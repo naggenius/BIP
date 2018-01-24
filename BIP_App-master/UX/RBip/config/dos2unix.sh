@@ -1,0 +1,4 @@
+dos2unix bip_remontee_erreurs.properties bip_remontee_erreurs.properties
+dos2unix bip_remontee_fichier42.properties bip_remontee_fichier42.properties
+dos2unix bip_remontee_log.properties bip_remontee_log.properties
+dos2unix bip_remontee.properties bip_remontee.properties

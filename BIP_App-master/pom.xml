@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>bip-parent</artifactId>
+    <groupId>com.bsc.bip</groupId>
+    <version>11.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>BIP - Parent POM</name>
+    <parent>
+        <version>1.0.2</version>
+        <artifactId>parent-sofa</artifactId>
+        <groupId>com.bsc.sofa</groupId>
+    </parent>
+    <modules>
+        <module>WIN/bip</module>
+        <module>UX/Livraison/SQL</module>
+        <module>UX/Livraison/Fichiers</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+        <project.build.compiler.version>1.6</project.build.compiler.version>
+        <compilerArgument>-Xlint:all</compilerArgument>
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+    </properties>
+    <build>
+        <plugins>
+            <!--
+                starting a release - creates a release branch and updates pom(s) with release versions
+                finishing a release - runs a maven build (deploy or install), merges the release branch, updates pom(s) with development versions
+                starting a hotfix - creates a hotfix branch and updates pom(s) with hotfix versions
+                finishing a hotfix - runs a maven build (deploy or install), merges the hotfix branch, updates pom(s) with previous versions
+                starting a feature - creates a feature branch
+                finishing a feature - merges the feature branch
+                -->
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m5.1</version>
+                <configuration>
+                    <flowInitContext>
+                        <masterBranchName>master</masterBranchName>
+                        <developBranchName>development</developBranchName>
+                        <featureBranchPrefix>feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+                        <versionTagPrefix>version-</versionTagPrefix>
+                    </flowInitContext>
+                    <noDeploy>true</noDeploy>
+                    <squash>true</squash>
+                    <pushReleases>true</pushReleases>
+                    <keepBranch>true</keepBranch>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <noTag>true</noTag>
+                    <allowUntracked>true</allowUntracked>
+                    <pullDevelop>true</pullDevelop>
+                    <pullMaster>true</pullMaster>
+                    <allowSnapshots>true</allowSnapshots>
+                    <scmCommentPrefix>[RELEASE] </scmCommentPrefix>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>bip-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>bip-plsql</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>bip-files</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <scm>
+        <connection>scm:git:https://sgithub.fr.world.socgen/BSC-CORE-Apps/BIP_App.git</connection>
+        <developerConnection>scm:git:https://sgithub.fr.world.socgen/BSC-CORE-Apps/BIP_App.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <prerequisites>
+        <maven>3.2.5</maven>
+    </prerequisites>
+    <organization>
+        <name>SOCIETE GENERALE</name>
+        <url>https://www.societegenerale.fr/</url>
+    </organization>
+</project>

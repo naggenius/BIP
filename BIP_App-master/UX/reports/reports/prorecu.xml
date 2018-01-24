@@ -1,0 +1,1519 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="prorecu" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes"/>
+  <xmlSettings xmlTag="PRORECU" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="4"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[code filiale]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="PRINTJOB" initialValue="No"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Landscape"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="File" display="yes"/>
+    <dataSource name="Q_ProjetsRecus">
+      <select>
+      <![CDATA[select 
+       'Col bidonForPageNum',
+       substr(TO_CHAR(lb.codsg, 'FM0000000'),1,5) codDepPole,
+       si.sigdep || '/' || si.sigpole as libDepPole,             
+       lb.codsg              codDPG,
+       si.libdsg             libDPG,
+       substr(r.rnom,1,15)   chefprojet, 
+       lb.pid                pid,
+       lb.pnom               libprojet, 
+       lb.ttrfbip            Dattransfert,
+       lb.ttrmens            Dattrtmens       
+from  ligne_bip       lb,
+      ressource       r,
+      struct_info     si
+where lb.pcpi = r.ident
+  and lb.codsg = si.codsg
+  and lb.ttrmens = (select dertrait from datdebex)
+  and lb.adatestatut is null
+  &p_where
+  order by  1, 3, 5, 6
+
+-- and SUBSTR(to_char(lb.codsg),1,2) = '13'
+]]>
+      </select>
+      <comment>
+      <![CDATA[La difference essentiel entre les requêtes Q_ProjetsRecus et Q_ProjetsNonRecus  est materialisée par une des conditions de la clause where.
+Dans la premiere 
+     and lb.ttrmens = (select dertrait from datdebex)
+     (attention : opérateur égale)
+Dans la seconde 
+     and lb.ttrmens != (select dertrait from datdebex)
+     (attention : opérateur non égale)
+
+Pour distinguer les colonnes des deux requetes, celles de la secondes sont postfixes par N.]]>
+      </comment>
+      <displayInfo x="1.55432" y="0.13240" width="2.09042" height="0.55563"/>
+      <group name="G_bidonForPageNum">
+        <comment>
+        <![CDATA[Le groupe G_bidonForPageNum et la colonne Col_bidonForPageNum permettent de numeroter les pages des deux layouts indépendament de l'un et l'autre.
+Sinon ils n'ont pas d'autre utilite.]]>
+        </comment>
+        <displayInfo x="0.60865" y="1.65323" width="3.67760" height="1.09389"
+        />
+        <dataItem name="Col_bidonForPageNum" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="39" width="19"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Col Bidonforpagenum">
+          <dataDescriptor expression="&apos;Col bidonForPageNum&apos;"
+           descriptiveExpression="&apos;COLBIDONFORPAGENUM&apos;" order="1"
+           oracleDatatype="aFixedChar" width="19"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_DepPole">
+        <comment>
+        <![CDATA[Le groupe G_bidonForPageNum et la colonne Col_bidonForPageNumN permettent de numeroter les pages des deux layouts indépendament de l'un et l'autre.
+Sinon ils n'ont pas d'autre utilite.]]>
+        </comment>
+        <displayInfo x="4.45678" y="1.42999" width="2.79394" height="1.96205"
+        />
+        <dataItem name="codDepPole" datatype="vchar2" columnOrder="18"
+         width="5" defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Coddeppole">
+          <dataDescriptor
+           expression="substr ( TO_CHAR ( lb.codsg , &apos;FM0000000&apos; ) , 1 , 5 )"
+           descriptiveExpression="CODDEPPOLE" order="2" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libDepPole" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="19" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Libdeppole" breakOrder="none">
+          <dataDescriptor
+           expression="si.sigdep || &apos;/&apos; || si.sigpole"
+           descriptiveExpression="LIBDEPPOLE" order="3"
+           oracleDatatype="aFixedChar" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NbProjetParDP" source="pid" function="count"
+         precision="8" reset="G_DepPole" compute="report"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Nbprojetpardp">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_DPG">
+        <displayInfo x="7.60543" y="1.43495" width="2.79394" height="1.52797"
+        />
+        <dataItem name="codDPG" oracleDatatype="number" columnOrder="20"
+         width="22" defaultWidth="80000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Coddpg">
+          <dataDescriptor expression="lb.codsg" descriptiveExpression="CODDPG"
+           order="4" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libDPG" datatype="vchar2" columnOrder="21" width="30"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Libdpg" breakOrder="none">
+          <dataDescriptor expression="si.libdsg"
+           descriptiveExpression="LIBDPG" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_ChefProjet">
+        <displayInfo x="10.59532" y="1.41945" width="2.79394" height="1.09389"
+        />
+        <dataItem name="chefprojet" datatype="vchar2" columnOrder="22"
+         width="15" defaultWidth="150000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chefprojet">
+          <dataDescriptor expression="substr ( r.rnom , 1 , 15 )"
+           descriptiveExpression="CHEFPROJET" order="6" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_projet">
+        <displayInfo x="13.66459" y="1.45542" width="2.79394" height="2.83021"
+        />
+        <dataItem name="pid" datatype="vchar2" columnOrder="23" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Pid">
+          <dataDescriptor expression="lb.pid" descriptiveExpression="PID"
+           order="7" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libprojet" datatype="vchar2" columnOrder="24"
+         width="30" defaultWidth="300000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Libprojet" breakOrder="none">
+          <dataDescriptor expression="lb.pnom"
+           descriptiveExpression="LIBPROJET" order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Dattransfert" datatype="date" oracleDatatype="date"
+         columnOrder="25" width="9" defaultWidth="110000"
+         defaultHeight="10000" columnFlags="32" defaultLabel="Dattransfert"
+         breakOrder="none">
+          <dataDescriptor expression="lb.ttrfbip"
+           descriptiveExpression="DATTRANSFERT" order="9"
+           oracleDatatype="date" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Dattrtmens" datatype="date" oracleDatatype="date"
+         columnOrder="26" width="9" defaultWidth="110000"
+         defaultHeight="10000" columnFlags="32" defaultLabel="Dattrtmens"
+         breakOrder="none">
+          <dataDescriptor expression="lb.ttrmens"
+           descriptiveExpression="DATTRTMENS" order="10" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_ProjetsNonRecus">
+      <select>
+      <![CDATA[select 
+       'Col_bidonForPageNumN',
+       substr(TO_CHAR(lb.codsg, 'FM0000000'),1,5) codDepPoleN,
+       si.sigdep || '/' || si.sigpole as libDepPoleN,             
+       lb.codsg              codDPGN,
+       substr(TO_CHAR(lb.codsg, 'FM0000000'), 4, 4) codPoleGroupN,
+       si.libdsg             libDPGN,
+       substr(r.rnom,1,15)   chefprojetN, 
+       lb.pid                pidN,
+       lb.pnom               libprojetN, 
+       lb.ttrfbip            DattransfertN,
+       lb.ttrmens            DattrtmensN       
+from  ligne_bip       lb,
+      ressource       r,
+      struct_info     si
+where lb.pcpi = r.ident
+  and lb.codsg = si.codsg
+  and lb.ttrmens != (select dertrait from datdebex)
+  and lb.adatestatut is null
+  &p_where
+  order by  1, 3, 6, 7
+
+-- and SUBSTR(to_char(lb.codsg),1,2) = '13']]>
+      </select>
+      <comment>
+      <![CDATA[La difference essentiel entre les requêtes Q_ProjetsRecus et Q_ProjetsNonRecus  est materialisée par une des conditions de la clause where.
+Dans la premiere 
+     and lb.ttrmens = (select dertrait from datdebex)
+     (attention : opérateur égale)
+Dans la seconde 
+     and lb.ttrmens != (select dertrait from datdebex)
+     (attention : opérateur non égale)
+
+Pour distinguer les colonnes des deux requetes, celles de la secondes sont postfixes par N.]]>
+      </comment>
+      <displayInfo x="0.99901" y="4.33927" width="2.98990" height="0.50788"/>
+      <group name="G_bidonForPageNumN">
+        <comment>
+        <![CDATA[Le groupe G_bidonForPageNumN et la colonne Col_bidonForPageNumN permettent de numeroter les pages des deux layouts indépendament de l'un et l'autre.
+Sinon ils n'ont pas d'autre utilite.]]>
+        </comment>
+        <displayInfo x="0.47625" y="6.16055" width="3.89093" height="1.09389"
+        />
+        <dataItem name="Col_bidonForPageNumN" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="40" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Col Bidonforpagenumn">
+          <dataDescriptor expression="&apos;Col_bidonForPageNumN&apos;"
+           descriptiveExpression="&apos;COL_BIDONFORPAGENUMN&apos;" order="1"
+           oracleDatatype="aFixedChar" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_DepPoleN">
+        <displayInfo x="4.56282" y="6.46658" width="2.79394" height="2.39613"
+        />
+        <dataItem name="codDepPoleN" datatype="vchar2" columnOrder="28"
+         width="5" defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Coddeppolen">
+          <dataDescriptor
+           expression="substr ( TO_CHAR ( lb.codsg , &apos;FM0000000&apos; ) , 1 , 5 )"
+           descriptiveExpression="CODDEPPOLEN" order="2" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libDepPoleN" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="29" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Libdeppolen" breakOrder="none">
+          <dataDescriptor
+           expression="si.sigdep || &apos;/&apos; || si.sigpole"
+           descriptiveExpression="LIBDEPPOLEN" order="3"
+           oracleDatatype="aFixedChar" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NbProjetParDPN" source="pidN" function="count"
+         precision="8" reset="G_DepPoleN" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_DPGn">
+        <displayInfo x="8.24043" y="6.46689" width="2.79394" height="1.96205"
+        />
+        <dataItem name="codDPGN" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="80000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Coddpgn">
+          <dataDescriptor expression="lb.codsg"
+           descriptiveExpression="CODDPGN" order="4" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codPoleGroupN" datatype="vchar2" columnOrder="38"
+         width="4" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="substr ( TO_CHAR ( lb.codsg , &apos;FM0000000&apos; ) , 4 , 4 )"
+           descriptiveExpression="CODPOLEGROUPN" order="5" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libDPGN" datatype="vchar2" columnOrder="31" width="30"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Libdpgn" breakOrder="none">
+          <dataDescriptor expression="si.libdsg"
+           descriptiveExpression="LIBDPGN" order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_ChefProjetN">
+        <displayInfo x="11.23032" y="6.57231" width="2.79394" height="1.09389"
+        />
+        <dataItem name="chefprojetN" datatype="vchar2" columnOrder="32"
+         width="15" defaultWidth="150000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chefprojetn">
+          <dataDescriptor expression="substr ( r.rnom , 1 , 15 )"
+           descriptiveExpression="CHEFPROJETN" order="7" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_ProjetsN">
+        <displayInfo x="14.40532" y="6.54007" width="2.79394" height="2.39613"
+        />
+        <dataItem name="pidN" datatype="vchar2" columnOrder="33" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Pidn">
+          <dataDescriptor expression="lb.pid" descriptiveExpression="PIDN"
+           order="8" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libprojetN" datatype="vchar2" columnOrder="34"
+         width="30" defaultWidth="300000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Libprojetn" breakOrder="none">
+          <dataDescriptor expression="lb.pnom"
+           descriptiveExpression="LIBPROJETN" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DattransfertN" datatype="date" oracleDatatype="date"
+         columnOrder="35" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dattransfertn" breakOrder="none">
+          <dataDescriptor expression="lb.ttrfbip"
+           descriptiveExpression="DATTRANSFERTN" order="10"
+           oracleDatatype="date" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DattrtmensN" datatype="date" oracleDatatype="date"
+         columnOrder="36" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dattrtmensn" breakOrder="none">
+          <dataDescriptor expression="lb.ttrmens"
+           descriptiveExpression="DATTRTMENSN" order="11"
+           oracleDatatype="date" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="28.19983" height="18.99977">
+      <location x="0.53113" y="1.00025"/>
+      <repeatingFrame name="R_bidonForPageNum" source="G_bidonForPageNum"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.10387" y="0.00031" width="27.96729"
+         height="5.77515"/>
+        <generalLayout verticalElasticity="variable"/>
+        <frame name="M_DepPole_GRPFR1">
+          <geometryInfo x="0.24557" y="0.00155" width="27.70188"
+           height="5.15751"/>
+          <generalLayout verticalElasticity="variable"/>
+          <repeatingFrame name="R_DepPole1" source="G_DepPole"
+           printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+           columnMode="no">
+            <geometryInfo x="0.34789" y="0.00310" width="27.49383"
+             height="4.71909"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_DPG1" source="G_DPG" printDirection="down"
+             maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="0.34820" y="3.45684" width="26.27592"
+               height="1.00273"/>
+              <generalLayout verticalElasticity="variable"/>
+              <repeatingFrame name="R_ChefProjet" source="G_ChefProjet"
+               printDirection="down" minWidowRecords="1" columnMode="no">
+                <geometryInfo x="8.29128" y="3.45684" width="18.20912"
+                 height="0.69670"/>
+                <generalLayout verticalElasticity="variable"/>
+                <repeatingFrame name="R_projet1" source="G_projet"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="11.63340" y="3.45684" width="14.70174"
+                   height="0.47780"/>
+                  <field name="F_pid" source="pid" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="11.79835" y="3.45684" width="0.90661"
+                     height="0.35006"/>
+                  </field>
+                  <field name="F_libprojet" source="libprojet"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="12.84232" y="3.45684" width="6.10939"
+                     height="0.35006"/>
+                  </field>
+                  <field name="F_Dattransfert" source="Dattransfert"
+                   minWidowLines="1" formatMask="DD/MM/YYYY" spacing="0"
+                   alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="19.80530" y="3.45684" width="2.21940"
+                     height="0.35006"/>
+                  </field>
+                  <field name="F_Dattrtmens" source="Dattrtmens"
+                   minWidowLines="1" formatMask="DD/MM/YYYY" spacing="0"
+                   alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="22.50095" y="3.45715" width="2.24637"
+                     height="0.34975"/>
+                  </field>
+                </repeatingFrame>
+                <field name="F_chefprojet1" source="chefprojet"
+                 minWidowLines="1" spacing="0" alignment="start">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="8.29252" y="3.45684" width="3.06958"
+                   height="0.35006"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                </field>
+              </repeatingFrame>
+              <field name="F_codDPG1" source="codDPG" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="0.34944" y="3.45684" width="1.31992"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_libDPG1" source="libDPG" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="1.88175" y="3.45684" width="6.11870"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+            </repeatingFrame>
+            <text name="B_Date2" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="11.49666" y="0.00341" width="0.56121"
+               height="0.39688"/>
+              <generalLayout horizontalElasticity="expand"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[LE ]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_DATE2" source="CurrentDate" minWidowLines="1"
+             formatMask="DD/MM/YYYY" spacing="single" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.99555" y="0.00620" width="2.09724"
+               height="0.46664"/>
+              <generalLayout horizontalElasticity="variable"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_DepPole1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="14.76995" y="0.00682" width="1.48177"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[DEP/POLE]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_libDepPole2" source="libDepPole" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.60984" y="0.00651" width="1.51650"
+               height="0.43811"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_TitreTiret5" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="19.02861" y="0.00651" width="3.41033"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[================]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_PAGE1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="23.19114" y="0.01674" width="1.75369"
+               height="0.52493"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Page :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="25.94105" y="0.00434" width="0.23595"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[/]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_TotalPage1" source="TotalPages" minWidowLines="1"
+             formatMask="NNNN" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="26.25948" y="0.01674" width="1.27465"
+               height="0.49981"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+               incrementBy="1" resetAt="R_bidonForPageNum"/>
+            </field>
+            <field name="F_PAGE1" source="PageNumber" minWidowLines="1"
+             formatMask="NNNN" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="24.76097" y="0.01674" width="1.06505"
+               height="0.52524"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+               incrementBy="1" resetAt="report"/>
+            </field>
+            <text name="B_TitreTiret7" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="8.04261" y="0.00341" width="2.96323"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[================]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_NbProjetParDP1" source="CS_NbProjetParDP"
+             minWidowLines="1" formatMask="NNNGNNN" spacing="0"
+             alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="3.42491" y="1.29667" width="1.79121"
+               height="0.39377"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_ProjetRecu1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.34882" y="1.29573" width="2.77813"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[PROJETS RECUS :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_libDPG1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.34820" y="2.51706" width="7.59023"
+               height="0.78538"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[GROUPE
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----------------------------------------]]>
+                </string>
+              </textSegment>
+            </text>
+            <frame name="M_projet_HDR2">
+              <geometryInfo x="8.28756" y="2.53473" width="18.47205"
+               height="0.85700"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <text name="B_pid2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="11.80796" y="2.53721" width="0.62074"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[PID---]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_chefprojet2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="8.28818" y="2.53721" width="2.93812"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[CHEF DE PROJET
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[---------------]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_libprojet2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="12.84418" y="2.53721" width="6.12831"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[PROJET
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[------------------------------]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_Dattransfert2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="19.80964" y="2.53721" width="1.98003"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[DTRSF BIP
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[------------]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_Dattrtmens2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="22.49630" y="2.53783" width="2.15832"
+                 height="0.80584"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[TRAITEMENT
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[-----------]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+            <text name="B_NomEtat1" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="0.36494" y="0.00372" width="3.09531"
+               height="0.39688"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[ETAT : $PRORECU]]>
+                </string>
+              </textSegment>
+            </text>
+          </repeatingFrame>
+        </frame>
+      </repeatingFrame>
+      <repeatingFrame name="R_bidonForPageNumN" source="G_bidonForPageNumN"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.10418" y="6.08118" width="27.92512"
+         height="6.78129"/>
+        <generalLayout pageBreakBefore="yes" verticalElasticity="variable"/>
+        <frame name="M_DepPoleN_GRPFR">
+          <geometryInfo x="0.16433" y="6.08211" width="27.78249"
+           height="6.12490"/>
+          <generalLayout verticalElasticity="variable"/>
+          <repeatingFrame name="R_DepPoleN" source="G_DepPoleN"
+           printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+           columnMode="no">
+            <geometryInfo x="0.22665" y="6.08335" width="27.65816"
+             height="5.86259"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_DPGn" source="G_DPGn"
+             printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+             columnMode="no">
+              <geometryInfo x="0.22820" y="10.04993" width="26.83092"
+               height="1.13760"/>
+              <generalLayout verticalElasticity="variable"/>
+              <repeatingFrame name="R_ChefProjetN" source="G_ChefProjetN"
+               printDirection="down" minWidowRecords="1" columnMode="no">
+                <geometryInfo x="9.65802" y="10.04993" width="17.30251"
+                 height="0.70011"/>
+                <generalLayout verticalElasticity="variable"/>
+                <repeatingFrame name="R_ProjetsN" source="G_ProjetsN"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="13.12292" y="10.04993" width="13.71389"
+                   height="0.48121"/>
+                  <field name="F_pidN" source="pidN" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="13.28787" y="10.04993" width="0.69980"
+                     height="0.35006"/>
+                  </field>
+                  <field name="F_libprojetN" source="libprojetN"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="14.31944" y="10.04993" width="6.51557"
+                     height="0.35006"/>
+                  </field>
+                  <field name="F_DattransfertN" source="DattransfertN"
+                   minWidowLines="1" formatMask="DD/MM/YYYY" spacing="0"
+                   alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="21.29048" y="10.04993" width="2.22591"
+                     height="0.35006"/>
+                  </field>
+                  <field name="F_DattrtmensN" source="DattrtmensN"
+                   minWidowLines="1" formatMask="DD/MM/YYYY" spacing="0"
+                   alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="23.96846" y="10.05024" width="2.43520"
+                     height="0.35006"/>
+                  </field>
+                </repeatingFrame>
+                <field name="F_chefprojetN" source="chefprojetN"
+                 minWidowLines="1" spacing="0" alignment="start">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="9.65802" y="10.04993" width="3.13345"
+                   height="0.35006"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                </field>
+              </repeatingFrame>
+              <field name="F_codDPGN" source="codDPGN" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="0.22820" y="10.04993" width="1.32023"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_libDPGN" source="libDPGN" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="3.48692" y="10.04993" width="5.85608"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_codDepPoleN1" source="codPoleGroupN"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="1.79462" y="10.04993" width="1.31899"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+            </repeatingFrame>
+            <text name="B_Date1" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="11.37388" y="6.08397" width="0.56121"
+               height="0.39688"/>
+              <generalLayout horizontalElasticity="expand"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[LE ]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_DATE1" source="CurrentDate" minWidowLines="1"
+             formatMask="DD/MM/YYYY" spacing="single" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.99679" y="6.08676" width="2.09724"
+               height="0.46664"/>
+              <generalLayout horizontalElasticity="variable"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_DepPole2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="14.77119" y="6.08738" width="1.48177"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[DEP/POLE]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_libDepPoleN1" source="libDepPoleN"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.61108" y="6.08707" width="1.51650"
+               height="0.43811"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_TitreTiret1" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="19.02985" y="6.08707" width="3.41033"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[================]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_PAGE2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="23.06836" y="6.09730" width="1.75369"
+               height="0.52493"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Page :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="25.81827" y="6.08490" width="0.23595"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[/]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_TotalPage2" source="TotalPages" minWidowLines="1"
+             formatMask="NNNN" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="26.13670" y="6.09730" width="1.39743"
+               height="0.49981"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+               incrementBy="1" resetAt="R_bidonForPageNumN"/>
+            </field>
+            <field name="F_PAGE2" source="PageNumber" minWidowLines="1"
+             formatMask="NNNN" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="24.63819" y="6.09730" width="1.06505"
+               height="0.52524"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+               incrementBy="1" resetAt="R_bidonForPageNumN"/>
+            </field>
+            <text name="B_TitreTiret3" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="8.04385" y="6.08397" width="2.96323"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[================]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_NbProjetParDP2" source="CS_NbProjetParDPN"
+             minWidowLines="1" formatMask="NNNGNNN" spacing="0"
+             alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="4.08564" y="7.75736" width="1.79121"
+               height="0.39377"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_ProjetRecu2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.26727" y="7.75643" width="3.63079"
+               height="0.37052"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[PROJETS NON RECUS :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_libDPG2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="3.48537" y="9.10890" width="5.77422"
+               height="0.78538"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[GROUPE
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[------------------------------]]>
+                </string>
+              </textSegment>
+            </text>
+            <frame name="M_projet_HDR1">
+              <geometryInfo x="9.59259" y="9.12657" width="17.50777"
+               height="0.85700"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <text name="B_pid1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="13.19547" y="9.12906" width="0.62074"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[PID---]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_chefprojet1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="9.59321" y="9.12906" width="2.93812"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[CHEF DE PROJET
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[---------------]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_libprojet1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="14.23169" y="9.12906" width="6.12831"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[PROJET
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[------------------------------]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_Dattransfert1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="21.19716" y="9.12906" width="1.98003"
+                 height="0.80615"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[DTRSF BIP
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[------------]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_Dattrtmens1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="23.88381" y="9.12968" width="2.15832"
+                 height="0.80584"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[TRAITEMENT
+]]>
+                  </string>
+                </textSegment>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[-----------]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+            <text name="B_CODPG" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.78687" y="9.10890" width="1.19373"
+               height="0.78538"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[P.G.
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[-----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_CODDPG" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.23161" y="9.10890" width="1.31496"
+               height="0.78538"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[D/P/G
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[------]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_NomEtat2" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="0.24216" y="6.08428" width="3.09531"
+               height="0.39688"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[ETAT : $PRONREC]]>
+                </string>
+              </textSegment>
+            </text>
+          </repeatingFrame>
+        </frame>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <text name="B_Titre3" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="12.03958" y="0.57206" width="6.63060"
+         height="0.37176"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings fillBackgroundColor="red"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[COMPTE RENDU TRANSFERT PMW ---> BIP]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_TitreTiret10" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="8.58707" y="1.07063" width="2.96323" height="0.37052"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[================]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_TitreTiret9" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="19.18488" y="1.07032" width="2.96323"
+         height="0.37052"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[================]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.29115" y="5.52990" width="3.17500" height="0.87313"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Dep Pole
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(1313) ou(****)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.34385" y="6.90563" width="3.36042" height="1.08490"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Dep Pole
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(1313) ou(****)]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_param6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.78365" y="6.95865" width="5.02698" height="0.71438"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.34385" y="8.30802" width="1.69323" height="0.42323"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.78365" y="8.09625" width="5.08000" height="0.63500"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[------------------------------------------------------------------------------------------
+-- Rôle : Construire un Where conditionnel. La chaine construite sera affectée au parametre
+-- de P_WHERE. 
+------------------------------------------------------------------------------------------
+function AfterPForm return boolean is
+	
+	l_param varchar2(10);
+	l_perim_me	VARCHAR2(1000) := '';
+	
+begin
+	
+  :p_where := '';
+
+	-- Filtre du perim ME
+	l_perim_me := pack_global.lire_perime(:P_GLOBAL);		
+	:P_WHERE :=' AND lb.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+
+
+	IF :P_PARAM6 IS NOT NULL THEN
+		-- ajout de '0' a gauche sur 7 caracteres + suppression des '*'
+	  l_param := rtrim(rtrim(LPAD(:P_PARAM6, 7, '0'),'*')) ;
+		:p_where := :p_where || ' and  TO_CHAR(lb.codsg, ''FM0000000'') like ''' || l_param ||'%'' ';
+		
+	END IF;
+	
+  -- --srw.message(1,' ' || :p_where);
+  RETURN (TRUE);
+END;
+]]>
+      </textSource>
+    </function>
+    <function name="rtrimetoile">
+      <textSource>
+      <![CDATA[FUNCTION RtrimEtoile(P_Text In VARCHAR2) RETURN VARCHAR2 IS
+  meta VARCHAR2(1);
+  L_Text VARCHAR2(7);
+BEGIN
+  L_Text := P_Text;
+  meta := SUBSTR(P_Text, NVL(length(P_Text), 0),1);
+  IF (meta = ' ') OR (meta = '*') THEN
+      L_Text := RTRIM(P_Text,meta);   
+  END IF;
+  RETURN(L_Text);
+END;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

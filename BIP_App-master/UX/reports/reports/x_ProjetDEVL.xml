@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ProjetDEVL" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_PROJETDEVL" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select 
+        p.icpi,
+        decode(p.STATUT,'D','D','A','A','R','A','Q','A')    STATUT,
+        to_char(p.datdem,'DD/MM/YYYY'),
+        p.cada,
+        sum(to_number(nvl(au.totalhtr,0)) + to_number(nvl(au.totalsg,0))) SOMME
+from
+        proj_info p, audit_immo au
+where
+        p.icodproj <> 0
+        and p.icpi = au.icpi (+)
+        and p.datdem < trunc(sysdate,'MM')
+        and p.statut in ('A','R','D','Q')
+        and p.topenvoi = 'N'
+        group by p.icpi,STATUT,p.datdem,p.cada       
+        order by p.datdem;]]>
+      </select>
+      <displayInfo x="1.19031" y="0.70996" width="1.39575" height="0.21875"/>
+      <group name="G_icpi">
+        <displayInfo x="0.72705" y="2.63708" width="2.33472" height="1.11426"
+        />
+        <dataItem name="icpi" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="11" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Icpi">
+          <xmlSettings xmlTag="CODE PROJET"/>
+          <dataDescriptor expression="p.icpi" descriptiveExpression="ICPI"
+           order="1" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="statut" datatype="vchar2" columnOrder="12" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Statut">
+          <dataDescriptor
+           expression="decode ( p.STATUT , &apos;D&apos; , &apos;D&apos; , &apos;A&apos; , &apos;A&apos; , &apos;R&apos; , &apos;A&apos; , &apos;Q&apos; , &apos;A&apos; )"
+           descriptiveExpression="STATUT" order="2" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cada" oracleDatatype="number" columnOrder="16"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cada">
+          <dataDescriptor expression="p.cada" descriptiveExpression="CADA"
+           order="4" oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="to_char_p_datdem_DD_MM_YYYY_" datatype="vchar2"
+         columnOrder="17" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="To Char P Datdem Dd Mm Yyyy">
+          <xmlSettings xmlTag="DATE DEMARAGE"/>
+          <dataDescriptor
+           expression="to_char ( p.datdem , &apos;DD/MM/YYYY&apos; )"
+           descriptiveExpression="TO_CHAR(P.DATDEM,&apos;DD/MM/YYYY&apos;)"
+           order="3" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOMME" oracleDatatype="number" columnOrder="18"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Somme">
+          <xmlSettings xmlTag="VALEUR IMMOBILISATION (EURO)"/>
+          <dataDescriptor
+           expression="sum ( to_number ( nvl ( au.totalhtr , 0 ) ) + to_number ( nvl ( au.totalsg , 0 ) ) )"
+           descriptiveExpression="SOMME" order="5" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_icpi_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="5.25000" height="0.37500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillPattern="transparent"
+         fillBackgroundColor="r100g100b100"/>
+        <repeatingFrame name="R_G_icpi" source="G_icpi" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="3.93750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="TableCell"/>
+          <field name="F_icpi" source="icpi" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="helvetica" size="10"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.75000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_statut" source="statut" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="helvetica" size="10"/>
+            <geometryInfo x="0.75000" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_datdem" source="to_char_p_datdem_DD_MM_YYYY_"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="helvetica" size="10"/>
+            <geometryInfo x="1.18750" y="0.18750" width="1.93750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_icpi_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="5.25000"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="TableHeading"/>
+          <text name="B_icpi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.75000"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="r25g50b75"/>
+            <textSegment>
+              <font face="helvetica" size="10" bold="yes"
+               textColor="TextColor"/>
+              <string>
+              <![CDATA[Icpi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_statut" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="r25g50b75"/>
+            <textSegment>
+              <font face="helvetica" size="10" bold="yes"
+               textColor="TextColor"/>
+              <string>
+              <![CDATA[Statut]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_datdem" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="1.93750"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="helvetica" size="10" bold="yes"
+               textColor="TextColor"/>
+              <string>
+              <![CDATA[Datdem]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#cccc99"/>
+    <color index="192" displayName="TableCell" value="#f7f7e7"/>
+    <color index="193" displayName="Totals" value="#ffffcc"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

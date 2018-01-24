@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="types_proj" DTDVersion="9.0.2.0.10" designInCharacterUnits="yes"
+  >
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="TYPES_PROJ" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_MSG" datatype="character" precision="10"
+     initialValue="AUCUN TYPE DE PROJET" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="PRINTJOB" initialValue="No"/>
+    <systemParameter name="MODE" initialValue="bitmap"/>
+    <systemParameter name="ORIENTATION" initialValue="Portrait"/>
+    <systemParameter name="THOUSANDS" display="yes"/>
+    <systemParameter name="CURRENCY" display="yes"/>
+    <systemParameter name="COPIES" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088" display="yes"/>
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="Preview" display="yes"/>
+    <dataSource name="Q_TYPESPROJ">
+      <select>
+      <![CDATA[SELECT 	tp.typproj,
+	NVL(tp.libtyp, 'Pas de type d''activité lié') libtyp,
+	ta.arctype, 
+	ta.libarc 
+FROM	type_activite ta,
+	type_projet tp,
+	lien_types_proj_act lpa
+WHERE	lpa.type_proj = tp.typproj(+)
+AND	lpa.type_act(+) = ta.arctype
+AND	ta.actif='O' 
+]]>
+      </select>
+      <displayInfo x="0.77075" y="0.27087" width="1.05212" height="0.26038"/>
+      <group name="G_typproj">
+        <displayInfo x="0.73621" y="0.93994" width="1.13293" height="0.60156"
+        />
+        <dataItem name="typproj" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="25" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typproj">
+          <dataDescriptor expression="tp.typproj"
+           descriptiveExpression="TYPPROJ" order="1"
+           oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libtyp" datatype="vchar2" columnOrder="26" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libtyp" breakOrder="none">
+          <dataDescriptor
+           expression="NVL ( tp.libtyp , &apos;Pas de type d&apos;&apos;activité lié&apos; )"
+           descriptiveExpression="LIBTYP" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_TYPACT">
+        <displayInfo x="0.74695" y="1.86560" width="1.09998" height="0.60156"
+        />
+        <dataItem name="arctype" datatype="vchar2" columnOrder="11" width="3"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arctype1">
+          <dataDescriptor expression="ta.arctype"
+           descriptiveExpression="ARCTYPE" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libarc" datatype="vchar2" columnOrder="12" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libarc1" breakOrder="none">
+          <dataDescriptor expression="ta.libarc"
+           descriptiveExpression="LIBARC" order="4" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DATE">
+      <select>
+      <![CDATA[select to_char(sysdate,'DD/MM/YYYY HH24:MI') date_jour from dual]]>
+      </select>
+      <displayInfo x="1.08337" y="2.95837" width="0.69995" height="0.35413"/>
+      <group name="G_DATE">
+        <displayInfo x="0.88342" y="3.81250" width="1.09998" height="0.43066"
+        />
+        <dataItem name="date_jour" datatype="vchar2" columnOrder="13"
+         width="75" defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor
+           expression="to_char(sysdate,&apos;DD/MM/YYYY HH24:MI&apos;)"
+           descriptiveExpression="DATE_JOUR" order="1" width="75"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_TYPACT_FERMES">
+      <select>
+      <![CDATA[SELECT 	tp.typproj typproj_f,
+	NVL(tp.libtyp, 'Pas de type d''activité lié') libtyp_f,
+	ta.arctype arctype_f, 
+	ta.libarc libarc_f 
+FROM	type_activite ta,
+	type_projet tp,
+	lien_types_proj_act lpa
+WHERE	lpa.type_proj = tp.typproj(+)
+AND	lpa.type_act(+) = ta.arctype
+AND	ta.actif='N' 
+]]>
+      </select>
+      <displayInfo x="2.38660" y="0.29480" width="1.61450" height="0.28125"/>
+      <group name="G_typproj_f">
+        <displayInfo x="2.60291" y="0.95386" width="1.17297" height="0.60156"
+        />
+        <dataItem name="typproj_f" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="27" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typproj F">
+          <dataDescriptor expression="tp.typproj"
+           descriptiveExpression="TYPPROJ_F" order="1"
+           oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libtyp_f" datatype="vchar2" columnOrder="28"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libtyp F" breakOrder="none">
+          <dataDescriptor
+           expression="NVL ( tp.libtyp , &apos;Pas de type d&apos;&apos;activité lié&apos; )"
+           descriptiveExpression="LIBTYP_F" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_typact_f">
+        <displayInfo x="2.62378" y="1.82776" width="1.14001" height="0.60156"
+        />
+        <dataItem name="arctype_f" datatype="vchar2" columnOrder="29"
+         width="3" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arctype F">
+          <dataDescriptor expression="ta.arctype"
+           descriptiveExpression="ARCTYPE_F" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libarc_f" datatype="vchar2" columnOrder="30"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libarc F" breakOrder="none">
+          <dataDescriptor expression="ta.libarc"
+           descriptiveExpression="LIBARC_F" order="4" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="2"/>
+  <section name="header" width="8.26990" height="11.68994" widthInChar="102"
+   heightInChar="85">
+    <body width="8.26990" height="11.68994">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="8.26990" height="11.68994" widthInChar="102"
+   heightInChar="85">
+    <body width="8.26990" height="11.68994">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="8.26990" height="11.68994" widthInChar="102"
+   heightInChar="85">
+    <body width="8.26990" height="10.11011">
+      <location x="0.00000" y="1.01807"/>
+      <frame name="M_TYPES_PROJ_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="8.10779" height="1.78784"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <frame name="M_TYPE_ACT_O">
+          <geometryInfo x="0.04053" y="0.00000" width="8.06726"
+           height="0.89392"/>
+          <generalLayout verticalElasticity="variable"/>
+          <frame name="M_TYPES_PROJ_HDR">
+            <geometryInfo x="0.08337" y="0.06738" width="7.98389"
+             height="0.27649"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16"/>
+            <text name="B_ARCTYPE" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.27649" y="0.13477" width="2.75012"
+               height="0.20911"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[TYPOLOGIE SECONDAIRE OUVERTE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_TYPPROJ" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.77795" y="0.13477" width="1.08325"
+               height="0.20911"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[TYPE ACTIVITE]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_TYPPROJ" source="G_typproj"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.08337" y="0.50562" width="8.02441"
+             height="0.31958"/>
+            <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+            <repeatingFrame name="R_TYPACT" source="G_TYPACT"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="3.93237" y="0.55017" width="4.13489"
+               height="0.20618"/>
+              <generalLayout verticalElasticity="expand"/>
+              <field name="F_ARCTYPE" source="arctype" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10"/>
+                <geometryInfo x="3.98401" y="0.57739" width="0.39417"
+                 height="0.12939"/>
+              </field>
+              <field name="F_LIBARC" source="libarc" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10"/>
+                <geometryInfo x="4.98621" y="0.57739" width="3.04688"
+                 height="0.17896"/>
+              </field>
+            </repeatingFrame>
+            <line name="B_1" arrow="none">
+              <geometryInfo x="0.12158" y="0.82520" width="7.98621"
+               height="0.00000"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="0.12158" y="0.82520"/>
+                <point x="8.10779" y="0.82520"/>
+              </points>
+            </line>
+            <field name="F_TypProj" source="typproj" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10"/>
+              <geometryInfo x="0.13391" y="0.57739" width="0.16663"
+               height="0.12939"/>
+            </field>
+            <field name="F_LIBTYPPROJ" source="libtyp" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10"/>
+              <geometryInfo x="0.54822" y="0.57739" width="2.50000"
+               height="0.17896"/>
+            </field>
+          </repeatingFrame>
+        </frame>
+        <frame name="M_TYPE_ACT_F">
+          <geometryInfo x="0.04053" y="0.89392" width="8.06726"
+           height="0.89392"/>
+          <generalLayout pageBreakBefore="yes" verticalElasticity="variable"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray8"/>
+          <repeatingFrame name="R_TYPPROJ_F" source="G_typproj_f"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.08337" y="1.39905" width="8.02441"
+             height="0.31958"/>
+            <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+            <field name="F_TypProj_F" source="typproj_f" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10"/>
+              <geometryInfo x="0.13391" y="1.47083" width="0.16663"
+               height="0.12939"/>
+            </field>
+            <field name="F_LIBTYPPROJ_F" source="libtyp_f" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10"/>
+              <geometryInfo x="0.54822" y="1.47083" width="2.50000"
+               height="0.17896"/>
+            </field>
+            <repeatingFrame name="R_TYPACT_F" source="G_typact_f"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="3.93237" y="1.44360" width="4.13489"
+               height="0.20618"/>
+              <generalLayout verticalElasticity="expand"/>
+              <field name="F_ARCTYPE_F" source="arctype_f" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10"/>
+                <geometryInfo x="3.98401" y="1.47083" width="0.39417"
+                 height="0.12939"/>
+              </field>
+              <field name="F_LIBARC_F" source="libarc_f" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10"/>
+                <geometryInfo x="4.98621" y="1.47083" width="3.04688"
+                 height="0.17896"/>
+              </field>
+            </repeatingFrame>
+            <line name="B_2" arrow="none">
+              <geometryInfo x="0.12158" y="1.71863" width="7.98621"
+               height="0.00000"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="0.12158" y="1.71863"/>
+                <point x="8.10779" y="1.71863"/>
+              </points>
+            </line>
+          </repeatingFrame>
+          <frame name="M_TYPES_PROJ_F_HDR">
+            <geometryInfo x="0.12390" y="0.96082" width="7.94336"
+             height="0.27649"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray20"/>
+            <text name="B_TYPPROJ_F" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.81848" y="1.02820" width="1.08325"
+               height="0.20911"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[TYPE ACTIVITE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_ARCTYPE_F" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.31702" y="1.02820" width="2.70959"
+               height="0.20911"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[TYPOLOGIE SECONDAIRE FERMEE]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <repeatingFrame name="R_DATE" source="G_DATE" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.29150" y="0.12354" width="2.16663" height="0.26477"
+        />
+        <text name="B_DATE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.37683" y="0.25879" width="0.53967"
+           height="0.12939"/>
+          <textSegment>
+            <font face="Courier New" size="10"/>
+            <string>
+            <![CDATA[DATE :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_DATE" source="date_jour" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.95813" y="0.25879" width="1.47424"
+           height="0.12952"/>
+        </field>
+      </repeatingFrame>
+      <text name="B_TITRE" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.21619" y="0.46497" width="5.94592" height="0.15393"
+        />
+        <textSegment>
+          <font face="Courier New" size="12" bold="yes"/>
+          <string>
+          <![CDATA[TABLE DE LIENS TYPES D'ACTIVITES / TYPOLOGIES SECONDAIRES]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_PAGE" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="6.16797" y="0.25879" width="0.54163" height="0.12939"
+        />
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[PAGE :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_PAGE" source="PageNumber" minWidowLines="1"
+       formatMask="9999" spacing="0" alignment="start">
+        <font face="Courier New" size="10"/>
+        <geometryInfo x="6.75122" y="0.25879" width="0.49878" height="0.12952"
+        />
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.53479" y="0.15979" width="0.95801" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.22754" y="0.49304" width="1.57263" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.44763" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.51013" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.49280" width="0.54138" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_COPIES" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.82605" width="0.37476" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Copies]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_CURRENCY" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.15930" width="0.47888" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Currency]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_THOUSANDS" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.49255" width="0.59351" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Thousands]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.45081" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_COPIES" source="COPIES" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.78406" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_CURRENCY" source="CURRENCY" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.11731" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_THOUSANDS" source="THOUSANDS" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.45056" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

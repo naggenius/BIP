@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_structlignebip" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_STRUCTLIGNEBIP" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="12000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CHEF_PROJET" datatype="character" width="4000" 
+     precision="10" defaultWidth="0" defaultHeight="0"/><!-- PPM 63485 : modification de taille à 4000 -->
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+rpad(nvl(l.PID,' '),4,' ') PID, 
+rpad(nvl(l.PNOM,' '),30,' ') PNOM, 
+nvl(l.ASTATUT,' ') ASTATUT, 
+rpad(nvl(to_char(l.ADATESTATUT,'DD/MM/RRRR'),' '),10,' ') ADATESTATUT, 
+nvl(l.TOPFER,' ') TOPFER, 
+lpad(nvl(to_char(s.CODSG),' '),7,' ') CODSG, 
+rpad(nvl(s.LIBDSG,' '),30,' ') LIBDSG, 
+rpad(nvl(ie.ECET,' '),2,' ') ECET, 
+rpad(nvl(ie.LIBETAPE,' '),30,' ') LIBETAPE,
+rpad(nvl(ie.TYPETAPE,' '),2,' ')  TYPETAPE,
+rpad(nvl(it.ACTA,' '),2,' ') ACTA,  
+rpad(nvl(it.LIBTACHE,' '),30,' ') LIBTACHE, 
+rpad(nvl(ist.ACST,' '),2,' ') ACST, 
+rpad(nvl(ist.ASNOM,' '),30,' ') ASNOM,
+rpad(nvl(ist.AIST,' '),6,' ') AIST, 
+rpad(nvl(ist.ASTA,' '),2,' ') ASTA, 
+rpad(nvl(to_char(ist.ADEB,'DD/MM/RRRR'),' '),10,' ') ADEB,
+rpad(nvl(to_char(ist.AFIN,'DD/MM/RRRR'),' '),10,' ') AFIN,
+rpad(nvl(to_char(ist.ANDE,'DD/MM/RRRR'),' '),10,' ') ANDE,
+rpad(nvl(to_char(ist.ANFI,'DD/MM/RRRR'),' '),10,' ') ANFI, 
+lpad(nvl(to_char(ist.ADUR),' '),5,' ') ADUR,
+rpad(nvl(ist.PARAM_LOCAL,' '),5,' ') PARAM_LOCAL,
+--ZAA 62324
+decode(:P_param6,'.CSV', DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,(DECODE(PI.PROJAXEMETIER, NULL, (DECODE(it.TACHEAXEMETIER, NULL, NULL, it.TACHEAXEMETIER) ), PI.PROJAXEMETIER) ) , DPCOPI.DPCOPIAXEMETIER ) , rpad(NVL ( DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,(DECODE(PI.PROJAXEMETIER, NULL, (DECODE(it.TACHEAXEMETIER, NULL, NULL, it.TACHEAXEMETIER) ), PI.PROJAXEMETIER) ) , DPCOPI.DPCOPIAXEMETIER),' '),12, ' ') ) Ref_demande,
+
+decode(:P_param6,'.CSV', DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,(DECODE(PI.PROJAXEMETIER, NULL,(DECODE(it.TACHEAXEMETIER,NULL,NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1), NULL,'???',DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER)AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1)) ))), DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1))) ) , DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1 ), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPIAXEMETIER) AND ROWNUM = 1 )) ) , rpad(NVL(DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,(DECODE(PI.PROJAXEMETIER, NULL,(DECODE(it.TACHEAXEMETIER,NULL,NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1), NULL,'???',DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER)AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1)) ))), DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1))) ) , DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1 ), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPIAXEMETIER) AND ROWNUM = 1 ))),' ') , 80 , ' ' ) ) Ref_demandeLib ,
+
+decode(:P_param6,'.CSV', (SELECT LIBTYET FROM TYPE_ETAPE WHERE ie.TYPETAPE = TYPE_ETAPE.TYPETAP AND ROWNUM = 1) , rpad(NVL((SELECT LIBTYET FROM TYPE_ETAPE WHERE ie.TYPETAPE = TYPE_ETAPE.TYPETAP AND ROWNUM = 1),' ') ,60,' ') ) TypeEtapeLib ,
+
+decode(:P_param6,'.CSV', DPCOPI.DPCOPIAXEMETIER , rpad(NVL(DPCOPI.DPCOPIAXEMETIER,' '),12, ' ') ) DpCopiAxeMetierCode ,
+
+decode(:P_param6,'.CSV', DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1)) ) , rpad(NVL(DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1)) ),' '),80, ' ') ) DpCopiAxeMetierLib,
+
+decode(:P_param6,'.CSV', PI.PROJAXEMETIER , rpad(NVL(PI.PROJAXEMETIER,' '),12, ' ') ) ProjAxeMetierCode ,
+
+decode(:P_param6,'.CSV', DECODE(PI.PROJAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1)) ) , rpad(NVL(DECODE(PI.PROJAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1)) ),' ') , 80 , ' ' ) ) ProjAxeMetierLib,
+
+decode(:P_param6,'.CSV', TACHEAXEMETIER , rpad(NVL(TACHEAXEMETIER,' '),12, ' ')) TacheAxeMetierCode , 
+
+decode(:P_param6,'.CSV', DECODE(it.TACHEAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1)) ) , rpad(NVL(DECODE(it.TACHEAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(it.TACHEAXEMETIER) AND ROWNUM = 1)) ),' ') , 80 , ' ' ) ) TacheAxeMetierLib 
+
+--Fin ZAA 62324
+from 
+ligne_bip l,
+struct_info s,
+isac_tache it,
+isac_etape ie,
+isac_sous_tache ist,
+DOSSIER_PROJET_COPI DPCOPI,
+proj_info   pi  
+where
+l.codsg = s.codsg
+and l.pid = ie.pid
+and ie.etape = it.ETAPE
+and it.tache = ist.TACHE
+and PI.dp_copi = DPCOPI.dp_copi(+)
+and   l.icpi     = pi.icpi 
+and INSTR(:P_CHEF_PROJET, to_char(l.pcpi,'FM00000')) > 0
+order by pid, ie.etape, it.tache, ist.sous_tache;]]>
+      </select>
+      <displayInfo x="1.70837" y="1.58337" width="0.69995" height="0.19995"/>
+      <group name="G_PID">
+        <displayInfo x="1.32690" y="2.28333" width="1.46301" height="3.33594"
+        />
+        <dataItem name="PID" datatype="vchar2" columnOrder="13" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Pid">
+          <dataDescriptor
+           expression="rpad ( nvl ( l.PID , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="PID" order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PNOM" datatype="vchar2" columnOrder="14" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Pnom">
+          <dataDescriptor
+           expression="rpad ( nvl ( l.PNOM , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="PNOM" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ASTATUT" datatype="vchar2" columnOrder="15" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Astatut">
+          <dataDescriptor expression="nvl ( l.ASTATUT , &apos; &apos; )"
+           descriptiveExpression="ASTATUT" order="3" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ADATESTATUT" datatype="vchar2" columnOrder="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Adatestatut">
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( l.ADATESTATUT , &apos;DD/MM/RRRR&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="ADATESTATUT" order="4" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOPFER" datatype="vchar2" columnOrder="17" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Topfer">
+          <dataDescriptor expression="nvl ( l.TOPFER , &apos; &apos; )"
+           descriptiveExpression="TOPFER" order="5" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" datatype="vchar2" columnOrder="18" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Codsg">
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.CODSG ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="CODSG" order="6" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDSG" datatype="vchar2" columnOrder="19" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Libdsg">
+          <dataDescriptor
+           expression="rpad ( nvl ( s.LIBDSG , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBDSG" order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ECET" datatype="vchar2" columnOrder="20" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ecet">
+          <dataDescriptor
+           expression="rpad ( nvl ( ie.ECET , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="ECET" order="8" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBETAPE" datatype="vchar2" columnOrder="21"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Libetape">
+          <dataDescriptor
+           expression="rpad ( nvl ( ie.LIBETAPE , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBETAPE" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPETAPE" datatype="vchar2" columnOrder="22" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Typetape">
+          <dataDescriptor
+           expression="rpad ( nvl ( ie.TYPETAPE , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="TYPETAPE" order="10" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACTA" datatype="vchar2" columnOrder="23" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Acta">
+          <dataDescriptor
+           expression="rpad ( nvl ( it.ACTA , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="ACTA" order="11" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBTACHE" datatype="vchar2" columnOrder="24"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Libtache">
+          <dataDescriptor
+           expression="rpad ( nvl ( it.LIBTACHE , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBTACHE" order="12" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACST" datatype="vchar2" columnOrder="25" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Acst">
+          <dataDescriptor
+           expression="rpad ( nvl ( ist.ACST , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="ACST" order="13" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ASNOM" datatype="vchar2" columnOrder="26" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Asnom">
+          <dataDescriptor
+           expression="rpad ( nvl ( ist.ASNOM , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="ASNOM" order="14" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AIST" datatype="vchar2" columnOrder="27" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Aist">
+          <dataDescriptor
+           expression="rpad ( nvl ( ist.AIST , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="AIST" order="15" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ASTA" datatype="vchar2" columnOrder="28" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Asta">
+          <dataDescriptor
+           expression="rpad ( nvl ( ist.ASTA , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="ASTA" order="16" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ADEB" datatype="vchar2" columnOrder="29"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Adeb">
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ist.ADEB , &apos;DD/MM/RRRR&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="ADEB" order="17" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AFIN" datatype="vchar2" columnOrder="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Afin">
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ist.AFIN , &apos;DD/MM/RRRR&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="AFIN" order="18" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ANDE" datatype="vchar2" columnOrder="31"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ande">
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ist.ANDE , &apos;DD/MM/RRRR&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="ANDE" order="19" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ANFI" datatype="vchar2" columnOrder="32"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Anfi">
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ist.ANFI , &apos;DD/MM/RRRR&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="ANFI" order="20" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ADUR" datatype="vchar2" columnOrder="33" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Adur">
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( ist.ADUR ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="ADUR" order="21" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PARAM_LOCAL" datatype="vchar2" columnOrder="34"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Param Local">
+          <dataDescriptor
+           expression="rpad ( nvl ( ist.PARAM_LOCAL , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="PARAM_LOCAL" order="22" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande" datatype="vchar2" columnOrder="35"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demande" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL, ( DECODE ( PI.PROJAXEMETIER, NULL, ( DECODE ( it.TACHEAXEMETIER, NULL, NULL, it.TACHEAXEMETIER )  ) , PI.PROJAXEMETIER )  ) , DPCOPI.DPCOPIAXEMETIER ) , rpad( NVL ( DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL, ( DECODE ( PI.PROJAXEMETIER, NULL, ( DECODE ( it.TACHEAXEMETIER, NULL, NULL, it.TACHEAXEMETIER )  ) , PI.PROJAXEMETIER )  ) , DPCOPI.DPCOPIAXEMETIER ) ,&apos; &apos; ) ,12, &apos; &apos; ) )"
+           descriptiveExpression="REF_DEMANDE" order="23" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demandeLib" datatype="vchar2" columnOrder="36"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demandeLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demandeLib&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL, ( DECODE ( PI.PROJAXEMETIER, NULL, ( DECODE ( it.TACHEAXEMETIER,NULL,NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 ) , NULL,&apos;???&apos;,DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER ) AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 )  )   )  )  ) , DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 )  )  )   )  , DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1 )  ) ) , rpad ( NVL ( DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL, ( DECODE ( PI.PROJAXEMETIER, NULL, ( DECODE ( it.TACHEAXEMETIER,NULL,NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 ) , NULL,&apos;???&apos;,DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER ) AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 )  )   )  )  ) , DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 )  )  )   )  , DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1 )  )  ) ,&apos; &apos; )  , 80 , &apos; &apos;  ) )"
+           descriptiveExpression="REF_DEMANDELIB" order="24" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TypeEtapeLib" datatype="vchar2" columnOrder="37"
+         width="60" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TypeEtapeLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TypeEtapeLib&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , ( SELECT LIBTYET FROM TYPE_ETAPE WHERE ie.TYPETAPE = TYPE_ETAPE.TYPETAP AND ROWNUM = 1 ) , rpad ( NVL ( ( SELECT LIBTYET FROM TYPE_ETAPE WHERE ie.TYPETAPE = TYPE_ETAPE.TYPETAP AND ROWNUM = 1 ),&apos; &apos; )  ,60,&apos; &apos; ) )"
+           descriptiveExpression="TYPE_ETAPE_LIB" order="25" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierCode" datatype="vchar2"
+         columnOrder="38" width="50" defaultWidth="10000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierCode&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , DPCOPI.DPCOPIAXEMETIER , rpad ( NVL ( DPCOPI.DPCOPIAXEMETIER,&apos; &apos; ) ,12, &apos; &apos; ) )"
+           descriptiveExpression="DPCOPIAXEMETIERCODE" order="26" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierLib" datatype="vchar2" columnOrder="39"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierLib&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL,NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1  ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER )  AND ROWNUM = 1  )  ) ) , rpad ( NVL ( DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL,NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1  ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER )  AND ROWNUM = 1  )  )   ) ,&apos; &apos; ) ,80, &apos; &apos; ) )"
+           descriptiveExpression="DPCOPIAXEMETIERLIB" order="27" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierCode" datatype="vchar2" columnOrder="40"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierCode&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , PI.PROJAXEMETIER , rpad ( NVL ( PI.PROJAXEMETIER,&apos; &apos; ) ,12, &apos; &apos; ) )"
+           descriptiveExpression="PROJAXEMETIERCODE" order="28" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierLib" datatype="vchar2" columnOrder="41"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierLib&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , DECODE ( PI.PROJAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 )  ) ) , rpad ( NVL ( DECODE ( PI.PROJAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 )  )   ) ,&apos; &apos; )  , 80 , &apos; &apos;  ) )"
+           descriptiveExpression="PROJAXEMETIERLIB" order="29" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TacheAxeMetierCode" datatype="vchar2" columnOrder="42"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TacheAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TacheAxeMetierCode&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , TACHEAXEMETIER , rpad ( NVL ( TACHEAXEMETIER,&apos; &apos; ) ,12, &apos; &apos; ) )"
+           descriptiveExpression="TACHEAXEMETIERCODE" order="30" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TacheAxeMetierLib" datatype="vchar2" columnOrder="43"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TacheAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TacheAxeMetierLib&quot;"/>
+          <dataDescriptor
+           expression="decode( : P_param6 , &apos;.CSV&apos; , DECODE ( it.TACHEAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 )  ) ) , rpad ( NVL ( DECODE ( it.TACHEAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( it.TACHEAXEMETIER )  AND ROWNUM = 1 )  )   ) ,&apos; &apos; )  , 80 , &apos; &apos;  ) )"
+           descriptiveExpression="TACHEAXEMETIERLIB" order="31" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_PID_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.25000" height="0.25000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_PID" source="G_PID" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.12500" width="7.25000"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_PID" source="PID" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.00000" y="0.12500" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PNOM" source="PNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.18750" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ASTATUT" source="ASTATUT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.43750" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ADATESTATUT" source="ADATESTATUT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.81250" y="0.12500" width="0.62500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TOPFER" source="TOPFER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="1.43750" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CODSG" source="CODSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="1.81250" y="0.12500" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBDSG" source="LIBDSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="2.12500" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ECET" source="ECET" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="2.50000" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBETAPE" source="LIBETAPE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="2.75000" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TYPETAPE" source="TYPETAPE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="3.18750" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ACTA" source="ACTA" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="3.62500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBTACHE" source="LIBTACHE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="3.87500" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ACST" source="ACST" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="4.31250" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ASNOM" source="ASNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="4.56250" y="0.12500" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AIST" source="AIST" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="4.87500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ASTA" source="ASTA" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="5.12500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ADEB" source="ADEB" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="5.37500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AFIN" source="AFIN" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="5.62500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ANDE" source="ANDE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="5.87500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ANFI" source="ANFI" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="6.12500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ADUR" source="ADUR" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="6.37500" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PARAM_LOCAL" source="PARAM_LOCAL" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="6.62500" y="0.12500" width="0.62500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_PID_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.25000"
+           height="0.12500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_PID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Pid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.18750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Pnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ASTATUT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.43750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Astatut]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ADATESTATUT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.81250" y="0.00000" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Adatestatut]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TOPFER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.43750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Topfer]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.81250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBDSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.12500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Libdsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ECET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Ecet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBETAPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.75000" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Libetape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPETAPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.18750" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Typetape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ACTA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.62500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Acta]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBTACHE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.87500" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Libtache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ACST" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.31250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Acst]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ASNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.56250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Asnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AIST" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Aist]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ASTA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.12500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Asta]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ADEB" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.37500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Adeb]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AFIN" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.62500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Afin]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Ande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ANFI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.12500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Anfi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ADUR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.37500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Adur]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PARAM_LOCAL" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.62500" y="0.00000" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Param Local]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_global pack_global.GlobalData;
+begin
+  
+  	l_global := pack_global.lire_globaldata(:P_GLOBAL);
+   :P_CHEF_PROJET := l_global.chefprojet;
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#cccc99"/>
+    <color index="192" displayName="TableCell" value="#f7f7e7"/>
+    <color index="193" displayName="Totals" value="#ffffcc"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_croise_saisie" DTDVersion="9.0.2.0.10"
+ beforeReportTrigger="beforereport" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="X_CROISE_SAISIE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_NUMSEQ_2" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+             '"'|| CHEF_PROJET ||'"',
+             '"'|| MATRICULE ||'"',
+             '"'|| RNOM ||'"',
+             '"'|| RPRENOM ||'"',
+             '"'|| USER_QUI_SAISIE ||'"' ,
+             '"'|| NOMBRE ||'"'
+FROM TMP_SAISIE_REALISEE
+WHERE numseq=:p_numseq_2
+AND nombre<>0
+AND TO_CHAR(chef_projet)<>USER_QUI_SAISIE
+ORDER BY rnom;]]>
+      </select>
+      <displayInfo x="1.56677" y="0.27075" width="0.69995" height="0.19995"/>
+      <group name="G_CHEF_PROJET">
+        <displayInfo x="1.08508" y="1.01245" width="1.53845" height="4.87402"
+        />
+        <dataItem name="CHEF_PROJET" datatype="vchar2" columnOrder="11"
+         width="42" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chef Projet">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || CHEF_PROJET || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||CHEF_PROJET||&apos;&quot;&apos;"
+           order="1" width="42"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATRICULE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="13" width="9"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Matricule">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || MATRICULE || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||MATRICULE||&apos;&quot;&apos;"
+           order="2" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RNOM" datatype="vchar2" columnOrder="14" width="32"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Rnom">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || RNOM || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||RNOM||&apos;&quot;&apos;"
+           order="3" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RPRENOM" datatype="vchar2" columnOrder="15" width="17"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Rprenom">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || RPRENOM || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||RPRENOM||&apos;&quot;&apos;"
+           order="4" width="17"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="USER_QUI_SAISIE" datatype="vchar2" columnOrder="16"
+         width="2002" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="User Qui Saisie">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || USER_QUI_SAISIE || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||USER_QUI_SAISIE||&apos;&quot;&apos;"
+           order="5" width="2002"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOMBRE" datatype="vchar2" columnOrder="17" width="42"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Nombre">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || NOMBRE || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||NOMBRE||&apos;&quot;&apos;"
+           order="6" width="42"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="trailer">
+    <margin>
+      <text name="B_OR$TRAILER_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="4.09949" y="0.25000" width="0.30103" height="0.06262"
+        />
+        <textSegment>
+          <font face="Courier New" size="4"/>
+          <string>
+          <![CDATA[x_Resserr]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  <section name="main">
+    <body>
+      <frame name="M_G_CHEF_PROJET_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="3.00000" height="0.25000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_CHEF_PROJET" source="G_CHEF_PROJET"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.12500" width="3.00000"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_CHEF_PROJET" source="CHEF_PROJET" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATRICULE" source="MATRICULE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.50000" y="0.12500" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_RNOM" source="RNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.93750" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_RPRENOM" source="RPRENOM" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.43750" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_USER_QUI_SAISIE" source="USER_QUI_SAISIE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.93750" y="0.12500" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NOMBRE" source="NOMBRE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.62500" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CHEF_PROJET_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="3.00000"
+           height="0.12500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_CHEF_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Chef Projet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATRICULE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.50000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Matricule]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.93750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RPRENOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.43750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rprenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_USER_QUI_SAISIE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.93750" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[User Qui Saisie]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NOMBRE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.62500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nombre]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="beforereport">
+      <textSource>
+      <![CDATA[function BeforeReport return boolean is
+begin
+  :p_numseq_2 := pack_rtfe.tmp_saisie_realisee_seq();
+						  
+  IF :p_numseq_2 = 0 THEN
+	return (FALSE);
+  END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  -- supprime les lignes de l'edition dans la table
+    delete from tmp_saisie_realisee
+    where  numseq = :p_numseq_2;
+    commit;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="x_Resserr"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

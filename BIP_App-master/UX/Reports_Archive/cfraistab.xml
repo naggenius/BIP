@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="cfraistab" DTDVersion="9.0.2.0.10"
+ unitOfMeasurement="centimeter" designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="T00503748" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM12" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="Preview" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select      c.codcfrais ||' - '||c.libcfrais as dc_cfrais,
+            trim(c.filcode) ||' - '||f.filsigle as dc_filcode,
+                codbddpg || '   ' ||  libbddpg,
+        	codhabili, 
+	decode(codhabili,'br','branche',
+			'dir','direction',
+			'dpt','département',
+			'pole','pôle',
+			'tout','groupe') as dc_habilitation			
+from compo_centre_frais co, centre_frais c, filiale_cli f
+where co.codcfrais(+)=c.codcfrais
+and f.filcode=c.filcode 
+order by c.codcfrais,codhabili]]>
+      </select>
+      <displayInfo x="2.16948" y="0.82010" width="3.12229" height="0.76740"/>
+      <group name="G_cfrais">
+        <displayInfo x="2.33350" y="2.85750" width="2.79394" height="2.83021"
+        />
+        <dataItem name="dc_cfrais" datatype="vchar2" columnOrder="24"
+         width="73" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dc Cfrais">
+          <dataDescriptor
+           expression="c.codcfrais || &apos; - &apos; || c.libcfrais"
+           descriptiveExpression="DC_CFRAIS" order="1" width="73"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_filcode" datatype="vchar2" columnOrder="27"
+         width="36" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dc Filcode">
+          <dataDescriptor
+           expression="trim ( c.filcode ) || &apos; - &apos; || f.filsigle"
+           descriptiveExpression="DC_FILCODE" order="2" width="36"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_habili">
+        <displayInfo x="2.22746" y="6.40302" width="2.79394" height="1.96205"
+        />
+        <dataItem name="codhabili1" datatype="vchar2" columnOrder="26"
+         width="15" defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <xmlSettings xmlTag="CODHABILI"/>
+          <dataDescriptor expression="codhabili"
+           descriptiveExpression="CODHABILI" order="4" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_habilitation" datatype="vchar2" columnOrder="25"
+         width="11" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Habilitation" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( codhabili , &apos;br&apos; , &apos;branche&apos; , &apos;dir&apos; , &apos;direction&apos; , &apos;dpt&apos; , &apos;département&apos; , &apos;pole&apos; , &apos;pôle&apos; , &apos;tout&apos; , &apos;groupe&apos; )"
+           descriptiveExpression="DC_HABILITATION" order="5" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_bddpg">
+        <displayInfo x="2.14778" y="8.96938" width="2.79394" height="1.96205"
+        />
+        <dataItem name="codbddpg_libbddpg" datatype="vchar2" columnOrder="28"
+         width="44" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Codbddpg Libbddpg">
+          <dataDescriptor expression="codbddpg || &apos;   &apos; || libbddpg"
+           descriptiveExpression="CODBDDPG||&apos;&apos;||LIBBDDPG" order="3"
+           width="44"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.00002" height="26.95029">
+      <location x="0.50012" y="2.11956"/>
+      <frame name="M_cfrais_GRPFR">
+        <geometryInfo x="0.04310" y="0.52958" width="19.94545"
+         height="2.36110"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_cfrais" source="G_cfrais"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.08620" y="1.70470" width="19.77337"
+           height="0.97637"/>
+          <generalLayout verticalElasticity="variable"/>
+          <frame name="M_habili_GRPFR">
+            <geometryInfo x="9.98358" y="1.84485" width="9.85459"
+             height="0.44834"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_habili" source="G_habili"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="10.04807" y="1.84485" width="9.72561"
+               height="0.44741"/>
+              <generalLayout verticalElasticity="variable"/>
+              <frame name="M_bddpg_GRPFR">
+                <geometryInfo x="12.43645" y="1.84485" width="7.31862"
+                 height="0.44710"/>
+                <generalLayout verticalElasticity="variable"/>
+                <repeatingFrame name="R_bddpg" source="G_bddpg"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="12.47955" y="1.84485" width="7.25816"
+                   height="0.44710"/>
+                  <field name="F_code" source="codbddpg_libbddpg"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="12.68233" y="1.84485" width="7.00515"
+                     height="0.44710"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout printObjectOnPage="allPage"
+                     basePrintingOn="enclosingObject"/>
+                  </field>
+                </repeatingFrame>
+              </frame>
+              <field name="F_dc_habilitation" source="dc_habilitation"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="10.07225" y="1.84485" width="2.23521"
+                 height="0.41207"/>
+                <generalLayout verticalElasticity="expand"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+            </repeatingFrame>
+          </frame>
+          <field name="F_dc_cfrais" source="dc_cfrais" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="0.19379" y="1.84485" width="5.07783"
+             height="0.42912"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <field name="F_dc_filcode" source="dc_filcode" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="6.11094" y="1.84485" width="3.61466"
+             height="0.44710"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+        </repeatingFrame>
+        <text name="B_dc_cfrais" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.16030" y="0.63562" width="5.49858"
+           height="1.06908"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Centre de frais 
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[--------------------------------]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_dc_habilitation" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="10.05086" y="0.63562" width="2.37288"
+           height="1.06908"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Habilitation
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[-------------]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_codbddpg" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="12.52761" y="0.63562" width="1.92112"
+           height="1.06908"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[BDDPG
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[-----------]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_libbddpg" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="14.93242" y="0.63562" width="5.04713"
+           height="1.06908"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Libellé du BDDPG
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[-----------------------------]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_dc_cfrais1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="6.08924" y="0.63562" width="3.74024"
+           height="1.06908"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Filiale
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[---------------------
+]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_Page" minWidowLines="1">
+        <textSettings justify="right" spacing="single"/>
+        <geometryInfo x="14.89459" y="0.66725" width="4.30795"
+         height="0.79809"/>
+        <generalLayout horizontalElasticity="variable"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page : &F_Page / &F_TotalPage]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Page" source="PageNumber" visible="no" minWidowLines="1"
+       formatMask="NNNNNNNN0" spacing="single" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.49369" y="0.39129" width="0.80429"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_TotalPage" source="TotalPages" visible="no"
+       minWidowLines="1" formatMask="NNNN" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.48098" y="1.01203" width="0.99994"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Date" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.69205" y="0.68120" width="1.66501" height="0.39688"
+        />
+        <generalLayout horizontalElasticity="expand"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[DATE : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_NomEtat" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.67469" y="1.27589" width="6.28644" height="0.39688"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ETAT : CFRAISTAB]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_Titre1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="6.60983" y="0.66725" width="9.26052" height="0.42602"
+        />
+        <visualSettings fillBackgroundColor="red"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[- Liste des centres de frais- ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="2.32699" y="0.65608" width="3.93929" height="0.46664"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

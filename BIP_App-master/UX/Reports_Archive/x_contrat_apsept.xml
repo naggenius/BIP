@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_contrat_apsept" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="T01504000" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_perime" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT DISTINCT rpad(c1.numcont,27,' ') numcont,
+    lpad(nvl(decode(c1.top30,'N',substr(c1.cav,2,2),'O',decode(c1.cav,'000',null,c1.cav)),' '),3,' ') cav,
+    lpad(nvl(to_char(lc1.ident),' '),5,' ') ident,
+    lpad(to_char(lc1.lcnum),2,' ') lcnum,
+    lpad(nvl(to_char(lc1.lccouact,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),'0.00'),12,' ') lccouact,
+    rpad(nvl(c1.soccont,' '),4,' ') soccont,
+    lpad(nvl(to_char(lc1.lresdeb,'DD/MM/YYYY'),' '),10,' ') lresdeb,
+    lpad(nvl(to_char(lc1.lresfin,'DD/MM/YYYY'),' '),10,' ') lresfin,
+    lpad(nvl(to_char(c1.cdatarr,'DD/MM/YYYY'),' '),12,' ') cdatarr,
+    lpad(nvl(to_char(md.CODE_CONTRACTUEL),' '),3,' ') Mode_contractuel
+FROM     -- Contrats sélectionnés
+    contrat c,
+    -- Lignes contrats liées au contrat
+    ligne_cont lc,
+    -- Avenants liés aux contrats
+    contrat c1,
+    -- Lignes contrats liés aux avenants
+    ligne_cont lc1,
+    datdebex,
+    MODE_CONTRACTUEL md
+WHERE  
+    -- On récupère les lignes contrats liées au contrat dans lc
+    c.numcont = lc.numcont
+AND    c.soccont = lc.soccont
+AND    c.cav = lc.cav
+-- On ne prend que le dernier avenant lié à la ressource
+AND    c.cav = (    SELECT     MAX(cont.cav)
+        FROM     contrat cont,
+            ligne_cont lcont 
+        WHERE     cont.numcont = lcont.numcont
+        AND    cont.soccont = lcont.soccont
+        AND    cont.cav = lcont.cav
+        AND    cont.numcont = c.numcont
+        AND    cont.soccont = c.soccont
+        AND     lcont.ident = lc.ident)
+-- On ne prend que les lignes contrats qui ne sont pas expirées
+AND         ((lc.lresfin IS NULL) OR (lc.lresfin >= datdebex.moismens))
+-- On ne prend que les contrats non SG
+AND    c.soccont <> 'SG..'
+-- On ne prend que les contrats pour lesquels les DPGs sont dans le périmètre ME
+AND     c.codsg IN (SELECT codsg FROM vue_dpg_perime WHERE INSTR(:P_PERIME, codbddpg) > 0)
+-- On récupère les avenants du contrat dans c1
+AND    c1.numcont = c.numcont
+AND    c1.soccont = c.soccont
+-- On récupère les lignes contrats liées aux avenants du contrats dans lc1
+AND         c1.soccont = lc1.soccont
+AND         c1.numcont = lc1.numcont
+AND         c1.cav = lc1.cav
+-- On ne prend que les lignes liées à la ressource (=> on ne prend que les avenants liés à la ressource)
+AND    lc1.ident = lc.ident
+AND lc1.MODE_CONTRACTUEL  = md.CODE_CONTRACTUEL (+)
+ORDER BY
+	ident,
+	numcont,
+	cav,
+	lcnum
+;]]>
+      </select>
+      <displayInfo x="0.51050" y="0.10413" width="0.80200" height="0.59375"/>
+      <group name="G_numcont">
+        <displayInfo x="0.36157" y="1.41675" width="1.45093" height="4.01953"
+        />
+        <dataItem name="numcont" datatype="vchar2" columnOrder="12" width="27"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Numcont" breakOrder="none">
+          <xmlSettings xmlTag="Num_contrat"/>
+          <dataDescriptor
+           expression="rpad ( c1.numcont , 27 , &apos; &apos; )"
+           descriptiveExpression="NUMCONT" order="1" width="27"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cav" datatype="vchar2" columnOrder="13" width="3"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cav" breakOrder="none">
+          <xmlSettings xmlTag="Num_avenant"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( decode ( c1.top30 , &apos;N&apos; , substr ( c1.cav , 2 , 2 ) , &apos;O&apos; , decode ( c1.cav , &apos;000&apos; , null , c1.cav ) ) , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="CAV" order="2" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="14" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ident" breakOrder="none">
+          <xmlSettings xmlTag="Id_ressource"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( lc1.ident ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="IDENT" order="3" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lcnum" datatype="vchar2" columnOrder="15" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Lcnum" breakOrder="none">
+          <xmlSettings xmlTag="Num_ligne_contrat"/>
+          <dataDescriptor
+           expression="lpad ( to_char ( lc1.lcnum ) , 2 , &apos; &apos; )"
+           descriptiveExpression="LCNUM" order="4" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lccouact" datatype="vchar2" columnOrder="16"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Lccouact" breakOrder="none">
+          <xmlSettings xmlTag="Cout_journalier_HT"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( lc1.lccouact , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , &apos;0.00&apos; ) , 12 , &apos; &apos; )"
+           descriptiveExpression="LCCOUACT" order="5" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soccont" datatype="vchar2" columnOrder="17" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Soccont" breakOrder="none">
+          <xmlSettings xmlTag="Id_societe"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( c1.soccont , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCONT" order="6" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lresdeb" datatype="vchar2" columnOrder="18"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Lresdeb" breakOrder="none">
+          <xmlSettings xmlTag="Date_debut_utilisation"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( lc1.lresdeb , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="LRESDEB" order="7" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lresfin" datatype="vchar2" columnOrder="19"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Lresfin" breakOrder="none">
+          <xmlSettings xmlTag="Date_fin_utilisation"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( lc1.lresfin , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="LRESFIN" order="8" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cdatarr" datatype="vchar2" columnOrder="21" width="12"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cdatarr" breakOrder="none">
+          <xmlSettings xmlTag="Date_arrivée_contrat"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( c1.cdatarr , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 12 , &apos; &apos; )"
+           descriptiveExpression="CDATARR" order="9" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Mode_contractuel" datatype="vchar2" columnOrder="22"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Mode Contr" breakOrder="none">
+          <xmlSettings xmlTag="MODE_CONTR"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( md.CODE_CONTRACTUEL ) , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="MODE_CONTRACTUEL" order="10" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header">
+    <body>
+      <text name="B_1" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.06250" y="0.06250" width="7.25000" height="0.34375"
+        />
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA['Num_contrat';'Num_avenant';'Id_ressource';'Num_ligne_contrat';'Cout_journalier_HT';'Id_societe';'Date_debut_utilisation';'Date_fin_utilisation']]>
+          </string>
+        </textSegment>
+      </text>
+    </body>
+  </section>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_numcont" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.12500" width="7.31250" height="0.62500"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_numcont" source="numcont" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.12500" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cav" source="cav" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.62500" y="0.18750" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_ident" source="ident" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.06250" y="0.18750" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_lccouact" source="lccouact" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.50000" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_soccont" source="soccont" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.00000" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_lresdeb" source="lresdeb" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.50000" y="0.18750" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_lresfin" source="lresfin" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.93750" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+  :P_PERIME:=PACK_GLOBAL.LIRE_PERIME(:P_GLOBAL);
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

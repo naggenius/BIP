@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eStatEdTotEtat" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="ESTATEDTOTETAT" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="400"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MESS" datatype="character" width="4000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select a.LIBELLE_RDF ,r.fichier_rdf,count(*)
+from report_log r,fichiers_rdf a
+where a.FICHIER_RDF(+) = r.FICHIER_RDF
+&P_WHERE
+group by a.LIBELLE_RDF ,r.fichier_rdf
+order by 3 desc
+;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_fichier_rdf">
+        <displayInfo x="1.26746" y="1.94995" width="1.46521" height="0.77246"
+        />
+        <dataItem name="fichier_rdf" datatype="vchar2" columnOrder="12"
+         width="30" defaultWidth="200000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="ETAT">
+          <dataDescriptor expression="r.fichier_rdf"
+           descriptiveExpression="FICHIER_RDF" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_RDF" datatype="vchar2" columnOrder="11"
+         width="100" defaultWidth="700000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="LIBELLLE">
+          <dataDescriptor expression="a.LIBELLE_RDF"
+           descriptiveExpression="LIBELLE_RDF" order="1" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="count" oracleDatatype="number" columnOrder="13"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="TOTAL">
+          <dataDescriptor expression="count ( * )"
+           descriptiveExpression="COUNT(*)" order="3" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_fichier_rdf_GRPFR">
+        <geometryInfo x="0.00000" y="0.37500" width="7.45300" height="0.50000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_fichier_rdf" source="G_fichier_rdf"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.68750" width="7.45300"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_fichier_rdf" source="fichier_rdf" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="0.00000" y="0.68750" width="1.68750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBELLE_RDF" source="LIBELLE_RDF" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="1.75000" y="0.68750" width="5.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_count" source="count" minWidowLines="1" spacing="0"
+           alignment="center">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="6.89050" y="0.68750" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_fichier_rdf_HDR">
+          <geometryInfo x="0.00000" y="0.37500" width="7.45300"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_fichier_rdf" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.37500" width="1.68750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[ETAT]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE_RDF" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.75000" y="0.37500" width="4.75000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LIBELLLE]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_count" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="6.89050" y="0.37500" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[TOTAL]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="2.66602" y="0.68750" width="3.70898" height="0.31250"
+        />
+        <textSegment>
+          <font face="Arial" size="14" bold="yes"/>
+          <string>
+          <![CDATA[Fréquence de lancement des états]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Message" source="P_MESS" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="0.12500" y="0.06250" width="4.00000" height="0.18750"
+        />
+      </field>
+      <text name="B_1" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="7.18750" y="0.06250" width="0.36462" height="0.15625"
+        />
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Date" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/RRRR" spacing="single" alignment="start">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="7.56250" y="0.06250" width="0.75000" height="0.18750"
+        />
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.42712" y="0.81250" width="2.00000" height="0.34375"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de début de suivi :
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(jj/mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.05054" y="0.23962" width="1.91663" height="0.16663"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes" underline="yes"/>
+      <string>
+      <![CDATA[Paramètres de lancement]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.18750" y="1.03125" width="1.44788" height="0.34375"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.18750" y="1.65430" width="1.44788" height="0.34375"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.13538" y="1.03113" width="2.01038" height="0.36450"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de début de suivi :
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(jj/mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.13586" y="1.64380" width="2.01038" height="0.36450"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de fin de suivi :
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(jj/mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.05115" y="0.36426" width="1.91663" height="0.16663"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes" underline="yes"/>
+      <string>
+      <![CDATA[Paramètres de lancement]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+where1 varchar2(400);
+where2 varchar2(400);
+l_date varchar2(10);
+
+begin
+  where1 :='';
+  where2 :='';
+
+  select to_char(sysdate,'dd/mm/yyyy') into l_date from dual;
+
+  IF (:P_PARAM6 is not null or :P_PARAM6<>'') THEN
+  	  where1 := ' AND date_log >= to_date('''||:P_PARAM6||''',''dd/mm/yyyy'') '; 
+  END IF; 
+
+  IF (:P_PARAM7 is not null or :P_PARAM7<>'') THEN 
+  		where2 := ' AND date_log <= to_date('''||:P_PARAM7||''',''dd/mm/yyyy'') '; 
+  END IF;
+	 	
+  :P_WHERE := where1 || where2;
+  
+  :P_MESS := ' Période traitée : jusqu''au '||l_date||'';
+  IF ((:P_PARAM6 is not null or :P_PARAM6<>'')and(:P_PARAM7 is not null or :P_PARAM7<>'')) THEN
+  	  :P_MESS := ' Période traitée : du '||:P_PARAM6||' au '||:P_PARAM7||'';
+  END IF;   
+  IF ((:P_PARAM6 is not null or :P_PARAM6<>'')and(:P_PARAM7 is null or :P_PARAM7='')) THEN
+  	  :P_MESS := ' Période traitée : du '||:P_PARAM6||' au '||l_date||'';
+  END IF;     
+  IF ((:P_PARAM6 is null or :P_PARAM6='')and(:P_PARAM7 is not null or :P_PARAM7<>'')) THEN
+  	  :P_MESS := ' Période traitée : jusqu''au '||:P_PARAM7||'';
+  END IF;       
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="Fréquence de lancement des états"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

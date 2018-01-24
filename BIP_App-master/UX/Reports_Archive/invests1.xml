@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="invests" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="MODULE1" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Bitmap"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088"/>
+    <dataSource name="Q_TAB_REF_INVEST">
+      <select>
+      <![CDATA[select distinct I.codposte, P.lib_poste, I.codnature , N.lib_nature
+from investissements I, poste P, nature N
+where I.CODPOSTE  = P.CODPOSTE
+  and I.CODNATURE = N.CODNATURE
+order by codposte
+;
+
+]]>
+      </select>
+      <displayInfo x="1.35303" y="1.00000" width="1.28748" height="0.19995"/>
+      <group name="G_codposte">
+        <displayInfo x="1.34070" y="1.94995" width="1.31873" height="1.11426"
+        />
+        <dataItem name="codposte" oracleDatatype="number" columnOrder="11"
+         width="22" defaultWidth="40000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="CODE POSTE">
+          <dataDescriptor expression="I.codposte"
+           descriptiveExpression="CODPOSTE" order="1" oracleDatatype="number"
+           width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_poste" datatype="vchar2" columnOrder="12"
+         width="64" defaultWidth="640000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="LIBELLE POSTE">
+          <dataDescriptor expression="P.lib_poste"
+           descriptiveExpression="LIB_POSTE" order="2" width="64"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_codnature">
+        <displayInfo x="1.30408" y="3.73779" width="1.39197" height="1.11426"
+        />
+        <dataItem name="codnature" oracleDatatype="number" columnOrder="13"
+         width="22" defaultWidth="40000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="CODE NATURE">
+          <dataDescriptor expression="I.codnature"
+           descriptiveExpression="CODNATURE" order="3" oracleDatatype="number"
+           width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_nature" datatype="vchar2" columnOrder="14"
+         width="64" defaultWidth="640000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="LIBELLE NATURE">
+          <dataDescriptor expression="N.lib_nature"
+           descriptiveExpression="LIB_NATURE" order="4" width="64"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_1" source="codnature" function="count" width="20"
+         precision="10" reset="report" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DATE">
+      <select>
+      <![CDATA[select to_char(sysdate,'DD/MM/YYYY HH24:MI') date_jour from dual;]]>
+      </select>
+      <displayInfo x="4.78271" y="0.99988" width="0.69995" height="0.19995"/>
+      <group name="G_date_jour">
+        <displayInfo x="4.57324" y="1.97070" width="1.11926" height="0.43066"
+        />
+        <dataItem name="date_jour" datatype="vchar2" columnOrder="15"
+         width="16" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Date Jour" breakOrder="none">
+          <dataDescriptor
+           expression="to_char ( sysdate , &apos;DD/MM/YYYY HH24:MI&apos; )"
+           descriptiveExpression="DATE_JOUR" order="1" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_Type_Invest">
+      <select>
+      <![CDATA[select distinct codposte, codnature, codtype , lib_type
+from investissements
+order by codposte asc, codnature asc, codtype asc
+;]]>
+      </select>
+      <displayInfo x="3.07935" y="1.01038" width="1.14026" height="0.19995"/>
+      <group name="G_Codposte1">
+        <displayInfo x="3.05640" y="1.96033" width="1.18176" height="0.43066"
+        />
+        <dataItem name="codposte1" oracleDatatype="number" columnOrder="16"
+         width="22" defaultWidth="60000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Codposte1">
+          <dataDescriptor expression="codposte"
+           descriptiveExpression="CODPOSTE" order="1" width="22" precision="4"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_codnature1">
+        <displayInfo x="3.04626" y="2.68762" width="1.21472" height="0.43066"
+        />
+        <dataItem name="codnature1" oracleDatatype="number" columnOrder="17"
+         width="22" defaultWidth="60000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Codnature1">
+          <dataDescriptor expression="codnature"
+           descriptiveExpression="CODNATURE" order="2" width="22"
+           precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_codtype">
+        <displayInfo x="3.02551" y="3.43030" width="1.24768" height="1.45605"
+        />
+        <dataItem name="codtype" oracleDatatype="number" columnOrder="18"
+         width="22" defaultWidth="60000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Codtype">
+          <dataDescriptor expression="codtype" descriptiveExpression="CODTYPE"
+           order="3" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_type" datatype="vchar2" columnOrder="19"
+         width="64" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Lib Type">
+          <dataDescriptor expression="lib_type"
+           descriptiveExpression="LIB_TYPE" order="4" width="64"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_2" source="codtype" function="count" width="20"
+         precision="10" reset="report" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" orientation="portrait"/>
+  <section name="main">
+    <body width="8.00000" height="9.50000">
+      <location x="0.25000" y="0.75000"/>
+      <frame name="M_G_codposte_GRPFR">
+        <geometryInfo x="0.18750" y="0.37500" width="7.00000" height="2.06250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_codposte" source="G_codposte"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.18750" y="0.93750" width="7.00000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="gray8"/>
+          <frame name="M_G_codnature_GRPFR">
+            <geometryInfo x="3.50000" y="0.93750" width="3.68750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_G_codnature" source="G_codnature"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="3.50000" y="0.93750" width="3.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout formatTrigger="r_g_codnatureformattrigger"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray8"/>
+              <field name="F_codnature" source="codnature" minWidowLines="1"
+               spacing="0" alignment="center">
+                <font face="Courier New" size="9"/>
+                <geometryInfo x="3.50000" y="0.93750" width="1.00000"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="r25g100b0"/>
+              </field>
+              <field name="F_lib_nature" source="lib_nature" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="9"/>
+                <geometryInfo x="4.62500" y="0.93750" width="2.56250"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+            </repeatingFrame>
+          </frame>
+          <field name="F_codposte" source="codposte" minWidowLines="1"
+           spacing="0" alignment="center">
+            <font face="Courier New" size="9"/>
+            <geometryInfo x="0.18750" y="0.93750" width="0.93750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <field name="F_lib_poste" source="lib_poste" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="9"/>
+            <geometryInfo x="1.18750" y="0.93750" width="2.31250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_Codposte1_GRPFR">
+          <geometryInfo x="0.25000" y="1.68750" width="6.93750"
+           height="0.75000"/>
+          <generalLayout verticalElasticity="variable"/>
+          <repeatingFrame name="R_G_Codposte1" source="G_Codposte1"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="2.18750" width="6.93750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <frame name="M_G_codnature1_GRPFR">
+              <geometryInfo x="1.31250" y="2.18750" width="5.87500"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="variable"/>
+              <repeatingFrame name="R_G_codnature1" source="G_codnature1"
+               printDirection="down" minWidowRecords="1" columnMode="no">
+                <geometryInfo x="1.31250" y="2.18750" width="5.87500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="variable"/>
+                <frame name="M_G_codtype_GRPFR">
+                  <geometryInfo x="2.43750" y="2.18750" width="4.75000"
+                   height="0.18750"/>
+                  <generalLayout verticalElasticity="variable"/>
+                  <repeatingFrame name="R_G_codtype" source="G_codtype"
+                   printDirection="down" minWidowRecords="1" columnMode="no">
+                    <geometryInfo x="2.43750" y="2.18750" width="4.75000"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="r_g_codtypeformattrigger"/>
+                    <visualSettings fillPattern="transparent"
+                     fillBackgroundColor="gray8"/>
+                    <field name="F_codtype" source="codtype" minWidowLines="1"
+                     spacing="0" alignment="center">
+                      <font face="Courier New" size="9"/>
+                      <geometryInfo x="2.43750" y="2.18750" width="0.87500"
+                       height="0.18750"/>
+                      <generalLayout verticalElasticity="expand"/>
+                    </field>
+                    <field name="F_lib_type" source="lib_type"
+                     minWidowLines="1" spacing="0" alignment="start">
+                      <font face="Courier New" size="9"/>
+                      <geometryInfo x="3.56250" y="2.18750" width="3.62500"
+                       height="0.18750"/>
+                      <generalLayout verticalElasticity="expand"/>
+                    </field>
+                  </repeatingFrame>
+                </frame>
+                <field name="F_codnature1" source="codnature1"
+                 minWidowLines="1" spacing="0" alignment="center">
+                  <font face="Courier New" size="9"/>
+                  <geometryInfo x="1.31250" y="2.18750" width="1.00000"
+                   height="0.18750"/>
+                  <generalLayout verticalElasticity="expand"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                </field>
+              </repeatingFrame>
+            </frame>
+            <field name="F_codposte1" source="codposte1" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Courier New" size="9"/>
+              <geometryInfo x="0.25000" y="2.18750" width="1.00000"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_G_Codposte1_HDR">
+            <geometryInfo x="0.25000" y="1.68750" width="6.93750"
+             height="0.50000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillBackgroundColor="r88g100b100"/>
+            <text name="B_codposte1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.25000" y="2.00000" width="1.06250"
+               height="0.18750"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray8"/>
+              <textSegment>
+                <font face="Courier New" size="10" underline="yes"/>
+                <string>
+                <![CDATA[CODE POSTE
+]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_codnature1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.31250" y="2.00000" width="1.12500"
+               height="0.18750"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray8"/>
+              <textSegment>
+                <font face="Courier New" size="10" underline="yes"/>
+                <string>
+                <![CDATA[CODE NATURE
+]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_codtype" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="2.43750" y="2.00000" width="1.12500"
+               height="0.18750"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray8"/>
+              <textSegment>
+                <font face="Courier New" size="10" underline="yes"/>
+                <string>
+                <![CDATA[CODE TYPE
+]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_lib_type" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="3.56250" y="2.00000" width="3.62500"
+               height="0.18750"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray8"/>
+              <textSegment>
+                <font face="Courier New" size="10" underline="yes"/>
+                <string>
+                <![CDATA[LIBELLE TYPE
+]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_titre2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.25000" y="1.68750" width="3.62500"
+               height="0.16663"/>
+              <textSegment>
+                <font face="Courier New" size="11" bold="yes" underline="yes"
+                />
+                <string>
+                <![CDATA[DETAIL DES TYPES D'INVESTISSEMENTS]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+        <frame name="M_G_codposte_HDR">
+          <geometryInfo x="0.18750" y="0.37500" width="7.00000"
+           height="0.50000"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillBackgroundColor="r88g100b100"/>
+          <text name="B_codposte" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.18750" y="0.68750" width="1.00000"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray8"/>
+            <textSegment>
+              <font face="Courier New" size="10" underline="yes"/>
+              <string>
+              <![CDATA[CODE POSTE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_lib_poste" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.68750" width="2.31250"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray8"/>
+            <textSegment>
+              <font face="Courier New" size="10" underline="yes"/>
+              <string>
+              <![CDATA[LIBELLE POSTE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codnature" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.50000" y="0.68750" width="1.12500"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray8"/>
+            <textSegment>
+              <font face="Courier New" size="10" underline="yes"/>
+              <string>
+              <![CDATA[CODE NATURE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_lib_nature" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.62500" y="0.68750" width="2.56250"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray8"/>
+            <textSegment>
+              <font face="Courier New" size="10" underline="yes"/>
+              <string>
+              <![CDATA[LIBELLE NATURE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_titrE1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.18750" y="0.37500" width="3.68750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="11" bold="yes" underline="yes"/>
+              <string>
+              <![CDATA[TABLES DE REFERENCE INVESTISSEMENTS]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="2.80566" y="0.43750" width="3.31934" height="0.22925"
+        />
+        <textSegment>
+          <font face="Courier New" size="12" bold="yes"/>
+          <string>
+          <![CDATA[ETAT DES INVESTISSEMENTS]]>
+          </string>
+        </textSegment>
+      </text>
+      <repeatingFrame name="R_Date" source="G_date_jour" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.43750" y="0.06250" width="1.81250" height="0.18750"
+        />
+        <text name="B_1" minWidowLines="1">
+          <textSettings spacing="single"/>
+          <geometryInfo x="0.43750" y="0.06250" width="0.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Date :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_Date" source="date_jour" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="0.81250" y="0.06250" width="1.43750"
+           height="0.18750"/>
+        </field>
+      </repeatingFrame>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="7.12500" y="0.06250" width="0.43750" height="0.16663"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_PAGE" source="PhysicalPageNumber" minWidowLines="1"
+       spacing="single" alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="7.62500" y="0.06250" width="0.43750" height="0.18750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="r_g_codnatureformattrigger">
+      <textSource>
+      <![CDATA[function R_G_codnatureFormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_1,2);
+if reste <> 0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+    srw.attr.bfcolor :='white';
+    srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_codtypeformattrigger">
+      <textSource>
+      <![CDATA[function R_G_codtypeFormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_2,2);
+if reste <> 0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+    srw.attr.bfcolor :='white';
+    srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabBrkLeft" versionFlags2="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

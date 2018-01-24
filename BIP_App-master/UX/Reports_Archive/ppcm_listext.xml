@@ -1,0 +1,4168 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="PPCM_LISTEXT" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="PPCM_LISTEXT" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM7" datatype="character" width="1"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="1000"
+     precision="10" label="P Where" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ORDER" datatype="character" width="100"
+     precision="10" label="P Order" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="1"
+     precision="10" initialValue="A" label="P Param10" defaultWidth="0"
+     defaultHeight="0" display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_GROUPE">
+      <select>
+      <![CDATA[-- cas 1
+-- ressource avec une situation en cours
+
+select distinct 
+pack_utile.f_get_deppole(substr(To_char(sit.codsg, 'FM0000000'),1,5)) libpole,
+to_char(pack_util_situ.DebutPresenceRessource(sit.ident),'dd/mm/yyyy') arriveesg,
+res.rnom nom,
+res.rprenom prenom,
+decode(sit.prestation,'IFO','Interv forf',to_char(sit.cout,'FM999999999D00')) cout,
+to_char(sit.montant_mensuel,'FM9999999999D00') montant_mensuel,
+to_char(sit.ident) ident,
+sit.prestation prestation,
+sit.soccode societe,
+to_char(sit.datsitu,'dd/mm/yyyy') datsitu,
+nvl(to_char(sit.datdep,'dd/mm/yyyy'),'En cours') echeance,
+decode(sit.prestation,'IFO','',to_char(lc.lresfin,'dd/mm/yyyy')) fincontrat,
+to_char(lc.lresfin,'yyyymmdd') fin,
+trim(lc.numcont) ||'-' || trim(lc.cav) numcontrat,
+decode(sit.prestation,'IFO','',to_char(lcbis.lccouact,'FM999999999D00')) cout_futur,
+to_char(lcbis.lresfin,'dd/mm/yyyy') contrat_futur,
+st.gnom responsable,
+res.rtype type,
+to_char(st.codsg, 'FM0000000') code,
+decode(sit.prestation,'IFO',to_date('31/12/2099','DD/MM/YYYY'),lc.lresfin) tri_chrono,
+sit.mode_contractuel_indicatif mci,
+sit.cpident chef_projet,
+sit.fident lien_forf,
+tr.rlib
+  from  ligne_cont lc,ligne_cont lcbis,situ_ress_full sit,ressource res,struct_info st, type_ress tr
+  where
+   sit.ident=res.ident
+and lc.lresfin in (select max(l.lresfin) from ligne_cont l where l.ident=res.ident and l.lresdeb < sysdate )
+and lcbis.lresfin in  (select max(l.lresfin) from ligne_cont l where l.ident=res.ident and ( l.lresfin > sysdate or  l.lresfin is null))
+and lcbis.ident = res.ident
+and lc.ident(+) =sit.ident
+and sit.codsg=st.codsg
+and res.rtype = tr.rtype
+and sit.soccode <> 'SG..'
+   -- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+and sit.type_situ='N'
+&P_WHERE
+
+--modif des regles de gestion
+
+UNION
+
+--cas 3
+--pers ayant une situation en cours sans contrat
+
+select distinct 
+pack_utile.f_get_deppole(substr(To_char(sit.codsg, 'FM0000000'),1,5)) libpole,
+to_char(pack_util_situ.DebutPresenceRessource(sit.ident),'dd/mm/yyyy') arriveesg,
+res.rnom nom,
+res.rprenom prenom,
+decode(sit.prestation,'IFO','Interv forf',to_char(sit.cout,'FM999999999D00')) cout,
+to_char(sit.montant_mensuel,'FM9999999999D00') montant_mensuel,
+to_char(sit.ident) ident,
+sit.prestation prestation,
+sit.soccode societe,
+to_char(sit.datsitu,'dd/mm/yyyy') datsitu,
+nvl(to_char(sit.datdep,'dd/mm/yyyy'),'En cours') echeance,
+'' fincontrat_g,
+'' fin_g,
+'' numcontrat_g,
+'' cout_futur_g,
+'' contrat_futur_g,
+st.gnom responsable_g,
+res.rtype type,
+to_char(st.codsg, 'FM0000000') code_g,
+to_date('31/12/2099','DD/MM/YYYY') tri_chrono_g,
+sit.mode_contractuel_indicatif mci,
+sit.cpident chef_projet,
+sit.fident lien_forf,
+tr.rlib
+ from  ressource res,situ_ress_full sit,struct_info st, type_ress tr
+   where sit.ident=res.ident
+      -- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+   and sit.type_situ='N'
+   --and sit.ident NOT IN  (select l.ident from ligne_cont l)
+--pas de contrat
+	and res.ident NOT IN (select lc.ident from ligne_cont lc
+			where to_char(lc.lresdeb,'yyyymm')<= to_char(sysdate,'yyyymm')
+			 and  (to_char(lc.lresfin,'yyyymm')>= to_char(sysdate,'yyyymm')  or lc.lresfin is null ))
+   and res.rtype = tr.rtype
+   and sit.codsg=st.codsg
+   and sit.soccode <> 'SG..'
+  &P_WHERE
+
+&P_ORDER;  ]]>
+      </select>
+      <displayInfo x="0.79163" y="0.12488" width="0.69995" height="0.19995"/>
+      <group name="G_1">
+        <displayInfo x="0.58533" y="0.82507" width="1.09998" height="0.60156"
+        />
+        <dataItem name="libpole" datatype="vchar2" columnOrder="16"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libpole G">
+          <xmlSettings xmlTag="LIBPOLE_G"/>
+          <dataDescriptor
+           expression="pack_utile.f_get_deppole ( substr ( To_char ( sit.codsg , &apos;FM0000000&apos; ) , 1 , 5 ) )"
+           descriptiveExpression="LIBPOLE" order="1" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_2">
+        <displayInfo x="0.48730" y="1.84314" width="1.27551" height="0.60156"
+        />
+        <dataItem name="code" datatype="vchar2" columnOrder="34" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code G">
+          <xmlSettings xmlTag="CODE_G"/>
+          <dataDescriptor
+           expression="to_char ( st.codsg , &apos;FM0000000&apos; )"
+           descriptiveExpression="CODE" order="19" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="responsable" datatype="vchar2" columnOrder="32"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Responsable G">
+          <xmlSettings xmlTag="RESPONSABLE_G"/>
+          <dataDescriptor expression="st.gnom"
+           descriptiveExpression="RESPONSABLE" order="17" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_3">
+        <displayInfo x="0.64795" y="2.65906" width="1.09998" height="0.60156"
+        />
+        <dataItem name="type" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="33" width="1" defaultWidth="10000" defaultHeight="10000"
+         columnFlags="35" defaultLabel="Type" breakOrder="descending">
+          <dataDescriptor expression="res.rtype" descriptiveExpression="TYPE"
+           order="18" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rlib" datatype="vchar2" columnOrder="84" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rlib">
+          <dataDescriptor expression="tr.rlib" descriptiveExpression="RLIB"
+           order="24" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_groupe">
+        <displayInfo x="0.59143" y="3.65247" width="1.52551" height="3.67773"
+        />
+        <dataItem name="arriveesg" datatype="vchar2" columnOrder="17"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Arriveesg G">
+          <xmlSettings xmlTag="ARRIVEESG_G"/>
+          <dataDescriptor
+           expression="to_char ( pack_util_situ.DebutPresenceRessource ( sit.ident ) , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="ARRIVEESG" order="2" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom" datatype="vchar2" columnOrder="18" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Nom G">
+          <xmlSettings xmlTag="NOM_G"/>
+          <dataDescriptor expression="res.rnom" descriptiveExpression="NOM"
+           order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom" datatype="vchar2" columnOrder="19" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Prenom G">
+          <xmlSettings xmlTag="PRENOM_G"/>
+          <dataDescriptor expression="res.rprenom"
+           descriptiveExpression="PRENOM" order="4" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout" datatype="vchar2" columnOrder="20" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cout G">
+          <xmlSettings xmlTag="COUT_G"/>
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;Interv forf&apos; , to_char ( sit.cout , &apos;FM999999999D00&apos; ) )"
+           descriptiveExpression="COUT" order="5" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="montant_mensuel" datatype="vchar2" columnOrder="21"
+         width="14" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Montant Mensuel G">
+          <xmlSettings xmlTag="MONTANT_MENSUEL_G"/>
+          <dataDescriptor
+           expression="to_char ( sit.montant_mensuel , &apos;FM9999999999D00&apos; )"
+           descriptiveExpression="MONTANT_MENSUEL" order="6" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="22" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ident G">
+          <xmlSettings xmlTag="IDENT_G"/>
+          <dataDescriptor expression="to_char ( sit.ident )"
+           descriptiveExpression="IDENT" order="7" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prestation" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="23" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Prestation G">
+          <xmlSettings xmlTag="PRESTATION_G"/>
+          <dataDescriptor expression="sit.prestation"
+           descriptiveExpression="PRESTATION" order="8"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="societe" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="24" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Societe G">
+          <xmlSettings xmlTag="SOCIETE_G"/>
+          <dataDescriptor expression="sit.soccode"
+           descriptiveExpression="SOCIETE" order="9"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datsitu" datatype="vchar2" columnOrder="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Datsitu G">
+          <xmlSettings xmlTag="DATSITU_G"/>
+          <dataDescriptor
+           expression="to_char ( sit.datsitu , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="DATSITU" order="10" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="echeance" datatype="vchar2" columnOrder="26"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Echeance G">
+          <xmlSettings xmlTag="ECHEANCE_G"/>
+          <dataDescriptor
+           expression="nvl ( to_char ( sit.datdep , &apos;dd/mm/yyyy&apos; ) , &apos;En cours&apos; )"
+           descriptiveExpression="ECHEANCE" order="11" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fincontrat" datatype="vchar2" columnOrder="27"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Fincontrat G">
+          <xmlSettings xmlTag="FINCONTRAT_G"/>
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;&apos; , to_char ( lc.lresfin , &apos;dd/mm/yyyy&apos; ) )"
+           descriptiveExpression="FINCONTRAT" order="12" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fin" datatype="vchar2" columnOrder="28" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Fin G">
+          <xmlSettings xmlTag="FIN_G"/>
+          <dataDescriptor
+           expression="to_char ( lc.lresfin , &apos;yyyymmdd&apos; )"
+           descriptiveExpression="FIN" order="13" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="numcontrat" datatype="vchar2" columnOrder="29"
+         width="31" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Numcontrat G">
+          <xmlSettings xmlTag="NUMCONTRAT_G"/>
+          <dataDescriptor
+           expression="trim ( lc.numcont ) || &apos;-&apos; || trim ( lc.cav )"
+           descriptiveExpression="NUMCONTRAT" order="14" width="31"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout_futur" datatype="vchar2" columnOrder="30"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Cout Futur G">
+          <xmlSettings xmlTag="COUT_FUTUR_G"/>
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;&apos; , to_char ( lcbis.lccouact , &apos;FM999999999D00&apos; ) )"
+           descriptiveExpression="COUT_FUTUR" order="15" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="contrat_futur" datatype="vchar2" columnOrder="31"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Contrat Futur G">
+          <xmlSettings xmlTag="CONTRAT_FUTUR_G"/>
+          <dataDescriptor
+           expression="to_char ( lcbis.lresfin , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="CONTRAT_FUTUR" order="16" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tri_chrono" datatype="date" oracleDatatype="date"
+         columnOrder="35" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Tri Chrono G">
+          <xmlSettings xmlTag="TRI_CHRONO_G"/>
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , to_date ( &apos;31/12/2099&apos; , &apos;DD/MM/YYYY&apos; ) , lc.lresfin )"
+           descriptiveExpression="TRI_CHRONO" order="20" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mci" datatype="vchar2" columnOrder="36" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Mci">
+          <dataDescriptor expression="sit.mode_contractuel_indicatif"
+           descriptiveExpression="MCI" order="21" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="chef_projet" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chef Projet">
+          <dataDescriptor expression="sit.cpident"
+           descriptiveExpression="CHEF_PROJET" order="22"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lien_forf" oracleDatatype="number" columnOrder="38"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Lien Forf">
+          <dataDescriptor expression="sit.fident"
+           descriptiveExpression="LIEN_FORF" order="23"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_1" source="ident" function="count" width="20"
+         precision="10" reset="G_1" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_POLE">
+      <select>
+      <![CDATA[-- cas 1
+-- ressource avec une situation en cours
+
+select distinct 
+pack_utile.f_get_deppole(substr(To_char(sit.codsg, 'FM0000000'),1,5)) libpole,
+to_char(pack_util_situ.DebutPresenceRessource(sit.ident),'dd/mm/yyyy') arriveesg,
+res.rnom nom,
+res.rprenom prenom,
+decode(sit.prestation,'IFO','Interv forf',to_char(sit.cout,'FM999999999D00')) cout,
+to_char(sit.montant_mensuel,'FM9999999999D00') montant_mensuel,
+to_char(sit.ident) ident,
+sit.prestation prestation,
+sit.soccode societe,
+to_char(sit.datsitu,'dd/mm/yyyy') datsitu,
+nvl(to_char(sit.datdep,'dd/mm/yyyy'),'En cours') echeance,
+decode(sit.prestation,'IFO','',to_char(lc.lresfin,'dd/mm/yyyy')) fincontrat,
+to_char(lc.lresfin,'yyyymmdd') fin,
+trim(lc.numcont) ||'-' || trim(lc.cav) numcontrat,
+decode(sit.prestation,'IFO','',to_char(lcbis.lccouact,'FM999999999D00')) cout_futur,
+to_char(lcbis.lresfin,'dd/mm/yyyy') contrat_futur,
+st.gnom responsable,
+res.rtype type,
+to_char(st.codsg, 'FM0000000') code,
+decode(sit.prestation,'IFO',to_date('31/12/2099','DD/MM/YYYY'),lc.lresfin) tri_chrono,
+sit.mode_contractuel_indicatif mci,
+sit.cpident chef_projet,
+sit.fident lien_forf,
+tr.rlib
+  from  ligne_cont lc,ligne_cont lcbis,situ_ress_full sit,ressource res,struct_info st, type_ress tr
+  where
+   sit.ident=res.ident
+and lc.lresfin in (select max(l.lresfin) from ligne_cont l where l.ident=res.ident and l.lresdeb < sysdate )
+and lcbis.lresfin in  (select max(l.lresfin) from ligne_cont l where l.ident=res.ident and ( l.lresfin > sysdate or  l.lresfin is null))
+and lcbis.ident = res.ident
+and lc.ident(+) =sit.ident
+and sit.codsg=st.codsg
+
+and sit.soccode <> 'SG..'
+   -- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+and sit.type_situ='N'
+and res.rtype = tr.rtype
+&P_WHERE
+
+--modif des regles de gestion
+
+UNION
+
+--cas 3
+--pers ayant une situation en cours sans contrat
+
+select distinct 
+pack_utile.f_get_deppole(substr(To_char(sit.codsg, 'FM0000000'),1,5)) libpole,
+to_char(pack_util_situ.DebutPresenceRessource(sit.ident),'dd/mm/yyyy') arriveesg,
+res.rnom nom,
+res.rprenom prenom,
+decode(sit.prestation,'IFO','Interv forf',to_char(sit.cout,'FM999999999D00')) cout,
+to_char(sit.montant_mensuel,'FM9999999999D00') montant_mensuel,
+to_char(sit.ident) ident,
+sit.prestation prestation,
+sit.soccode societe,
+to_char(sit.datsitu,'dd/mm/yyyy') datsitu,
+nvl(to_char(sit.datdep,'dd/mm/yyyy'),'En cours') echeance,
+'' fincontrat_g,
+'' fin_g,
+'' numcontrat_g,
+'' cout_futur_g,
+'' contrat_futur_g,
+st.gnom responsable_g,
+res.rtype type,
+to_char(st.codsg, 'FM0000000') code_g,
+to_date('31/12/2099','DD/MM/YYYY') tri_chrono_g,
+sit.mode_contractuel_indicatif mci,
+sit.cpident chef_projet,
+sit.fident lien_forf,
+tr.rlib
+ from  ressource res,situ_ress_full sit,struct_info st, type_ress tr
+   where sit.ident=res.ident
+      -- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+   and sit.type_situ='N'
+   --and sit.ident NOT IN  (select l.ident from ligne_cont l)
+--pas de contrat
+	and res.ident NOT IN (select lc.ident from ligne_cont lc
+			where to_char(lc.lresdeb,'yyyymm')<= to_char(sysdate,'yyyymm')
+			 and  (to_char(lc.lresfin,'yyyymm')>= to_char(sysdate,'yyyymm')  or lc.lresfin is null ))
+   
+   and sit.codsg=st.codsg
+   and sit.soccode <> 'SG..'
+and res.rtype = tr.rtype
+  &P_WHERE
+
+&P_ORDER;  ]]>
+      </select>
+      <displayInfo x="3.71887" y="0.19800" width="0.69995" height="0.19995"/>
+      <group name="G_4">
+        <displayInfo x="3.47095" y="0.92908" width="1.09998" height="0.60156"
+        />
+        <dataItem name="libpole1" datatype="vchar2" columnOrder="39"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libpole1">
+          <dataDescriptor
+           expression="pack_utile.f_get_deppole ( substr ( To_char ( sit.codsg , &apos;FM0000000&apos; ) , 1 , 5 ) )"
+           descriptiveExpression="LIBPOLE" order="1" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_5">
+        <displayInfo x="3.35632" y="2.32227" width="1.09998" height="0.60156"
+        />
+        <dataItem name="type1" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="56" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Type1">
+          <dataDescriptor expression="res.rtype" descriptiveExpression="TYPE"
+           order="18" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rlib1" datatype="vchar2" columnOrder="86" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rlib1">
+          <dataDescriptor expression="tr.rlib" descriptiveExpression="RLIB"
+           order="24" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_pole">
+        <displayInfo x="3.14355" y="3.78418" width="1.58801" height="4.19043"
+        />
+        <dataItem name="code1" datatype="vchar2" columnOrder="57" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code1">
+          <dataDescriptor
+           expression="to_char ( st.codsg , &apos;FM0000000&apos; )"
+           descriptiveExpression="CODE" order="19" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="arriveesg1" datatype="vchar2" columnOrder="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Arriveesg1">
+          <dataDescriptor
+           expression="to_char ( pack_util_situ.DebutPresenceRessource ( sit.ident ) , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="ARRIVEESG" order="2" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom1" datatype="vchar2" columnOrder="41" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Nom1">
+          <dataDescriptor expression="res.rnom" descriptiveExpression="NOM"
+           order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom1" datatype="vchar2" columnOrder="42" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Prenom1">
+          <dataDescriptor expression="res.rprenom"
+           descriptiveExpression="PRENOM" order="4" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout1" datatype="vchar2" columnOrder="43" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cout1">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;Interv forf&apos; , to_char ( sit.cout , &apos;FM999999999D00&apos; ) )"
+           descriptiveExpression="COUT" order="5" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="montant_mensuel1" datatype="vchar2" columnOrder="44"
+         width="14" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Montant Mensuel1">
+          <dataDescriptor
+           expression="to_char ( sit.montant_mensuel , &apos;FM9999999999D00&apos; )"
+           descriptiveExpression="MONTANT_MENSUEL" order="6" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident1" datatype="vchar2" columnOrder="45" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ident1">
+          <dataDescriptor expression="to_char ( sit.ident )"
+           descriptiveExpression="IDENT" order="7" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prestation1" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="46" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Prestation1">
+          <dataDescriptor expression="sit.prestation"
+           descriptiveExpression="PRESTATION" order="8"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="societe1" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="47" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Societe1">
+          <dataDescriptor expression="sit.soccode"
+           descriptiveExpression="SOCIETE" order="9"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datsitu1" datatype="vchar2" columnOrder="48"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Datsitu1">
+          <dataDescriptor
+           expression="to_char ( sit.datsitu , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="DATSITU" order="10" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="echeance1" datatype="vchar2" columnOrder="49"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Echeance1">
+          <dataDescriptor
+           expression="nvl ( to_char ( sit.datdep , &apos;dd/mm/yyyy&apos; ) , &apos;En cours&apos; )"
+           descriptiveExpression="ECHEANCE" order="11" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fincontrat1" datatype="vchar2" columnOrder="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Fincontrat1">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;&apos; , to_char ( lc.lresfin , &apos;dd/mm/yyyy&apos; ) )"
+           descriptiveExpression="FINCONTRAT" order="12" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fin1" datatype="vchar2" columnOrder="51" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Fin1">
+          <dataDescriptor
+           expression="to_char ( lc.lresfin , &apos;yyyymmdd&apos; )"
+           descriptiveExpression="FIN" order="13" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="numcontrat1" datatype="vchar2" columnOrder="52"
+         width="31" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Numcontrat1">
+          <dataDescriptor
+           expression="trim ( lc.numcont ) || &apos;-&apos; || trim ( lc.cav )"
+           descriptiveExpression="NUMCONTRAT" order="14" width="31"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout_futur1" datatype="vchar2" columnOrder="53"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Cout Futur1">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;&apos; , to_char ( lcbis.lccouact , &apos;FM999999999D00&apos; ) )"
+           descriptiveExpression="COUT_FUTUR" order="15" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="contrat_futur1" datatype="vchar2" columnOrder="54"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Contrat Futur1">
+          <dataDescriptor
+           expression="to_char ( lcbis.lresfin , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="CONTRAT_FUTUR" order="16" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="responsable1" datatype="vchar2" columnOrder="55"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Responsable1">
+          <dataDescriptor expression="st.gnom"
+           descriptiveExpression="RESPONSABLE" order="17" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tri_chrono1" datatype="date" oracleDatatype="date"
+         columnOrder="58" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Tri Chrono1">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , to_date ( &apos;31/12/2099&apos; , &apos;DD/MM/YYYY&apos; ) , lc.lresfin )"
+           descriptiveExpression="TRI_CHRONO" order="20" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mci1" datatype="vchar2" columnOrder="59" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Mci1">
+          <dataDescriptor expression="sit.mode_contractuel_indicatif"
+           descriptiveExpression="MCI" order="21" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="chef_projet1" oracleDatatype="number" columnOrder="60"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chef Projet1">
+          <dataDescriptor expression="sit.cpident"
+           descriptiveExpression="CHEF_PROJET" order="22"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lien_forf1" oracleDatatype="number" columnOrder="61"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Lien Forf1">
+          <dataDescriptor expression="sit.fident"
+           descriptiveExpression="LIEN_FORF" order="23"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_2" source="ident1" function="count" width="20"
+         precision="10" reset="G_4" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DEP">
+      <select>
+      <![CDATA[-- cas 1
+-- ressource avec une situation en cours
+
+select distinct 
+pack_utile.f_get_dep(substr(To_char(sit.codsg, 'FM0000000'),1,3)) libdep,
+to_char(pack_util_situ.DebutPresenceRessource(sit.ident),'dd/mm/yyyy') arriveesg,
+res.rnom nom,
+res.rprenom prenom,
+decode(sit.prestation,'IFO','Interv forf',to_char(sit.cout,'FM999999999D00')) cout,
+to_char(sit.montant_mensuel,'FM9999999999D00') montant_mensuel,
+to_char(sit.ident) ident,
+sit.prestation prestation,
+sit.soccode societe,
+to_char(sit.datsitu,'dd/mm/yyyy') datsitu,
+nvl(to_char(sit.datdep,'dd/mm/yyyy'),'En cours') echeance,
+decode(sit.prestation,'IFO','',to_char(lc.lresfin,'dd/mm/yyyy')) fincontrat,
+to_char(lc.lresfin,'yyyymmdd') fin,
+trim(lc.numcont) ||'-' || trim(lc.cav) numcontrat,
+decode(sit.prestation,'IFO','',to_char(lcbis.lccouact,'FM999999999D00')) cout_futur,
+to_char(lcbis.lresfin,'dd/mm/yyyy') contrat_futur,
+st.gnom responsable,
+res.rtype type,
+to_char(st.codsg, 'FM0000000') code,
+decode(sit.prestation,'IFO',to_date('31/12/2099','DD/MM/YYYY'),lc.lresfin) tri_chrono,
+sit.mode_contractuel_indicatif mci,
+sit.cpident chef_projet,
+sit.fident lien_forf,
+tr.rlib
+  from  ligne_cont lc,ligne_cont lcbis,situ_ress_full sit,ressource res,struct_info st, type_ress tr
+  where
+   sit.ident=res.ident
+and lc.lresfin in (select max(l.lresfin) from ligne_cont l where l.ident=res.ident and l.lresdeb < sysdate )
+and lcbis.lresfin in  (select max(l.lresfin) from ligne_cont l where l.ident=res.ident and ( l.lresfin > sysdate or  l.lresfin is null))
+and lcbis.ident = res.ident
+and lc.ident(+) =sit.ident
+and sit.codsg=st.codsg
+
+and sit.soccode <> 'SG..'
+   -- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+and sit.type_situ='N'
+and tr.rtype = res.rtype
+&P_WHERE
+
+--modif des regles de gestion
+
+UNION
+
+--cas 3
+--pers ayant une situation en cours sans contrat
+
+select distinct 
+pack_utile.f_get_dep(substr(To_char(sit.codsg, 'FM0000000'),1,3)) libdep,
+to_char(pack_util_situ.DebutPresenceRessource(sit.ident),'dd/mm/yyyy') arriveesg,
+res.rnom nom,
+res.rprenom prenom,
+decode(sit.prestation,'IFO','Interv forf',to_char(sit.cout,'FM999999999D00')) cout,
+to_char(sit.montant_mensuel,'FM9999999999D00') montant_mensuel,
+to_char(sit.ident) ident,
+sit.prestation prestation,
+sit.soccode societe,
+to_char(sit.datsitu,'dd/mm/yyyy') datsitu,
+nvl(to_char(sit.datdep,'dd/mm/yyyy'),'En cours') echeance,
+'' fincontrat_g,
+'' fin_g,
+'' numcontrat_g,
+'' cout_futur_g,
+'' contrat_futur_g,
+st.gnom responsable_g,
+res.rtype type,
+to_char(st.codsg, 'FM0000000') code_g,
+to_date('31/12/2099','DD/MM/YYYY') tri_chrono_g,
+sit.mode_contractuel_indicatif mci,
+sit.cpident chef_projet,
+sit.fident lien_forf,
+tr.rlib
+ from  ressource res,situ_ress_full sit,struct_info st, type_ress tr
+   where sit.ident=res.ident
+      -- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+   and sit.type_situ='N'
+   --and sit.ident NOT IN  (select l.ident from ligne_cont l)
+--pas de contrat
+	and res.ident NOT IN (select lc.ident from ligne_cont lc
+			where to_char(lc.lresdeb,'yyyymm')<= to_char(sysdate,'yyyymm')
+			 and  (to_char(lc.lresfin,'yyyymm')>= to_char(sysdate,'yyyymm')  or lc.lresfin is null ))
+   and tr.rtype = res.rtype
+   and sit.codsg=st.codsg
+   and sit.soccode <> 'SG..'
+  &P_WHERE
+
+&P_ORDER;  ]]>
+      </select>
+      <displayInfo x="6.52075" y="0.31250" width="0.69995" height="0.19995"/>
+      <group name="G_6">
+        <displayInfo x="6.15845" y="0.99158" width="1.09998" height="0.60156"
+        />
+        <dataItem name="libdep" datatype="vchar2" columnOrder="90"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libdep">
+          <dataDescriptor
+           expression="pack_utile.f_get_dep ( substr ( To_char ( sit.codsg , &apos;FM0000000&apos; ) , 1 , 3 ) )"
+           descriptiveExpression="LIBDEP" order="1" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_7">
+        <displayInfo x="6.21045" y="2.22864" width="1.09998" height="0.60156"
+        />
+        <dataItem name="rlib2" datatype="vchar2" columnOrder="88" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rlib2">
+          <dataDescriptor expression="tr.rlib" descriptiveExpression="RLIB"
+           order="24" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="type2" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="78" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Type2">
+          <dataDescriptor expression="res.rtype" descriptiveExpression="TYPE"
+           order="18" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_dep">
+        <displayInfo x="5.20605" y="3.79468" width="1.58801" height="4.19043"
+        />
+        <dataItem name="code2" datatype="vchar2" columnOrder="79" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Code2">
+          <dataDescriptor
+           expression="to_char ( st.codsg , &apos;FM0000000&apos; )"
+           descriptiveExpression="CODE" order="19" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="arriveesg2" datatype="vchar2" columnOrder="62"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Arriveesg2">
+          <dataDescriptor
+           expression="to_char ( pack_util_situ.DebutPresenceRessource ( sit.ident ) , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="ARRIVEESG" order="2" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom2" datatype="vchar2" columnOrder="63" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Nom2">
+          <dataDescriptor expression="res.rnom" descriptiveExpression="NOM"
+           order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom2" datatype="vchar2" columnOrder="64" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Prenom2">
+          <dataDescriptor expression="res.rprenom"
+           descriptiveExpression="PRENOM" order="4" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout2" datatype="vchar2" columnOrder="65" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cout2">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;Interv forf&apos; , to_char ( sit.cout , &apos;FM999999999D00&apos; ) )"
+           descriptiveExpression="COUT" order="5" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="montant_mensuel2" datatype="vchar2" columnOrder="66"
+         width="14" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Montant Mensuel2">
+          <dataDescriptor
+           expression="to_char ( sit.montant_mensuel , &apos;FM9999999999D00&apos; )"
+           descriptiveExpression="MONTANT_MENSUEL" order="6" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident2" datatype="vchar2" columnOrder="67" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ident2">
+          <dataDescriptor expression="to_char ( sit.ident )"
+           descriptiveExpression="IDENT" order="7" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prestation2" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="68" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Prestation2">
+          <dataDescriptor expression="sit.prestation"
+           descriptiveExpression="PRESTATION" order="8"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="societe2" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="69" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Societe2">
+          <dataDescriptor expression="sit.soccode"
+           descriptiveExpression="SOCIETE" order="9"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datsitu2" datatype="vchar2" columnOrder="70"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Datsitu2">
+          <dataDescriptor
+           expression="to_char ( sit.datsitu , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="DATSITU" order="10" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="echeance2" datatype="vchar2" columnOrder="71"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Echeance2">
+          <dataDescriptor
+           expression="nvl ( to_char ( sit.datdep , &apos;dd/mm/yyyy&apos; ) , &apos;En cours&apos; )"
+           descriptiveExpression="ECHEANCE" order="11" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fincontrat2" datatype="vchar2" columnOrder="72"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Fincontrat2">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;&apos; , to_char ( lc.lresfin , &apos;dd/mm/yyyy&apos; ) )"
+           descriptiveExpression="FINCONTRAT" order="12" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fin2" datatype="vchar2" columnOrder="73" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Fin2">
+          <dataDescriptor
+           expression="to_char ( lc.lresfin , &apos;yyyymmdd&apos; )"
+           descriptiveExpression="FIN" order="13" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="numcontrat2" datatype="vchar2" columnOrder="74"
+         width="31" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Numcontrat2">
+          <dataDescriptor
+           expression="trim ( lc.numcont ) || &apos;-&apos; || trim ( lc.cav )"
+           descriptiveExpression="NUMCONTRAT" order="14" width="31"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout_futur2" datatype="vchar2" columnOrder="75"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Cout Futur2">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , &apos;&apos; , to_char ( lcbis.lccouact , &apos;FM999999999D00&apos; ) )"
+           descriptiveExpression="COUT_FUTUR" order="15" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="contrat_futur2" datatype="vchar2" columnOrder="76"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Contrat Futur2">
+          <dataDescriptor
+           expression="to_char ( lcbis.lresfin , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="CONTRAT_FUTUR" order="16" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="responsable2" datatype="vchar2" columnOrder="77"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Responsable2">
+          <dataDescriptor expression="st.gnom"
+           descriptiveExpression="RESPONSABLE" order="17" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tri_chrono2" datatype="date" oracleDatatype="date"
+         columnOrder="80" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Tri Chrono2">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;IFO&apos; , to_date ( &apos;31/12/2099&apos; , &apos;DD/MM/YYYY&apos; ) , lc.lresfin )"
+           descriptiveExpression="TRI_CHRONO" order="20" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mci2" datatype="vchar2" columnOrder="81" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Mci2">
+          <dataDescriptor expression="sit.mode_contractuel_indicatif"
+           descriptiveExpression="MCI" order="21" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="chef_projet2" oracleDatatype="number" columnOrder="82"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chef Projet2">
+          <dataDescriptor expression="sit.cpident"
+           descriptiveExpression="CHEF_PROJET" order="22"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lien_forf2" oracleDatatype="number" columnOrder="83"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Lien Forf2">
+          <dataDescriptor expression="sit.fident"
+           descriptiveExpression="LIEN_FORF" order="23"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_3" source="ident2" function="count" width="20"
+         precision="10" reset="G_6" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="10.75000" height="7.79736">
+      <location x="0.10425" y="0.48389"/>
+      <frame name="M_GROUPE">
+        <geometryInfo x="0.02356" y="0.07288" width="10.71216"
+         height="3.22461"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_groupeformattrigger"/>
+        <repeatingFrame name="R_G_1" source="G_1" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.02356" y="0.11462" width="10.71216"
+           height="3.18286"/>
+          <generalLayout verticalElasticity="variable"/>
+          <field name="F_libpole" source="libpole" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="helvetica" size="16" bold="yes"/>
+            <geometryInfo x="5.15320" y="0.23755" width="1.06116"
+             height="0.26233"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_2_GRPFR">
+            <geometryInfo x="0.02356" y="0.96631" width="10.71216"
+             height="2.33118"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_G_2" source="G_2" printDirection="down"
+             maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="0.02356" y="0.96875" width="10.71216"
+               height="2.32874"/>
+              <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+              <field name="F_code" source="code" minWidowLines="1" spacing="0"
+               alignment="start">
+                <font face="helvetica" size="12" bold="yes"/>
+                <geometryInfo x="3.62000" y="1.21106" width="0.86292"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <frame name="M_G_3_GRPFR">
+                <geometryInfo x="0.02356" y="1.58081" width="10.71216"
+                 height="1.71667"/>
+                <generalLayout verticalElasticity="variable"/>
+                <repeatingFrame name="R_G_3" source="G_3"
+                 printDirection="down" minWidowRecords="1" columnMode="no"
+                 vertSpaceBetweenFrames="0.3641">
+                  <geometryInfo x="0.02356" y="1.58081" width="10.71216"
+                   height="1.71667"/>
+                  <generalLayout verticalElasticity="variable"/>
+                  <advancedLayout keepWithAnchoringObject="yes"/>
+                  <field name="F_rlib" source="rlib" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="10" bold="yes"/>
+                    <geometryInfo x="0.03784" y="1.60168" width="6.23779"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout printObjectOnPage="allPage"
+                     basePrintingOn="enclosingObject"/>
+                  </field>
+                  <frame name="M_G_groupe_GRPFR">
+                    <geometryInfo x="0.02356" y="1.81250" width="10.71216"
+                     height="1.48499"/>
+                    <generalLayout verticalElasticity="variable"/>
+                    <advancedLayout keepWithAnchoringObject="yes"/>
+                    <frame name="M_2">
+                      <geometryInfo x="0.03796" y="1.91418" width="10.67175"
+                       height="0.57544"/>
+                      <generalLayout verticalElasticity="variable"/>
+                      <advancedLayout formatTrigger="m_2formattrigger"/>
+                      <frame name="M_G_groupe_HDR">
+                        <geometryInfo x="0.03796" y="1.91418" width="10.67175"
+                         height="0.30969"/>
+                        <advancedLayout printObjectOnPage="allPage"
+                         basePrintingOn="enclosingObject"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="r88g100b100"/>
+                        <text name="B_arriveesg" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="5.23083" y="1.91443"
+                           width="0.49902" height="0.30945"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Date de 
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[création]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_nom" minWidowLines="1">
+                          <textSettings spacing="0"/>
+                          <geometryInfo x="0.06909" y="1.97644"
+                           width="0.87854" height="0.18750"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Intervenant]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_cout" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="8.66150" y="1.91418"
+                           width="0.51990" height="0.30969"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Coût HT
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[actuel]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_montant_mensuel" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="9.33728" y="1.91418"
+                           width="0.49902" height="0.30969"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Coût HT
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[mensuel]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_ident" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="3.21362" y="1.93213"
+                           width="0.31189" height="0.29175"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Code
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[BIP]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_prestation" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="2.45508" y="1.97668"
+                           width="0.36389" height="0.18750"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Prest.]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_societe" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="3.62952" y="1.97668"
+                           width="0.29102" height="0.18750"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Sté.]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_datsitu" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="5.85461" y="1.91418"
+                           width="0.65503" height="0.30969"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Début de la
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[situation]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_echeance" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="6.65503" y="1.91418"
+                           width="0.53027" height="0.30969"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Fin de la
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[situation]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_fincontrat" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="9.99243" y="1.91418"
+                           width="0.71729" height="0.30969"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Echéance ligne contrat]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_numcontrat" minWidowLines="1">
+                          <textSettings spacing="0"/>
+                          <geometryInfo x="7.63245" y="1.96631"
+                           width="0.66541" height="0.18750"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[N°Contrat Av]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_mci" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="2.90198" y="1.97681"
+                           width="0.21838" height="0.18750"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[MCI]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_chef_projet" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="4.02478" y="1.91443"
+                           width="0.37427" height="0.30945"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Code
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[CP]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_lien_forf" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="4.50317" y="1.91418"
+                           width="0.55078" height="0.30957"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Code lien
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[forf]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                      </frame>
+                      <repeatingFrame name="R_G_groupe" source="G_groupe"
+                       printDirection="down" minWidowRecords="1"
+                       columnMode="no">
+                        <geometryInfo x="0.03796" y="2.22388" width="10.64075"
+                         height="0.20349"/>
+                        <generalLayout verticalElasticity="expand"/>
+                        <advancedLayout
+                         formatTrigger="r_g_groupeformattrigger"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="gray8"/>
+                        <field name="F_nom" source="nom" minWidowLines="1"
+                         spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="0.04834" y="2.23987"
+                           width="2.36511" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_cout" source="cout" minWidowLines="1"
+                         spacing="0" alignment="end">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="8.60449" y="2.23987"
+                           width="0.55090" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_ident" source="ident" minWidowLines="1"
+                         spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="3.16687" y="2.23987"
+                           width="0.38477" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_datsitu" source="datsitu"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="5.88599" y="2.23987"
+                           width="0.65491" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_echeance" source="echeance"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="6.60840" y="2.23987"
+                           width="0.62378" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_fincontrat" source="fincontrat"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="10.05481" y="2.23987"
+                           width="0.62390" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                          <advancedLayout
+                           formatTrigger="f_fincontratformattrigger"/>
+                        </field>
+                        <field name="F_mci" source="mci" minWidowLines="1"
+                         spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="2.84998" y="2.23987"
+                           width="0.29114" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_chef_projet" source="chef_projet"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="4.05042" y="2.23987"
+                           width="0.37427" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_lien_forf" source="lien_forf"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="4.56543" y="2.23987"
+                           width="0.37427" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_montantmensuel"
+                         source="montant_mensuel" minWidowLines="1"
+                         spacing="0" alignment="end">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="9.21790" y="2.23987"
+                           width="0.72778" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_arriveesg" source="arriveesg"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="5.15796" y="2.23987"
+                           width="0.65503" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_prestation" source="prestation"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="2.48596" y="2.23987"
+                           width="0.25476" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_numcontrat" source="numcontrat"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="7.28943" y="2.23987"
+                           width="1.33081" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_societe" source="societe"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="3.62952" y="2.23987"
+                           width="0.37439" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                      </repeatingFrame>
+                    </frame>
+                    <frame name="M_1">
+                      <geometryInfo x="0.02356" y="2.71338" width="10.71216"
+                       height="0.58411"/>
+                      <generalLayout verticalElasticity="variable"/>
+                      <advancedLayout keepWithAnchoringObject="yes"
+                       formatTrigger="m_1formattrigger"/>
+                      <repeatingFrame name="R_G_groupe1" source="G_groupe"
+                       printDirection="down" minWidowRecords="1"
+                       columnMode="no">
+                        <geometryInfo x="0.02356" y="3.03638" width="10.68616"
+                         height="0.21399"/>
+                        <generalLayout verticalElasticity="expand"/>
+                        <advancedLayout
+                         formatTrigger="r_g_groupe1formattrigger"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="gray8"/>
+                        <field name="F_nom3" source="nom" minWidowLines="1"
+                         spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="0.02356" y="3.07312"
+                           width="1.33459" height="0.15588"/>
+                        </field>
+                        <field name="F_prenom3" source="prenom"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="1.37891" y="3.07324"
+                           width="1.06897" height="0.16101"/>
+                        </field>
+                        <field name="F_prestation3" source="prestation"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="2.49133" y="3.06287"
+                           width="0.30164" height="0.16101"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_ident3" source="ident"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="3.23987" y="3.06287"
+                           width="0.37427" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_mci3" source="mci" minWidowLines="1"
+                         spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="2.83960" y="3.06299"
+                           width="0.24951" height="0.18738"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_societe3" source="societe"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="3.61426" y="3.06287"
+                           width="0.37427" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_arriveesg3" source="arriveesg"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="5.03845" y="3.06287"
+                           width="0.68616" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_echeance3" source="echeance"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="5.79724" y="3.06287"
+                           width="0.60315" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_cout3" source="cout" minWidowLines="1"
+                         spacing="0" alignment="end">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="6.46289" y="3.06287"
+                           width="0.56140" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_fincontrat3" source="fincontrat"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="7.06531" y="3.06287"
+                           width="0.62390" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                          <advancedLayout
+                           formatTrigger="f_fincontrat3formattrigger"/>
+                        </field>
+                        <field name="F_numcontrat3" source="numcontrat"
+                         minWidowLines="1" spacing="0" alignment="center">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="7.71875" y="3.04163"
+                           width="1.31250" height="0.20874"/>
+                          <generalLayout verticalElasticity="expand"/>
+                          <advancedLayout
+                           formatTrigger="f_numcontrat3formattrigger"/>
+                        </field>
+                        <field name="F_cout_futur3" source="cout_futur"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="10"/>
+                          <geometryInfo x="9.05176" y="3.06287"
+                           width="0.68616" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                          <advancedLayout
+                           formatTrigger="f_cout_futur3formattrigger"/>
+                        </field>
+                        <field name="F_contrat_futur3" source="contrat_futur"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="10"/>
+                          <geometryInfo x="9.77405" y="3.06287"
+                           width="0.93567" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                          <advancedLayout
+                           formatTrigger="f_contrat_futur3formattrigger"/>
+                        </field>
+                        <field name="F_chef_projet3" source="chef_projet"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="4.12366" y="3.06287"
+                           width="0.37427" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                        <field name="F_lien_forf3" source="lien_forf"
+                         minWidowLines="1" spacing="0" alignment="start">
+                          <font face="helvetica" size="8"/>
+                          <geometryInfo x="4.53955" y="3.06287"
+                           width="0.37427" height="0.18750"/>
+                          <generalLayout verticalElasticity="expand"/>
+                        </field>
+                      </repeatingFrame>
+                      <frame name="M_G_groupe_HDR1">
+                        <geometryInfo x="0.03796" y="2.71338" width="10.69775"
+                         height="0.32300"/>
+                        <advancedLayout printObjectOnPage="allPage"
+                         basePrintingOn="enclosingObject"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="r88g100b100"/>
+                        <text name="B_arriveesg3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="4.96570" y="2.71338"
+                           width="0.74854" height="0.30212"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Date arrivée
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[SG retenue]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_nom3" minWidowLines="1">
+                          <textSettings spacing="0"/>
+                          <geometryInfo x="0.08984" y="2.78638"
+                           width="0.74854" height="0.20837"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Intervenant]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_prenom3" minWidowLines="1">
+                          <textSettings spacing="0"/>
+                          <geometryInfo x="1.54529" y="2.78638"
+                           width="0.68616" height="0.20837"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Prénom]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_prestation3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="2.43945" y="2.78638"
+                           width="0.37427" height="0.20837"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Prest.]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_mci3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="2.80322" y="2.77600"
+                           width="0.31189" height="0.21887"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[MCI]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_ident3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="3.16736" y="2.71338"
+                           width="0.43665" height="0.31262"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Code
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[BIP]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_societe3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="3.65564" y="2.79675"
+                           width="0.27039" height="0.18762"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Sté]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_echeance3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="5.71436" y="2.71338"
+                           width="0.67578" height="0.29163"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Fin situa active]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_cout3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="6.48352" y="2.71338"
+                           width="0.54065" height="0.31250"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Coût HT
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[actuel]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_fincontrat3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="6.97192" y="2.72375"
+                           width="0.86279" height="0.30225"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Fin ligne cont active]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_numcontrat3" minWidowLines="1">
+                          <textSettings spacing="0"/>
+                          <geometryInfo x="8.05334" y="2.80725"
+                           width="0.81091" height="0.15613"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[N°Contrat Av]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_cout_futur3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="9.02051" y="2.71338"
+                           width="0.73816" height="0.30212"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Coût jh HT
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[négocié]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_contrat_futur3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="9.80005" y="2.71338"
+                           width="0.93567" height="0.32300"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Date de fin de
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[contrat negocié]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_lien_forf3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="4.42529" y="2.71338"
+                           width="0.49902" height="0.30200"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Code lien forf]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                        <text name="B_chef_projet3" minWidowLines="1">
+                          <textSettings justify="center" spacing="0"/>
+                          <geometryInfo x="4.06128" y="2.71338"
+                           width="0.31189" height="0.30225"/>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[Code
+]]>
+                            </string>
+                          </textSegment>
+                          <textSegment>
+                            <font face="helvetica" size="8"/>
+                            <string>
+                            <![CDATA[CP]]>
+                            </string>
+                          </textSegment>
+                        </text>
+                      </frame>
+                    </frame>
+                  </frame>
+                </repeatingFrame>
+              </frame>
+              <text name="B_code" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="2.85095" y="1.22168" width="0.69666"
+                 height="0.18750"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="helvetica" size="12" bold="yes"/>
+                  <string>
+                  <![CDATA[Groupe :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_responsable" source="responsable"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="helvetica" size="12" bold="yes"/>
+                <geometryInfo x="6.06396" y="1.21106" width="3.86731"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_responsable" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="4.87866" y="1.21106" width="1.12280"
+                 height="0.18750"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="helvetica" size="12" bold="yes"/>
+                  <string>
+                  <![CDATA[Responsable]]>
+                  </string>
+                </textSegment>
+              </text>
+            </repeatingFrame>
+          </frame>
+          <text name="B_libpole" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.39478" y="0.22729" width="0.54065"
+             height="0.26233"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="helvetica" size="16" bold="yes"/>
+              <string>
+              <![CDATA[Pôle]]>
+              </string>
+            </textSegment>
+          </text>
+          <rectangle name="B_1">
+            <geometryInfo x="3.98950" y="0.14575" width="2.68225"
+             height="0.45837"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings linePattern="solid"/>
+            <points>
+              <point x="3.98950" y="0.14575"/>
+              <point x="2.68225" y="0.45837"/>
+            </points>
+          </rectangle>
+        </repeatingFrame>
+      </frame>
+      <frame name="M_POLE">
+        <geometryInfo x="0.01685" y="3.48474" width="10.71216"
+         height="3.37988"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject" formatTrigger="m_poleformattrigger"
+        />
+        <repeatingFrame name="R_G_4" source="G_4" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.01685" y="3.48474" width="10.71216"
+           height="3.19238"/>
+          <generalLayout verticalElasticity="variable"/>
+          <field name="F_libpole1" source="libpole1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="helvetica" size="16" bold="yes"/>
+            <geometryInfo x="5.00916" y="3.66187" width="1.32422"
+             height="0.29651"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_5_GRPFR">
+            <geometryInfo x="0.01685" y="4.31250" width="10.71216"
+             height="2.26038"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_G_5" source="G_5" printDirection="down"
+             minWidowRecords="1" columnMode="no"
+             vertSpaceBetweenFrames="0.5415">
+              <geometryInfo x="0.01685" y="4.40625" width="10.71216"
+               height="2.09375"/>
+              <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+              <field name="F_rlib1" source="rlib1" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="helvetica" size="10" bold="yes"/>
+                <geometryInfo x="0.01990" y="4.42200" width="6.26135"
+                 height="0.20935"/>
+                <generalLayout verticalElasticity="expand"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <frame name="M_3">
+                <geometryInfo x="0.03125" y="4.79956" width="10.67175"
+                 height="0.57544"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout formatTrigger="m_3formattrigger"/>
+                <frame name="M_G_groupe_HDR2">
+                  <geometryInfo x="0.03125" y="4.79956" width="10.67175"
+                   height="0.30969"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="r88g100b100"/>
+                  <text name="B_arriveesg4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="5.22412" y="4.79980" width="0.49902"
+                     height="0.30945"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Date de 
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[création]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_nom4" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="0.06238" y="4.86182" width="0.87854"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Intervenant]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_cout4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="8.65479" y="4.79956" width="0.51990"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[actuel]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_montant_mensuel3" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.33057" y="4.79956" width="0.49902"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[mensuel]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_ident4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.20691" y="4.81750" width="0.31189"
+                     height="0.29175"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[BIP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_prestation4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.44836" y="4.86206" width="0.36389"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Prest.]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_societe4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.62280" y="4.86206" width="0.29102"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Sté.]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_datsitu3" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="5.84790" y="4.79956" width="0.65503"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Début de la
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[situation]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_echeance4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="6.64832" y="4.79956" width="0.53027"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Fin de la
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[situation]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_fincontrat4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.98572" y="4.79956" width="0.71729"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Echéance ligne contrat]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_numcontrat4" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="7.57373" y="4.85168" width="0.66541"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[N°Contrat Av]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_mci4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.89526" y="4.86218" width="0.21838"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[MCI]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_chef_projet4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.01807" y="4.79980" width="0.37427"
+                     height="0.30945"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[CP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_lien_forf4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.49646" y="4.79956" width="0.55078"
+                     height="0.30957"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code lien
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[forf]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                </frame>
+                <repeatingFrame name="R_G_groupe2" source="G_pole"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="0.03125" y="5.10925" width="10.64075"
+                   height="0.20349"/>
+                  <generalLayout verticalElasticity="expand"/>
+                  <advancedLayout formatTrigger="r_g_groupe2formattrigger"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="gray8"/>
+                  <field name="F_nom4" source="nom1" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="0.04163" y="5.12524" width="2.36511"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_cout4" source="cout1" minWidowLines="1"
+                   spacing="0" alignment="end">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="8.57690" y="5.12524" width="0.57178"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_ident4" source="ident1" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.16016" y="5.12524" width="0.38477"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_datsitu3" source="datsitu1" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.87927" y="5.12524" width="0.65491"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_echeance4" source="echeance1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="6.60168" y="5.12524" width="0.62378"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_fincontrat4" source="fincontrat1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="10.04810" y="5.12524" width="0.62390"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_fincontrat4formattrigger"
+                    />
+                  </field>
+                  <field name="F_mci4" source="mci1" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.84326" y="5.12524" width="0.29114"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_chef_projet4" source="chef_projet1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.04370" y="5.12524" width="0.37427"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_lien_forf4" source="lien_forf1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.55872" y="5.12524" width="0.37427"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_montantmensuel1" source="montant_mensuel1"
+                   minWidowLines="1" spacing="0" alignment="end">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="9.21118" y="5.12524" width="0.72778"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_arriveesg4" source="arriveesg1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.15125" y="5.12524" width="0.65503"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_prestation4" source="prestation1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.47925" y="5.12524" width="0.32764"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_numcontrat4" source="numcontrat1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="7.28271" y="5.12524" width="1.27869"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_societe4" source="societe1" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.62280" y="5.12524" width="0.37439"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                </repeatingFrame>
+              </frame>
+              <frame name="M_4">
+                <geometryInfo x="0.01685" y="5.44250" width="10.71216"
+                 height="0.58411"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout printObjectOnPage="firstPage"
+                 basePrintingOn="enclosingObject"
+                 formatTrigger="m_4formattrigger"/>
+                <repeatingFrame name="R_G_groupe3" source="G_pole"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="0.01685" y="5.76550" width="10.68616"
+                   height="0.21399"/>
+                  <generalLayout verticalElasticity="expand"/>
+                  <advancedLayout formatTrigger="r_g_groupe3formattrigger"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="gray8"/>
+                  <field name="F_nom5" source="nom1" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="0.01685" y="5.80225" width="1.33459"
+                     height="0.15588"/>
+                  </field>
+                  <field name="F_prenom4" source="prenom1" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="1.37219" y="5.80237" width="1.06897"
+                     height="0.16101"/>
+                  </field>
+                  <field name="F_prestation5" source="prestation1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.44299" y="5.79199" width="0.31201"
+                     height="0.16101"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_ident5" source="ident1" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.19141" y="5.77637" width="0.37427"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_mci5" source="mci1" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.83289" y="5.79211" width="0.24951"
+                     height="0.16101"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_societe5" source="societe1" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.60754" y="5.79199" width="0.37427"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_arriveesg5" source="arriveesg1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.03174" y="5.79199" width="0.68616"
+                     height="0.16626"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_echeance5" source="echeance1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.79053" y="5.79199" width="0.60315"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_cout5" source="cout1" minWidowLines="1"
+                   spacing="0" alignment="end">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="6.45618" y="5.79199" width="0.56140"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_fincontrat5" source="fincontrat1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="7.04822" y="5.77112" width="0.62390"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_fincontrat5formattrigger"
+                    />
+                  </field>
+                  <field name="F_numcontrat5" source="numcontrat1"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="7.82288" y="5.79199" width="1.27087"
+                     height="0.13513"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_numcontrat5formattrigger"
+                    />
+                  </field>
+                  <field name="F_cout_futur4" source="cout_futur1"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="10"/>
+                    <geometryInfo x="9.09375" y="5.79199" width="0.64783"
+                     height="0.17676"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_cout_futur4formattrigger"
+                    />
+                  </field>
+                  <field name="F_contrat_futur4" source="contrat_futur1"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="10"/>
+                    <geometryInfo x="9.76733" y="5.79199" width="0.93567"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout
+                     formatTrigger="f_contrat_futur4formattrigger"/>
+                  </field>
+                  <field name="F_chef_projet5" source="chef_projet1"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.11694" y="5.79199" width="0.37427"
+                     height="0.17676"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_lien_forf5" source="lien_forf1"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.53284" y="5.79199" width="0.37427"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                </repeatingFrame>
+                <frame name="M_G_groupe_HDR3">
+                  <geometryInfo x="0.03125" y="5.44250" width="10.69775"
+                   height="0.32300"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="r88g100b100"/>
+                  <text name="B_arriveesg5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.95898" y="5.44250" width="0.74854"
+                     height="0.30212"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Date arrivée
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[SG retenue]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_nom5" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="0.08313" y="5.51550" width="0.74854"
+                     height="0.20837"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Intervenant]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_prenom4" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="1.53857" y="5.51550" width="0.68616"
+                     height="0.20837"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Prénom]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_prestation5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.43274" y="5.51550" width="0.37427"
+                     height="0.20837"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Prest.]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_mci5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.79651" y="5.50513" width="0.31189"
+                     height="0.21887"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[MCI]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_ident5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.16064" y="5.44250" width="0.43665"
+                     height="0.31262"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[BIP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_societe5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.64893" y="5.52588" width="0.27039"
+                     height="0.18762"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Sté]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_echeance5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="5.70764" y="5.44250" width="0.67578"
+                     height="0.29163"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Fin situa active]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_cout5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="6.51843" y="5.44250" width="0.54065"
+                     height="0.31250"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[actuel]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_fincontrat5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="6.93384" y="5.44250" width="0.86279"
+                     height="0.30225"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Fin ligne cont active]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_numcontrat5" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="8.16113" y="5.53638" width="0.81091"
+                     height="0.15613"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[N°Contrat Av]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_cout_futur4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.02429" y="5.44250" width="0.73816"
+                     height="0.30212"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût jh HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[négocié]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_contrat_futur4" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.79333" y="5.44250" width="0.93567"
+                     height="0.32300"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Date de fin de
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[contrat negocié]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_lien_forf5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.41858" y="5.44250" width="0.49902"
+                     height="0.30200"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code lien forf]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_chef_projet5" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.05457" y="5.44250" width="0.31189"
+                     height="0.30225"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[CP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                </frame>
+              </frame>
+            </repeatingFrame>
+          </frame>
+          <text name="B_libpole1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.40637" y="3.68274" width="0.65613"
+             height="0.29639"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="helvetica" size="16" bold="yes"/>
+              <string>
+              <![CDATA[Pôle]]>
+              </string>
+            </textSegment>
+          </text>
+          <rectangle name="B_2">
+            <geometryInfo x="4.04163" y="3.56250" width="2.35425"
+             height="0.51038"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings linePattern="solid"/>
+            <points>
+              <point x="4.04163" y="3.56250"/>
+              <point x="2.35425" y="0.51038"/>
+            </points>
+          </rectangle>
+        </repeatingFrame>
+      </frame>
+      <frame name="M_DEP">
+        <geometryInfo x="0.01685" y="8.14783" width="10.71216"
+         height="6.85205"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_depformattrigger"/>
+        <repeatingFrame name="R_G_9" source="G_6" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.01685" y="8.48474" width="10.71216"
+           height="3.21313"/>
+          <generalLayout verticalElasticity="variable"/>
+          <field name="F_libpole3" source="libdep" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="helvetica" size="16" bold="yes"/>
+            <geometryInfo x="5.53894" y="8.68262" width="0.76172"
+             height="0.29651"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_5_GRPFR1">
+            <geometryInfo x="0.01685" y="9.33337" width="10.71216"
+             height="2.23950"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_G_8" source="G_7" printDirection="down"
+             minWidowRecords="1" columnMode="no"
+             vertSpaceBetweenFrames="0.5103">
+              <geometryInfo x="0.01685" y="9.40625" width="10.71216"
+               height="2.09375"/>
+              <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+              <field name="F_rlib2" source="rlib2" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="helvetica" size="10" bold="yes"/>
+                <geometryInfo x="0.01990" y="9.44287" width="6.26135"
+                 height="0.20935"/>
+                <generalLayout verticalElasticity="expand"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <frame name="M_6">
+                <geometryInfo x="0.03125" y="9.79956" width="10.67175"
+                 height="0.57544"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout formatTrigger="m_6formattrigger"/>
+                <frame name="M_G_dep_HDR5">
+                  <geometryInfo x="0.03125" y="9.79956" width="10.67175"
+                   height="0.30969"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="r88g100b100"/>
+                  <text name="B_arriveesg6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="5.22412" y="9.79980" width="0.49902"
+                     height="0.30945"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Date de 
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[création]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_nom6" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="0.06238" y="9.86182" width="0.87854"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Intervenant]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_cout6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="8.65479" y="9.79956" width="0.51990"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[actuel]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_montant_mensuel1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.33057" y="9.79956" width="0.49902"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[mensuel]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_ident6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.20691" y="9.81750" width="0.31189"
+                     height="0.29175"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[BIP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_prestation6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.44836" y="9.86206" width="0.36389"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Prest.]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_societe6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.62280" y="9.86206" width="0.29102"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Sté.]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_datsitu1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="5.84790" y="9.79956" width="0.65503"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Début de la
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[situation]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_echeance6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="6.64832" y="9.79956" width="0.53027"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Fin de la
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[situation]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_fincontrat6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.98572" y="9.79956" width="0.71729"
+                     height="0.30969"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Echéance ligne contrat]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_numcontrat6" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="7.58423" y="9.85168" width="0.66541"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[N°Contrat Av]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_mci6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.89526" y="9.86218" width="0.21838"
+                     height="0.18750"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[MCI]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_chef_projet6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.01807" y="9.79980" width="0.37427"
+                     height="0.30945"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[CP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_lien_forf6" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.49646" y="9.79956" width="0.55078"
+                     height="0.30957"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code lien
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[forf]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                </frame>
+                <repeatingFrame name="R_G_dep5" source="G_dep"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="0.03125" y="10.10925" width="10.64075"
+                   height="0.20349"/>
+                  <generalLayout verticalElasticity="expand"/>
+                  <advancedLayout formatTrigger="r_g_groupe5formattrigger"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="gray8"/>
+                  <field name="F_nom6" source="nom2" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="0.04163" y="10.12524" width="2.36511"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_cout6" source="cout2" minWidowLines="1"
+                   spacing="0" alignment="end">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="8.54565" y="10.12524" width="0.60303"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_ident6" source="ident2" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.16016" y="10.12524" width="0.38477"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_datsitu1" source="datsitu2" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.87927" y="10.12524" width="0.65491"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_echeance6" source="echeance2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="6.60168" y="10.12524" width="0.62378"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_fincontrat6" source="fincontrat2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="10.04810" y="10.12524" width="0.62390"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_fincontrat6formattrigger"
+                    />
+                  </field>
+                  <field name="F_mci6" source="mci2" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.84326" y="10.12524" width="0.29114"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_chef_projet6" source="chef_projet2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.04370" y="10.12524" width="0.37427"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_lien_forf6" source="lien_forf2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.55872" y="10.12524" width="0.37427"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_montantmensuel2" source="montant_mensuel2"
+                   minWidowLines="1" spacing="0" alignment="end">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="9.21118" y="10.12524" width="0.72778"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_arriveesg6" source="arriveesg2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.15125" y="10.12524" width="0.65503"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_prestation6" source="prestation2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.47925" y="10.12524" width="0.25476"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_numcontrat6" source="numcontrat2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="7.30359" y="10.12524" width="1.23706"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_societe6" source="societe2" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.62280" y="10.12524" width="0.37439"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                </repeatingFrame>
+              </frame>
+              <frame name="M_5">
+                <geometryInfo x="0.01685" y="10.44250" width="10.71216"
+                 height="0.58411"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout keepWithAnchoringObject="yes"
+                 formatTrigger="m_5formattrigger"/>
+                <repeatingFrame name="R_G_dep4" source="G_dep"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="0.01685" y="10.76550" width="10.68616"
+                   height="0.21399"/>
+                  <generalLayout verticalElasticity="expand"/>
+                  <advancedLayout formatTrigger="r_g_groupe4formattrigger"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="gray8"/>
+                  <field name="F_nom1" source="nom2" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="0.01685" y="10.80225" width="1.33459"
+                     height="0.15588"/>
+                  </field>
+                  <field name="F_prenom1" source="prenom2" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="1.37219" y="10.80237" width="1.06897"
+                     height="0.16101"/>
+                  </field>
+                  <field name="F_prestation1" source="prestation2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.48462" y="10.79199" width="0.27039"
+                     height="0.16101"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_ident1" source="ident2" minWidowLines="1"
+                   spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.19141" y="10.77637" width="0.37427"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_mci1" source="mci2" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="2.83289" y="10.79211" width="0.24951"
+                     height="0.16101"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_societe1" source="societe2" minWidowLines="1"
+                   spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="3.60754" y="10.79199" width="0.37427"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_arriveesg1" source="arriveesg2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.96924" y="10.79199" width="0.68616"
+                     height="0.16626"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_echeance1" source="echeance2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="5.79053" y="10.79199" width="0.60315"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_cout1" source="cout2" minWidowLines="1"
+                   spacing="0" alignment="end">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="6.45618" y="10.79199" width="0.56140"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_fincontrat1" source="fincontrat2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="7.03772" y="10.77112" width="0.62390"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_fincontrat1formattrigger"
+                    />
+                  </field>
+                  <field name="F_numcontrat1" source="numcontrat2"
+                   minWidowLines="1" spacing="0" alignment="center">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="7.67712" y="10.78125" width="1.35413"
+                     height="0.17712"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_numcontrat1formattrigger"
+                    />
+                  </field>
+                  <field name="F_cout_futur1" source="cout_futur2"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="10"/>
+                    <geometryInfo x="9.05542" y="10.79199" width="0.68616"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout formatTrigger="f_cout_futur1formattrigger"
+                    />
+                  </field>
+                  <field name="F_contrat_futur1" source="contrat_futur2"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="10"/>
+                    <geometryInfo x="9.76733" y="10.79199" width="0.93567"
+                     height="0.18750"/>
+                    <generalLayout verticalElasticity="expand"/>
+                    <advancedLayout
+                     formatTrigger="f_contrat_futur1formattrigger"/>
+                  </field>
+                  <field name="F_chef_projet1" source="chef_projet2"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.11694" y="10.79199" width="0.37427"
+                     height="0.17676"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                  <field name="F_lien_forf1" source="lien_forf2"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="helvetica" size="8"/>
+                    <geometryInfo x="4.53284" y="10.79199" width="0.37427"
+                     height="0.17151"/>
+                    <generalLayout verticalElasticity="expand"/>
+                  </field>
+                </repeatingFrame>
+                <frame name="M_G_dep_HDR4">
+                  <geometryInfo x="0.03125" y="10.44250" width="10.69775"
+                   height="0.32300"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="r88g100b100"/>
+                  <text name="B_arriveesg1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.95898" y="10.44250" width="0.74854"
+                     height="0.30212"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Date arrivée
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[SG retenue]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_nom1" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="0.08313" y="10.51550" width="0.74854"
+                     height="0.20837"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Intervenant]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_prenom1" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="1.53857" y="10.51550" width="0.68616"
+                     height="0.20837"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Prénom]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_prestation1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.43274" y="10.51550" width="0.37427"
+                     height="0.20837"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Prest.]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_mci1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="2.79651" y="10.50513" width="0.31189"
+                     height="0.21887"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[MCI]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_ident1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.16064" y="10.44250" width="0.43665"
+                     height="0.31262"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[BIP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_societe1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="3.64893" y="10.52588" width="0.27039"
+                     height="0.18762"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Sté]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_echeance1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="5.70764" y="10.44250" width="0.67578"
+                     height="0.29163"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Fin situa active]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_cout1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="6.51843" y="10.44250" width="0.54065"
+                     height="0.31250"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[actuel]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_fincontrat1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="6.95471" y="10.44250" width="0.86279"
+                     height="0.30225"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Fin ligne cont active]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_numcontrat1" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="8.02576" y="10.53638" width="0.81091"
+                     height="0.15613"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[N°Contrat Av]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_cout_futur1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.05554" y="10.44250" width="0.73816"
+                     height="0.30212"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Coût jh HT
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[négocié]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_contrat_futur1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="9.79333" y="10.44250" width="0.93567"
+                     height="0.32300"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Date de fin de
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[contrat negocié]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_lien_forf1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.41858" y="10.44250" width="0.49902"
+                     height="0.30200"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code lien forf]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <text name="B_chef_projet1" minWidowLines="1">
+                    <textSettings justify="center" spacing="0"/>
+                    <geometryInfo x="4.05457" y="10.44250" width="0.31189"
+                     height="0.30225"/>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[Code
+]]>
+                      </string>
+                    </textSegment>
+                    <textSegment>
+                      <font face="helvetica" size="8"/>
+                      <string>
+                      <![CDATA[CP]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                </frame>
+              </frame>
+            </repeatingFrame>
+          </frame>
+          <text name="B_libpole3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.89587" y="8.68274" width="1.56104"
+             height="0.29639"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="helvetica" size="16" bold="yes"/>
+              <string>
+              <![CDATA[Département :]]>
+              </string>
+            </textSegment>
+          </text>
+          <rectangle name="B_3">
+            <geometryInfo x="3.67700" y="8.59375" width="2.64978"
+             height="0.51038"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings linePattern="solid"/>
+            <points>
+              <point x="3.67700" y="8.59375"/>
+              <point x="2.64978" y="0.51038"/>
+            </points>
+          </rectangle>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_4" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="3.67712" y="0.11462" width="4.03125" height="0.26038"
+        />
+        <textSegment>
+          <font face="helvetica" size="16" bold="yes"/>
+          <string>
+          <![CDATA[SUIVI DES PRESTATIONS EXTERNES]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_5" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.15625" y="0.12500" width="0.50000" height="0.19788"
+        />
+        <textSegment>
+          <font face="helvetica" size="10"/>
+          <string>
+          <![CDATA[Date :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/RR HH24:MI" spacing="0" alignment="start">
+        <font face="helvetica" size="10"/>
+        <geometryInfo x="0.66663" y="0.12500" width="1.14600" height="0.17712"
+        />
+      </field>
+      <text name="B_6" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="9.22913" y="0.14575" width="0.52087" height="0.19788"
+        />
+        <textSegment>
+          <font face="helvetica" size="10"/>
+          <string>
+          <![CDATA[Page : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_2" source="PageNumber" minWidowLines="1" spacing="0"
+       alignment="end">
+        <font face="helvetica" size="10"/>
+        <geometryInfo x="9.75000" y="0.15625" width="0.33337" height="0.16663"
+        />
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_7" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="10.11450" y="0.14575" width="0.09387"
+         height="0.19788"/>
+        <textSegment>
+          <font face="helvetica" size="10"/>
+          <string>
+          <![CDATA[/ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_3" source="TotalPages" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="helvetica" size="10"/>
+        <geometryInfo x="10.18750" y="0.15613" width="0.33337"
+         height="0.16663"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_8" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="9.06250" y="0.66663" width="1.64575" height="0.32300"
+        />
+        <textSegment>
+          <font face="helvetica" size="8"/>
+          <string>
+          <![CDATA[Date de fin de contrat en cours :
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="helvetica" size="8"/>
+          <string>
+          <![CDATA[blanc = pas de contrat]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.18579" y="0.15979" width="1.65601" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres rapport]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param7]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_WHERE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.55176" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Where]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_ORDER" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.49280" width="0.48926" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Order]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.82605" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_WHERE" source="P_WHERE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_ORDER" source="P_ORDER" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.45081" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.78406" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.23267" y="2.21143" width="0.74646" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param10]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM10" source="P_PARAM10" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.11731" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+	l_param VARCHAR2(10);
+	l_perim_me	VARCHAR2(1000) := '';
+	
+begin
+  
+	:p_where :='';
+	:p_order := '';
+
+	-- Ajout du perim ME
+	l_perim_me := pack_global.lire_perime(:P_GLOBAL);		
+	:p_where := :p_where || ' AND sit.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+
+
+	IF NVL(LENGTH(LPAD(:P_PARAM6, 7, '0')), 0) != 0 then 
+			-- ajout de '0' a gauche sur 7 caracteres + suppression des '*'
+	  l_param := rtrim(rtrim(LPAD(:P_PARAM6, 7, '0'),'*')) ;
+		:p_where := :p_where || ' and  TO_CHAR(sit.codsg, ''FM0000000'') like ''' || l_param || '%'' ';
+	END IF;
+   
+
+	if('C'=:P_PARAM10) then
+		:p_order := 'order by tri_chrono,nom';
+	else
+		:p_order := 'order by nom';
+	end if;
+
+	
+ 
+  --srw.message(1,:P_where);  
+  return (true);
+  end;]]>
+      </textSource>
+    </function>
+    <function name="m_groupeformattrigger">
+      <textSource>
+      <![CDATA[function M_GROUPEFormatTrigger return boolean is
+-- CAS : pas  d etoile dans le dpg ou param7 à 3
+-- se rapporte à la requete Q_GROUPE
+begin
+     
+   if INSTR(:P_Param6,'*',1)=0  then
+   	   	return (TRUE);
+   elsif :P_Param7=3 or :P_Param7 is null then
+    	return (TRUE);
+   else
+    	return (FALSE);
+   end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_depformattrigger">
+      <textSource>
+      <![CDATA[function M_DEPFormatTrigger return boolean is
+-- CAS 1 : se rapporte à la requete Q_DEP
+-- si on coche par departement cad P_PARAM7=1
+-- si on coche par departement cad P_PARAM7=1 mais que l'on entre un Dep/Pole/** : par pole
+begin
+	if INSTR(:P_Param6,'*',1)=0  then
+    	return (FALSE);
+    		elsif (:P_Param7=1 AND substr(LPAD(:P_PARAM6, 7, '0'),4,4)='****')   then
+     			return (TRUE);
+   		else
+     			return (FALSE);
+   	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_poleformattrigger">
+      <textSource>
+      <![CDATA[function M_POLEFormatTrigger return boolean is
+begin
+	
+	if INSTR(:P_Param6,'*',1)=0  then
+    	return (FALSE);
+   		elsif (:P_Param7=2) OR (:P_Param7=1 AND INSTR(:P_Param6,'*',1)=6)  then
+    	    			return (TRUE);
+   		else
+   			return (FALSE);
+   end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_fincontratformattrigger">
+      <textSource>
+      <![CDATA[function F_fincontratFormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat,7,4) || substr(:fincontrat,3,4) || substr(:fincontrat,1,2);
+
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_fincontrat3formattrigger">
+      <textSource>
+      <![CDATA[function F_fincontrat3FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat,7,4) || substr(:fincontrat,3,4) || substr(:fincontrat,1,2);
+
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cout_futur3formattrigger">
+      <textSource>
+      <![CDATA[function F_cout_futur3FormatTrigger return boolean is
+  l_date varchar2(10);
+l_cont varchar2(10);
+begin
+l_date := substr(:fincontrat,7,4) || substr(:fincontrat,3,4) || substr(:fincontrat,1,2);
+l_cont := substr(:contrat_futur,7,4) || substr(:contrat_futur,3,4) || substr(:contrat_futur,1,2);
+
+if l_cont > l_date then
+return (TRUE);
+else
+  return (FALSE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_contrat_futur3formattrigger">
+      <textSource>
+      <![CDATA[function F_contrat_futur3FormatTrigger return boolean is
+  l_date varchar2(10);
+l_cont varchar2(10);
+begin
+l_date := substr(:fincontrat,7,4) || substr(:fincontrat,3,4) || substr(:fincontrat,1,2);
+l_cont := substr(:contrat_futur,7,4) || substr(:contrat_futur,3,4) || substr(:contrat_futur,1,2);
+
+if l_cont > l_date then
+return (TRUE);
+else
+  return (FALSE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_numcontrat3formattrigger">
+      <textSource>
+      <![CDATA[function F_numcontrat3FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat,7,4) || substr(:fincontrat,3,4) || substr(:fincontrat,1,2);
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_1formattrigger">
+      <textSource>
+      <![CDATA[function M_1FormatTrigger return boolean is
+begin
+  if :type <> 'P' then return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_2formattrigger">
+      <textSource>
+      <![CDATA[function M_2FormatTrigger return boolean is
+begin
+  if :type = 'P' then return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_groupe1formattrigger">
+      <textSource>
+      <![CDATA[function R_G_groupe1FormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_1,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_groupeformattrigger">
+      <textSource>
+      <![CDATA[function R_G_groupeFormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_1,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_fincontrat4formattrigger">
+      <textSource>
+      <![CDATA[function F_fincontrat4FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat1,7,4) || substr(:fincontrat1,3,4) || substr(:fincontrat1,1,2);
+
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_groupe2formattrigger">
+      <textSource>
+      <![CDATA[function R_G_groupe2FormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_2,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_3formattrigger">
+      <textSource>
+      <![CDATA[function M_3FormatTrigger return boolean is
+begin
+  if :type1 = 'P' then return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_contrat_futur4formattrigger">
+      <textSource>
+      <![CDATA[function F_contrat_futur4FormatTrigger return boolean is
+  l_date varchar2(10);
+l_cont varchar2(10);
+begin
+l_date := substr(:fincontrat1,7,4) || substr(:fincontrat1,3,4) || substr(:fincontrat1,1,2);
+l_cont := substr(:contrat_futur1,7,4) || substr(:contrat_futur1,3,4) || substr(:contrat_futur1,1,2);
+
+if l_cont > l_date then
+return (TRUE);
+else
+  return (FALSE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cout_futur4formattrigger">
+      <textSource>
+      <![CDATA[function F_cout_futur4FormatTrigger return boolean is
+  l_date varchar2(10);
+l_cont varchar2(10);
+begin
+l_date := substr(:fincontrat1,7,4) || substr(:fincontrat1,3,4) || substr(:fincontrat1,1,2);
+l_cont := substr(:contrat_futur1,7,4) || substr(:contrat_futur1,3,4) || substr(:contrat_futur1,1,2);
+
+if l_cont > l_date then
+return (TRUE);
+else
+  return (FALSE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_numcontrat5formattrigger">
+      <textSource>
+      <![CDATA[function F_numcontrat5FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat1,7,4) || substr(:fincontrat1,3,4) || substr(:fincontrat1,1,2);
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_fincontrat5formattrigger">
+      <textSource>
+      <![CDATA[function F_fincontrat5FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat1,7,4) || substr(:fincontrat1,3,4) || substr(:fincontrat1,1,2);
+
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_groupe3formattrigger">
+      <textSource>
+      <![CDATA[function R_G_groupe3FormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_2,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_4formattrigger">
+      <textSource>
+      <![CDATA[function M_4FormatTrigger return boolean is
+begin
+  if :type1 <> 'P' then return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_contrat_futur1formattrigger">
+      <textSource>
+      <![CDATA[function F_contrat_futur1FormatTrigger return boolean is
+  l_date varchar2(10);
+l_cont varchar2(10);
+begin
+l_date := substr(:fincontrat2,7,4) || substr(:fincontrat2,3,4) || substr(:fincontrat2,1,2);
+l_cont := substr(:contrat_futur2,7,4) || substr(:contrat_futur2,3,4) || substr(:contrat_futur2,1,2);
+
+if l_cont > l_date then
+return (TRUE);
+else
+  return (FALSE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cout_futur1formattrigger">
+      <textSource>
+      <![CDATA[function F_cout_futur1FormatTrigger return boolean is
+  l_date varchar2(10);
+l_cont varchar2(10);
+begin
+l_date := substr(:fincontrat2,7,4) || substr(:fincontrat2,3,4) || substr(:fincontrat2,1,2);
+l_cont := substr(:contrat_futur2,7,4) || substr(:contrat_futur2,3,4) || substr(:contrat_futur2,1,2);
+
+if l_cont > l_date then
+return (TRUE);
+else
+  return (FALSE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_numcontrat1formattrigger">
+      <textSource>
+      <![CDATA[function F_numcontrat1FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat2,7,4) || substr(:fincontrat2,3,4) || substr(:fincontrat2,1,2);
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_fincontrat1formattrigger">
+      <textSource>
+      <![CDATA[function F_fincontrat1FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat2,7,4) || substr(:fincontrat2,3,4) || substr(:fincontrat2,1,2);
+
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_groupe4formattrigger">
+      <textSource>
+      <![CDATA[function R_G_groupe4FormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_3,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_5formattrigger">
+      <textSource>
+      <![CDATA[function M_5FormatTrigger return boolean is
+begin
+  if :type2 <> 'P' then return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_fincontrat6formattrigger">
+      <textSource>
+      <![CDATA[function F_fincontrat6FormatTrigger return boolean is
+l_date varchar2(10);
+begin
+l_date := substr(:fincontrat2,7,4) || substr(:fincontrat2,3,4) || substr(:fincontrat2,1,2);
+
+
+if l_date <= to_char(sysdate,'yyyy/mm/dd') then
+
+-- pour les contrats finissant avant la date de l edition
+-- on remplace la valeur par (vide)
+SRW.SET_FIELD_CHAR(0,' ');
+return (TRUE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_groupe5formattrigger">
+      <textSource>
+      <![CDATA[function R_G_groupe5FormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_3,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_6formattrigger">
+      <textSource>
+      <![CDATA[function M_6FormatTrigger return boolean is
+begin
+  if :type2 = 'P' then return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#cccc99"/>
+    <color index="192" displayName="TableCell" value="#f7f7e7"/>
+    <color index="193" displayName="Totals" value="#ffffcc"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

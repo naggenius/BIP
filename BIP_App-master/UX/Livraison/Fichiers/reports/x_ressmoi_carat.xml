@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ressmoi_carat" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_RESSMOI_CARAT" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="20000"
+     precision="10" label="P Where" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" display="yes"/>
+    <systemParameter name="ORIENTATION" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[-- Crée le 20/08/2003 par NBM
+--Toutes les ressources du DPG choisi mois par mois du début de l'année jusqu'au mois courant-1 (datdebex.moismens-1)
+--Pour chaque mois, on veut la ligne BIP de la ressource et son consommé.
+
+SELECT rpad( NVL( pid, ' '),  4,  ' ')                     PID,
+    substr( NVL( ptype, ' '), 1, 1)                      PTYPE,
+    rpad( NVL( pnom, ' '), 30, ' ')                    PNOM,
+    lpad( NVL( TO_CHAR(DPG_ligne), ' '), 7, '0')                DPG_ligne,
+    rpad( NVL( pcmouvra, ' '), 5, ' ')                PCMOUVRA,
+    rpad( NVL( TO_CHAR(cdeb, 'MMYYYY'), '0'), 6, '0')         CDEB,
+    lpad( NVL( TO_CHAR(tires), '0'), 5, '0')                TIRES,
+    rpad( NVL( aist, ' '), 6, ' ')                    AIST,
+                
+
+  RPAD( NVL(rnom,' '),30,' ')  RNOM,  
+
+    rpad( NVL( soccode, ' '), 4, ' ')                    SOCCODE,
+                rpad( NVL( socgrpe, ' '), 4, ' ')                    SOCGRPE,
+        lpad( NVL( TO_CHAR(couttc,  'FM9999999999.00'), '0.00'), 13, ' ')    COUTTC,
+        lpad( NVL( TO_CHAR(cusag,  'FM999999.00'), ' '), 8, ' ')        CUSAG,
+
+                NVL( qualif, '   ')                      QUALIF, 
+                
+    lpad( NVL( TO_CHAR(rcodsg), ' '), 7, '0')                RCODSG,
+        lpad (NVL (TO_CHAR(cout, 'FM9999999999.00'), '0.00'), 13, ' ')    COUT,                    
+    rpad(NVL (verifsitu, ' '),3,' ')            VERIFSITU,
+    rpad( NVL( factpid, ' '),  4,  ' ')            FACTPID,
+    rpad( NVL( sgssii, ' '),  4,  ' ')            SGSSII,
+    rpad(NVL( plocal, ' '),  20,  ' ')            PLOCAL,
+    rpad(NVL(TO_CHAR(ca_dpg_ligne), ' '), 6, ' ')    CA_DPG_LIGNE,
+    rpad(NVL(TO_CHAR(ca_dpg_ress), ' '), 6, ' ')    CA_DPG_RESS,
+    rpad(NVL(metier, ' '), 3, ' ')            METIER,
+        lpad( NVL( TO_CHAR(couthtr,  'FM9999999999.00'), '0.00'), 13, ' ') COUTHTR,
+                 rtype TYPE_RESSOURCE,
+                 rpad( NVL( mci, ' '),  5,  ' ')    MODE_CONTRACTUEL_INDICATIF,      
+    --DECODE(:P_PARAM6,'.TXT',CHR(13),NULL)    CH,
+   
+  
+PROFIL_FI_DYNA  PROFIL_FI_DYNA,
+PROFIL_FI_MENS PROFIL_FI_MENS,
+--Ajout dans le cadre de la PPM 62334 paragraphe 6.9 par FAD
+--Sprint 3 BIP 32 changes
+/*DECODE(:P_param6,'.CSV',PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPIAXEMETIER,PROJAXEMETIER,PID) , 
+rpad(NVL (pack_arbitre.FIND_REF_DEMANDE(null,DPCOPIAXEMETIER,PROJAXEMETIER,PID),' '),12, ' ') ) Ref_demande,
+
+--Sprint 3 BIP 32 changes
+decode(:P_param6,'.CSV', DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPIAXEMETIER,PROJAXEMETIER,PID))	AND ROWNUM = 1	), NULL,'???',	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPIAXEMETIER,PROJAXEMETIER,PID) )	AND ROWNUM = 1
+	)) , rpad (DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPIAXEMETIER,PROJAXEMETIER,PID))	AND ROWNUM = 1	), NULL,'???',	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPIAXEMETIER,PROJAXEMETIER,PID) )	AND ROWNUM = 1
+	))  , 80 , ' ' ) )  Ref_demande_Lib,*/
+rpad(pack_arbitre.FIND_REF_DEMANDE(null,DPCOPIAXEMETIER,PROJAXEMETIER,PID),12, ' ') Ref_demande,
+rpad(PACK_ARBITRE.FIND_REF_DEMANDE_LIB(DPCOPIAXEMETIER,PROJAXEMETIER,PID), 80 , ' ') Ref_demande_Lib,
+
+ DPCOPIAXEMETIER DpCopiAxeMetier,
+
+ PROJAXEMETIER  ProjAxeMetier
+--Fin
+FROM (
+    SELECT DISTINCT
+        p.pid,
+        p.factpty        ptype,
+        p.factpno        pnom,
+        p.factpdsg    DPG_ligne,
+        p.factpcm        pcmouvra, 
+        p.cdeb,
+        p.tires        tires, 
+        p.aist        aist,
+        p.rnom        rnom,
+        s.soccode        soccode,
+                                so.socgrpe        socgrpe,
+                                
+        pack_x_ressmoi.getCoutTTC ( s.soccode, r.rtype, l.metier, s.niveau, s.codsg, si1.CAFI, s.cout, s.PRESTATION, r.ident, TO_CHAR(p.cdeb,'DDMMYYYY') , l.CODCAMO)  couttc,
+        
+        p.cusag        cusag,
+        s.prestation    qualif,
+        s.codsg        rcodsg,
+        
+        pack_x_ressmoi.getCout ( s.soccode, r.rtype, l.metier, s.niveau, s.codsg, si1.CAFI , s.cout, s.PRESTATION, r.ident, TO_CHAR(p.cdeb,'DDMMYYYY') , l.CODCAMO) cout,
+        
+                                            
+        decode(s.type_situ,'N','   ','ERR') verifsitu,               -- permet de différencier les réalisés par ressource sans situation
+        p.factpid          factpid,
+        decode(s.soccode,'SG..','SG  ','SSII') sgssii,
+        l.pzone         plocal,
+        si2.centractiv    ca_dpg_ligne,
+        si1.centractiv    ca_dpg_ress,
+        l.metier        metier,
+     -- ABN PPM 64382
+        pack_x_ressmoi.getCoutHTR ( s.soccode, r.rtype, l.metier, s.niveau, s.codsg, si1.CAFI, s.cout, s.PRESTATION, r.ident, TO_CHAR(p.cdeb,'DDMMYYYY'), si2.filcode, l.CODCAMO)  couthtr,
+    
+        r.rtype rtype,
+        s.mode_contractuel_indicatif mci,
+        DPCOPI.DPCOPIAXEMETIER,
+		PI.PROJAXEMETIER,
+        pack_utile_cout.Get_Profil_Fi( s.codsg, si1.CAFI, s.PRESTATION, r.ident, TO_CHAR(p.cdeb,'DDMMYYYY'), s.soccode, r.rtype, l.metier, s.niveau, l.codcamo,l.pid ) PROFIL_FI_DYNA,
+        decode(l.codcamo,66666,'multiCA',PACK_UTILE_COUT.GET_PROFIL_FI_MENS(r.ident, p.cdeb , p.pid)) PROFIL_FI_MENS
+
+    FROM    PROPLUS    p,
+            LIGNE_BIP     l,
+            SITU_RESS_FULL s, 
+            RESSOURCE     r,
+            STRUCT_INFO    si1,
+            STRUCT_INFO    si2,
+            APPLICATION    ap,
+            PROJ_INFO      pi,
+            DATDEBEX       d,
+            SOCIETE so,
+			DOSSIER_PROJET_COPI DPCOPI, TEMP_DMP_PID T
+
+    WHERE 
+		PI.dp_copi = DPCOPI.dp_copi(+)
+        AND p.cusag     > 0
+        AND so.soccode=s.soccode
+        AND p.factpid = l.pid    
+        and to_char(p.cdeb,'YYYY')=to_char(d.datdebex,'YYYY')
+        and p.cdeb<=d.moismens
+        and r.ident=s.ident
+        AND s.ident = p.tires
+        AND (s.datdep >= p.cdeb OR s.datdep is null)
+        AND (    ( (s.datsitu <= p.cdeb or s.datsitu is null )  AND  s.type_situ <> 'N' )
+              OR (s.datsitu <= p.cdeb AND  s.type_situ =  'N' ) )
+                      AND l.icpi = pi.icpi
+                      AND l.airt = ap.airt
+        AND s.codsg = si1.codsg
+        AND l.codsg = si2.codsg
+AND L.PID = T.PID
+
+                           --     &P_WHERE
+    ) 
+ORDER BY
+        6      asc,
+        1    asc,
+        2     asc,
+        3      asc,
+        7    asc,
+        8      asc
+;]]>
+      </select>
+      <displayInfo x="1.05212" y="0.43750" width="0.69995" height="0.19995"/>
+      <group name="G_PID">
+        <displayInfo x="0.88464" y="1.49133" width="2.30286" height="5.38672"
+        />
+        <dataItem name="PID" datatype="vchar2" columnOrder="12" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pid">
+          <xmlSettings xmlTag="&quot;ligne_origine&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( pid , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="PID" order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PTYPE" datatype="vchar2" columnOrder="13" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="type">
+          <xmlSettings xmlTag="&quot;type&quot;"/>
+          <dataDescriptor
+           expression="substr ( NVL ( ptype , &apos; &apos; ) , 1 , 1 )"
+           descriptiveExpression="PTYPE" order="2" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PNOM" datatype="vchar2" columnOrder="14" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="libellé">
+          <xmlSettings xmlTag="&quot;libellé&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( pnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="PNOM" order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_ligne" datatype="vchar2" columnOrder="15"
+         width="7" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DPG_ligne" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG_ligne&quot;"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( DPG_ligne ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="DPG_LIGNE" order="4" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PCMOUVRA" datatype="vchar2" columnOrder="16" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pcmouvra" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CodMo&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( pcmouvra , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="PCMOUVRA" order="5" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDEB" datatype="vchar2" columnOrder="17" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdeb">
+          <xmlSettings xmlTag="&quot;date&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( TO_CHAR ( cdeb , &apos;MMYYYY&apos; ) , &apos;0&apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CDEB" order="6" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TIRES" datatype="vchar2" columnOrder="18" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Tires">
+          <xmlSettings xmlTag="id_ress"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( tires ) , &apos;0&apos; ) , 5 , &apos;0&apos; )"
+           descriptiveExpression="TIRES" order="7" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AIST" datatype="vchar2" columnOrder="19" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Aist">
+          <xmlSettings xmlTag="&quot;FFxxx&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( aist , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="AIST" order="8" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RNOM" datatype="vchar2" columnOrder="37" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom">
+          <xmlSettings xmlTag="Nom_ress"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( rnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="RNOM" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCCODE" datatype="vchar2" columnOrder="20" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Soccode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Sté&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( soccode , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCODE" order="10" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUTTC" datatype="vchar2" columnOrder="21" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Couttc" breakOrder="none">
+          <xmlSettings xmlTag="&quot;cout_ttc&quot;"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( couttc , &apos;FM9999999999.00&apos; ) , &apos;0.00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTTC" order="12" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CUSAG" datatype="vchar2" columnOrder="22" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cusag" breakOrder="none">
+          <xmlSettings xmlTag="&quot;nb_jh&quot;"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( cusag , &apos;FM999999.00&apos; ) , &apos; &apos; ) , 8 , &apos; &apos; )"
+           descriptiveExpression="CUSAG" order="13" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="QUALIF" datatype="vchar2" columnOrder="23" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Qualif" breakOrder="none">
+          <xmlSettings xmlTag="&quot;qualif&quot;"/>
+          <dataDescriptor expression="NVL ( qualif , &apos;   &apos; )"
+           descriptiveExpression="QUALIF" order="14" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RCODSG" datatype="vchar2" columnOrder="24" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rcodsg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG_ress&quot;"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( rcodsg ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="RCODSG" order="15" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT" datatype="vchar2" columnOrder="25" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cout" breakOrder="none">
+          <xmlSettings xmlTag="&quot;cout_ht&quot;"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( cout , &apos;FM9999999999.00&apos; ) , &apos;0.00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUT" order="16" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VERIFSITU" datatype="vchar2" columnOrder="26"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Verifsitu" breakOrder="none">
+          <dataDescriptor
+           expression="rpad ( NVL ( verifsitu , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="VERIFSITU" order="17" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FACTPID" datatype="vchar2" columnOrder="27" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Factpid" breakOrder="none">
+          <xmlSettings xmlTag="&quot;imputation&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( factpid , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="FACTPID" order="18" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SGSSII" datatype="vchar2" columnOrder="28" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sgssii" breakOrder="none">
+          <xmlSettings xmlTag="&quot;societe&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( sgssii , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SGSSII" order="19" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PLOCAL" datatype="vchar2" columnOrder="29" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Plocal" breakOrder="none">
+          <xmlSettings xmlTag="&quot;paramètre local&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( plocal , &apos; &apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="PLOCAL" order="20" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_DPG_LIGNE" datatype="vchar2" columnOrder="30"
+         width="6" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ca Dpg Ligne" breakOrder="none">
+          <dataDescriptor
+           expression="rpad ( NVL ( TO_CHAR ( ca_dpg_ligne ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CA_DPG_LIGNE" order="21" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_DPG_RESS" datatype="vchar2" columnOrder="31"
+         width="6" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ca Dpg Ress" breakOrder="none">
+          <dataDescriptor
+           expression="rpad ( NVL ( TO_CHAR ( ca_dpg_ress ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CA_DPG_RESS" order="22" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="32" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Métier&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( metier , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="METIER" order="23" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUTHTR" datatype="vchar2" columnOrder="33" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Couthtr" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Coût htr&quot;"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( couthtr , &apos;FM9999999999.00&apos; ) , &apos;0.00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTHTR" order="24" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCGRPE" datatype="vchar2" columnOrder="34" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Socgrpe">
+          <xmlSettings xmlTag="Groupe Sté"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( socgrpe , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCGRPE" order="11" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_RESSOURCE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="36" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rtype" breakOrder="none">
+          <xmlSettings xmlTag="Type de ressource"/>
+          <dataDescriptor expression="rtype"
+           descriptiveExpression="TYPE_RESSOURCE" order="25"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MODE_CONTRACTUEL_INDICATIF" datatype="vchar2"
+         columnOrder="35" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Rpad Nvl Mci 5" breakOrder="none">
+          <xmlSettings xmlTag="MCI"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( mci , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="MODE_CONTRACTUEL_INDICATIF" order="26"
+           width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROFIL_FI_DYNA" datatype="vchar2" columnOrder="38"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Profil Fi Dyna">
+          <xmlSettings xmlTag="Profil de FI Dyna."/>
+          <dataDescriptor expression="PROFIL_FI_DYNA"
+           descriptiveExpression="PROFIL_FI_DYNA" order="27" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROFIL_FI_MENS" datatype="vchar2" columnOrder="39"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Profil Fi Mens">
+          <xmlSettings xmlTag="Profil de FI Mens."/>
+          <dataDescriptor expression="PROFIL_FI_MENS"
+           descriptiveExpression="PROFIL_FI_MENS" order="28" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande" datatype="vchar2" columnOrder="40"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demande" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande&quot;"/>
+          <dataDescriptor
+           expression="rpad ( pack_arbitre.FIND_REF_DEMANDE ( null , DPCOPIAXEMETIER , PROJAXEMETIER , PID ) , 12 , &apos; &apos; )"
+           descriptiveExpression="REF_DEMANDE" order="29" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande_Lib" datatype="vchar2" columnOrder="41"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demande_Lib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande_Lib&quot;"/>
+          <dataDescriptor
+           expression="rpad ( PACK_ARBITRE.FIND_REF_DEMANDE_LIB ( DPCOPIAXEMETIER , PROJAXEMETIER , PID ) , 80 , &apos; &apos; )"
+           descriptiveExpression="REF_DEMANDE_LIB" order="30" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetier" datatype="vchar2" columnOrder="42"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetier&quot;"/>
+          <dataDescriptor expression="DPCOPIAXEMETIER"
+           descriptiveExpression="DPCOPIAXEMETIER" order="31" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetier" datatype="vchar2" columnOrder="43"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetier&quot;"/>
+          <dataDescriptor expression="PROJAXEMETIER"
+           descriptiveExpression="PROJAXEMETIER" order="32" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <parameterForm>
+  <field name="PF_1" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.66626" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+   L_MSG VARCHAR2(6);
+  L_TMP NUMBER(9) := 0;
+  L_OBL CHAR(1);
+  l_direction client_mo.clidir%type;
+BEGIN
+	
+	DELETE FROM TEMP_DMP_PID;
+  FOR i IN
+  (SELECT l.PID,
+    l.CODSG
+  FROM LIGNE_BIP l,
+    DATDEBEX d
+  WHERE ( extract (YEAR FROM l.ADATESTATUT) >= extract (YEAR FROM d.MOISMENS) OR L.adatestatut IS NULL)
+  )
+  LOOP
+    --check direct link
+    Pack_Ligne_Bip.CHECK_DMPLINK(I.PID,L_MSG,L_OBL );
+    IF L_MSG = 'LINK' THEN
+      INSERT INTO TEMP_DMP_PID VALUES
+        (I.PID
+        );
+    ELSE
+      -- CHECK INDIRECT LINK -- DP COPY
+      BEGIN
+        SELECT CMO.clidir
+        INTO l_direction
+        FROM client_mo CMO,
+          ligne_bip LB
+        WHERE LB.pid   = I.PID
+        AND LB.clicode = CMO.clicode;
+        
+        SELECT 1
+        INTO L_TMP
+        FROM ligne_param_bip
+        WHERE code_action = 'AXEMETIER_'
+          || l_direction
+        AND code_version LIKE 'DPC%'
+        AND upper(actif) = 'O';
+        
+        INSERT INTO TEMP_DMP_PID VALUES
+          (I.PID
+          );
+      EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+        BEGIN
+          ---- CHECK INDIRECT LINK -- PROJECT
+         
+          SELECT 1
+          INTO L_TMP
+          FROM ligne_param_bip
+          WHERE code_action = 'AXEMETIER_'
+            || l_direction
+          AND code_version LIKE 'PRJ%'
+          AND upper(actif) = 'O';
+          
+          INSERT INTO TEMP_DMP_PID VALUES
+            (I.PID
+            );
+        EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+          BEGIN
+          
+            SELECT CODDIR INTO l_direction FROM STRUCT_INFO WHERE CODSG = I.CODSG;
+            
+            SELECT 1
+            INTO L_TMP
+            FROM ligne_param_bip
+            WHERE code_action = 'AXEMETIER_'
+              || l_direction
+            AND code_version LIKE 'PRJ%'
+            AND upper(actif) = 'O';
+            
+            INSERT INTO TEMP_DMP_PID VALUES
+              (I.PID
+              );
+          EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+            NULL;
+          END;
+        END;
+      END;
+    END IF;
+  END LOOP;
+  COMMIT;
+
+		    --   :P_WHERE := :P_WHERE || '     and EXITS (SELECT * FROM TEMP_DMP_PID T WHERE T.PID = L.PID) ';	
+	
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="coutKE" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="COUTKE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+     cout.DPG_BAS  ,
+     cout.DPG_HAUT ,
+    cout.libelle_four_copi,
+    cout.ANNEE, 
+    cout.type_ligne,
+    DECODE (cout.ME,NULL,' ', ROUND(  cout.ME ,2) )  ME, 
+   DECODE (cout.MO,NULL,' ', ROUND(  cout.MO ,2) )  MO,  
+   DECODE (cout.HOM,NULL,' ', ROUND(  cout.HOM ,2) )  HOM,   
+   DECODE (cout.GAP,NULL,' ', ROUND(  cout.GAP ,2) )   GAP,   
+   DECODE (cout.EXP,NULL,' ', ROUND(  cout.EXP ,2) )  EXP,   
+   DECODE (cout.SAU,NULL,' ', ROUND(  cout.SAU ,2) )  SAU 
+from
+   tmp_coutke_edition cout 
+&P_WHERE 
+order by annee,dpg_bas]]>
+      </select>
+      <displayInfo x="1.97913" y="1.47913" width="0.69995" height="0.19995"/>
+      <group name="G_1">
+        <displayInfo x="1.45007" y="2.42908" width="1.09998" height="0.43066"
+        />
+        <dataItem name="ANNEE" oracleDatatype="number" columnOrder="15"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="cout.ANNEE"
+           descriptiveExpression="ANNEE" order="4" oracleDatatype="number"
+           width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_DPG_BAS">
+        <displayInfo x="1.20605" y="3.34937" width="1.54395" height="2.82324"
+        />
+        <dataItem name="DPG_BAS" oracleDatatype="number" columnOrder="12"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dpg Bas">
+          <dataDescriptor expression="cout.DPG_BAS"
+           descriptiveExpression="DPG_BAS" order="1" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_HAUT" oracleDatatype="number" columnOrder="13"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dpg Haut">
+          <dataDescriptor expression="cout.DPG_HAUT"
+           descriptiveExpression="DPG_HAUT" order="2" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_four_copi" datatype="vchar2" columnOrder="14"
+         width="60" defaultWidth="150000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Fournisseur">
+          <dataDescriptor expression="cout.libelle_four_copi"
+           descriptiveExpression="LIBELLE_FOUR_COPI" order="3" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="type_ligne" datatype="vchar2" columnOrder="26"
+         width="20" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type Ligne">
+          <dataDescriptor expression="cout.type_ligne"
+           descriptiveExpression="TYPE_LIGNE" order="5" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ME" datatype="vchar2" columnOrder="16" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Me">
+          <dataDescriptor
+           expression="DECODE ( cout.ME , NULL , &apos; &apos; , ROUND ( cout.ME , 2 ) )"
+           descriptiveExpression="ME" order="6" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MO" datatype="vchar2" columnOrder="17" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Mo">
+          <dataDescriptor
+           expression="DECODE ( cout.MO , NULL , &apos; &apos; , ROUND ( cout.MO , 2 ) )"
+           descriptiveExpression="MO" order="7" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="HOM" datatype="vchar2" columnOrder="18" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Hom">
+          <dataDescriptor
+           expression="DECODE ( cout.HOM , NULL , &apos; &apos; , ROUND ( cout.HOM , 2 ) )"
+           descriptiveExpression="HOM" order="8" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="GAP" datatype="vchar2" columnOrder="19" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Gap">
+          <dataDescriptor
+           expression="DECODE ( cout.GAP , NULL , &apos; &apos; , ROUND ( cout.GAP , 2 ) )"
+           descriptiveExpression="GAP" order="9" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EXP" datatype="vchar2" columnOrder="20" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Exp">
+          <dataDescriptor
+           expression="DECODE ( cout.EXP , NULL , &apos; &apos; , ROUND ( cout.EXP , 2 ) )"
+           descriptiveExpression="EXP" order="10" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SAU" datatype="vchar2" columnOrder="21" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Sau">
+          <dataDescriptor
+           expression="DECODE ( cout.SAU , NULL , &apos; &apos; , ROUND ( cout.SAU , 2 ) )"
+           descriptiveExpression="SAU" order="11" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_compteur" source="CP_indice" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Compteur">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <placeholder name="CP_indice" datatype="number" width="20"
+         precision="10" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="16" defaultLabel="Cp Indice" valueIfNull="1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </placeholder>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body width="8.12500" height="9.50000">
+      <location x="0.18750" y="1.25000"/>
+      <frame name="M_G_1_GRPFR">
+        <webSettings>
+        <![CDATA[#NULL#]]>
+        </webSettings>
+        <geometryInfo x="0.00000" y="0.00000" width="8.12500" height="2.25000"
+        />
+        <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+        <advancedLayout keepWithAnchoringObject="yes"/>
+        <visualSettings fillPattern="transparent"
+         fillBackgroundColor="r100g100b100"/>
+        <repeatingFrame name="R_G_1" source="G_1" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <webSettings>
+          <![CDATA[#NULL#]]>
+          </webSettings>
+          <geometryInfo x="0.00000" y="0.00000" width="8.12500"
+           height="1.43750"/>
+          <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+          <advancedLayout keepWithAnchoringObject="yes"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="TextColor"/>
+          <rectangle name="B_6">
+            <geometryInfo x="0.00000" y="0.18750" width="2.12500"
+             height="0.50000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100" linePattern="solid"/>
+            <points>
+              <point x="0.00000" y="0.18750"/>
+              <point x="2.12500" y="0.50000"/>
+            </points>
+          </rectangle>
+          <text name="B_ANNEE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.06250" y="0.31250" width="0.75000"
+             height="0.18750"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="custom6"/>
+            <textSegment>
+              <font face="Arial" size="14" bold="yes"/>
+              <string>
+              <![CDATA[Année :]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_ANNEE" source="ANNEE" minWidowLines="1" spacing="0"
+           alignment="end">
+            <font face="Arial" size="14" bold="yes" textColor="red"/>
+            <geometryInfo x="1.12500" y="0.31250" width="0.93750"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_DPG_BAS_GRPFR">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="0.75000" width="8.12500"
+             height="0.68750"/>
+            <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r100g100b100" linePattern="solid"/>
+            <repeatingFrame name="R_G_DPG_BAS" source="G_DPG_BAS"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <webSettings>
+              <![CDATA[#NULL#]]>
+              </webSettings>
+              <geometryInfo x="0.00000" y="0.93750" width="8.12500"
+               height="0.31250"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout formatTrigger="r_g_codbrformattrigger"/>
+              <visualSettings fillPattern="transparent" linePattern="solid"/>
+              <field name="F_DPG_BAS" source="DPG_BAS" minWidowLines="1"
+               spacing="0" alignment="center">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="0.00000" y="1.00000" width="0.81250"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_DPG_HAUT" source="DPG_HAUT" minWidowLines="1"
+               spacing="0" alignment="center">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="0.81250" y="1.00000" width="0.81250"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_libelle_four_copi" source="libelle_four_copi"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="1.62500" y="1.00000" width="2.00000"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_ME" source="ME" minWidowLines="1" spacing="0"
+               alignment="end">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="4.25000" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_MO" source="MO" minWidowLines="1" spacing="0"
+               alignment="end">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="4.87500" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_HOM" source="HOM" minWidowLines="1" spacing="0"
+               alignment="end">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="5.50000" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_GAP" source="GAP" minWidowLines="1" spacing="0"
+               alignment="end">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="6.12500" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_EXP" source="EXP" minWidowLines="1" spacing="0"
+               alignment="end">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="6.75000" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_SAU" source="SAU" minWidowLines="1" spacing="0"
+               alignment="end">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="7.37500" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_TYPe_LIGNe" source="type_ligne" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="9"/>
+                <geometryInfo x="3.62500" y="1.00000" width="0.62500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_G_DPG_BAS_HDR">
+              <webSettings>
+              <![CDATA[#NULL#]]>
+              </webSettings>
+              <geometryInfo x="0.00000" y="0.75000" width="8.12500"
+               height="0.18750"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray16" linePattern="solid"/>
+              <text name="B_DPG_BAS" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="0.00000" y="0.75000" width="0.81250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="custom6"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Dpg Bas]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_DPG_HAUT" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="0.81250" y="0.75000" width="0.81250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="custom6"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Dpg Haut]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_libelle_four_copi" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="1.88550" y="0.75000" width="0.93750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Fournisseur]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_ME" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="4.37500" y="0.75000" width="0.62500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Me]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_MO" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="5.00000" y="0.75000" width="0.62500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Mo]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_HOM" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="5.62500" y="0.75000" width="0.62500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Hom]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_GAP" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="6.25000" y="0.75000" width="0.62500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Gap]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_EXP" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="6.87500" y="0.75000" width="0.62500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Exp]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_SAU" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="7.50000" y="0.75000" width="0.62500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Sau]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_libelle_four_copi1" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="3.38025" y="0.75000" width="0.93750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Type Ligne]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+          </frame>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="2.56250" y="0.54163" width="3.25000" height="0.64587"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <textSegment>
+          <font face="Arial" size="14" bold="yes" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[LISTE DES COUTS STANDARDS
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Arial" size="14" bold="yes" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[POUR LES ETATS EN KE]]>
+          </string>
+        </textSegment>
+      </text>
+      <rectangle name="B_2">
+        <geometryInfo x="2.31250" y="0.43750" width="3.62500" height="0.68750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings linePattern="solid" lineForegroundColor="r0g0b75"
+         lineBackgroundColor="black"/>
+        <points>
+          <point x="2.31250" y="0.43750"/>
+          <point x="3.62500" y="0.68750"/>
+        </points>
+      </rectangle>
+      <text name="B_3" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="0.12500" y="0.07288" width="0.43750" height="0.17712"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Arial" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Date:]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="center">
+        <font face="Arial" size="10" textColor="r0g0b50"/>
+        <geometryInfo x="0.50000" y="0.06250" width="1.18750" height="0.25000"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+      </field>
+      <text name="B_4" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="7.21875" y="0.11462" width="0.42834" height="0.16785"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Courier New" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Page:]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_2" source="PageNumber" minWidowLines="1" spacing="single"
+       alignment="end">
+        <font face="Courier New" size="10" textColor="r0g0b50"/>
+        <geometryInfo x="7.62500" y="0.12500" width="0.25000" height="0.18750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_5" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="7.87500" y="0.12500" width="0.18750" height="0.18750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Courier New" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_3" source="TotalPages" minWidowLines="1" spacing="single"
+       alignment="start">
+        <font face="Courier New" size="10" textColor="r0g0b50"/>
+        <geometryInfo x="8.06250" y="0.12500" width="0.37500" height="0.18750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+
+
+  
+   :P_NUMSEQ := pack_cout_standard_ke.insert_tmp_edition_etatke(:P_PARAM6); 
+   
+  
+   
+   :p_where := ' where numseq  = ' || :P_NUMSEQ ;
+
+ 
+   ----srw.message(1,:P_where);  
+ 
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+    
+    DELETE FROM TMP_COUTKE_EDITION WHERE NUMSEQ = :P_NUMSEQ ; 
+  
+    COMMIT ; 
+   
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_codbrformattrigger">
+      <textSource>
+      <![CDATA[function R_G_CODBRFormatTrigger return boolean is
+begin
+ IF (:CS_compteur mod 2 = 0)
+   THEN
+      srw.set_background_fill_color('r88g75b88');
+ else
+ 	 srw.set_background_fill_color('white');
+       END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#ffffff"/>
+    <color index="191" displayName="custom6" value="#93065d"/>
+    <color index="192" displayName="Background2" value="#e4c1d6"/>
+    <color index="193" displayName="Background3" value="#c982ae"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName="rwwine"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

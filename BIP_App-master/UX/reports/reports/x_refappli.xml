@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_refappli" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_REFAPPLI" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT rpad(nvl(a.AIRT,' '),5,' ')    AIRT,
+          rpad(nvl(a.ALIBEL,' '),50,' ')  ALIBEL,
+	      rpad(nvl(a.ALIBCOURT,' '),20,' ') ALIBCOURT, 
+          rpad(nvl(a.AMNEMO,' '),20,' ')  AMNEMO, 
+          rpad(nvl(a.ADESCR,' '),420,' ') ADESCR,
+          rpad(nvl(a.AMOP,' '),20,' ')    AMOP,
+          lpad(nvl(a.CLICODE,' '),5,' ') CLICODE,
+          rpad(nvl(a.ACME,' '),20,' ')    ACME,
+          lpad(nvl(to_char(a.CODSG),'0'),7,'0') CODSG,
+          rpad(nvl(a.AGAPPLI,' '),20,' ')        AGAPPLI,
+          rpad(nvl(a.CODGAPPLI,' '),5,' ')      CODGAPPLI,
+          rpad(nvl(a.ACDAREG,' '),5,' ')    ACDAREG,
+          LPAD(NVL(to_char(a.CODCAMO1), ' '), 6, ' ') CODCAMO1,
+          LPAD(NVL(to_char(a.TYPACTCA1), ' '), 6, ' ') TYPACTCA1,
+		  LPAD(NVL(to_char(a.cdfain1), ' '), 6, ' ') CDFAIN1,
+         
+          LPAD(NVL(to_char(a.CODCAMO2), ' '), 6, ' ') CODCAMO2,
+          LPAD(NVL(to_char(a.TYPACTCA2), ' '), 6, ' ') TYPACTCA2,
+          LPAD(NVL(to_char(a.cdfain2), ' '), 6, ' ') CDFAIN2,
+         
+          LPAD(NVL(to_char(a.CODCAMO3), ' '), 6, ' ') CODCAMO3,
+          LPAD(NVL(to_char(a.TYPACTCA3), ' '), 6, ' ') TYPACTCA3,
+          LPAD(NVL(to_char(a.cdfain3), ' '), 6, ' ') CDFAIN3,
+         
+          LPAD(NVL(to_char(a.CODCAMO4), ' '), 6, ' ') CODCAMO4,
+          LPAD(NVL(to_char(a.TYPACTCA4), ' '), 6, ' ') TYPACTCA4,
+          LPAD(NVL(to_char(a.cdfain4), ' '), 6, ' ') CDFAIN4,
+         
+          LPAD(NVL(to_char(a.CODCAMO5), ' '), 6, ' ') CODCAMO5,
+          LPAD(NVL(to_char(a.TYPACTCA5), ' '), 6, ' ') TYPACTCA5,
+          LPAD(NVL(to_char(a.cdfain5), ' '), 6, ' ') CDFAIN5,
+         
+          LPAD(NVL(to_char(a.CODCAMO6), ' '), 6, ' ') CODCAMO6,
+          LPAD(NVL(to_char(a.TYPACTCA6), ' '), 6, ' ') TYPACTCA6,
+          LPAD(NVL(to_char(a.cdfain6), ' '), 6, ' ') CDFAIN6,
+         
+          LPAD(NVL(to_char(a.CODCAMO7), ' '), 6, ' ') CODCAMO7,
+          LPAD(NVL(to_char(a.TYPACTCA7), ' '), 6, ' ') TYPACTCA7,
+           LPAD(NVL(to_char(a.cdfain7), ' '), 6, ' ') CDFAIN7,
+         
+          LPAD(NVL(to_char(a.CODCAMO8), ' '), 6, ' ') CODCAMO8,
+          LPAD(NVL(to_char(a.TYPACTCA8), ' '), 6, ' ') TYPACTCA8,
+          LPAD(NVL(to_char(a.cdfain8), ' '), 6, ' ') CDFAIN8,
+         
+          LPAD(NVL(to_char(a.CODCAMO9), ' '), 6, ' ') CODCAMO9,
+          LPAD(NVL(to_char(a.TYPACTCA9), ' '), 6, ' ') TYPACTCA9,
+          LPAD(NVL(to_char(a.cdfain9), ' '), 6, ' ') CDFAIN9,
+         
+          LPAD(NVL(to_char(a.CODCAMO10), ' '), 6, ' ') CODCAMO10,
+          LPAD(NVL(to_char(a.TYPACTCA10), ' '), 6, ' ') TYPACTCA10,
+           LPAD(NVL(to_char(a.cdfain10), ' '), 6, ' ') CDFAIN10,
+         
+ 	rpad(nvl(ss.code_ss, ' '), 5, ' ')		CODE_SOUS_SYSTEME,
+	rpad(nvl(ss.libelle, ' '), 40 ,' ')		LIBELLE_SOUS_SYSTEME,
+    rpad(nvl(d.code_d, ' '), 5, ' ')		CODE_DOMAINE,
+	rpad(nvl(d.libelle, ' '), 100 ,' ')		LIBELLE_DOMAINE,
+    rpad(nvl(d.code_d, ' '), 5, ' ')		CODE_BLOC,
+	rpad(nvl(d.libelle, ' '), 100 ,' ')		LIBELLE_BLOC,  
+          chr(13) ch
+		  
+FROM      APPLICATION a,
+ sous_systeme ss,
+domaine d,
+bloc b
+
+where
+
+a.bloc = b.code_b (+)
+and d.code_ss = ss.code_ss (+)
+and b.code_d = d.code_d (+)
+ 
+ORDER BY AIRT ASC
+;
+]]>
+      </select>	
+      <displayInfo x="0.23962" y="0.26038" width="0.89587" height="0.50000"/>
+      <group name="G_AIRT">
+        <displayInfo x="2.35193" y="0.37500" width="2.63770" height="6.41211"
+        />
+        <dataItem name="AIRT" datatype="vchar2" columnOrder="11" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Airt" breakOrder="none">
+          <xmlSettings xmlTag="Code application"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.AIRT , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="AIRT" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ALIBEL" datatype="vchar2" columnOrder="12" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Alibel">
+          <xmlSettings xmlTag="Libellé"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.ALIBEL , &apos; &apos; ) , 50 , &apos; &apos; )"
+           descriptiveExpression="ALIBEL" order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ALIBCOURT" datatype="vchar2" columnOrder="13"
+         width="20" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Alibcourt">
+          <xmlSettings xmlTag="Libellé court"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.ALIBCOURT , &apos; &apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="ALIBCOURT" order="3" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ADESCR" datatype="vchar2" columnOrder="39" width="420"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Adescr">
+          <xmlSettings xmlTag="Description"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.ADESCR , &apos; &apos; ) , 420 , &apos; &apos; )"
+           descriptiveExpression="ADESCR" order="5" width="420"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AMNEMO" datatype="vchar2" columnOrder="14" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Amnemo">
+          <xmlSettings xmlTag="Mnémonique"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.AMNEMO , &apos; &apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="AMNEMO" order="4" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AMOP" datatype="vchar2" columnOrder="15" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Amop">
+          <xmlSettings xmlTag="Nom MO"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.AMOP , &apos; &apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="AMOP" order="6" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLICODE" datatype="vchar2" columnOrder="16" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Clicode">
+          <xmlSettings xmlTag="Code MO"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( a.CLICODE , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CLICODE" order="7" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACME" datatype="vchar2" columnOrder="17" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Acme">
+          <xmlSettings xmlTag="Nom ME"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.ACME , &apos; &apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="ACME" order="8" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" datatype="vchar2" columnOrder="18" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codsg">
+          <xmlSettings xmlTag="Code ME"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( a.CODSG ) , &apos;0&apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSG" order="9" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AGAPPLI" datatype="vchar2" columnOrder="19" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Agappli">
+          <xmlSettings xmlTag="Nom gestionnaire"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.AGAPPLI , &apos; &apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="AGAPPLI" order="10" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODGAPPLI" datatype="vchar2" columnOrder="20"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codgappli">
+          <xmlSettings xmlTag="Code gestionnaire"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.CODGAPPLI , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CODGAPPLI" order="11" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACDAREG" datatype="vchar2" columnOrder="21" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Acdareg">
+          <xmlSettings xmlTag="Code appli de regroupement"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( a.ACDAREG , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="ACDAREG" order="12" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO1" datatype="vchar2" columnOrder="23" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo Ca1">
+          <xmlSettings xmlTag="CODCAMO_CA1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO1 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO1" order="13" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA1" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca1">
+		  <xmlSettings xmlTag="Type-activité_CA1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA1 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA1" order="14" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN1" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain1">
+		 <xmlSettings xmlTag="Etat_CA_1"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain1), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN1" order="15" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO2" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo2">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO2 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO2" order="16" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA2" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca2">
+		 <xmlSettings xmlTag="Type-activité_CA2"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA2 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA2" order="17" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN2" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain2">
+		 <xmlSettings xmlTag="Etat_CA_2"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain2), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN2" order="18" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+		
+        <dataItem name="CODCAMO3" datatype="vchar2" columnOrder="25" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo3">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO3 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO3" order="19" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA3" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca3">
+		 <xmlSettings xmlTag="Type-activité_CA3"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA3 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA3" order="20" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN3" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain3">
+		 <xmlSettings xmlTag="Etat_CA_3"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain3), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN3" order="21" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+		
+        <dataItem name="CODCAMO4" datatype="vchar2" columnOrder="26" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo4">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO4 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO4" order="22" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA4" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca4">
+		 <xmlSettings xmlTag="Type-activité_CA4"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA4 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA4" order="23" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN4" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain4">
+		 <xmlSettings xmlTag="Etat_CA_4"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain4), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN4" order="24" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO5" datatype="vchar2" columnOrder="27" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo5">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO5 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO5" order="25" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA5" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca5">
+		 <xmlSettings xmlTag="Type-activité_CA5"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA5 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA5" order="26" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN5" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain5">
+		 <xmlSettings xmlTag="Etat_CA_5"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain5), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN5" order="27" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO6" datatype="vchar2" columnOrder="28" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo6">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO6 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO6" order="28" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA6" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca6">
+		 <xmlSettings xmlTag="Type-activité_CA6"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA6 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA6" order="29" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN6" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain6">
+		 <xmlSettings xmlTag="Etat_CA_6"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain6), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN6" order="30" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO7" datatype="vchar2" columnOrder="29" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo7">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO7 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO7" order="31" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA7" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca7">
+		 <xmlSettings xmlTag="Type-activité_CA7"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA7 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA7" order="32" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN7" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain7">
+		 <xmlSettings xmlTag="Etat_CA_7"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain7), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN7" order="33" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO8" datatype="vchar2" columnOrder="30" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo8">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO8 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO8" order="34" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA8" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca8">
+		 <xmlSettings xmlTag="Type-activité_CA8"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA8 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA8" order="35" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN8" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain8">
+		 <xmlSettings xmlTag="Etat_CA_8"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain8), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN8" order="36" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO9" datatype="vchar2" columnOrder="31" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo9">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO9 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO9" order="37" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA9" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca9">
+		 <xmlSettings xmlTag="Type-activité_CA9"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA9 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA9" order="38" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN9" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain9">
+		 <xmlSettings xmlTag="Etat_CA_9"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain9), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN9" order="39" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODCAMO10" datatype="vchar2" columnOrder="32"
+         width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo10">
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.CODCAMO10 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CODCAMO10" order="40" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="TYPACTCA10" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typactca10">
+		 <xmlSettings xmlTag="Type-activité_CA10"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( to_char ( a.TYPACTCA10 ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="TYPACTCA10" order="41" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="CDFAIN10" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdfain10">
+		 <xmlSettings xmlTag="Etat_CA_10"/>
+          <dataDescriptor
+           expression="LPAD(NVL(DECODE(to_char(ca.ctopamo),  &apos; &apos;, &apos; &apos;,&apos;M&apos;, &apos; &apos;,a.cdfain10), &apos; &apos;), 6, &apos; &apos;)"
+           descriptiveExpression="CDFAIN10" order="42" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="CODE_SOUS_SYSTEME" datatype="vchar2" columnOrder="33"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Sous Systeme">
+          <xmlSettings xmlTag="Code sous-systeme"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( ss.code_ss , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_SOUS_SYSTEME" order="43" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="LIBELLE_SOUS_SYSTEME" datatype="vchar2"
+         columnOrder="34" width="40" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle Sous Systeme">
+          <xmlSettings xmlTag="Libelle sous-systeme"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( ss.libelle , &apos; &apos; ) , 40 , &apos; &apos; )"
+           descriptiveExpression="LIBELLE_SOUS_SYSTEME" order="44" width="40"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_DOMAINE" datatype="vchar2" columnOrder="35"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Domaine">
+          <xmlSettings xmlTag="Code domaine"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( d.code_d , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_DOMAINE" order="45" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_DOMAINE" datatype="vchar2" columnOrder="36"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Domaine">
+          <xmlSettings xmlTag="Libelle domaine"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( d.libelle , &apos; &apos; ) , 100 , &apos; &apos; )"
+           descriptiveExpression="LIBELLE_DOMAINE" order="46" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_BLOC" datatype="vchar2" columnOrder="37"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Bloc">
+          <xmlSettings xmlTag="Code bloc"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( d.code_d , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_BLOC" order="47" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_BLOC" datatype="vchar2" columnOrder="38"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Bloc">
+          <xmlSettings xmlTag="Libelle bloc"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( d.libelle , &apos; &apos; ) , 100 , &apos; &apos; )"
+           descriptiveExpression="LIBELLE_BLOC" order="48" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ch" datatype="vchar2" columnOrder="22" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ch">
+          <xmlSettings xmlTag=""/>
+          <dataDescriptor expression="chr ( 13 )" descriptiveExpression="CH"
+           order="49" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_AIRT" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.06250" width="7.37500" height="0.68750"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_airt" source="AIRT" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.18750" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_alibel" source="ALIBEL" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.62500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_alibcourt" source="ALIBCOURT" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.06250" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_amnemo" source="AMNEMO" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.43750" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_adescr" source="ADESCR" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.93750" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_amop" source="AMOP" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.56250" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_clicode" source="CLICODE" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.00000" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_acme" source="ACME" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.43750" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_codsg" source="CODSG" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.87500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_agappli" source="AGAPPLI" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.31250" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_codgappli" source="CODGAPPLI" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.68750" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_acdareg" source="ACDAREG" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="7.06250" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_retour" source="ch" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.25000" y="0.43750" width="0.62500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

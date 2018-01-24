@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="pca4sst_csv" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="PCA4SST_CSV" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     initialValue="01616**" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="p_where" datatype="character" width="10000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="12000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select  distinct
+      decode(substr(LPAD(:p_param6, 7, '0'), 5, 2),'**', (S.sigdep || '/' || S.sigpole),S.libdsg) Departement_pole,
+       lb.clicode            Code_direction,
+       cm.clisigle           Direction,
+       lb.pid                Ligne,
+       lb.pcle               Cle,
+       lb.typproj            TYPE,
+       lb.arctype            TYPO,
+       lb.codcamo            CA_payeur,
+       rpad(lb.pnom,25)      LIBPROJET,
+       to_char(lb.codsg,'FM0000000')      DPG,
+       lb.metier METIER,
+       rpad(r.rnom,12)        CHEFPROJET,
+       nvl(conso.cusag,0)        CONSO_N,
+       nvl(budg.reestime,0)      REEST_N,
+       nvl(budg.bpmontme,0)       PROPP_FOUR_N,
+       nvl(budg.bpmontmo,0)         PROPO_CLI__N,
+       nvl(budg.bnmont,0)                 NOTIF_N,
+       nvl(budg.anmont,0)                ARBIT_N,
+       nvl(budg1.bpmontme,0)        PROPO_FOUR_N1,
+       nvl(budg1.bpmontmo,0)        PROPOMO_CLI_N1,
+    pro.pid ligne_sst,
+	pro.aist SOUS_TACHE,
+	rpad(r2.rnom,12)  CP_SST,
+	pro.pdsg CODSG_SST,
+          decode(substr(TO_CHAR(pro.pdsg, 'FM0000000'), 6, 2),
+	'**', (S2.sigdep || '/' || S2.sigpole),
+	S2.libdsg) PROLIBDPG, 
+	
+	to_char(pack_pca4.f_conso_sst(lb.pid,pro.pid,pro.pcpi),'FM99999D0')  CONSO_SST
+from  ligne_bip       lb  ,
+    (select * from proplus where AISTTY = 'FF') pro,
+      struct_info S,
+    struct_info S2,
+      proj_info       pri ,
+      budget     budg  ,
+      budget     budg1 ,
+      consomme conso   ,   
+      ressource       r   ,
+      ressource       r2   ,
+     client_mo       cm
+ 
+where  lb.icpi    = pri.icpi
+   and S.codsg= lb.codsg
+   and lb.pid=pro.factpid(+)
+   and to_char(pro.cdeb(+),'yyyy') = :P_ANNEE
+   and pro.pcpi=r2.ident(+)
+   and S2.codsg(+)= pro.pdsg
+   and lb.clicode = cm.clicode
+   and lb.pcpi    = r.ident
+   and lb.pid = budg.pid  (+)
+   and lb.pid = conso.pid   (+) 
+   and lb.pid = budg1.pid (+)
+   and lb.typproj!=9
+   and (   (  conso.cusag     <> 0 AND   conso.cusag    is not null )
+        OR ( budg.reestime  <> 0 AND  budg.reestime is not null )
+        OR ( budg.bpmontme     <> 0 AND  budg.bpmontme    is not null )
+        OR ( budg.bnmont      <> 0 AND  budg.bnmont     is not null )
+        OR ( budg.bpmontmo     <> 0 AND  budg.bpmontmo    is not null )
+        OR (budg.anmont      <> 0 AND budg.anmont     is not null )
+        OR (budg1.bpmontme     <> 0 AND budg1.bpmontme    is not null)
+        OR (budg1.bpmontmo     <> 0 AND budg1.bpmontmo    is not null)
+        )
+	AND (lb.adatestatut IS NULL
+           OR lb.adatestatut >= (select datdebex from datdebex) )
+&p_where
+order by Departement_pole,  Direction,
+         ligne, ca_payeur, LIBPROJET, DPG, CHEFPROJET
+;
+]]>
+      </select>
+      <displayInfo x="1.75000" y="1.02087" width="0.69995" height="0.19995"/>
+      <group name="G_Departement_pole">
+        <displayInfo x="1.30078" y="1.72083" width="1.59839" height="4.19043"
+        />
+        <dataItem name="Departement_pole" datatype="vchar2" columnOrder="13"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Departement Pole">
+          <dataDescriptor
+           expression="decode ( substr ( LPAD ( : p_param6 , 7 , &apos;0&apos; ) , 5 , 2 ) , &apos;**&apos; , ( S.sigdep || &apos;/&apos; || S.sigpole ) , S.libdsg )"
+           descriptiveExpression="DEPARTEMENT_POLE" order="1" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Code_direction" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="14" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Code Direction">
+          <xmlSettings xmlTag="CODE_CLIENT_PRINCIPAL"/>
+          <dataDescriptor expression="lb.clicode"
+           descriptiveExpression="CODE_DIRECTION" order="2"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Direction" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="15" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Direction">
+          <xmlSettings xmlTag="LIBELLE_REDUIT_CLIENT"/>
+          <dataDescriptor expression="cm.clisigle"
+           descriptiveExpression="DIRECTION" order="3"
+           oracleDatatype="aFixedChar" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ligne" datatype="vchar2" columnOrder="16" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ligne">
+          <dataDescriptor expression="lb.pid" descriptiveExpression="LIGNE"
+           order="4" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Cle" datatype="vchar2" columnOrder="17" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cle">
+          <dataDescriptor expression="lb.pcle" descriptiveExpression="CLE"
+           order="5" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="18" width="2" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Type">
+          <dataDescriptor expression="lb.typproj" descriptiveExpression="TYPE"
+           order="6" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPO" datatype="vchar2" columnOrder="19" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Typo">
+          <dataDescriptor expression="lb.arctype" descriptiveExpression="TYPO"
+           order="7" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_payeur" oracleDatatype="number" columnOrder="20"
+         width="22" defaultWidth="80000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Ca Payeur">
+          <dataDescriptor expression="lb.codcamo"
+           descriptiveExpression="CA_PAYEUR" order="8" oracleDatatype="number"
+           width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBPROJET" datatype="vchar2" columnOrder="21"
+         width="25" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Libprojet">
+          <xmlSettings xmlTag="LIBELLE_LIGNE"/>
+          <dataDescriptor expression="rpad ( lb.pnom , 25 )"
+           descriptiveExpression="LIBPROJET" order="9" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG" datatype="vchar2" columnOrder="22" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Dpg">
+          <dataDescriptor
+           expression="to_char ( lb.codsg , &apos;FM0000000&apos; )"
+           descriptiveExpression="DPG" order="10" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="23" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Metier">
+          <dataDescriptor expression="lb.metier"
+           descriptiveExpression="METIER" order="11"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHEFPROJET" datatype="vchar2" columnOrder="24"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Chefprojet">
+          <dataDescriptor expression="rpad ( r.rnom , 12 )"
+           descriptiveExpression="CHEFPROJET" order="12" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSO_N" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Conso N">
+          <dataDescriptor expression="nvl ( conso.cusag , 0 )"
+           descriptiveExpression="CONSO_N" order="13" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REEST_N" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Reest N">
+          <dataDescriptor expression="nvl ( budg.reestime , 0 )"
+           descriptiveExpression="REEST_N" order="14" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPP_FOUR_N" oracleDatatype="number" columnOrder="27"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Propp Four N">
+          <dataDescriptor expression="nvl ( budg.bpmontme , 0 )"
+           descriptiveExpression="PROPP_FOUR_N" order="15"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPO_CLI_N" oracleDatatype="number" columnOrder="28"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Propo Cli N">
+          <dataDescriptor expression="nvl ( budg.bpmontmo , 0 )"
+           descriptiveExpression="PROPO_CLI__N" order="16"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOTIF_N" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Notif N">
+          <dataDescriptor expression="nvl ( budg.bnmont , 0 )"
+           descriptiveExpression="NOTIF_N" order="17" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARBIT_N" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Arbit N">
+          <dataDescriptor expression="nvl ( budg.anmont , 0 )"
+           descriptiveExpression="ARBIT_N" order="18" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPO_FOUR_N1" oracleDatatype="number"
+         columnOrder="31" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="33" defaultLabel="Propo Four N1">
+          <dataDescriptor expression="nvl ( budg1.bpmontme , 0 )"
+           descriptiveExpression="PROPO_FOUR_N1" order="19"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPOMO_CLI_N1" oracleDatatype="number"
+         columnOrder="32" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="33" defaultLabel="Propomo Cli N1">
+          <dataDescriptor expression="nvl ( budg1.bpmontmo , 0 )"
+           descriptiveExpression="PROPOMO_CLI_N1" order="20"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ligne_sst" datatype="vchar2" columnOrder="33"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ligne Sst">
+          <dataDescriptor expression="pro.pid"
+           descriptiveExpression="LIGNE_SST" order="21" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOUS_TACHE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="34" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Sous Tache">
+          <dataDescriptor expression="pro.aist"
+           descriptiveExpression="SOUS_TACHE" order="22"
+           oracleDatatype="aFixedChar" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CP_SST" datatype="vchar2" columnOrder="35" width="12"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cp Sst">
+          <dataDescriptor expression="rpad ( r2.rnom , 12 )"
+           descriptiveExpression="CP_SST" order="23" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG_SST" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Codsg Sst">
+          <dataDescriptor expression="pro.pdsg"
+           descriptiveExpression="CODSG_SST" order="24"
+           oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROLIBDPG" datatype="vchar2" columnOrder="37"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Prolibdpg">
+          <dataDescriptor
+           expression="decode ( substr ( TO_CHAR ( pro.pdsg , &apos;FM0000000&apos; ) , 6 , 2 ) , &apos;**&apos; , ( S2.sigdep || &apos;/&apos; || S2.sigpole ) , S2.libdsg )"
+           descriptiveExpression="PROLIBDPG" order="25" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSO_SST" datatype="vchar2" columnOrder="38"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Conso Sst">
+          <dataDescriptor
+           expression="to_char ( pack_pca4.f_conso_sst ( lb.pid , pro.pid , pro.pcpi ) , &apos;FM99999D0&apos; )"
+           descriptiveExpression="CONSO_SST" order="26" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_Departement_pole_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.50000" height="0.31250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_Departement_pole"
+         source="G_Departement_pole" printDirection="down" minWidowRecords="1"
+         columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="7.50000"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_Departement_pole" source="Departement_pole"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Code_direction" source="Code_direction"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.56250" y="0.18750" width="0.50000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Direction" source="Direction" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.06250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Ligne" source="Ligne" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.37500" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Cle" source="Cle" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.56250" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TYPE" source="TYPE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.68750" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TYPO" source="TYPO" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.87500" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CA_payeur" source="CA_payeur" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.06250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBPROJET" source="LIBPROJET" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.37500" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DPG" source="DPG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.68750" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.81250" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CHEFPROJET" source="CHEFPROJET" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.06250" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CONSO_N" source="CONSO_N" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.43750" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_REEST_N" source="REEST_N" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.75000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PROPP_FOUR_N" source="PROPP_FOUR_N" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.06250" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PROPO_CLI_N" source="PROPO_CLI_N" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.50000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NOTIF_N" source="NOTIF_N" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.87500" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ARBIT_N" source="ARBIT_N" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.18750" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PROPO_FOUR_N1" source="PROPO_FOUR_N1"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.50000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PROPOMO_CLI_N1" source="PROPOMO_CLI_N1"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.81250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ligne_sst" source="ligne_sst" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.12500" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SOUS_TACHE" source="SOUS_TACHE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.31250" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CP_SST" source="CP_SST" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.50000" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CODSG_SST" source="CODSG_SST" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.68750" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PROLIBDPG" source="PROLIBDPG" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.00000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CONSO_SST" source="CONSO_SST" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.31250" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_Departement_pole_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.50000"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_Departement_pole" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Departement Pole]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Code_direction" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.50000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Code Direction]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Direction" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.06250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Direction]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Ligne" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.37500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Cle" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.56250" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.68750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Type]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.87500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Typo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CA_payeur" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ca Payeur]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBPROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.37500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libprojet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.81250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CHEFPROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.06250" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Chefprojet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSO_N" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso N]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_REEST_N" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.75000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Reest N]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PROPP_FOUR_N" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.06250" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Propp Four N]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PROPO_CLI_N" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.50000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Propo Cli N]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NOTIF_N" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.87500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Notif N]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ARBIT_N" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.18750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Arbit N]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PROPO_FOUR_N1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.50000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Propo
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Four N1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PROPOMO_CLI_N1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.81250" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Propomo
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cli N1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ligne_sst" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.12500" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sst]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SOUS_TACHE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.31250" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sous
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CP_SST" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.50000" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cp
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sst]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODSG_SST" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.68750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codsg Sst]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PROLIBDPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.00000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Prolibdpg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSO_SST" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.31250" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sst]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+   l_annee0  VARCHAR2(10);
+   l_annee1  VARCHAR2(10);
+   l_param   VARCHAR2(40);
+   l_conso   number(12,2);
+   l_listeChefsProjets varchar2(4000); --PPM 63485 : modification de taille à 4000
+   --l_perimo VARCHAR2(500);
+   l_perim_me	VARCHAR2(1000) := '';  
+     
+begin
+   -- ================================================
+   -- Determiner l'annee de traitement N et N+1
+   -- ================================================
+   
+   SELECT to_char(moismens,'YYYY'),to_char(moismens,'YYYY') INTO l_annee0,:P_ANNEE
+   FROM datdebex;
+   
+   l_annee1 := to_char(to_number(l_annee0,'FM9999') + 1,'FM9999');
+   :p_where := ' and budg.annee(+) = ' || l_annee0 ;
+   :p_where := :p_where || ' and budg1.annee(+) = ' || l_annee1 ;
+   :p_where := :p_where || ' and conso.annee(+) = ' || l_annee0 ;
+   
+   
+		-- Ajout du perim ME
+		l_perim_me := pack_global.lire_perime(:P_GLOBAL);		
+		:p_where := :p_where || ' AND lb.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+   
+   
+		-- ================================================
+  	-- cas de l'édition lancée dans isac
+		-- ================================================
+		IF :P_PARAM7 is not null then
+				if (:P_PARAM7 !='Tous') then
+					:P_WHERE :=  :P_WHERE ||' AND lb.pcpi='||:P_PARAM7;
+				else
+					l_listeChefsProjets := pack_global.lire_globaldata(:P_GLOBAL).chefprojet;
+					:P_WHERE := :P_WHERE ||' AND INSTR('''|| l_listeChefsProjets ||''', TO_CHAR(lb.pcpi, ''FM00000'') ) > 0';
+				end if;
+		ELSE
+ 	  	-- ================================================
+	   	-- Soustraire les eventuels $ ou ' ' dans p_param6
+	   	-- ================================================
+		   IF NVL(LENGTH(LPAD(:P_PARAM6, 7, '0')), 0) != 0 then 
+		   		-- ajout de '0' a gauche sur 7 caracteres + suppression des '*'
+		      l_param := rtrim(rtrim(LPAD(:P_PARAM6, 7, '0'),'*')) ;
+					:p_where := :p_where || ' and  TO_CHAR(lb.codsg, ''FM0000000'') like ''' || l_param ||'%'' ';
+		   END IF;	   	
+		END IF;  	
+		
+     
+   --l_perimo := pack_global.lire_perimo(:p_global);
+
+	  		
+	--	if length(l_perimo) != 0 AND '000000000' not in (l_perimo) AND '099988888' not in (l_perimo) then	  	
+	--			:P_WHERE := :P_WHERE ||' and ( lb.clicode in (select clicode from vue_clicode_perimo where BDCLICODE in ('||l_perimo||') ) 
+	--															or lb.clicode_oper in (select clicode from vue_clicode_perimo where BDCLICODE in ('||l_perimo||') ) )';
+	--	end if;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

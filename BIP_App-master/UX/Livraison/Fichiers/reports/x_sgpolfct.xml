@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_sgpolfct" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T06501516" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT  rpad( nvl( SI.sigdep, ' ' ), 3, ' ' )     sigle_dep,
+rpad( nvl( SI.sigpole, ' '), 3, ' ' ) sigle_pole,
+rpad( nvl( P.qualif, ' ' ), 3, ' ' ) prestation,
+lpad(to_char( sum( nvl(P.cusag,0) ), 'FM99999.00'), 8, ' ' ) cumul_cons
+FROM  datdebex dx, struct_info SI,proplus P
+WHERE
+ P.divsecgrou = SI.codsg
+AND P.societe    = 'SG..'
+AND P.ptype     != '7 '
+AND P.cdeb      >= dx.datdebex
+GROUP BY  rpad( nvl( SI.sigdep, ' ' ), 3, ' ' ),
+  rpad( nvl( SI.sigpole, ' '), 3, ' ' ),
+  rpad( nvl( qualif, ' ' ), 3, ' ' )
+ORDER BY  1 asc,
+	  2 asc,
+	  3 asc]]>
+      </select>
+      <displayInfo x="0.09375" y="0.02087" width="1.34375" height="0.26050"/>
+      <group name="G_sigle_dep">
+        <displayInfo x="0.24255" y="1.06250" width="1.25464" height="1.28516"
+        />
+        <dataItem name="sigle_dep" datatype="vchar2" columnOrder="11"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sigle Dep">
+          <dataDescriptor
+           expression="rpad ( nvl ( SI.sigdep , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="SIGLE_DEP" order="1" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sigle_pole" datatype="vchar2" columnOrder="12"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sigle Pole">
+          <dataDescriptor
+           expression="rpad ( nvl ( SI.sigpole , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="SIGLE_POLE" order="2" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prestation" datatype="vchar2" columnOrder="13"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Prestation">
+          <dataDescriptor
+           expression="rpad ( nvl ( P.qualif , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="PRESTATION" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cumul_cons" datatype="vchar2" columnOrder="14"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cumul Cons">
+          <dataDescriptor
+           expression="lpad ( to_char ( sum ( nvl ( P.cusag , 0 ) ) , &apos;FM99999.00&apos; ) , 8 , &apos; &apos; )"
+           descriptiveExpression="CUMUL_CONS" order="4" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_sigle_dep" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.12500" width="7.31250" height="0.50000"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_sigle_dep" source="sigle_dep" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.12500" y="0.18750" width="0.56250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_sigle_pole" source="sigle_pole" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.75000" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_prestation" source="prestation" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.25000" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cumul_cons" source="cumul_cons" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.75000" y="0.18750" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,601 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bsc.bip</groupId>
+	<artifactId>bip-ui</artifactId>
+	<packaging>war</packaging>
+	<name>BIP - Base d'Information Projet - WebApp</name>
+	<url>https://bip.it.safe.socgen/frameAccueil.jsp</url>
+
+	<parent>
+	<version>11.1.0-SNAPSHOT</version>
+    <artifactId>bip-parent</artifactId>
+    <groupId>com.bsc.bip</groupId>
+	<relativePath>../../</relativePath>
+	</parent>
+	
+	<scm>
+		<url>https://sgithub.fr.world.socgen/BSC-CORE-Apps/BIP_App/tree/master</url>
+		<connection>scm:git:https://sgithub.fr.world.socgen/BSC-CORE-Apps/BIP_App.git</connection>
+		<developerConnection>scm:git:https://sgithub.fr.world.socgen/BSC-CORE-Apps/BIP_App.git</developerConnection> 
+	  <tag>HEAD</tag>
+  </scm>
+	<organization>
+		<name>SOCIETE GENERALE</name>
+		<url>https://www.societegenerale.fr/</url>
+	</organization>
+	<description>Suivi des budgets,ressources, projets et activités. Gestion du reférentiel projets. Ordonnoncement des contrats ...</description>
+
+	<properties>
+		<apache.poi.version>3.5-FINAL</apache.poi.version>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+		<weblogic.local.dir>C:\ENVDEVC1\bea\user_projects\domains\domaineBIP_MTC\autodeploy</weblogic.local.dir>
+		<project.build.compiler.version>1.6</project.build.compiler.version>
+		<war.name>bip</war.name>
+		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+	</properties>
+
+	<build>
+		<filters>
+			<filter>${basedir}/src/main/config/${env}-configuration.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<finalName>${war.name}</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>${project.build.compiler.version}</source>
+					<target>${project.build.compiler.version}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+					<archiveClasses>true</archiveClasses>
+					<failOnMissingWebXml>true</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>WEB-INF</targetPath>
+							<includes>
+								<include>**/weblogic.xml</include>
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<checkModificationExcludes>
+						<checkModificationExclude>**/target</checkModificationExclude>
+						<checkModificationExclude>**/src/**</checkModificationExclude>
+					</checkModificationExcludes>
+				</configuration>
+			</plugin>
+					
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/resources</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>**/*.properties</include>
+										<include>**/*.xml</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.17</version>
+        </plugin> 
+
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.7.9</version>
+            <executions>
+                <execution>
+                    <id>default-prepare-agent</id>
+                    <goals><goal>prepare-agent</goal></goals>
+                </execution>
+                <execution>
+                    <id>default-report</id>
+                    <phase>prepare-package</phase>
+                    <goals><goal>report</goal></goals>
+                </execution>
+            </executions>
+        </plugin>
+		</plugins>
+		
+		<pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.2</version>
+      </plugin>
+    </plugins>
+  </pluginManagement>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${apache.poi.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${apache.poi.version}</version>
+			<!-- <exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xmlbeans</artifactId>
+					<groupId>org.apache.xmlbeans</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>dom4j</artifactId>
+					<groupId>dom4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>ooxml-schemas</artifactId>
+					<groupId>org.apache.poi</groupId>
+				</exclusion>
+			</exclusions> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>${apache.poi.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen.afe</groupId>
+			<artifactId>safeclientjass</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>capfwk</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>struts</groupId>
+			<artifactId>struts</artifactId>
+			<version>1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.sql</groupId>
+					<artifactId>jdbc-stdext</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>oro</artifactId>
+					<groupId>oro</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>struts-legacy</artifactId>
+					<groupId>struts</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-validator</artifactId>
+					<groupId>commons-validator</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-contrib</artifactId>
+			<version>${apache.poi.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>10.2.0.2.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>1.7</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>sesame-mappings</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>sesame-access</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>sesame-httpclient</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>sesame-glue</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>sesame-logging</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>sesame-sso-client</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk13</artifactId>
+			<version>140</version>
+		</dependency>
+
+		<dependency>
+			<groupId>castor</groupId>
+			<artifactId>castor-xml</artifactId>
+			<version>0.9.3.9</version>
+			<type>pom</type>
+		</dependency>
+
+		<dependency>
+			<groupId>ajaxtags</groupId>
+			<artifactId>ajaxtags</artifactId>
+			<version>1.2-beta3</version>
+			<classifier>beta3</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>ADNReader</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.socgen</groupId>
+			<artifactId>ich-ihm</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.owasp.esapi</groupId>
+			<artifactId>esapi</artifactId>
+			<version>2.0_rc10</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xalan</artifactId>
+					<groupId>xalan</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xercesImpl</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xmlParserAPIs</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xml-apis-ext</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xom</artifactId>
+					<groupId>xom</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>antisamy</artifactId>
+					<groupId>org.owasp</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>batik-css</artifactId>
+					<groupId>org.apache.xmlgraphics</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>batik-util</artifactId>
+					<groupId>org.apache.xmlgraphics</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>bsh-core</artifactId>
+					<groupId>org.beanshell</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>batik-ext</artifactId>
+					<groupId>org.apache.xmlgraphics</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.threeten</groupId>
+		    <artifactId>threetenbp</artifactId>
+		    <version>1.3.5</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>avalon-framework</artifactId>
+					<groupId>avalon-framework</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>logkit</artifactId>
+					<groupId>logkit</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-codec</artifactId>
+					<groupId>commons-codec</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bea</groupId>
+			<artifactId>weblogic</artifactId>
+			<version>9.2.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+	<profile>
+			<id>deploy-local</id>		
+				<properties>
+					<env>local</env>
+				</properties>			
+ 			<build>
+ 			<defaultGoal>clean install</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>com.oracle.weblogic</groupId>
+						<artifactId>weblogic-maven-plugin</artifactId>
+						<version>10.3.6.0</version>
+						<configuration>
+							<adminurl>t3://localhost:7001</adminurl>
+							<goalPrefix>wls</goalPrefix>
+							<user>weblogic</user>
+							<password>weblogic1</password>
+							<targets>AdminServer</targets>
+							<failOnError>false</failOnError>
+						</configuration>
+						<executions>
+							<execution>
+								<id>wls-undeploy</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>undeploy</goal>
+								</goals>
+								<configuration>
+									<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+									<verbose>true</verbose>
+									<name>${project.build.finalName}</name>
+									<failOnError>false</failOnError>
+								</configuration>
+							</execution>
+							<execution>
+								<id>wls-deploy</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>deploy</goal>
+								</goals>
+								<configuration>
+									<!--The admin URL where the app is deployed. Here use the plugin's 
+										default value t3://localhost:7001 -->
+									<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+									<verbose>true</verbose>
+									<name>${project.build.finalName}</name>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>			
+		</profile>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>homo</id>
+			<properties>
+				<env>homo</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<env>prod</env>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>local</id>
+			<properties>
+				<env>local</env>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<outputDirectory>${weblogic.local.dir}</outputDirectory>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
+</project>

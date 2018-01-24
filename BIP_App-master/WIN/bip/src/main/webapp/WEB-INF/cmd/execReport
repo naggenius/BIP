@@ -1,0 +1,70 @@
+#!/bin/ksh
+#_______________________________________________________________________________
+# Application Base d'Informations Projets
+# Nom du fichier : execReport
+# Objet : Appel au serveur de reports
+#
+#_______________________________________________________________________________
+# Creation : E.GREVREND 19/08/2003
+# Modification :
+# --------------
+# Auteur                Date         Objet
+# E.GREVREND    22/08/2003   Execution depuis un fichier  cause des pbs de " "
+# EGR			10/10/2003	 Param a partir des var d'environnement
+#
+################################################################################
+
+PARAMS=$*
+
+APPLI_DIR=$DIR_INTRA
+
+REPORT_IN=$APPLI_DIR/reports
+REPORT_OUT=$APPLI_DIR/rapport
+
+OPTIONS="destype=file THOUSANDS=. DECIMAL=,"
+
+cd $DIR_INTRA_EXECREPORTS
+
+RES_FILE=$(date +"%Y%m%d.%H%M%S")_$$
+ERR_FILE=$RES_FILE.err
+RES_FILE=$RES_FILE.res
+
+>$RES_FILE
+
+OLD_DESNAME=$(echo $PARAMS | awk 'BEGIN { RS=" " } { FS="=" } $1 ~ /desname$/ { print($2) }')
+DESNAME=\'$REPORT_OUT/${OLD_DESNAME#\'}
+PARAMS="${PARAMS%%desname=*}desname=$DESNAME ${PARAMS##*desname=$OLD_DESNAME}"
+
+OLD_MODULE=$(echo $PARAMS | awk 'BEGIN { RS=" " } { FS="=" } $1 ~ /module$/ { print($2) }')
+MODULE=\'$REPORT_IN/${OLD_MODULE#\'}
+PARAMS="${PARAMS%%module=*}module=$MODULE ${PARAMS##*module=$OLD_MODULE}"
+
+CMD="rwcli60 $PARAMS $OPTIONS"
+
+echo "# Command line : " > $ERR_FILE
+echo $CMD >> $ERR_FILE
+chmod +x $ERR_FILE
+
+#execution ...
+$ERR_FILE >> $RES_FILE 2>&1
+
+RES=$?
+if [ $RES -eq 0 ]
+then
+        rm $RES_FILE $ERR_FILE
+else
+        #le fichier d'erreur est directement executable
+        #il contiend egalement le resultat de son execution
+        echo "" >> $ERR_FILE
+        echo "########################################" >> $ERR_FILE
+        echo "#Code erreur : "$RES >> $ERR_FILE
+        echo "exit $?" >> $ERR_FILE
+        echo "########################################" >> $ERR_FILE
+        echo "# Res : " >> $ERR_FILE
+        cat $RES_FILE >>$ERR_FILE
+
+        rm $RES_FILE
+        exit $RES
+fi
+
+exit 0

@@ -1,0 +1,2426 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="ppcm_listtel" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="T24102832" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="3"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE1" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE2" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="1"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088"/>
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="preview" display="yes"/>
+    <dataSource name="Q_LISTEL">
+      <select>
+      <![CDATA[select distinct 
+	pack_utile.f_get_deppole(substr(To_char(sit.codsg, 'FM0000000'),1,5)) libpole,
+	res.rnom nom,
+	res.rprenom prenom,
+	res.rtel tel,
+	imm.iadrabr immeuble,
+	substr(TO_CHAR(st.codsg, 'FM0000000'),0,5) code,
+	res.batiment|| res.etage|| res.bureau bureau,
+     	decode(sit.soccode,'SG..',1,0)   SG ,
+	decode(sit.soccode,'SG..',0,1)   SSII  ,   
+	decode(sit.soccode,'SG..',decode(sit.prestation,'GRA',1,0),0) SG_GRA,   
+	decode(sit.soccode,'SG..',decode(sit.prestation,'INT',1,0),0) SG_INT,    
+	decode(sit.soccode,'SG..',decode(sit.prestation,'STA',1,0),0) SG_STA,
+	decode(sit.soccode,'SG..',decode(sit.prestation,'IFO',1,0),0) SG_IFO,
+	decode(sit.prestation,'STA',1,decode(sit.prestation,'INT',1,decode(sit.prestation,'GRA',1,decode(sit.prestation,'IFO',1,0))))GRA_INT_STA  ,
+	decode(sit.soccode,'SG..','',sit.soccode) societe
+from 	situ_ress_full sit,
+	ressource res,
+	struct_info st,
+	immeuble imm
+where
+	res.icodimm = imm.icodimm
+	and sit.ident=res.ident
+	and res.rtype='P'
+	and sit.codsg=st.codsg          
+         	-- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+	and sit.type_situ='N'
+        	-- and sit.codsg like '161612%'
+&P_WHERE
+
+
+order by 2,3,code;  ]]>
+      </select>
+      <displayInfo x="2.03740" y="0.92615" width="1.77788" height="0.50788"/>
+      <group name="G_DC_LIBPOLE">
+        <displayInfo x="0.65639" y="2.22746" width="4.55600" height="6.30287"
+        />
+        <dataItem name="code" datatype="vchar2" columnOrder="68" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code">
+          <dataDescriptor
+           expression="substr ( TO_CHAR ( st.codsg , &apos;FM0000000&apos; ) , 0 , 5 )"
+           descriptiveExpression="CODE" order="6" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libpole" datatype="vchar2" columnOrder="11"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libpole">
+          <dataDescriptor
+           expression="pack_utile.f_get_deppole ( substr ( To_char ( sit.codsg , &apos;FM0000000&apos; ) , 1 , 5 ) )"
+           descriptiveExpression="LIBPOLE" order="1" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_SG" source="SG" function="sum" width="40"
+         precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Sg">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_SSII" source="SSII" function="sum" width="40"
+         precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Ssii">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_GRA" source="SG_GRA" function="sum"
+         width="40" precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Total Sg Gra">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_INT" source="SG_INT" function="sum"
+         width="40" precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Total Sg Int">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_STA" source="SG_STA" function="sum"
+         width="40" precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Total Sg Sta">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_IFO" source="SG_IFO" function="sum" width="40"
+         precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Tot Ifo">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_GRATUIT" source="GRA_INT_STA" function="sum"
+         width="40" precision="38" reset="G_DC_LIBPOLE" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Tot Gratuit">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="CF_TOT_SG_GRATUIT" source="cf_tot_sg_gratuitformula"
+         datatype="number" width="12" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16"
+         defaultLabel="Cf Tot Sg Gratuit" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_SSII" source="cf_total_ssiiformula"
+         datatype="number" width="12" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16" defaultLabel="Cf Total Ssii"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_SG" source="cf_total_sgformula"
+         datatype="number" width="12" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16" defaultLabel="Cf Total Sg"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_RESS" source="cf_total_ressformula"
+         datatype="number" width="12" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16" defaultLabel="Cf Total Ress"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+      <group name="G_RESSOURCE">
+        <displayInfo x="0.52431" y="9.65212" width="4.21184" height="6.73695"
+        />
+        <dataItem name="nom" datatype="vchar2" columnOrder="12" width="30"
+         defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor expression="res.rnom" descriptiveExpression="NOM"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom" datatype="vchar2" columnOrder="13" width="15"
+         defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor expression="res.rprenom"
+           descriptiveExpression="PRENOM" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="GRA_INT_STA" oracleDatatype="number" columnOrder="22"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;STA&apos; , 1 , decode ( sit.prestation , &apos;INT&apos; , 1 , decode ( sit.prestation , &apos;GRA&apos; , 1 , decode ( sit.prestation , &apos;IFO&apos; , 1 , 0 ) ) ) )"
+           descriptiveExpression="GRA_INT_STA" order="14"
+           oracleDatatype="number" width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="societe" datatype="vchar2" columnOrder="73" width="4"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , &apos;&apos; , sit.soccode )"
+           descriptiveExpression="SOCIETE" order="15" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG" oracleDatatype="number" columnOrder="17" width="2"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , 1 , 0 )"
+           descriptiveExpression="SG" order="8" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_IFO" oracleDatatype="number" columnOrder="69"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;IFO&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_IFO" order="13" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII" oracleDatatype="number" columnOrder="18"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , 0 , 1 )"
+           descriptiveExpression="SSII" order="9" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_GRA" oracleDatatype="number" columnOrder="19"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;GRA&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_GRA" order="10" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_INT" oracleDatatype="number" columnOrder="20"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;INT&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_INT" order="11" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_STA" oracleDatatype="number" columnOrder="21"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;STA&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_STA" order="12" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tel" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="14" width="16" defaultWidth="0" defaultHeight="0"
+         columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="res.rtel" descriptiveExpression="TEL"
+           order="4" oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="immeuble" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="15" defaultWidth="0"
+         defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="imm.iadrabr"
+           descriptiveExpression="IMMEUBLE" order="5"
+           oracleDatatype="aFixedChar" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bureau" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="16" width="6"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="res.batiment || res.etage || res.bureau"
+           descriptiveExpression="BUREAU" order="7"
+           oracleDatatype="aFixedChar" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM" source="nom" function="count" width="12"
+         precision="10" reset="G_DC_LIBPOLE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_LISTEL_GROUPE">
+      <select>
+      <![CDATA[select distinct 
+	pack_utile.f_get_deppole(substr(To_char(sit.codsg, 'FM0000000'),1,5)) libpole_g,
+    	res.rnom nom_g,
+	res.rprenom prenom_g,
+	res.rtel tel_g,
+	to_char(st.codsg, 'FM0000000') code_g,
+ 	st.gnom responsable_g,
+	imm.iadrabr immeuble_g,
+	res.batiment|| res.etage|| res.bureau bureau_g,
+     	decode(sit.soccode,'SG..',1,0)   SG_g ,
+	decode(sit.soccode,'SG..',0,1)   SSII_g  ,   
+	decode(sit.soccode,'SG..',decode(sit.prestation,'GRA',1,0),0) SG_GRA_g,   
+	decode(sit.soccode,'SG..',decode(sit.prestation,'INT',1,0),0) SG_INT_g,    
+	decode(sit.soccode,'SG..',decode(sit.prestation,'STA',1,0),0) SG_STA_g,
+	decode(sit.soccode,'SG..',decode(sit.prestation,'IFO',1,0),0) SG_IFO_g,
+	decode(sit.prestation,'STA',1,decode(sit.prestation,'INT',1,decode(sit.prestation,'GRA',1,decode(sit.prestation,'IFO',1,0))))GRA_INT_STA_g  ,
+	decode(sit.soccode,'SG..','',sit.soccode) societe_g
+from 	situ_ress_full sit,
+	ressource res,
+	struct_info st,
+	immeuble imm
+where
+	res.icodimm = imm.icodimm
+	and sit.ident=res.ident
+	and res.rtype='P'
+	and sit.codsg=st.codsg          
+         	-- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+	and sit.type_situ='N'
+        	-- and sit.codsg like '161612%'
+&P_WHERE
+
+
+order by 2,3,code_g;  ]]>
+      </select>
+      <displayInfo x="8.62552" y="1.13760" width="3.70396" height="0.50788"/>
+      <group name="G_pole_g">
+        <displayInfo x="8.40879" y="2.51861" width="4.26486" height="1.52797"
+        />
+        <dataItem name="code_g" datatype="vchar2" columnOrder="67" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code G">
+          <dataDescriptor
+           expression="to_char ( st.codsg , &apos;FM0000000&apos; )"
+           descriptiveExpression="CODE_G" order="5" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libpole_g" datatype="vchar2" columnOrder="43"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libpole G">
+          <dataDescriptor
+           expression="pack_utile.f_get_deppole ( substr ( To_char ( sit.codsg , &apos;FM0000000&apos; ) , 1 , 5 ) )"
+           descriptiveExpression="LIBPOLE_G" order="1" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_groupe">
+        <displayInfo x="8.24973" y="4.49306" width="5.58788" height="5.43471"
+        />
+        <dataItem name="responsable_g" datatype="vchar2" columnOrder="44"
+         width="30" defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor expression="st.gnom"
+           descriptiveExpression="RESPONSABLE_G" order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_SG_g" source="SG_g" function="sum" width="40"
+         precision="38" reset="G_groupe" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_SSII_g" source="SSII_g" function="sum" width="12"
+         precision="10" reset="G_groupe" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_GRA_g" source="SG_GRA_g" function="sum"
+         width="12" precision="10" reset="G_groupe" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_INT_g" source="SG_INT_g" function="sum"
+         width="12" precision="10" reset="G_groupe" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_STA_g" source="SG_STA_g" function="sum"
+         width="40" precision="38" reset="G_groupe" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_IFO_g" source="SG_IFO_g" function="sum"
+         width="40" precision="38" reset="G_groupe" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_GRATUIT_g" source="GRA_INT_STA_g" function="sum"
+         width="12" precision="10" reset="G_groupe" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="CF_TOT_SG_GRATUIT_g"
+         source="cf_tot_sg_gratuit_gformula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_SG_g" source="cf_total_sg_gformula"
+         datatype="number" width="12" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="48" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_SSII_g" source="cf_total_ssii_gformula"
+         datatype="number" width="12" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="48" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_RESS_g" source="cf_total_ress_gformula"
+         datatype="number" width="12" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="48" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+      <group name="G_ressource_g">
+        <displayInfo x="8.40848" y="10.58323" width="3.65652" height="6.73695"
+        />
+        <dataItem name="nom_g" datatype="vchar2" columnOrder="45" width="30"
+         defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor expression="res.rnom" descriptiveExpression="NOM_G"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom_g" datatype="vchar2" columnOrder="46"
+         width="15" defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor expression="res.rprenom"
+           descriptiveExpression="PRENOM_G" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="societe_g" datatype="vchar2" columnOrder="74"
+         width="4" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , &apos;&apos; , sit.soccode )"
+           descriptiveExpression="SOCIETE_G" order="16" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tel_g" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="47" width="16"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="res.rtel" descriptiveExpression="TEL_G"
+           order="4" oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="immeuble_g" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="48" defaultWidth="0"
+         defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="imm.iadrabr"
+           descriptiveExpression="IMMEUBLE_G" order="7"
+           oracleDatatype="aFixedChar" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_IFO_g" oracleDatatype="number" columnOrder="70"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;IFO&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_IFO_G" order="14" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bureau_g" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="49" width="6"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="res.batiment || res.etage || res.bureau"
+           descriptiveExpression="BUREAU_G" order="8"
+           oracleDatatype="aFixedChar" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_g" oracleDatatype="number" columnOrder="50"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , 1 , 0 )"
+           descriptiveExpression="SG_G" order="9" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_g" oracleDatatype="number" columnOrder="51"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , 0 , 1 )"
+           descriptiveExpression="SSII_G" order="10" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_GRA_g" oracleDatatype="number" columnOrder="52"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;GRA&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_GRA_G" order="11" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_INT_g" oracleDatatype="number" columnOrder="53"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;INT&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_INT_G" order="12" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_STA_g" oracleDatatype="number" columnOrder="54"
+         width="2" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;STA&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_STA_G" order="13" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="GRA_INT_STA_g" oracleDatatype="number"
+         columnOrder="55" width="2" defaultWidth="0" defaultHeight="0"
+         columnFlags="32" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;STA&apos; , 1 , decode ( sit.prestation , &apos;INT&apos; , 1 , decode ( sit.prestation , &apos;GRA&apos; , 1 , decode ( sit.prestation , &apos;IFO&apos; , 1 , 0 ) ) ) )"
+           descriptiveExpression="GRA_INT_STA_G" order="15"
+           oracleDatatype="number" width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_g" source="nom_g" function="count" width="12"
+         precision="10" reset="G_groupe" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DEP">
+      <select>
+      <![CDATA[select distinct 
+	pack_utile.f_get_dep(substr(To_char(sit.codsg, 'FM0000000'),1,3)) libdep,
+	res.rnom nom,
+	res.rprenom prenom,
+	res.rtel tel,
+	imm.iadrabr immeuble,
+	substr(TO_CHAR(st.codsg, 'FM0000000'),0,3) code,
+	res.batiment|| res.etage|| res.bureau bureau,
+     	decode(sit.soccode,'SG..',1,0)   SG ,
+	decode(sit.soccode,'SG..',0,1)   SSII  ,   
+	decode(sit.soccode,'SG..',decode(sit.prestation,'GRA',1,0),0) SG_GRA,   
+	decode(sit.soccode,'SG..',decode(sit.prestation,'INT',1,0),0) SG_INT,    
+	decode(sit.soccode,'SG..',decode(sit.prestation,'STA',1,0),0) SG_STA,
+	decode(sit.soccode,'SG..',decode(sit.prestation,'IFO',1,0),0) SG_IFO,
+	decode(sit.prestation,'STA',1,decode(sit.prestation,'INT',1,decode(sit.prestation,'GRA',1,decode(sit.prestation,'IFO',1,0))))GRA_INT_STA  ,
+	decode(sit.soccode,'SG..','',sit.soccode) societe
+from 	situ_ress_full sit,
+	ressource res,
+	struct_info st,
+	immeuble imm
+where
+	res.icodimm = imm.icodimm
+	and sit.ident=res.ident
+	and res.rtype='P'
+	and sit.codsg=st.codsg          
+         	-- situation en cours (dans le mois)
+	and to_char(sit.datsitu,'yyyymm') <= to_char(sysdate,'yyyymm')
+	and ( to_char(sit.datdep,'yyyymm') >= to_char(sysdate,'yyyymm')  or sit.datdep is null)
+	and sit.type_situ='N'
+        	-- and sit.codsg like '161612%'
+&P_WHERE
+
+
+order by 2,3,code;  ]]>
+      </select>
+      <displayInfo x="16.24552" y="1.32302" width="1.77788" height="0.50788"/>
+      <group name="G_DC_LIBDEP">
+        <displayInfo x="15.26325" y="2.43954" width="5.21550" height="6.30287"
+        />
+        <dataItem name="libdep" datatype="vchar2" columnOrder="102"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libdep">
+          <dataDescriptor
+           expression="pack_utile.f_get_dep ( substr ( To_char ( sit.codsg , &apos;FM0000000&apos; ) , 1 , 3 ) )"
+           descriptiveExpression="LIBDEP" order="1" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="code1" datatype="vchar2" columnOrder="79" width="3"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code1">
+          <dataDescriptor
+           expression="substr ( TO_CHAR ( st.codsg , &apos;FM0000000&apos; ) , 0 , 3 )"
+           descriptiveExpression="CODE" order="6" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_SG1" source="SG1" function="sum" width="20"
+         precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Sg1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_SSII1" source="SSII1" function="sum" width="20"
+         precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Ssii1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_GRA1" source="SG_GRA1" function="sum"
+         width="20" precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Total Sg Gra1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_INT1" source="SG_INT1" function="sum"
+         width="20" precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Total Sg Int1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOTAL_SG_STA1" source="SG_STA1" function="sum"
+         width="20" precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Total Sg Sta1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_IFO1" source="SG_IFO1" function="sum" width="20"
+         precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Tot Ifo1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_GRATUIT1" source="GRA_INT_STA1" function="sum"
+         width="20" precision="10" reset="G_DC_LIBDEP" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Tot Gratuit1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="CF_TOT_SG_GRATUIT1" source="cf_tot_sg_gratuit1formula"
+         datatype="number" width="20" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16"
+         defaultLabel="Cf Tot Sg Gratuit1" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_SSII1" source="cf_total_ssii1formula"
+         datatype="number" width="20" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16" defaultLabel="Cf Total Ssii1"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_SG1" source="cf_total_sg1formula"
+         datatype="number" width="20" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16" defaultLabel="Cf Total Sg1"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL_RESS1" source="cf_total_ress1formula"
+         datatype="number" width="20" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16" defaultLabel="Cf Total Ress1"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+      <group name="G_ressource1">
+        <displayInfo x="16.08367" y="9.34269" width="3.77310" height="6.30287"
+        />
+        <dataItem name="nom1" datatype="vchar2" columnOrder="75" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nom1">
+          <dataDescriptor expression="res.rnom" descriptiveExpression="NOM"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom1" datatype="vchar2" columnOrder="76" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Prenom1">
+          <dataDescriptor expression="res.rprenom"
+           descriptiveExpression="PRENOM" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tel1" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="77" width="16" defaultWidth="60000"
+         defaultHeight="10000" columnFlags="0" defaultLabel="Tel1"
+         breakOrder="none">
+          <dataDescriptor expression="res.rtel" descriptiveExpression="TEL"
+           order="4" oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bureau1" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="80" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bureau1" breakOrder="none">
+          <dataDescriptor expression="res.batiment || res.etage || res.bureau"
+           descriptiveExpression="BUREAU" order="7"
+           oracleDatatype="aFixedChar" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="immeuble1" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="78" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0" defaultLabel="Immeuble1"
+         breakOrder="none">
+          <dataDescriptor expression="imm.iadrabr"
+           descriptiveExpression="IMMEUBLE" order="5"
+           oracleDatatype="aFixedChar" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG1" oracleDatatype="number" columnOrder="81"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , 1 , 0 )"
+           descriptiveExpression="SG" order="8" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_INT1" oracleDatatype="number" columnOrder="84"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Int1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;INT&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_INT" order="11" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII1" oracleDatatype="number" columnOrder="82"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ssii1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , 0 , 1 )"
+           descriptiveExpression="SSII" order="9" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_GRA1" oracleDatatype="number" columnOrder="83"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Gra1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;GRA&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_GRA" order="10" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_STA1" oracleDatatype="number" columnOrder="85"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Sta1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;STA&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_STA" order="12" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="GRA_INT_STA1" oracleDatatype="number" columnOrder="87"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Gra Int Sta1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.prestation , &apos;STA&apos; , 1 , decode ( sit.prestation , &apos;INT&apos; , 1 , decode ( sit.prestation , &apos;GRA&apos; , 1 , decode ( sit.prestation , &apos;IFO&apos; , 1 , 0 ) ) ) )"
+           descriptiveExpression="GRA_INT_STA" order="14"
+           oracleDatatype="number" width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="societe1" datatype="vchar2" columnOrder="88" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Societe1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , &apos;&apos; , sit.soccode )"
+           descriptiveExpression="SOCIETE" order="15" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM1" source="nom1" function="count" width="20"
+         precision="10" reset="G_DC_LIBDEP" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <dataItem name="SG_IFO1" oracleDatatype="number" columnOrder="86"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Ifo1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( sit.soccode , &apos;SG..&apos; , decode ( sit.prestation , &apos;IFO&apos; , 1 , 0 ) , 0 )"
+           descriptiveExpression="SG_IFO" order="13" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4"/>
+  <section name="header" width="20.99996" height="29.69989" widthInChar="140"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="20.99996" height="29.69989" widthInChar="140"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" widthInChar="140"
+   heightInChar="80">
+    <body width="20.99996" height="27.15989">
+      <location x="0.00000" y="1.27000"/>
+      <frame name="M_tel">
+        <geometryInfo x="0.13240" y="0.10573" width="19.48904"
+         height="4.60375"/>
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout formatTrigger="m_9formattrigger"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <repeatingFrame name="R_pole" source="G_DC_LIBPOLE"
+         printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+         columnMode="no">
+          <geometryInfo x="0.23813" y="0.21301" width="19.34828"
+           height="4.12750"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillForegroundColor="r0g50b75"
+           fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          <field name="F_deppole" source="libpole" visible="no"
+           minWidowLines="1" spacing="0" alignment="right">
+            <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="0.73236" y="0.53051" width="1.94004"
+             height="0.50260"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          </field>
+          <frame name="M_entete_nom">
+            <geometryInfo x="1.31465" y="2.46187" width="18.11021"
+             height="0.68802"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="r88g100b100"
+             linePattern="solid" lineForegroundColor="gray8"/>
+            <text name="B_nom" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="1.65912" y="2.59519" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Nom]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_prenom" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="5.97235" y="2.59519" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Prénom]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_tel" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="11.94532" y="2.59519" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tél.]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_bureau" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="17.41878" y="2.59519" width="1.55308"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Bureau]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_immeuble" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.81553" y="2.59519" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Immeuble]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_prenom2" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="10.25116" y="2.59519" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Société]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_liste_nom" source="G_RESSOURCE"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.30349" y="3.17748" width="18.12137"
+             height="0.50292"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_liste_nomformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+             linePattern="solid" lineForegroundColor="gray8"/>
+            <field name="F_nom" source="nom" minWidowLines="1" spacing="0"
+             alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="1.58626" y="3.25748" width="4.18052"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_prenom" source="prenom" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="5.92553" y="3.25748" width="4.18052"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_tel" source="tel" minWidowLines="1" spacing="0"
+             alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.99865" y="3.25748" width="2.70123"
+               height="0.31781"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_bureau" source="bureau" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.42126" y="3.25748" width="1.93135"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_immeuble" source="immeuble" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.79228" y="3.25748" width="2.48481"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_num" source="CS_NUM" visible="no" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="5.77391" y="3.24848" width="0.14976"
+               height="0.27843"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_soc" source="societe" minWidowLines="1" spacing="0"
+             alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="10.24992" y="3.25748" width="1.45014"
+               height="0.31781"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+          </repeatingFrame>
+          <text name="B_2" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="4.62049" y="0.60989" width="7.75798"
+             height="0.37052"/>
+            <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            <textSegment>
+              <font face="Courier New" size="9" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Pôle &F_deppole - &F_code]]>
+              </string>
+            </textSegment>
+          </text>
+          <frame name="M_totaux">
+            <geometryInfo x="14.28843" y="0.47780" width="4.70390"
+             height="1.82563"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+             linePattern="solid" lineForegroundColor="gray8"/>
+            <text name="B_6" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.36781" y="0.53051" width="3.28073"
+               height="0.42323"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[Effectifs SG :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_8" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.36781" y="1.35000" width="2.87424"
+               height="0.59903"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[Stagiaires/Intérim, GRA, IFO :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_9" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.36781" y="1.91833" width="3.24910"
+               height="0.30913"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[TOTAL :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_sg" source="CF_TOTAL_SG" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.34096" y="0.53051" width="1.63432"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_gra" source="CS_TOT_GRATUIT" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.35181" y="1.44270" width="1.64021"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_total" source="CF_TOTAL_RESS" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.06066" y="1.82563" width="1.93167"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_ssii" source="CF_TOTAL_SSII" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.34096" y="0.95343" width="1.63401"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <text name="B_7" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.29339" y="0.95343" width="3.28073"
+               height="0.42323"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[Ressources SSII :]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_code" source="code" visible="no" minWidowLines="1"
+           spacing="0" alignment="left">
+            <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="0.76957" y="1.08676" width="1.94004"
+             height="0.50260"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          </field>
+        </repeatingFrame>
+      </frame>
+      <frame name="M_tel_groupe">
+        <geometryInfo x="0.01736" y="5.27503" width="19.84747"
+         height="5.61640"/>
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject" formatTrigger="m_10formattrigger"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <repeatingFrame name="R_pole2" source="G_pole_g" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.44059" y="5.35440" width="19.42424"
+           height="5.25859"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillForegroundColor="gray"
+           fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          <repeatingFrame name="R_groupe_g" source="G_groupe"
+           printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+           columnMode="no">
+            <geometryInfo x="0.52493" y="6.75680" width="19.33990"
+             height="3.57777"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillForegroundColor="gray"
+             fillBackgroundColor="gray8" lineForegroundColor="gray8"/>
+            <field name="F_responsable_g" source="responsable_g" visible="no"
+             minWidowLines="1" spacing="0" alignment="left">
+              <font face="Courier New" size="9" bold="yes"
+               textColor="r0g50b88"/>
+              <geometryInfo x="0.60244" y="8.33500" width="6.08521"
+               height="0.37083"/>
+              <generalLayout horizontalElasticity="contract"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillForegroundColor="gray"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <frame name="M_entete_nom1">
+              <geometryInfo x="1.48208" y="8.84008" width="18.35547"
+               height="0.68802"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <visualSettings fillPattern="transparent"
+               fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100" linePattern="solid"
+               lineForegroundColor="gray8"/>
+              <text name="B_nom1" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="1.81694" y="8.97341" width="2.09010"
+                 height="0.52927"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="8" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Nom]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_prenom1" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="6.13017" y="8.97341" width="2.09010"
+                 height="0.52927"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="8" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Prénom]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_tel1" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="11.95431" y="8.97341" width="2.09010"
+                 height="0.52927"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="8" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Tél.]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_bureau1" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="17.77876" y="8.97341" width="1.97135"
+                 height="0.52927"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="8" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Bureau]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_immeuble1" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="15.12218" y="8.97341" width="2.09010"
+                 height="0.52927"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="8" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Immeuble]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_prenom3" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="10.39999" y="8.99201" width="2.09010"
+                 height="0.52927"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="8" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Société]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+            <frame name="M_totaux_g">
+              <geometryInfo x="14.43726" y="6.87462" width="4.48066"
+               height="1.82563"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillPattern="transparent"
+               fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+               linePattern="solid" lineForegroundColor="gray8"/>
+              <text name="B_10" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="14.51663" y="6.92733" width="3.28073"
+                 height="0.42323"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="7"/>
+                  <string>
+                  <![CDATA[Effectifs SG :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_5" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="14.51663" y="7.35025" width="3.28073"
+                 height="0.42323"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="7"/>
+                  <string>
+                  <![CDATA[Ressources SSII :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_4" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="14.51663" y="7.74681" width="2.91300"
+                 height="0.60989"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="7"/>
+                  <string>
+                  <![CDATA[Stagiaires/Intérim, GRA, IFO :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_3" minWidowLines="1">
+                <textSettings justify="left" spacing="0"/>
+                <geometryInfo x="14.51663" y="8.31515" width="3.28073"
+                 height="0.31967"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+                <textSegment>
+                  <font face="Courier New" size="7"/>
+                  <string>
+                  <![CDATA[TOTAL :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_sg_g" source="CF_TOTAL_SG_g" minWidowLines="1"
+               spacing="0" alignment="right">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="17.30375" y="6.92733" width="1.58750"
+                 height="0.39625"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_gra_g" source="CS_TOT_GRATUIT_g"
+               minWidowLines="1" spacing="0" alignment="right">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="17.27740" y="7.83952" width="1.64021"
+                 height="0.39625"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_total_g" source="CF_TOTAL_RESS_g"
+               minWidowLines="1" spacing="0" alignment="right">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="16.98625" y="8.22244" width="1.93167"
+                 height="0.39625"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_ssii_g" source="CF_TOTAL_SSII_g"
+               minWidowLines="1" spacing="0" alignment="right">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="17.30375" y="7.35025" width="1.61385"
+                 height="0.39625"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+            </frame>
+            <repeatingFrame name="R_liste_nom_g" source="G_ressource_g"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="1.50006" y="9.48159" width="18.36477"
+               height="0.45300"/>
+              <generalLayout verticalElasticity="variable"/>
+              <advancedLayout formatTrigger="r_liste_nom_gformattrigger"/>
+              <visualSettings fillPattern="transparent"
+               fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+               linePattern="solid" lineForegroundColor="gray8"/>
+              <field name="F_nom_g" source="nom_g" minWidowLines="1"
+               spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="1.74377" y="9.56252" width="4.18052"
+                 height="0.37052"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_prenom_g" source="prenom_g" minWidowLines="1"
+               spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="6.08304" y="9.56252" width="4.18052"
+                 height="0.37052"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_tel_g" source="tel_g" minWidowLines="1"
+               spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="11.97012" y="9.56252" width="2.99238"
+                 height="0.36742"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_bureau_g" source="bureau_g" minWidowLines="1"
+               spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="17.80946" y="9.56252" width="2.05538"
+                 height="0.37052"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_immeuble_g" source="immeuble_g" minWidowLines="1"
+               spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="15.13582" y="9.56252" width="2.48481"
+                 height="0.37052"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_num_g" source="CS_NUM_g" visible="no"
+               minWidowLines="1" spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="5.84957" y="9.65615" width="0.41269"
+                 height="0.27843"/>
+                <visualSettings fillPattern="transparent"
+                 fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+                 lineForegroundColor="r0g50b75"/>
+              </field>
+              <field name="F_soc_g" source="societe_g" minWidowLines="1"
+               spacing="0" alignment="center">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="10.28712" y="9.56159" width="1.52549"
+                 height="0.31781"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              </field>
+            </repeatingFrame>
+            <text name="B_16" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="5.47501" y="6.98066" width="8.96255"
+               height="1.44425"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <visualSettings lineBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Groupe : &F_code_g
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Responsable : &F_responsable_g]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_code_g" source="code_g" visible="no"
+             minWidowLines="1" spacing="0" alignment="left">
+              <font face="Courier New" size="9" bold="yes"
+               textColor="r0g50b88"/>
+              <geometryInfo x="0.63965" y="7.87146" width="3.82271"
+               height="0.37083"/>
+              <generalLayout horizontalElasticity="contract"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillForegroundColor="gray"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+          </repeatingFrame>
+          <field name="F_deppole2" source="libpole_g" visible="no"
+           minWidowLines="1" spacing="single" alignment="center">
+            <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="0.57268" y="5.48866" width="2.31118"
+             height="0.58229"/>
+            <visualSettings fillBackgroundColor="r88g88b100"
+             lineForegroundColor="darkmagenta"/>
+          </field>
+          <text name="B_1" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="4.73118" y="5.83995" width="7.75798"
+             height="0.37052"/>
+            <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            <textSegment>
+              <font face="Courier New" size="9" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Pôle &F_deppole2]]>
+              </string>
+            </textSegment>
+          </text>
+        </repeatingFrame>
+      </frame>
+      <frame name="M_TEL_DEP">
+        <geometryInfo x="0.39284" y="11.60146" width="19.61214"
+         height="4.54794"/>
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="anchoringObject" formatTrigger="m_tel1formattrigger"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <repeatingFrame name="R_pole1" source="G_DC_LIBDEP"
+         printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+         columnMode="no">
+          <geometryInfo x="0.49857" y="11.70874" width="19.34828"
+           height="4.12750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillForegroundColor="r0g50b75"
+           fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          <field name="F_dep1" source="libdep" visible="no" minWidowLines="1"
+           spacing="0" alignment="right">
+            <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="0.95560" y="12.02624" width="1.18101"
+             height="0.50260"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          </field>
+          <frame name="M_entete_nom2">
+            <geometryInfo x="1.57510" y="13.95760" width="18.11238"
+             height="0.68802"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="r88g100b100"
+             linePattern="solid" lineForegroundColor="gray8"/>
+            <text name="B_nom2" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="1.91957" y="14.09092" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Nom]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_prenom5" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="6.23280" y="14.09092" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Prénom]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_tel2" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="12.31739" y="14.09092" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tél.]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_bureau2" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="17.60482" y="14.09092" width="1.85570"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Bureau]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_immeuble2" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="15.11319" y="14.09092" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Immeuble]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_prenom4" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="10.47440" y="14.09092" width="2.09010"
+               height="0.52927"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Société]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_liste_nom1" source="G_ressource1"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.56394" y="14.67321" width="18.08603"
+             height="0.50292"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_liste_nom1formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+             linePattern="solid" lineForegroundColor="gray8"/>
+            <field name="F_nom1" source="nom1" minWidowLines="1" spacing="0"
+             alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="1.84671" y="14.75321" width="4.18052"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_prenom1" source="prenom1" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.18598" y="14.75321" width="4.18052"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_tel1" source="tel1" minWidowLines="1" spacing="0"
+             alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="12.37072" y="14.75321" width="2.62930"
+               height="0.31781"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_bureau1" source="bureau1" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.68171" y="14.75321" width="1.93135"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_immeuble1" source="immeuble1" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="15.08993" y="14.75321" width="2.48481"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_num1" source="CS_NUM" visible="no"
+             minWidowLines="1" spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.03436" y="14.74422" width="0.14976"
+               height="0.27843"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_soc1" source="societe1" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="10.51037" y="14.75321" width="1.67711"
+               height="0.31781"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+          </repeatingFrame>
+          <text name="B_20" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="4.88094" y="12.10562" width="7.75798"
+             height="0.37052"/>
+            <advancedLayout printObjectOnPage="firstPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            <textSegment>
+              <font face="Courier New" size="9" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Département &F_dep1 - &F_code1]]>
+              </string>
+            </textSegment>
+          </text>
+          <frame name="M_totaux1">
+            <geometryInfo x="14.54888" y="11.97353" width="4.70390"
+             height="1.82563"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+             linePattern="solid" lineForegroundColor="gray8"/>
+            <text name="B_19" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.62825" y="12.02624" width="3.28073"
+               height="0.42323"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[Effectifs SG :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_18" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.62825" y="12.84573" width="2.87424"
+               height="0.59903"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[Stagiaires/Intérim, GRA, IFO :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_17" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.62825" y="13.41406" width="3.24910"
+               height="0.30913"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[TOTAL :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_sg1" source="CF_TOTAL_SG1" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.60141" y="12.02624" width="1.63432"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_gra1" source="CS_TOT_GRATUIT1" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.61226" y="12.93844" width="1.64021"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_total1" source="CF_TOTAL_RESS1" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.32111" y="13.32136" width="1.93167"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <field name="F_ssii1" source="CF_TOTAL_SSII1" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.60141" y="12.44916" width="1.63401"
+               height="0.39625"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            </field>
+            <text name="B_14" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="14.55384" y="12.44916" width="3.28073"
+               height="0.42323"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+              <textSegment>
+                <font face="Courier New" size="7"/>
+                <string>
+                <![CDATA[Ressources SSII :]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_code1" source="code1" visible="no" minWidowLines="1"
+           spacing="0" alignment="left">
+            <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="0.95560" y="12.58249" width="1.94004"
+             height="0.50260"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          </field>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_11" minWidowLines="1">
+        <textSettings justify="right" spacing="0"/>
+        <geometryInfo x="0.24991" y="0.44865" width="0.91157" height="0.34385"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="7"/>
+          <string>
+          <![CDATA[Date :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_date1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+        <font face="Courier New" size="7"/>
+        <geometryInfo x="1.22380" y="0.44803" width="3.05036" height="0.39377"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+      </field>
+      <frame name="M_titre2">
+        <geometryInfo x="4.42423" y="0.25239" width="8.11857" height="0.92615"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineWidth="2" fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" linePattern="solid"
+         lineForegroundColor="gray16"/>
+        <text name="B_15" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="4.73211" y="0.51718" width="7.75798"
+           height="0.37052"/>
+          <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+           fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          <textSegment>
+            <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"
+            />
+            <string>
+            <![CDATA[LISTE TELEPHONIQUE]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <text name="B_12" minWidowLines="1">
+        <textSettings justify="right" spacing="0"/>
+        <geometryInfo x="14.88746" y="0.54136" width="1.19404"
+         height="0.34385"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="7"/>
+          <string>
+          <![CDATA[Page :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_page" source="PageNumber" minWidowLines="1"
+       formatMask="NNNN" spacing="0" alignment="right">
+        <font face="Courier New" size="7"/>
+        <geometryInfo x="16.05235" y="0.55687" width="0.75003"
+         height="0.46385"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_13" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="16.80363" y="0.55687" width="0.33765"
+         height="0.37052"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="7"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_page1" source="TotalPages" minWidowLines="1"
+       formatMask="NNNN" spacing="0" alignment="left">
+        <font face="Courier New" size="7"/>
+        <geometryInfo x="17.09415" y="0.55687" width="0.75003"
+         height="0.46385"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_6" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_5" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_4" source="DESFORMAT" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_3" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_codsg" pageNumber="1" minWidowLines="1">
+    <textSettings justify="center" spacing="single"/>
+    <geometryInfo x="0.73949" y="5.54974" width="1.42875" height="0.34385"/>
+    <visualSettings lineWidth="1" fillPattern="transparent"
+     fillBackgroundColor="r88g100b100" linePattern="solid"
+     lineForegroundColor="r0g50b88"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" textColor="r0g50b88"/>
+      <string>
+      <![CDATA[DPG]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.78333" y="5.31781" width="4.98481" height="0.74073"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings justify="center" spacing="single"/>
+    <geometryInfo x="0.68802" y="6.27280" width="2.75177" height="0.68771"/>
+    <visualSettings lineWidth="1" fillPattern="transparent"
+     fillBackgroundColor="r88g100b100" linePattern="solid"
+     lineForegroundColor="r0g50b88"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" textColor="r0g50b88"/>
+      <string>
+      <![CDATA[Param 7 (1 2 3 ou rien)
+]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.78458" y="6.21512" width="4.98481" height="0.74073"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="cf_tot_sg_gratuitformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOT_SG_GRATUITFormula return Number is
+begin
+  RETURN :CS_TOTAL_SG_GRA + :CS_TOTAL_SG_INT + :CS_TOTAL_SG_STA + :CS_TOT_IFO;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_ssiiformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_SSIIFormula return Number is
+l_total number;
+begin
+l_total := :CS_SSII - (:CS_TOT_GRATUIT - :CF_TOT_SG_GRATUIT);
+  
+  return l_total;
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_sgformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_SGFormula return Number is
+l_total number;
+begin
+  l_total := :CS_SG - :CF_TOT_SG_GRATUIT;
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_ressformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_RESSFormula return Number is
+l_total number;
+begin
+  l_total := :CF_TOTAL_SG + :CF_TOTAL_SSII + :CS_TOT_GRATUIT;
+  
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_tot_sg_gratuit_gformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOT_SG_GRATUIT_gFormula return Number is
+begin
+  RETURN :CS_TOTAL_SG_GRA_g + :CS_TOTAL_SG_INT_g + :CS_TOTAL_SG_STA_g + :CS_TOT_IFO_g;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_sg_gformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_SG_gFormula return Number is
+l_total number;
+begin
+  l_total := :CS_SG_g - :CF_TOT_SG_GRATUIT_g;
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_ssii_gformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_SSII_gFormula return Number is
+l_total number;
+begin
+  l_total := :CS_SSII_g - (:CS_TOT_GRATUIT_g - :CF_TOT_SG_GRATUIT_g);
+  
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_ress_gformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_RESS_gFormula return Number is
+l_total number;
+begin
+  l_total := :CF_TOTAL_SG_g + :CF_TOTAL_SSII_g + :CS_TOT_GRATUIT_g;
+  
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_10formattrigger">
+      <textSource>
+      <![CDATA[function M_10FormatTrigger return boolean is
+-- CAS : pas  d etoile dans le dpg ou param7 à 3
+-- se rapporte à la requete Q_GROUPE
+begin
+     
+   if INSTR(:P_Param6,'*',1)=0  then
+    	return (TRUE);
+   elsif :P_Param7=3 or :P_Param7 is null then
+    	return (TRUE);
+   else
+    	return (FALSE);
+   end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_9formattrigger">
+      <textSource>
+      <![CDATA[function M_9FormatTrigger return boolean is
+-- CAS 2 : se rapporte à la requete Q_POLE
+-- si on coche par pole cad P_PARAM7=2
+-- si on coche par departement cad P_PARAM7=1 mais que l'on entre un Dep/Pole **
+begin
+	
+	if INSTR(:P_Param6,'*',1)=0  then
+    	return (FALSE);
+   		elsif (:P_Param7=2) OR (:P_Param7=1 AND INSTR(:P_Param6,'*',1)=6)  then
+    			return (TRUE);
+   		else
+   			return (FALSE);
+   end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_param VARCHAR2(10);
+	l_perim_me	VARCHAR2(1000) := '';
+
+begin
+
+	-- Ajout du perim ME
+	l_perim_me := pack_global.lire_perime(:P_GLOBAL);	
+		
+	:p_where := ' AND sit.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+  :p_where1 := ' AND cont.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+  :p_where2 := ' AND pro.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+  
+	IF NVL(LENGTH(LPAD(:P_PARAM6, 7, '0')), 0) != 0 then 
+			-- ajout de '0' a gauche sur 7 caracteres + suppression des '*'
+	  l_param := rtrim(rtrim(LPAD(:P_PARAM6, 7, '0'),'*')) ;
+		:p_where := :p_where || ' and  TO_CHAR(sit.codsg, ''FM0000000'') like ''' || l_param || '%'' ';
+		:p_where1 := :p_where1 || ' and  TO_CHAR(cont.codsg, ''FM0000000'') like ''' || l_param || '%'' ';
+		:p_where2 := :p_where2 || ' and  TO_CHAR(pro.codsg, ''FM0000000'') like ''' || l_param || '%'' ';
+				
+	END IF;
+ 
+  --srw.message(1,:P_where);  
+  return (true);
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_liste_nomformattrigger">
+      <textSource>
+      <![CDATA[function R_liste_nomFormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_NUM,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_liste_nom_gformattrigger">
+      <textSource>
+      <![CDATA[function R_liste_nom_gFormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_NUM_g,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_ress1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_RESS1Formula return Number is
+l_total number;
+begin
+  l_total := :CF_TOTAL_SG1 + :CF_TOTAL_SSII1 + :CS_TOT_GRATUIT1;
+  
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_sg1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_SG1Formula return Number is
+l_total number;
+begin
+  l_total := :CS_SG1 - :CF_TOT_SG_GRATUIT1;
+  return l_total;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_total_ssii1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOTAL_SSII1Formula return Number is
+l_total number;
+begin
+l_total := :CS_SSII1 - (:CS_TOT_GRATUIT1 - :CF_TOT_SG_GRATUIT1);
+  
+  return l_total;
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_tot_sg_gratuit1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOT_SG_GRATUIT1Formula return Number is
+begin
+  RETURN :CS_TOTAL_SG_GRA1 + :CS_TOTAL_SG_INT1 + :CS_TOTAL_SG_STA1 + :CS_TOT_IFO1;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_liste_nom1formattrigger">
+      <textSource>
+      <![CDATA[function R_liste_nom1FormatTrigger return boolean is
+reste number;
+begin
+reste := mod(:CS_NUM1,2);
+if reste=0 then
+-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='white';
+ srw.set_attr (0,srw.attr);
+end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_tel1formattrigger">
+      <textSource>
+      <![CDATA[function M_tel1FormatTrigger return boolean is
+-- CAS 1 : se rapporte à la requete Q_DEP
+-- si on coche par departement cad P_PARAM7=1
+-- si on coche par departement cad P_PARAM7=1 mais que l'on entre un Dep/Pole/** : par pole
+begin
+	
+	if INSTR(:P_Param6,'*',1)=0  then
+    	return (FALSE);
+   		elsif (:P_Param7=1 AND substr(LPAD(:P_PARAM6, 7, '0'),4,4)='****')   then
+    			return (TRUE);
+   		else
+   			return (FALSE);
+   		end if;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

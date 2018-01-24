@@ -1,0 +1,11 @@
+#! /bin/ksh
+BASE=PBIPPBIP
+USER=bip
+PASSWD=C8bIx96DZBHX
+BATCH2COMPIL_FILE=batch2compil.sql
+COMP_PACKAGE_FILE=compilInvalidPackage.sql
+
+sqlplus $USER/$PASSWD@$BASE @$BATCH2COMPIL_FILE
+
+sqlplus $USER/$PASSWD@$BASE @$COMP_PACKAGE_FILE
+

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="stockImmo_new" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="STOCKIMMO_NEW" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_APP" datatype="character" width="255"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DOS_PROJ" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PROJET" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_FI" datatype="character" width="255"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_DA" datatype="character" width="255"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[SELECT   tmp.projet, tmp.statut, to_char(tmp.datestatut,'DD/MM/YYYY'), tmp.annee,replace(round(SUM (tmp.euro),2),'.',',') euro
+    FROM (
+          /*  IMMO année 2004 à N-1 */
+          SELECT pi.icpi projet, pi.statut statut, pi.datstatut datestatut, a.annee annee, b.jh jh, b.euro euro
+            FROM (SELECT   TO_CHAR (h.cdeb, 'YYYY') annee
+                      FROM histo_stock_immo_corrige h
+                  GROUP BY TO_CHAR (h.cdeb, 'YYYY')) a
+                 CROSS JOIN
+                 (SELECT DISTINCT h.icpi, pi.statut, pi.datstatut
+                             FROM histo_stock_immo_corrige h, proj_info pi, ligne_bip bip
+                            WHERE h.icpi = pi.icpi
+                            AND h.pid = bip.pid
+                            AND (INSTR(:P_APP,bip.airt)>0
+                                OR INSTR(:P_PROJET,pi.icpi)>0
+                                OR INSTR(:P_DOS_PROJ,pi.icodproj)>0
+                                OR INSTR(:P_CA_FI,h.cafi)>0
+                                OR INSTR(:P_CA_DA,to_char(h.cada,'FM00000'))>0)) pi
+                 ,
+                 (SELECT   icpi, TO_CHAR (cdeb, 'YYYY') annee,
+                           SUM (consojh) jh, SUM (coutft * consojh) euro
+                      FROM histo_stock_immo_corrige
+                  GROUP BY icpi, TO_CHAR (cdeb, 'YYYY')) b
+           WHERE a.annee = b.annee AND b.icpi = pi.icpi
+          UNION
+          /*IMMO à 0 de 2004 à N pour compléter les années manquante*/
+          SELECT pi.icpi projet, pi.statut statut, pi.datstatut datestatut,  a.annee annee, 0 jh, 0 euro
+            FROM (SELECT   TO_CHAR (h.cdeb, 'YYYY') annee
+                      FROM histo_stock_immo_corrige h
+                  GROUP BY TO_CHAR (h.cdeb, 'YYYY')
+                  UNION
+                  SELECT   TO_CHAR (h.cdeb, 'YYYY') annee
+                      FROM stock_immo h
+                  GROUP BY TO_CHAR (h.cdeb, 'YYYY')) a
+                 CROSS JOIN
+                 (SELECT DISTINCT h.icpi, pi.statut, pi.datstatut
+                             FROM histo_stock_immo_corrige h, proj_info pi, ligne_bip bip
+                            WHERE h.icpi = pi.icpi
+                             AND h.pid = bip.pid
+                            AND (INSTR(:P_APP,bip.airt)>0
+                                OR INSTR(:P_PROJET,pi.icpi)>0
+                                OR INSTR(:P_DOS_PROJ,pi.icodproj)>0
+                                OR INSTR(:P_CA_FI,h.cafi)>0
+                                OR INSTR(:P_CA_DA,to_char(h.cada,'FM00000'))>0)
+                  UNION
+                  SELECT DISTINCT s.icpi, pi.statut,  pi.datstatut
+                             FROM stock_immo s, proj_info pi, ligne_bip bip
+                            WHERE s.icpi = pi.icpi
+                             AND s.pid = bip.pid
+                            AND (INSTR(:P_APP,bip.airt)>0
+                                OR INSTR(:P_PROJET,pi.icpi)>0
+                                OR INSTR(:P_DOS_PROJ,pi.icodproj)>0
+                                OR INSTR(:P_CA_FI,s.cafi)>0
+                                OR INSTR(:P_CA_DA,to_char(s.cada,'FM00000'))>0)
+                         ORDER BY icpi) pi
+          UNION
+          /*  IMMO année N */
+          SELECT pi.icpi projet, pi.statut statut, pi.datstatut datestatut, a.annee annee, b.jh jh, b.euro euro
+            FROM (SELECT   TO_CHAR (h.cdeb, 'YYYY') annee
+                      FROM stock_immo h
+                  GROUP BY TO_CHAR (h.cdeb, 'YYYY')) a
+                 CROSS JOIN
+                 (SELECT DISTINCT s.icpi, pi.statut, pi.datstatut
+                             FROM stock_immo s, proj_info pi, ligne_bip bip
+                            WHERE s.icpi = pi.icpi
+                             AND s.pid = bip.pid
+                            AND (INSTR(:P_APP,bip.airt)>0
+                                OR INSTR(:P_PROJET,pi.icpi)>0
+                                OR INSTR(:P_DOS_PROJ,pi.icodproj)>0
+                                OR INSTR(:P_CA_FI,s.cafi)>0
+                                OR INSTR(:P_CA_DA,to_char(s.cada,'FM00000'))>0)) pi
+                 ,
+                 (SELECT   icpi, TO_CHAR (cdeb, 'YYYY') annee,
+                           SUM (consojh) jh, SUM (coutft * consojh) euro
+                      FROM stock_immo
+                  GROUP BY icpi, TO_CHAR (cdeb, 'YYYY')) b
+           WHERE a.annee = b.annee AND b.icpi = pi.icpi) tmp
+GROUP BY tmp.projet, tmp.annee,  tmp.statut, tmp.datestatut]]>
+      </select>
+      <displayInfo x="1.19788" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_PROJET">
+        <displayInfo x="0.16016" y="1.69995" width="2.77551" height="1.11426"
+        />
+        <dataItem name="PROJET" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="11" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Projet">
+          <dataDescriptor expression="PROJET" descriptiveExpression="PROJET"
+           order="1" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="STATUT" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="12" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Statut">
+          <dataDescriptor expression="STATUT" descriptiveExpression="STATUT"
+           order="2" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TO_CHAR_TMP_DATESTATUT_DD_MM_Y" datatype="vchar2"
+         columnOrder="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="To Char Tmp Datestatut Dd Mm Y">
+          <dataDescriptor
+           expression="TO_CHAR(TMP.DATESTATUT,&apos;DD/MM/YYYY&apos;)"
+           descriptiveExpression="TO_CHAR(TMP.DATESTATUT,&apos;DD/MM/YYYY&apos;)"
+           order="3" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ANNEE" datatype="vchar2" columnOrder="14" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="ANNEE" descriptiveExpression="ANNEE"
+           order="4" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EURO" datatype="vchar2" columnOrder="15" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Euro">
+          <dataDescriptor expression="EURO" descriptiveExpression="EURO"
+           order="5" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="10.00000" height="6.50000"/>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.00000" y="1.04480" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P_Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.56250" y="0.98206" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_global pack_global.GlobalData;
+	l_ca_da VARCHAR2(255);
+	virgules NUMBER;
+	l_codcamo VARCHAR(64);
+	l_niveau number;
+	TYPE TYP_REF_CUR IS REF CURSOR ;
+  CUR TYP_REF_CUR ;
+  l_tmp centre_activite.codcamo%Type ;
+  i number;
+  pos number;
+  pos1 number;
+
+begin
+
+	l_global := pack_global.lire_globaldata(:P_GLOBAL);
+  :P_APP := l_global.appli;
+  :P_DOS_PROJ := l_global.doss_proj;
+  :P_PROJET := l_global.projet;
+  :P_CA_FI := l_global.ca_fi;
+  l_ca_da := l_global.ca_da;
+  
+  virgules := ( (LENGTH(l_ca_da) - LENGTH(REPLACE(l_ca_da,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+  	i:=0;
+  	While i < virgules+1
+      Loop
+      	l_niveau := -1;
+      	if (virgules=0) then
+      			l_codcamo := l_ca_da;
+        elsif (i=0)then
+        		pos := INSTR( l_ca_da, ',', 1, 1);
+        		l_codcamo := substr( l_ca_da, 1, pos-1);
+        elsif (i=virgules) then
+        		pos := INSTR( l_ca_da, ',', 1, i);
+        			l_codcamo := substr( l_ca_da, pos+1, LENGTH(l_ca_da)-1);
+        else
+        		pos := INSTR( l_ca_da, ',', 1, i);
+        		pos1 := INSTR( l_ca_da, ',', 1, i+1);
+        		l_codcamo := substr( l_ca_da, pos+1, pos1-pos-1);
+        end if;
+        
+        select niveau into l_niveau
+        from entite_structure es
+        where INSTR(l_codcamo, to_char(es.codcamo,'FM00000')) > 0;
+
+        if(l_niveau=0)then
+
+	        	if(:P_CA_DA='' or :P_CA_DA is null)then
+	        		:P_CA_DA := :P_CA_DA || l_codcamo;
+	        	else
+	        		:P_CA_DA := :P_CA_DA || ', ' || l_codcamo;
+	        	end if;
+	        	
+	       elsif(l_niveau=1) then
+	        		
+	        		OPEN CUR FOR select codcamo
+	        		from centre_activite ca
+	        		where to_char(caniv1) = l_codcamo;
+	        		
+	        		Loop
+     	   				Fetch CUR Into l_tmp ;
+     	   				if(CUR%FOUND) then
+	   	   					if(:P_CA_DA='' or :P_CA_DA is null)then
+	        					:P_CA_DA := :P_CA_DA || l_tmp;
+	        				else
+	        					:P_CA_DA := :P_CA_DA || ', ' || l_tmp;
+	        				end if;
+        				end if;
+ 
+        				Exit When CUR%NOTFOUND ; 
+      				End loop ;
+      				Close CUR ;
+	        		
+	       elsif(l_niveau=2) then
+	        		
+	        			OPEN CUR FOR select codcamo
+	        		from centre_activite ca
+	        		where  to_char(caniv2) = l_codcamo;
+	        		
+	        		Loop
+     	   				Fetch CUR Into l_tmp ;
+     	   				if(CUR%FOUND) then
+	   	   					if(:P_CA_DA='' or :P_CA_DA is null)then
+	        					:P_CA_DA := :P_CA_DA || l_tmp;
+	        				else
+	        					:P_CA_DA := :P_CA_DA || ', ' || l_tmp;
+	        				end if;
+ 								end if;
+        				Exit When CUR%NOTFOUND ; 
+      				End loop ;
+      				Close CUR ;
+	        		
+	       elsif(l_niveau=3) then
+	        		
+	        		OPEN CUR FOR select codcamo
+	        		from centre_activite ca
+	        		where  to_char(caniv3) = l_codcamo;
+	        		
+	        		Loop
+     	   				Fetch CUR Into l_tmp ;
+     	   				if(CUR%FOUND) then
+	   	   					if(:P_CA_DA='' or :P_CA_DA is null)then
+	        					:P_CA_DA := :P_CA_DA || l_tmp;
+	        				else
+	        					:P_CA_DA := :P_CA_DA || ', ' || l_tmp;
+	        				end if;
+	        			end if;
+ 
+        				Exit When CUR%NOTFOUND ; 
+      				End loop ;
+      				Close CUR ;
+	        		
+	       elsif(l_niveau=4) then
+	        		
+	        		OPEN CUR FOR select codcamo
+	        		from centre_activite ca
+	        		where  to_char(caniv4) = l_codcamo;
+	        		
+	        		Loop
+     	   				Fetch CUR Into l_tmp ;
+     	   				if(CUR%FOUND) then
+	   	   					if(:P_CA_DA='' or :P_CA_DA is null)then
+	        					:P_CA_DA := :P_CA_DA || l_tmp;
+	        				else
+	        					:P_CA_DA := :P_CA_DA || ', ' || l_tmp;
+	        				end if;
+	        			end if;
+ 
+        				Exit When CUR%NOTFOUND ; 
+      				End loop ;
+      				Close CUR ;
+	        		
+	       elsif(l_niveau=5) then
+	        		
+	        		OPEN CUR FOR select codcamo
+	        		from centre_activite ca
+	        		where  to_char(caniv5) = l_codcamo;
+	        		
+	        		Loop
+     	   				Fetch CUR Into l_tmp ;
+     	   				if(CUR%FOUND) then
+	   	   					if(:P_CA_DA='' or :P_CA_DA is null)then
+	        					:P_CA_DA := :P_CA_DA || l_tmp;
+	        				else
+	        					:P_CA_DA := :P_CA_DA || ', ' || l_tmp;
+	        				end if;
+	        			end if;
+ 
+        				Exit When CUR%NOTFOUND ; 
+      				End loop ;
+      				Close CUR ;
+	        		
+	       elsif(l_niveau=6) then
+	        		
+	        			OPEN CUR FOR select codcamo
+	        		from centre_activite ca
+	        		where  to_char(caniv6) = l_codcamo;
+	        		
+	        		Loop
+     	   				Fetch CUR Into l_tmp ;
+     	   				if(CUR%FOUND) then
+	   	   					if(:P_CA_DA='' or :P_CA_DA is null)then
+	        					:P_CA_DA := :P_CA_DA || l_tmp;
+	        				else
+	        					:P_CA_DA := :P_CA_DA || ', ' || l_tmp;
+	        				end if;
+	        			end if;
+ 
+        				Exit When CUR%NOTFOUND ; 
+      				End loop ;
+      				Close CUR ;
+        		
+        end if;
+        
+        i := i + 1 ;
+      End loop ;
+
+  return (TRUE);
+  
+  
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="matrix" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

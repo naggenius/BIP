@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_Domaine" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_DOMAINE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+RPAD(d.code_d,5,' ') code_domaine,
+RPAD(d.libelle,100,' ') libele_domaine,
+
+RPAD(d.code_ss,5,' ') code_sous_systeme,
+RPAD(ss.libelle,40,' ') libelle_sous_systeme,
+DECODE(d.top_actif,'O','Oui','N','Non') top_actif_domaine
+from sous_systeme ss, domaine d
+where
+d.code_ss = ss.code_ss
+AND code_d not in ('0','ZZZZZ')
+ORDER BY NLSSORT(code_d, 'NLS_SORT=FRENCH_M');]]>
+      </select>
+      <displayInfo x="1.52087" y="1.70837" width="0.69995" height="0.19995"/>
+      <group name="G_code_domaine">
+        <displayInfo x="1.00916" y="2.40833" width="1.72339" height="1.11426"
+        />
+        <dataItem name="code_domaine" datatype="vchar2" columnOrder="11"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Domaine">
+          <xmlSettings xmlTag="Code domaine"/>
+          <dataDescriptor expression="RPAD ( d.code_d , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_DOMAINE" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libele_domaine" datatype="vchar2" columnOrder="12"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libele Domaine">
+          <xmlSettings xmlTag="Libelle domaine"/>
+          <dataDescriptor
+           expression="RPAD ( d.libelle , 100 , &apos; &apos; )"
+           descriptiveExpression="LIBELE_DOMAINE" order="2" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="code_sous_systeme" datatype="vchar2" columnOrder="13"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Sous Systeme">
+          <xmlSettings xmlTag="Code sous-systeme"/>
+          <dataDescriptor expression="RPAD ( d.code_ss , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_SOUS_SYSTEME" order="3" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_sous_systeme" datatype="vchar2"
+         columnOrder="14" width="40" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle Sous Systeme">
+          <xmlSettings xmlTag="Libelle sous-systeme"/>
+          <dataDescriptor
+           expression="RPAD ( ss.libelle , 40 , &apos; &apos; )"
+           descriptiveExpression="LIBELLE_SOUS_SYSTEME" order="4" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="top_actif_domaine" datatype="vchar2" columnOrder="15"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Top Actif Domaine">
+          <xmlSettings xmlTag="Top actif"/>
+          <dataDescriptor
+           expression="DECODE ( d.top_actif , &apos;O&apos; , &apos;Oui&apos; , &apos;N&apos; , &apos;Non&apos; )"
+           descriptiveExpression="TOP_ACTIF_DOMAINE" order="5" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

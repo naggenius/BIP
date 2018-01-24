@@ -1,0 +1,5 @@
+# SEL 13/10/2014 : fichiers d'entrée pour la mensuelle
+
+cd /applis/bipd/batch/data
+cp TRANSTOM.PORGYPR.IABSM001.D200415 /applis/bipd/reception/TRANSTOM.PORGYPR.IABSM001.D241215
+cp TRANSTOM.HBIPF.RDC38320.D0131311.D29092014 /applis/bipd/reception/TRANSTOM.HBIPF.RDC38320.D0131311.D24112015

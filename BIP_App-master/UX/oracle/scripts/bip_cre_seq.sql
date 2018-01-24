@@ -1,0 +1,24 @@
+-- ============================================================
+-- PROJET  - Script de creation des sequencess BIP
+-- Date : 02/10/2006	
+-- Auteur :  A. SAKHRAOUI
+-- Version:	1
+--
+-- Modifications :
+--	
+--
+-- ============================================================
+
+-- ========================================================
+-- bip_cre_seq.sql
+-- ========================================================
+CREATE SEQUENCE sbudget INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE sconso INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE sdetail INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE seqreftrans INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE seq_etape INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE seq_sous_tache INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE seq_tache INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE sfacrap INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE sfe60 INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;
+CREATE SEQUENCE srapsynt INCREMENT BY 1 START WITH 0 NOCYCLE CACHE 20 NOORDER;

@@ -1,0 +1,3267 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eDetailReestimeRe" DTDVersion="9.0.2.0.10"
+ beforeReportTrigger="beforereport" afterReportTrigger="afterreport"
+ unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="T04003740" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_MSG" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="12"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_DOSS_PROJ" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_APPLI" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_PROJ" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_CA_PAYEUR" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_APP" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DOS_PROJ" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PROJET" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ARRETE" datatype="date" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ_2" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESTYPE" initialValue="Preview"/>
+    <dataSource name="eDetailReestimeRe">
+      <select>
+      <![CDATA[select 
+	   TO_CHAR(MOISMENS,'mm/yyyy') MOISMENS,
+	   CODSG||' - '||LIBDSG LIBDSG,
+	   CODE_SCENARIO||' - '||LIB_SCENARIO LIBSCENARIO,
+	   DECODE(TYPER,'X',2,1) TYPE,
+                   'TOTAL RESSOURCE '||IDENT||' - '||NOM RESSOURCE,
+	   'RESSOURCE '||DECODE(TYPER,'X','FICTIVE ','')||IDENT||' - '||NOM||' '||DECODE(TO_CHAR(DATDEP,'yyyy'),TO_CHAR(MOISMENS,'yyyy'),'('||DATDEP||')','') T_RESSOURCE,
+                   NOM,
+                   IDENT,
+	   CODE_ACTIVITE,
+                   CJAN,
+	   CFEV,
+	   CMAR,
+	   CAVR,
+	   CMAI,
+	   CJUN,
+	   CJUL,
+	   CAOU,
+	   CSEP,
+	   COCT,
+	   CNOV,
+                   CDEC,
+	   JAN,
+	   FEV,
+	   MAR,
+	   AVR,
+	   MAI,
+	   JUN,
+	   JUL,
+	   AOU,
+	   SEP,
+	   OCT,
+	   NOV,
+	   DEC,
+	   T_REALISER,
+	   T_REESTIMER	  
+from tmp_ree_detail
+where 
+numseq=:p_numseq_2
+ORDER BY TYPE,NOM,IDENT,CODE_ACTIVITE
+]]>
+      </select>
+      <displayInfo x="3.22833" y="0.02635" width="3.91604" height="0.60865"/>
+      <group name="G_DETAIL">
+        <displayInfo x="2.30343" y="2.24327" width="5.72368" height="14.11635"
+        />
+        <dataItem name="MOISMENS" datatype="vchar2" columnOrder="30" width="7"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Moismens" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( MOISMENS , &apos;mm/yyyy&apos; )"
+           descriptiveExpression="MOISMENS" order="1" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDSG" datatype="vchar2" columnOrder="32" width="83"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdsg">
+          <dataDescriptor expression="CODSG || &apos; - &apos; || LIBDSG"
+           descriptiveExpression="LIBDSG" order="2" width="83"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_SCENARIO" datatype="vchar2" columnOrder="31"
+         width="75" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Lib Scenario" breakOrder="none">
+          <dataDescriptor
+           expression="CODE_SCENARIO || &apos; - &apos; || LIB_SCENARIO"
+           descriptiveExpression="LIBSCENARIO" order="3" width="75"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CJAN" oracleDatatype="number" columnOrder="43"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cjan">
+          <dataDescriptor expression="CJAN" descriptiveExpression="CJAN"
+           order="10" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CFEV" oracleDatatype="number" columnOrder="44"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cfev">
+          <dataDescriptor expression="CFEV" descriptiveExpression="CFEV"
+           order="11" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CMAR" oracleDatatype="number" columnOrder="45"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cmar">
+          <dataDescriptor expression="CMAR" descriptiveExpression="CMAR"
+           order="12" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CAVR" oracleDatatype="number" columnOrder="46"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cavr">
+          <dataDescriptor expression="CAVR" descriptiveExpression="CAVR"
+           order="13" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CMAI" oracleDatatype="number" columnOrder="47"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cmai">
+          <dataDescriptor expression="CMAI" descriptiveExpression="CMAI"
+           order="14" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CJUN" oracleDatatype="number" columnOrder="48"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cjun">
+          <dataDescriptor expression="CJUN" descriptiveExpression="CJUN"
+           order="15" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CJUL" oracleDatatype="number" columnOrder="49"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cjul">
+          <dataDescriptor expression="CJUL" descriptiveExpression="CJUL"
+           order="16" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CAOU" oracleDatatype="number" columnOrder="50"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Caou">
+          <dataDescriptor expression="CAOU" descriptiveExpression="CAOU"
+           order="17" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CSEP" oracleDatatype="number" columnOrder="51"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Csep">
+          <dataDescriptor expression="CSEP" descriptiveExpression="CSEP"
+           order="18" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COCT" oracleDatatype="number" columnOrder="52"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Coct">
+          <dataDescriptor expression="COCT" descriptiveExpression="COCT"
+           order="19" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CNOV" oracleDatatype="number" columnOrder="53"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cnov">
+          <dataDescriptor expression="CNOV" descriptiveExpression="CNOV"
+           order="20" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDEC" oracleDatatype="number" columnOrder="54"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdec">
+          <dataDescriptor expression="CDEC" descriptiveExpression="CDEC"
+           order="21" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_TOT_DPG_JAN" source="TOT_JAN" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_FEV" source="TOT_FEV" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_MAR" source="TOT_MAR" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_AVR" source="TOT_AVR" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_MAI" source="TOT_MAI" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_JUIN" source="TOT_JUN" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_JUIL" source="TOT_JUL" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_AOUT" source="TOT_AOU" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_SEPT" source="TOT_SEP" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_OCT" source="TOT_OCT" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_NOV" source="TOT_NOV" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_DEC" source="TOT_DEC" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_T_REALISER" source="TOT_T_REALISER"
+         function="sum" width="20" precision="10" reset="report"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_DPG_T_REESTIMER" source="TOT_T_REESTIMER"
+         function="sum" width="20" precision="10" reset="report"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="CF_TOT_DPG_A" source="cf_1formula" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <summary name="TOTAL" source="CS_TOTAL" function="sum" width="20"
+         precision="10" reset="report" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_RESSOURCE">
+        <displayInfo x="2.71580" y="17.28360" width="4.92032"
+         height="11.07777"/>
+        <dataItem name="TYPE" oracleDatatype="number" columnOrder="33"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type">
+          <dataDescriptor
+           expression="DECODE ( TYPER , &apos;X&apos; , 2 , 1 )"
+           descriptiveExpression="TYPE" order="4" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOM" datatype="vchar2" columnOrder="81" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nom">
+          <dataDescriptor expression="NOM" descriptiveExpression="NOM"
+           order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENT" oracleDatatype="number" columnOrder="82"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <dataDescriptor expression="IDENT" descriptiveExpression="IDENT"
+           order="8" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RESSOURCE1" datatype="vchar2" columnOrder="75"
+         width="89" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Ressource1" breakOrder="none">
+          <dataDescriptor
+           expression="&apos;TOTAL RESSOURCE &apos; || IDENT || &apos; - &apos; || NOM"
+           descriptiveExpression="RESSOURCE" order="5" width="89"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_RESSOURCE" datatype="vchar2" columnOrder="34"
+         width="102" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Ressource" breakOrder="none">
+          <xmlSettings xmlTag="RESSOURCE"/>
+          <dataDescriptor
+           expression="&apos;RESSOURCE &apos; || DECODE ( TYPER , &apos;X&apos; , &apos;FICTIVE &apos; , &apos;&apos; ) || IDENT || &apos; - &apos; || NOM || &apos; &apos; || DECODE ( TO_CHAR ( DATDEP , &apos;yyyy&apos; ) , TO_CHAR ( MOISMENS , &apos;yyyy&apos; ) , &apos;(&apos; || DATDEP || &apos;)&apos; , &apos;&apos; )"
+           descriptiveExpression="T_RESSOURCE" order="6" width="102"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="TOT_JAN" source="JAN" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_FEV" source="FEV" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_MAR" source="MAR" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_AVR" source="AVR" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_MAI" source="MAI" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_JUN" source="JUN" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_JUL" source="JUL" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_AOU" source="AOU" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_SEP" source="SEP" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_OCT" source="OCT" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_NOV" source="NOV" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_DEC" source="DEC" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_T_REALISER" source="T_REALISER" function="sum"
+         width="20" precision="10" reset="G_RESSOURCE" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="TOT_T_REESTIMER" source="T_REESTIMER" function="sum"
+         width="20" precision="10" reset="G_RESSOURCE" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="TOT_A" source="tot_aformula" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="TOT_C" source="tot_cformula" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <summary name="CS_TOTAL" source="CF_TOTAL" function="sum" width="20"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_ACTIVITE">
+        <displayInfo x="2.83021" y="29.92810" width="4.68188" height="8.90736"
+        />
+        <dataItem name="CODE_ACTIVITE1" datatype="vchar2" columnOrder="29"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Code Activite">
+          <xmlSettings xmlTag="CODE_ACTIVITE"/>
+          <dataDescriptor expression="CODE_ACTIVITE"
+           descriptiveExpression="CODE_ACTIVITE" order="9" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JAN" oracleDatatype="number" columnOrder="55"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jan">
+          <dataDescriptor expression="JAN" descriptiveExpression="JAN"
+           order="22" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FEV" oracleDatatype="number" columnOrder="56"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Fev">
+          <dataDescriptor expression="FEV" descriptiveExpression="FEV"
+           order="23" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MAR" oracleDatatype="number" columnOrder="57"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Mar">
+          <dataDescriptor expression="MAR" descriptiveExpression="MAR"
+           order="24" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AVR" oracleDatatype="number" columnOrder="58"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Avr">
+          <dataDescriptor expression="AVR" descriptiveExpression="AVR"
+           order="25" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MAI" oracleDatatype="number" columnOrder="59"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Mai">
+          <dataDescriptor expression="MAI" descriptiveExpression="MAI"
+           order="26" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JUN" oracleDatatype="number" columnOrder="60"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jun">
+          <dataDescriptor expression="JUN" descriptiveExpression="JUN"
+           order="27" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JUL" oracleDatatype="number" columnOrder="35"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jul">
+          <dataDescriptor expression="JUL" descriptiveExpression="JUL"
+           order="28" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AOU" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Aou">
+          <dataDescriptor expression="AOU" descriptiveExpression="AOU"
+           order="29" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SEP" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Sep">
+          <dataDescriptor expression="SEP" descriptiveExpression="SEP"
+           order="30" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="OCT" oracleDatatype="number" columnOrder="38"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Oct">
+          <dataDescriptor expression="OCT" descriptiveExpression="OCT"
+           order="31" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOV" oracleDatatype="number" columnOrder="39"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Nov">
+          <dataDescriptor expression="NOV" descriptiveExpression="NOV"
+           order="32" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DEC" oracleDatatype="number" columnOrder="40"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dec">
+          <dataDescriptor expression="DEC" descriptiveExpression="DEC"
+           order="33" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_REALISER" oracleDatatype="number" columnOrder="41"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="T Realiser">
+          <dataDescriptor expression="T_REALISER"
+           descriptiveExpression="T_REALISER" order="34"
+           oracleDatatype="number" width="22" scale="2" precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_REESTIMER" oracleDatatype="number" columnOrder="42"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="T Reestimer">
+          <dataDescriptor expression="T_REESTIMER"
+           descriptiveExpression="T_REESTIMER" order="35"
+           oracleDatatype="number" width="22" scale="2" precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="A" source="aformula" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="C" source="cformula" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOTAL" source="cf_1formula0004" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+    </dataSource>
+    <dataSource name="Q_ACTIVITE">
+      <select>
+      <![CDATA[select 
+	   TO_CHAR(MOISMENS,'mm/yyyy') MOISMENS,
+	   CODSG||' - '||LIBDSG LIBDSG,
+	   CODE_SCENARIO||' - '||LIB_SCENARIO LIBSCENARIO,
+	   DECODE(TYPER,'X',2,1) TYPE,
+                   'TOTAL ACTIVITE '||CODE_ACTIVITE T_ACTIVITE,
+	   DECODE(TYPER,'X','FICTIVE ','')||IDENT||' - '||NOM||' '||DECODE(TO_CHAR(DATDEP,'yyyy'),TO_CHAR(MOISMENS,'yyyy'),'('||DATDEP||')','') T_RESSOURCE,
+                   NOM,
+                   IDENT,
+	   CODE_ACTIVITE,
+                   CJAN,
+	   CFEV,
+	   CMAR,
+	   CAVR,
+	   CMAI,
+	   CJUN,
+	   CJUL,
+	   CAOU,
+	   CSEP,
+	   COCT,
+	   CNOV,
+                   CDEC,
+	   JAN,
+	   FEV,
+	   MAR,
+	   AVR,
+	   MAI,
+	   JUN,
+	   JUL,
+	   AOU,
+	   SEP,
+	   OCT,
+	   NOV,
+	   DEC,
+	   T_REALISER,
+	   T_REESTIMER	  
+from tmp_ree_detail
+where 
+numseq=:p_numseq_2
+ORDER BY TYPE,NOM,IDENT,CODE_ACTIVITE]]>
+      </select>
+      <displayInfo x="14.15821" y="0.08093" width="3.22771" height="0.50788"/>
+      <group name="G_A_DETAIL">
+        <displayInfo x="12.68357" y="2.28699" width="6.20768"
+         height="14.11635"/>
+        <dataItem name="MOISMENS1" datatype="vchar2" columnOrder="101"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Moismens1" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( MOISMENS , &apos;mm/yyyy&apos; )"
+           descriptiveExpression="MOISMENS" order="1" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDSG1" datatype="vchar2" columnOrder="102"
+         width="83" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libdsg1">
+          <dataDescriptor expression="CODSG || &apos; - &apos; || LIBDSG"
+           descriptiveExpression="LIBDSG" order="2" width="83"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBSCENARIO1" datatype="vchar2" columnOrder="103"
+         width="75" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libscenario1" breakOrder="none">
+          <dataDescriptor
+           expression="CODE_SCENARIO || &apos; - &apos; || LIB_SCENARIO"
+           descriptiveExpression="LIBSCENARIO" order="3" width="75"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CJAN1" oracleDatatype="number" columnOrder="109"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cjan1">
+          <dataDescriptor expression="CJAN" descriptiveExpression="CJAN"
+           order="10" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CFEV1" oracleDatatype="number" columnOrder="110"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cfev1">
+          <dataDescriptor expression="CFEV" descriptiveExpression="CFEV"
+           order="11" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CMAR1" oracleDatatype="number" columnOrder="111"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cmar1">
+          <dataDescriptor expression="CMAR" descriptiveExpression="CMAR"
+           order="12" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CAVR1" oracleDatatype="number" columnOrder="112"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cavr1">
+          <dataDescriptor expression="CAVR" descriptiveExpression="CAVR"
+           order="13" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CMAI1" oracleDatatype="number" columnOrder="113"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cmai1">
+          <dataDescriptor expression="CMAI" descriptiveExpression="CMAI"
+           order="14" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CJUN1" oracleDatatype="number" columnOrder="114"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cjun1">
+          <dataDescriptor expression="CJUN" descriptiveExpression="CJUN"
+           order="15" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CJUL1" oracleDatatype="number" columnOrder="115"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cjul1">
+          <dataDescriptor expression="CJUL" descriptiveExpression="CJUL"
+           order="16" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CAOU1" oracleDatatype="number" columnOrder="116"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Caou1">
+          <dataDescriptor expression="CAOU" descriptiveExpression="CAOU"
+           order="17" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CSEP1" oracleDatatype="number" columnOrder="117"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Csep1">
+          <dataDescriptor expression="CSEP" descriptiveExpression="CSEP"
+           order="18" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COCT1" oracleDatatype="number" columnOrder="118"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Coct1">
+          <dataDescriptor expression="COCT" descriptiveExpression="COCT"
+           order="19" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CNOV1" oracleDatatype="number" columnOrder="119"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cnov1">
+          <dataDescriptor expression="CNOV" descriptiveExpression="CNOV"
+           order="20" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDEC1" oracleDatatype="number" columnOrder="120"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdec1">
+          <dataDescriptor expression="CDEC" descriptiveExpression="CDEC"
+           order="21" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="A_CS_TOT_DPG_JAN" source="A_TOT_JAN" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_FEV" source="A_TOT_FEV" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_MAR" source="A_TOT_MAR" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_AVR" source="A_TOT_AVR" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_MAI" source="A_TOT_MAI" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_JUN" source="A_TOT_JUN" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_JUI" source="A_TOT_JUI" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_AOU" source="A_TOT_AOU" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_SEP" source="A_TOT_SEP" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_OCT" source="A_TOT_OCT" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_NOV" source="A_TOT_NOV" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_DEC" source="A_TOT_DEC" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="A_CF_TOT_DPG_A" source="a_cf_tot_dpg_aformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <summary name="A_CS_TOT_DPG_T_REALISER" source="A_TOT_T_REALISER"
+         function="sum" width="20" precision="10" reset="report"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_CS_TOT_DPG_T_REESTIMER" source="A_TOT_T_REESTIMER"
+         function="sum" width="20" precision="10" reset="report"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOTAL" source="A_CS_TOTAL" function="sum" width="20"
+         precision="10" reset="report" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_A_ACTIVITE">
+        <displayInfo x="13.53220" y="17.32917" width="4.51383"
+         height="11.51186"/>
+        <dataItem name="CODE_ACTIVITE" datatype="vchar2" columnOrder="108"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Code Activite">
+          <dataDescriptor expression="CODE_ACTIVITE"
+           descriptiveExpression="CODE_ACTIVITE" order="9" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_ACTIVITE" datatype="vchar2" columnOrder="140"
+         width="27" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="T Activite">
+          <dataDescriptor
+           expression="&apos;TOTAL ACTIVITE &apos; || CODE_ACTIVITE"
+           descriptiveExpression="T_ACTIVITE" order="5" width="27"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="A_TOT_JAN" source="JAN1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_FEV" source="FEV1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_MAR" source="MAR1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_AVR" source="AVR1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_MAI" source="MAI1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_JUN" source="JUN1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_JUI" source="JUL1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_AOU" source="AOU1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_SEP" source="SEP1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_OCT" source="OCT1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_NOV" source="NOV1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_DEC" source="DEC1" function="sum" width="20"
+         precision="10" reset="G_A_ACTIVITE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_T_REALISER" source="T_REALISER1" function="sum"
+         width="20" precision="10" reset="G_A_ACTIVITE" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="A_TOT_T_REESTIMER" source="T_REESTIMER1" function="sum"
+         width="20" precision="10" reset="G_A_ACTIVITE" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="A_TOT_A" source="a_tot_aformula" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="A_TOT_C" source="a_tot_cformula" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <summary name="A_CS_TOTAL" source="A_CF_TOTAL" function="sum"
+         width="20" precision="10" reset="G_A_ACTIVITE" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_A_RESSOURCE">
+        <displayInfo x="13.90055" y="29.95476" width="3.76876"
+         height="10.20961"/>
+        <dataItem name="TYPE1" oracleDatatype="number" columnOrder="104"
+         width="2" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type1">
+          <dataDescriptor
+           expression="DECODE ( TYPER , &apos;X&apos; , 2 , 1 )"
+           descriptiveExpression="TYPE" order="4" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOM1" datatype="vchar2" columnOrder="106" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nom1">
+          <dataDescriptor expression="NOM" descriptiveExpression="NOM"
+           order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENT1" oracleDatatype="number" columnOrder="107"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident1">
+          <dataDescriptor expression="IDENT" descriptiveExpression="IDENT"
+           order="8" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_RESSOURCE1" datatype="vchar2" columnOrder="105"
+         width="92" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="T Ressource1" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( TYPER , &apos;X&apos; , &apos;FICTIVE &apos; , &apos;&apos; ) || IDENT || &apos; - &apos; || NOM || &apos; &apos; || DECODE ( TO_CHAR ( DATDEP , &apos;yyyy&apos; ) , TO_CHAR ( MOISMENS , &apos;yyyy&apos; ) , &apos;(&apos; || DATDEP || &apos;)&apos; , &apos;&apos; )"
+           descriptiveExpression="T_RESSOURCE" order="6" width="92"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JAN1" oracleDatatype="number" columnOrder="121"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jan1">
+          <dataDescriptor expression="JAN" descriptiveExpression="JAN"
+           order="22" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FEV1" oracleDatatype="number" columnOrder="122"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Fev1">
+          <dataDescriptor expression="FEV" descriptiveExpression="FEV"
+           order="23" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MAR1" oracleDatatype="number" columnOrder="123"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Mar1">
+          <dataDescriptor expression="MAR" descriptiveExpression="MAR"
+           order="24" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AVR1" oracleDatatype="number" columnOrder="124"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Avr1">
+          <dataDescriptor expression="AVR" descriptiveExpression="AVR"
+           order="25" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MAI1" oracleDatatype="number" columnOrder="125"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Mai1">
+          <dataDescriptor expression="MAI" descriptiveExpression="MAI"
+           order="26" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JUN1" oracleDatatype="number" columnOrder="126"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jun1">
+          <dataDescriptor expression="JUN" descriptiveExpression="JUN"
+           order="27" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JUL1" oracleDatatype="number" columnOrder="127"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jul1">
+          <dataDescriptor expression="JUL" descriptiveExpression="JUL"
+           order="28" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AOU1" oracleDatatype="number" columnOrder="128"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Aou1">
+          <dataDescriptor expression="AOU" descriptiveExpression="AOU"
+           order="29" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SEP1" oracleDatatype="number" columnOrder="129"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Sep1">
+          <dataDescriptor expression="SEP" descriptiveExpression="SEP"
+           order="30" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="OCT1" oracleDatatype="number" columnOrder="130"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Oct1">
+          <dataDescriptor expression="OCT" descriptiveExpression="OCT"
+           order="31" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOV1" oracleDatatype="number" columnOrder="131"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Nov1">
+          <dataDescriptor expression="NOV" descriptiveExpression="NOV"
+           order="32" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DEC1" oracleDatatype="number" columnOrder="132"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dec1">
+          <dataDescriptor expression="DEC" descriptiveExpression="DEC"
+           order="33" oracleDatatype="number" width="22" scale="2"
+           precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_REALISER1" oracleDatatype="number" columnOrder="133"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="T Realiser1">
+          <dataDescriptor expression="T_REALISER"
+           descriptiveExpression="T_REALISER" order="34"
+           oracleDatatype="number" width="22" scale="2" precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="T_REESTIMER1" oracleDatatype="number"
+         columnOrder="134" width="22" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="T Reestimer1">
+          <dataDescriptor expression="T_REESTIMER"
+           descriptiveExpression="T_REESTIMER" order="35"
+           oracleDatatype="number" width="22" scale="2" precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="A_A" source="a_aformula" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="A_C" source="a_cformula" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="A_CF_TOTAL" source="a_cf_totalformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers gridSpacing="0.25"/>
+  <section name="header" width="29.69989" height="24.99971" widthInChar="180"
+   orientation="landscape">
+    <body width="27.15989" height="19.91971">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="24.99971" widthInChar="180"
+   orientation="landscape">
+    <body width="27.15989" height="19.91971">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="24.99971" widthInChar="180"
+   orientation="landscape">
+    <body width="28.42989" height="15.71284">
+      <location x="0.43656" y="3.17500"/>
+      <repeatingFrame name="R_R_DETAIL" source="G_DETAIL"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.20154" y="0.37486" width="28.16572"
+         height="6.68765"/>
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout formatTrigger="r_r_detailformattrigger"/>
+        <text name="B_7" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.46571" y="1.56021" width="2.98958"
+           height="0.51594"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[SCENARIO : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="LIB_scenario" source="LIB_SCENARIO" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="3.54211" y="1.54471" width="8.01688"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_3" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.69670" y="2.76448" width="0.11906"
+           height="0.44990"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <textSegment>
+            <font face="Courier New" size="11" bold="yes"/>
+            <string>
+            <![CDATA[ ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_5" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.49671" y="0.94568" width="1.42875"
+           height="0.51594"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[DPG : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="DPG" source="LIBDSG" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="2.31428" y="0.98351" width="8.01688"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_4" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.46509" y="2.54682" width="4.65956"
+           height="0.52152"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="9"/>
+            <string>
+            <![CDATA[Nombre de jours Ouvrés :]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[ ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="cjanv" source="CJAN" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="6.87245" y="2.47396" width="1.37511"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cfev" source="CFEV" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="8.26399" y="2.47396" width="1.13978"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cmar" source="CMAR" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="9.41679" y="2.47396" width="1.08055"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cjun" source="CJUN" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="13.06308" y="2.47396" width="1.06443"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cavr" source="CAVR" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="10.60586" y="2.47396" width="1.18659"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cmai" source="CMAI" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="11.79246" y="2.47396" width="1.27062"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cjul" source="CJUL" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="14.23913" y="2.47396" width="1.19683"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="caou" source="CAOU" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="15.43596" y="2.47396" width="1.19094"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="coct" source="COCT" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="18.11052" y="2.47489" width="0.89948"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="csep" source="CSEP" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="16.91959" y="2.47396" width="1.06474"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="CNOV" source="CNOV" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="19.13961" y="2.47396" width="0.97017"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="CDEC" source="CDEC" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="20.28031" y="2.48233" width="1.17171"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <rectangle name="B_8">
+          <geometryInfo x="0.43594" y="3.27639" width="27.93132"
+           height="0.50012"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray4" linePattern="solid"/>
+          <points>
+            <point x="0.43594" y="3.27639"/>
+            <point x="27.93132" y="0.50012"/>
+          </points>
+        </rectangle>
+        <text name="B_9" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="0.46509" y="3.36910" width="4.65956"
+           height="0.51594"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="9"/>
+            <string>
+            <![CDATA[Activités:]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[ ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_10" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="7.05445" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Jan ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_11" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="8.43421" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Fev ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_12" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="9.53492" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Mar ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_13" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="10.63563" y="3.39049" width="1.26845"
+           height="0.49454"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Avr]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_14" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="11.92237" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Mai]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_15" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="13.11610" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Jun ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_16" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="14.41834" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Jul ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_17" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="15.55006" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Aou]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_18" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="16.77479" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Sep]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_20" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="18.03053" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Oct]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_23" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="19.16224" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Nov]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_24" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="20.35597" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Dec]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_19" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="21.47218" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Conso]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_21" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="22.82992" y="3.39049" width="1.07838"
+           height="0.52555"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Raf]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_22" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="25.47193" y="3.39886" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[%Avct]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_25" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="26.56551" y="3.39886" width="1.76051"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[%RepAct]]>
+            </string>
+          </textSegment>
+        </text>
+        <repeatingFrame name="R_6" source="G_RESSOURCE" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.45238" y="3.86023" width="27.87861"
+           height="1.90531"/>
+          <generalLayout pageProtect="yes" verticalElasticity="expand"/>
+          <field name="RESSOURCE2" source="T_RESSOURCE" minWidowLines="1"
+           formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+            <font face="Courier New" size="9" bold="yes"/>
+            <geometryInfo x="0.45238" y="3.95108" width="9.47911"
+             height="0.37362"/>
+          </field>
+          <repeatingFrame name="R_5" source="G_ACTIVITE" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.24675" y="4.39415" width="27.08424"
+             height="0.59345"/>
+            <generalLayout verticalElasticity="expand"/>
+            <field name="activite3" source="CODE_ACTIVITE1" minWidowLines="1"
+             formatMask="NNN" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="1.24675" y="4.48655" width="3.28383"
+               height="0.36401"/>
+            </field>
+            <field name="janv1" source="JAN" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.79834" y="4.44128" width="1.10815"
+               height="0.54074"/>
+            </field>
+            <field name="fev1" source="FEV" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="7.99920" y="4.44128" width="1.20303"
+               height="0.54074"/>
+            </field>
+            <field name="mar1" source="MAR" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="9.20223" y="4.44128" width="1.15621"
+               height="0.54074"/>
+            </field>
+            <field name="jun1" source="JUN" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="13.07548" y="4.44128" width="1.12582"
+               height="0.54074"/>
+            </field>
+            <field name="avr1" source="AVR" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="10.45115" y="4.44128" width="1.15528"
+               height="0.54074"/>
+            </field>
+            <field name="mai1" source="MAI" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.83525" y="4.44128" width="1.23930"
+               height="0.54074"/>
+            </field>
+            <field name="jul1" source="JUL" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.26921" y="4.44128" width="1.22814"
+               height="0.54074"/>
+            </field>
+            <field name="oct1" source="OCT" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="18.07766" y="4.44190" width="1.15745"
+               height="0.54105"/>
+            </field>
+            <field name="sep1" source="SEP" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.92114" y="4.44128" width="1.06474"
+               height="0.54074"/>
+            </field>
+            <field name="NOV1" source="NOV" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="19.28068" y="4.44128" width="1.10939"
+               height="0.54074"/>
+            </field>
+            <field name="dec1" source="DEC" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="20.43689" y="4.43415" width="1.17171"
+               height="0.54136"/>
+            </field>
+            <field name="T1" source="T_REALISER" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="21.61139" y="4.43415" width="1.37387"
+               height="0.54136"/>
+            </field>
+            <field name="R4" source="T_REESTIMER" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="23.02030" y="4.43415" width="1.15869"
+               height="0.54136"/>
+            </field>
+            <field name="A1" source="A" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0%" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="25.68804" y="4.43415" width="1.21884"
+               height="0.54136"/>
+            </field>
+            <field name="C1" source="C" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0%" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="26.91092" y="4.43415" width="1.42007"
+               height="0.54136"/>
+            </field>
+            <field name="aou1" source="AOU" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="15.55998" y="4.44128" width="1.15652"
+               height="0.54074"/>
+            </field>
+            <field name="R9" source="CF_TOTAL" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="24.26053" y="4.43415" width="1.33418"
+               height="0.54136"/>
+            </field>
+          </repeatingFrame>
+          <field name="ressource" source="RESSOURCE1" minWidowLines="1"
+           formatMask="NNN" spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="0.46695" y="5.19596" width="6.29853"
+             height="0.36370"/>
+          </field>
+          <field name="janv2" source="TOT_JAN" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="6.84299" y="5.17147" width="1.06350"
+             height="0.55563"/>
+          </field>
+          <field name="fev2" source="TOT_FEV" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="7.99920" y="5.15069" width="1.20303"
+             height="0.54105"/>
+          </field>
+          <field name="mar2" source="TOT_MAR" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="9.20223" y="5.15069" width="1.15621"
+             height="0.54105"/>
+          </field>
+          <field name="jun2" source="TOT_JUN" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="13.07548" y="5.15069" width="1.12582"
+             height="0.54105"/>
+          </field>
+          <field name="avr2" source="TOT_AVR" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="10.45115" y="5.15069" width="1.15528"
+             height="0.54105"/>
+          </field>
+          <field name="mai2" source="TOT_MAI" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="11.83525" y="5.15069" width="1.23930"
+             height="0.54105"/>
+          </field>
+          <field name="jul2" source="TOT_JUL" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="14.26921" y="5.15069" width="1.22814"
+             height="0.54105"/>
+          </field>
+          <field name="oct2" source="TOT_OCT" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="18.07766" y="5.15131" width="1.15745"
+             height="0.54136"/>
+          </field>
+          <field name="sep2" source="TOT_SEP" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="16.92114" y="5.15069" width="1.06474"
+             height="0.54105"/>
+          </field>
+          <field name="NOV2" source="TOT_NOV" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="19.28068" y="5.15069" width="1.10939"
+             height="0.54105"/>
+          </field>
+          <field name="dec2" source="TOT_DEC" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="20.43689" y="5.12806" width="1.17171"
+             height="0.54105"/>
+          </field>
+          <field name="T2" source="TOT_T_REALISER" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="21.61139" y="5.12806" width="1.37387"
+             height="0.54105"/>
+          </field>
+          <field name="R1" source="TOT_T_REESTIMER" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="23.02030" y="5.12806" width="1.15869"
+             height="0.54105"/>
+          </field>
+          <field name="A2" source="TOT_A" minWidowLines="1"
+           formatMask="NNNNNNNNNNN0%" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="25.74882" y="5.12806" width="0.99095"
+             height="0.54105"/>
+          </field>
+          <field name="aou2" source="TOT_AOU" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="15.55998" y="5.15069" width="1.15652"
+             height="0.54105"/>
+          </field>
+          <field name="R7" source="CS_TOTAL" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="24.24503" y="5.12806" width="1.36426"
+             height="0.54105"/>
+          </field>
+        </repeatingFrame>
+        <text name="B_6" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.57826" y="6.38845" width="3.37530"
+           height="0.37052"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[TOTAL DPG]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="janv3" source="CS_TOT_DPG_JAN" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="6.82749" y="6.38070" width="1.06350"
+           height="0.55563"/>
+        </field>
+        <field name="fev3" source="CS_TOT_DPG_FEV" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="7.98370" y="6.39093" width="1.20303"
+           height="0.54105"/>
+        </field>
+        <field name="mar3" source="CS_TOT_DPG_MAR" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="9.18673" y="6.39093" width="1.15621"
+           height="0.54105"/>
+        </field>
+        <field name="jun3" source="CS_TOT_DPG_JUIN" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="13.07548" y="6.39093" width="1.12582"
+           height="0.54105"/>
+        </field>
+        <field name="avr3" source="CS_TOT_DPG_AVR" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="10.43564" y="6.39093" width="1.15528"
+           height="0.54105"/>
+        </field>
+        <field name="mai3" source="CS_TOT_DPG_MAI" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="11.63216" y="6.39093" width="1.23930"
+           height="0.54105"/>
+        </field>
+        <field name="jul3" source="CS_TOT_DPG_JUIL" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="14.26921" y="6.39093" width="1.22814"
+           height="0.54105"/>
+        </field>
+        <field name="oct3" source="CS_TOT_DPG_OCT" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="18.06215" y="6.39155" width="1.15745"
+           height="0.54136"/>
+        </field>
+        <field name="sep3" source="CS_TOT_DPG_SEPT" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="16.81448" y="6.39093" width="1.17140"
+           height="0.54105"/>
+        </field>
+        <field name="NOV3" source="CS_TOT_DPG_NOV" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="19.28068" y="6.39093" width="1.10939"
+           height="0.54105"/>
+        </field>
+        <field name="dec3" source="CS_TOT_DPG_DEC" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="20.40589" y="6.39930" width="1.17171"
+           height="0.54105"/>
+        </field>
+        <field name="T3" source="CS_TOT_DPG_T_REALISER" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="21.58039" y="6.39930" width="1.37480"
+           height="0.54105"/>
+        </field>
+        <field name="R3" source="CS_TOT_DPG_T_REESTIMER" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="22.97131" y="6.39930" width="1.26969"
+           height="0.52276"/>
+        </field>
+        <field name="A3" source="CF_TOT_DPG_A" minWidowLines="1"
+         formatMask="NNNNNNNNNNN0%" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="25.64154" y="6.39930" width="1.09823"
+           height="0.54105"/>
+        </field>
+        <field name="aou3" source="CS_TOT_DPG_AOUT" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="15.55998" y="6.39093" width="1.15652"
+           height="0.54105"/>
+        </field>
+        <field name="R8" source="TOTAL" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="24.25805" y="6.39930" width="1.38255"
+           height="0.52276"/>
+        </field>
+        <field name="R_MOINSMENS" source="MOISMENS" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="4.26331" y="0.43191" width="8.01688"
+           height="0.55407"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_26" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.46571" y="0.47129" width="4.33338"
+           height="0.51470"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[SITUATION AU: ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_28" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="24.38022" y="3.37499" width="1.07838"
+           height="0.52555"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Total]]>
+            </string>
+          </textSegment>
+        </text>
+      </repeatingFrame>
+      <repeatingFrame name="R_A_DETAIL" source="G_A_DETAIL"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.21704" y="7.32017" width="28.16572"
+         height="6.68765"/>
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout formatTrigger="r_a_detailformattrigger"/>
+        <text name="B_53" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.48121" y="8.50553" width="2.98958"
+           height="0.51594"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[SCENARIO : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="A_LIB_scenario" source="LIBSCENARIO1" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="3.55761" y="8.49002" width="8.01688"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_52" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.71220" y="9.70979" width="0.11906"
+           height="0.44990"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <textSegment>
+            <font face="Courier New" size="11" bold="yes"/>
+            <string>
+            <![CDATA[ ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_51" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.51222" y="7.89099" width="1.42875"
+           height="0.51594"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[DPG : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="A_DPG" source="LIBDSG1" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="2.32978" y="7.92882" width="8.01688"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_50" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.46509" y="9.50764" width="4.65956"
+           height="0.52152"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="9"/>
+            <string>
+            <![CDATA[Nombre de jours Ouvrés :]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[ ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="cjanv1" source="CJAN1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="6.88795" y="9.41927" width="1.37511"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cfev1" source="CFEV1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="8.27949" y="9.41927" width="1.13978"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cmar1" source="CMAR1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="9.43229" y="9.41927" width="1.08055"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cjun1" source="CJUN1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="13.07858" y="9.41927" width="1.06443"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cavr1" source="CAVR1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="10.62137" y="9.41927" width="1.18659"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cmai1" source="CMAI1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="11.80796" y="9.41927" width="1.27062"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="cjul1" source="CJUL1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="14.25463" y="9.41927" width="1.19683"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="caou1" source="CAOU1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="15.45146" y="9.41927" width="1.19094"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="coct1" source="COCT1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="18.12603" y="9.42020" width="0.89948"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="csep1" source="CSEP1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="16.93509" y="9.41927" width="1.06474"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="CNOV1" source="CNOV1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="19.15511" y="9.41927" width="0.97017"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="CDEC1" source="CDEC1" minWidowLines="1" formatMask="NNN"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="20.29582" y="9.42764" width="1.17171"
+           height="0.55563"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <rectangle name="B_49">
+          <geometryInfo x="0.45145" y="10.22170" width="27.93132"
+           height="0.50012"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray4" linePattern="solid"/>
+          <points>
+            <point x="0.45145" y="10.22170"/>
+            <point x="27.93132" y="0.50012"/>
+          </points>
+        </rectangle>
+        <text name="B_48" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="0.48059" y="10.31441" width="4.65956"
+           height="0.51594"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="9"/>
+            <string>
+            <![CDATA[Activités:]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[ ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_47" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="7.06996" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Jan ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_46" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="8.44972" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Fev ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_45" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="9.55042" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Mar ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_44" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="10.65113" y="10.33580" width="1.26845"
+           height="0.49454"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Avr]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_43" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="11.93788" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Mai]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_42" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="13.13160" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Jun ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_41" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="14.43385" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Jul ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_40" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="15.56556" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Aou]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_39" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="16.79029" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Sep]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_38" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="18.04603" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Oct]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_37" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="19.17774" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Nov]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_36" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="20.37147" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Dec]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_35" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="21.48768" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Conso]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_34" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="22.84543" y="10.33580" width="1.07838"
+           height="0.52555"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Raf]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_33" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="25.48744" y="10.34417" width="1.26845"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[%Avct]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_32" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="26.58101" y="10.34417" width="1.76051"
+           height="0.48617"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[%RepAct]]>
+            </string>
+          </textSegment>
+        </text>
+        <repeatingFrame name="R_A_ACTIVITE" source="G_A_ACTIVITE"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.46788" y="10.80554" width="27.87861"
+           height="1.90531"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="A_CODE_ACTIVITE" source="CODE_ACTIVITE"
+           minWidowLines="1" formatMask="DD/MM/YYYY" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="9" bold="yes"/>
+            <geometryInfo x="0.46788" y="10.89639" width="9.47911"
+             height="0.37362"/>
+          </field>
+          <repeatingFrame name="R_A_RESSOURCE" source="G_A_RESSOURCE"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.26225" y="11.33946" width="27.08424"
+             height="0.59345"/>
+            <generalLayout verticalElasticity="expand"/>
+            <field name="A_RESSOURCE" source="T_RESSOURCE1" minWidowLines="1"
+             formatMask="NNN" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="1.26225" y="11.43186" width="5.45641"
+               height="0.36401"/>
+            </field>
+            <field name="A_JAN" source="JAN1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.81385" y="11.38659" width="1.10815"
+               height="0.54074"/>
+            </field>
+            <field name="A_FEV" source="FEV1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="8.01470" y="11.38659" width="1.20303"
+               height="0.54074"/>
+            </field>
+            <field name="A_MAR" source="MAR1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="9.21773" y="11.38659" width="1.15621"
+               height="0.54074"/>
+            </field>
+            <field name="A_JUN" source="JUN1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="13.09098" y="11.38659" width="1.12582"
+               height="0.54074"/>
+            </field>
+            <field name="A_AVR" source="AVR1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="10.46665" y="11.38659" width="1.15528"
+               height="0.54074"/>
+            </field>
+            <field name="A_MAI" source="MAI1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.85075" y="11.38659" width="1.23930"
+               height="0.54074"/>
+            </field>
+            <field name="A_JUL" source="JUL1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.28471" y="11.38659" width="1.22814"
+               height="0.54074"/>
+            </field>
+            <field name="A_OCT" source="OCT1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="18.09316" y="11.38721" width="1.15745"
+               height="0.54105"/>
+            </field>
+            <field name="A_SEP" source="SEP1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.93664" y="11.38659" width="1.06474"
+               height="0.54074"/>
+            </field>
+            <field name="A_NOV" source="NOV1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="19.29619" y="11.38659" width="1.10939"
+               height="0.54074"/>
+            </field>
+            <field name="A_DEC" source="DEC1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="20.45240" y="11.37946" width="1.17171"
+               height="0.54136"/>
+            </field>
+            <field name="A_T_REALISER" source="T_REALISER1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="21.62690" y="11.37946" width="1.37387"
+               height="0.54136"/>
+            </field>
+            <field name="A_T_REESTIMER" source="T_REESTIMER1"
+             minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="23.03580" y="11.37946" width="1.15869"
+               height="0.54136"/>
+            </field>
+            <field name="A_A" source="A_A" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0%" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="25.70355" y="11.37946" width="1.21884"
+               height="0.54136"/>
+            </field>
+            <field name="A_C" source="A_C" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0%" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="26.92642" y="11.37946" width="1.42007"
+               height="0.54136"/>
+            </field>
+            <field name="A_AOU" source="AOU1" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="15.57548" y="11.38659" width="1.15652"
+               height="0.54074"/>
+            </field>
+            <field name="A_CF_TOTAL" source="A_CF_TOTAL" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="24.27604" y="11.37946" width="1.33418"
+               height="0.54136"/>
+            </field>
+          </repeatingFrame>
+          <field name="A_T_ACTIVITE" source="T_ACTIVITE" minWidowLines="1"
+           formatMask="NNN" spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="0.48245" y="12.14127" width="6.29853"
+             height="0.36370"/>
+          </field>
+          <field name="A_TOT_JAN" source="A_TOT_JAN" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="6.85850" y="12.11678" width="1.06350"
+             height="0.55563"/>
+          </field>
+          <field name="A_TOT_FEV" source="A_TOT_FEV" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="8.01470" y="12.09601" width="1.20303"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_MAR" source="A_TOT_MAR" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="9.21773" y="12.09601" width="1.15621"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_JUN" source="A_TOT_JUN" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="13.09098" y="12.09601" width="1.12582"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_AVR" source="A_TOT_AVR" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="10.46665" y="12.09601" width="1.15528"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_MAI" source="A_TOT_MAI" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="11.85075" y="12.09601" width="1.23930"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_JUL" source="A_TOT_JUI" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="14.28471" y="12.09601" width="1.22814"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_OCT" source="A_TOT_OCT" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="18.09316" y="12.09663" width="1.15745"
+             height="0.54136"/>
+          </field>
+          <field name="A_TOT_SEP" source="A_TOT_SEP" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="16.93664" y="12.09601" width="1.06474"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_NOV" source="A_TOT_NOV" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="19.29619" y="12.09601" width="1.10939"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_DEC" source="A_TOT_DEC" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="20.45240" y="12.07337" width="1.17171"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_T_REALISER" source="A_TOT_T_REALISER"
+           minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="21.62690" y="12.07337" width="1.37387"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_T_REESTIMER" source="A_TOT_T_REESTIMER"
+           minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="23.03580" y="12.07337" width="1.15869"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_A" source="A_TOT_A" minWidowLines="1"
+           formatMask="NNNNNNNNNNN0%" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="25.76432" y="12.07337" width="0.99095"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_AOU" source="A_TOT_AOU" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="15.57548" y="12.09601" width="1.15652"
+             height="0.54105"/>
+          </field>
+          <field name="A_TOT_CS_TOTAL" source="A_CS_TOTAL" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="24.26053" y="12.07337" width="1.36426"
+             height="0.54105"/>
+          </field>
+        </repeatingFrame>
+        <text name="B_30" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.59376" y="13.33376" width="3.37530"
+           height="0.37052"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[TOTAL DPG]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="A_CF_TOT_DPG_JAN" source="A_CS_TOT_DPG_JAN"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="6.84299" y="13.32601" width="1.06350"
+           height="0.55563"/>
+        </field>
+        <field name="A_CF_TOT_DPG_FEV" source="A_CS_TOT_DPG_FEV"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="7.99920" y="13.33624" width="1.20303"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_MAR" source="A_CS_TOT_DPG_MAR"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="9.20223" y="13.33624" width="1.15621"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_JUN" source="A_CS_TOT_DPG_JUN"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="13.09098" y="13.33624" width="1.12582"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_AVR" source="A_CS_TOT_DPG_AVR"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="10.45115" y="13.33624" width="1.15528"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_MAI" source="A_CS_TOT_DPG_MAI"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="11.64766" y="13.33624" width="1.23930"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_JUL" source="A_CS_TOT_DPG_JUI"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="14.28471" y="13.33624" width="1.22814"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_OCT" source="A_CS_TOT_DPG_OCT"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="18.07766" y="13.33686" width="1.15745"
+           height="0.54136"/>
+        </field>
+        <field name="A_CF_TOT_DPG_SEP" source="A_CS_TOT_DPG_SEP"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="16.82998" y="13.33624" width="1.17140"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_NOV" source="A_CS_TOT_DPG_NOV"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="19.29619" y="13.33624" width="1.10939"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_DEC" source="A_CS_TOT_DPG_DEC"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="20.42139" y="13.34461" width="1.17171"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_T_REALISER" source="A_CS_TOT_DPG_T_REALISER"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="21.59589" y="13.34461" width="1.37480"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_T_REESTIMER"
+         source="A_CS_TOT_DPG_T_REESTIMER" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="22.98681" y="13.34461" width="1.26969"
+           height="0.52276"/>
+        </field>
+        <field name="A_CF_TOT_DPG_A" source="A_CF_TOT_DPG_A" minWidowLines="1"
+         formatMask="NNNNNNNNNNN0%" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="25.65704" y="13.34461" width="1.09823"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_AOU" source="A_CS_TOT_DPG_AOU"
+         minWidowLines="1" formatMask="NNNGNNNGNN0D0" spacing="0"
+         alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="15.57548" y="13.33624" width="1.15652"
+           height="0.54105"/>
+        </field>
+        <field name="A_CF_TOT_DPG_TOTAL" source="A_TOTAL" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D0" spacing="0" alignment="end">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="24.27356" y="13.34461" width="1.38255"
+           height="0.52276"/>
+        </field>
+        <field name="A_MOISMENS" source="MOISMENS1" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="4.27881" y="7.37722" width="8.01688"
+           height="0.55407"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_31" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.48121" y="7.41660" width="4.33338"
+           height="0.51470"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[SITUATION AU: ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_29" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="24.39572" y="10.32030" width="1.07838"
+           height="0.52555"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Total]]>
+            </string>
+          </textSegment>
+        </text>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <frame name="M_1">
+        <geometryInfo x="0.47625" y="0.15875" width="28.32261"
+         height="2.42094"/>
+        <visualSettings fillBackgroundColor="gray16"/>
+        <field name="F_DATE1" source="CurrentDate" minWidowLines="1"
+         formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="2.55364" y="0.23626" width="5.08000"
+           height="0.47625"/>
+        </field>
+        <field name="F_NUM_PAGE1" source="PageNumber" minWidowLines="1"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="26.63992" y="0.20526" width="0.79375"
+           height="0.47625"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="report"/>
+        </field>
+        <field name="F_TOTAL_PAGE1" source="TotalPages" minWidowLines="1"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="27.84636" y="0.22076" width="0.95250"
+           height="0.47625"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="report"/>
+        </field>
+        <text name="B_1" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="9.34455" y="0.96304" width="9.76313"
+           height="1.46844"/>
+          <visualSettings fillBackgroundColor="gray16"/>
+          <textSegment>
+            <font face="Courier New" size="16" bold="yes"/>
+            <string>
+            <![CDATA[BIP: Outil Réestimé JH
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="16" bold="yes"/>
+            <string>
+            <![CDATA[Détail du réestimé]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_2" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="27.44143" y="0.22076" width="0.40246"
+           height="0.45114"/>
+          <visualSettings fillBackgroundColor="gray16"/>
+          <textSegment>
+            <font face="Courier New" size="11"/>
+            <string>
+            <![CDATA[/]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_27" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="0.57733" y="0.23409" width="1.85942"
+           height="0.76740"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[Edité le :]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000">
+  <text name="PB_10" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.89837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.11795" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.85576" y="2.75580" width="1.50750" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[DPG]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.70396" y="2.57008" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.62458" y="4.81924" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.85607" y="4.95195" width="2.47768" height="0.49857"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Code scenario]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="P_PARAM9" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.70396" y="6.64487" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.88274" y="6.77757" width="2.47768" height="0.49857"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[REGROUPEMENT]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="aformula" returnType="number">
+      <textSource>
+      <![CDATA[function AFormula return Number is
+begin
+  if((:T_REALISER+:T_REESTIMER)<>0)THEN
+  	return (:T_REALISER/(:T_REALISER+:T_REESTIMER))*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="cformula" returnType="number">
+      <textSource>
+      <![CDATA[function CFormula return Number is
+begin
+   if((:TOT_T_REALISER)<>0)then
+  	return ((:T_REALISER/:TOT_T_REALISER)*100);
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="tot_aformula" returnType="number">
+      <textSource>
+      <![CDATA[function TOT_AFormula return Number is
+begin
+  if((:TOT_T_REALISER+:TOT_T_REESTIMER)<>0)THEN
+  	return :TOT_T_REALISER/(:TOT_T_REALISER+:TOT_T_REESTIMER)*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="tot_cformula" returnType="number">
+      <textSource>
+      <![CDATA[function TOT_CFormula return Number is
+begin
+  if((:TOT_T_REALISER+:TOT_T_REESTIMER)<>0)THEN
+  	return :TOT_T_REESTIMER/(:TOT_T_REALISER+:TOT_T_REESTIMER)*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="beforereport">
+      <textSource>
+      <![CDATA[function BeforeReport return boolean is
+begin
+  
+
+  :p_numseq_2 := pack_ree_detail.tmp_ree_detail_seq(:p_param6,:p_param7);
+						  
+  IF :p_numseq_2 = 0 THEN
+	return (FALSE);
+  END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  -- supprime les lignes de l'edition dans la table
+  delete from tmp_ree_detail
+  where  numseq = :p_numseq_2;
+  commit;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_1Formula return Number is
+begin
+  if((:CS_TOT_DPG_T_REALISER+:CS_TOT_DPG_T_REESTIMER)<>0)THEN
+  	return :CS_TOT_DPG_T_REALISER/(:CS_TOT_DPG_T_REALISER+:CS_TOT_DPG_T_REESTIMER)*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_1formula0004" returnType="number">
+      <textSource>
+      <![CDATA[function CF_1FORMULA0004 return Number is
+begin
+  return :T_REALISER+:T_REESTIMER;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_r_detailformattrigger">
+      <textSource>
+      <![CDATA[function R_R_DETAILFormatTrigger return boolean is
+begin
+  if (:P_PARAM9 = 'R') then
+  	return (TRUE);
+  end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_a_detailformattrigger">
+      <textSource>
+      <![CDATA[function R_A_DETAILFormatTrigger return boolean is
+begin
+  if (:P_PARAM9 = 'A') then
+  	return (TRUE);
+  end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="a_tot_aformula" returnType="number">
+      <textSource>
+      <![CDATA[function A_TOT_AFormula return Number is
+begin
+  if((:A_TOT_T_REALISER+:A_TOT_T_REESTIMER)<>0)THEN
+  	return :A_TOT_T_REALISER/(:A_TOT_T_REALISER+:A_TOT_T_REESTIMER)*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="a_cf_tot_dpg_aformula" returnType="number">
+      <textSource>
+      <![CDATA[function A_CF_TOT_DPG_AFormula return Number is
+begin
+  if((:A_CS_TOT_DPG_T_REALISER+:A_CS_TOT_DPG_T_REESTIMER)<>0)THEN
+  	return :A_CS_TOT_DPG_T_REALISER/(:A_CS_TOT_DPG_T_REALISER+:A_CS_TOT_DPG_T_REESTIMER)*100;
+  else
+  	return 0;
+  end if;	
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="a_tot_cformula" returnType="number">
+      <textSource>
+      <![CDATA[function A_TOT_CFormula return Number is
+begin
+  if((:A_TOT_T_REALISER+:A_TOT_T_REESTIMER)<>0)THEN
+  	return :A_TOT_T_REESTIMER/(:A_TOT_T_REALISER+:A_TOT_T_REESTIMER)*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="a_aformula" returnType="number">
+      <textSource>
+      <![CDATA[function A_AFormula return Number is
+begin
+  if((:T_REALISER1+:T_REESTIMER1)<>0)THEN
+  	return (:T_REALISER1/(:T_REALISER1+:T_REESTIMER1))*100;
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="a_cformula" returnType="number">
+      <textSource>
+      <![CDATA[function A_CFormula return Number is
+begin
+   if((:A_TOT_T_REALISER)<>0)then
+  	return ((:T_REALISER1/:A_TOT_T_REALISER)*100);
+  else
+  	return 0;
+  end if;	
+end;]]>
+      </textSource>
+    </function>
+    <function name="a_cf_totalformula" returnType="number">
+      <textSource>
+      <![CDATA[function A_CF_TOTALFormula return Number is
+begin
+  return :T_REALISER1+:T_REESTIMER1;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

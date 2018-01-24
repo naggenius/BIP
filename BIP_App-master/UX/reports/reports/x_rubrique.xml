@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_rubrique" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_RUBRIQUE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_param6" datatype="character" precision="10"
+     label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_global" datatype="character" width="5024"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param7" datatype="character" width="7"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Code DPG]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_param1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param4" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_A" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_DP" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_P" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_CAFI" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HAB" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[ SELECT 	            d.LIBDIR,
+                                    r.codrub,
+                             r.CAFI,
+									r.codep,
+    								r.codfei,
+									tr.librubst  || ' '|| ca.CLIBRCA libelle,
+   									TO_CHAR(c1.codcompte) || '-'|| c1.libcompte comptedeb,
+									TO_CHAR(c2.codcompte) || '-'|| c2.libcompte comptecre,
+   									r.schemacpt,
+   									r.appli,
+  									TO_CHAR(r.datedemande,'dd/mm/yyyy') datedemande,
+   									TO_CHAR(r.dateretour,'dd/mm/yyyy') dateretour,
+   									r.commentaires
+   			   FROM  RUBRIQUE r, TYPE_RUBRIQUE tr, COMPTE c1, COMPTE c2, CENTRE_ACTIVITE ca, DIRECTIONS d
+              WHERE  r.CODEP=tr.CODEP(+)
+			  AND r.CODFEI=tr.CODFEI
+			  AND c1.codcompte(+)=r.comptedeb
+			   AND c2.codcompte(+)=r.comptecre
+			   AND ca.CODCAMO(+)=r.CAFI
+			   AND d.coddir(+)=r.coddir
+			   ORDER BY d.LIBDIR, r.CAFI, r.codfei, r.codep;]]>
+      </select>
+      <displayInfo x="1.05212" y="0.43750" width="0.69995" height="0.19995"/>
+      <group name="G_LIBDIR">
+        <displayInfo x="0.69714" y="1.09570" width="2.40698" height="4.36133"
+        />
+        <dataItem name="LIBDIR" datatype="vchar2" columnOrder="25" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdir">
+          <xmlSettings xmlTag="&quot;Direction&quot;"/>
+          <dataDescriptor expression="d.LIBDIR" descriptiveExpression="LIBDIR"
+           order="1" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codrub" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codrub">
+          <xmlSettings xmlTag="&quot;Code rubrique FI&quot;"/>
+          <dataDescriptor expression="r.codrub" descriptiveExpression="CODRUB"
+           order="2" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CAFI" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cafi">
+          <xmlSettings xmlTag="&quot;CAFI&quot;"/>
+          <dataDescriptor expression="r.CAFI" descriptiveExpression="CAFI"
+           order="3" oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codep" oracleDatatype="number" columnOrder="27"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codep">
+          <xmlSettings xmlTag="&quot;Code EP&quot;"/>
+          <dataDescriptor expression="r.codep" descriptiveExpression="CODEP"
+           order="4" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codfei" oracleDatatype="number" columnOrder="28"
+         width="22" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codfei">
+          <xmlSettings xmlTag="&quot;CODFEI&quot;"/>
+          <dataDescriptor expression="r.codfei" descriptiveExpression="CODFEI"
+           order="5" oracleDatatype="number" width="22" precision="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle" datatype="vchar2" columnOrder="30" width="67"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <xmlSettings xmlTag="&quot;Libellé&quot;"/>
+          <dataDescriptor
+           expression="tr.librubst || &apos; &apos; || ca.CLIBRCA"
+           descriptiveExpression="LIBELLE" order="6" width="67"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="comptedeb" datatype="vchar2" columnOrder="31"
+         width="91" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Comptedeb">
+          <xmlSettings xmlTag="&quot;Compte à débiter&quot;"/>
+          <dataDescriptor
+           expression="TO_CHAR ( c1.codcompte ) || &apos;-&apos; || c1.libcompte"
+           descriptiveExpression="COMPTEDEB" order="7" width="91"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="comptecre" datatype="vchar2" columnOrder="32"
+         width="91" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Comptecre">
+          <xmlSettings xmlTag="&quot;Compte à créditer&quot;"/>
+          <dataDescriptor
+           expression="TO_CHAR ( c2.codcompte ) || &apos;-&apos; || c2.libcompte"
+           descriptiveExpression="COMPTECRE" order="8" width="91"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="schemacpt" oracleDatatype="number" columnOrder="33"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Schemacpt">
+          <xmlSettings xmlTag="&quot;Schéma comptable&quot;"/>
+          <dataDescriptor expression="r.schemacpt"
+           descriptiveExpression="SCHEMACPT" order="9" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="appli" datatype="vchar2" columnOrder="34"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Appli">
+          <xmlSettings xmlTag="&quot;Application&quot;"/>
+          <dataDescriptor expression="r.appli" descriptiveExpression="APPLI"
+           order="10" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datedemande" datatype="vchar2" columnOrder="35"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Datedemande">
+          <xmlSettings xmlTag="&quot;Date demande&quot;"/>
+          <dataDescriptor
+           expression="TO_CHAR ( r.datedemande , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="DATEDEMANDE" order="11" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dateretour" datatype="vchar2" columnOrder="36"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dateretour">
+          <xmlSettings xmlTag="&quot;Date retour&quot;"/>
+          <dataDescriptor
+           expression="TO_CHAR ( r.dateretour , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="DATERETOUR" order="12" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="commentaires" datatype="vchar2" columnOrder="37"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Commentaires">
+          <xmlSettings xmlTag="&quot;Commentaire&quot;"/>
+          <dataDescriptor expression="r.commentaires"
+           descriptiveExpression="COMMENTAIRES" order="13" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_LIBDIR_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="5.93750" height="0.25000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_LIBDIR" source="G_LIBDIR"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.12500" width="5.93750"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_LIBDIR" source="LIBDIR" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codrub" source="codrub" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.50000" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CAFI" source="CAFI" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.87500" y="0.12500" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codep" source="codep" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.31250" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codfei" source="codfei" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.68750" y="0.12500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_libelle" source="libelle" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.06250" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_comptedeb" source="comptedeb" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.56250" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_comptecre" source="comptecre" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.06250" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_schemacpt" source="schemacpt" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.56250" y="0.12500" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_appli" source="appli" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.00000" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_datedemande" source="datedemande" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.50000" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_dateretour" source="dateretour" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.00000" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_commentaires" source="commentaires" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.50000" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_LIBDIR_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="5.93750"
+           height="0.12500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_LIBDIR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libdir]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codrub" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codrub]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CAFI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.87500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cafi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codep" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codep]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codfei" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.68750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codfei]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libelle" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_comptedeb" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.56250" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Comptedeb]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_comptecre" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.06250" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Comptecre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_schemacpt" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.56250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Schemacpt]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_appli" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.00000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Appli]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_datedemande" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.50000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Datedemande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dateretour" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.00000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dateretour]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_commentaires" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.50000" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Commentaires]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

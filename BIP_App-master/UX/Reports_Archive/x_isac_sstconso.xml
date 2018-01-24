@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_isac_sstconso" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_ISAC_SSTCONSO" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="12000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="12000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT isst.pid ligne,
+	lb.pnom lib_ligne,
+	iet.ecet etape,
+	iet.typetape type_etape,
+	iet.libetape lib_etape,
+	ita.acta tache,
+	ita.libtache lib_tache,
+	isst.acst sous_tache,
+	isst.asnom lib_sous_tache,
+	isst.aist type,
+	isst.param_local zone_libre,
+	DECODE(SUBSTR(NVL(isst.aist, ' '), 1, 2), 'FF', SUBSTR(isst.aist , 3, 4), isst.pid) imputation,
+	lb.codsg dpg_ligne,
+	ress.rnom nom,
+	cons.ident code_ress,
+	cons.CPIDENT RESP_ress,
+	-- FAD PPM 64360 QC 1932 : Modification des paramètres transmis à la fonction, seul le FIDENT est nécessaire.
+	-- la ligne contrat du forfait lié est incluse dans une seule situation du forfait lié et non dans la situation de la ressource en cours
+	DECODE(CONS.PRESTATION, 'SLT', DECODE(PACK_LIGCONT.VERIF_FORFAIT(CONS.FIDENT), 'OK', CONS.FIDENT, NULL), NULL) ID_FORFAIT,
+	DECODE(CONS.PRESTATION, 'SLT', DECODE(PACK_LIGCONT.VERIF_FORFAIT(CONS.FIDENT), 'OK', CONS.RNOM, NULL), NULL) LIB_FORFAIT,
+	DECODE(CONS.PRESTATION, 'SLT', DECODE(PACK_LIGCONT.VERIF_FORFAIT(CONS.FIDENT), 'OK', CONS.SOCCONT, NULL), NULL) SOCIETE,
+	DECODE(CONS.PRESTATION, 'SLT', DECODE(PACK_LIGCONT.VERIF_FORFAIT(CONS.FIDENT), 'OK', cons.NUMCONT, NULL), NULL) num_contrat,
+	-- FAD PPM 64360 QC 1932 : Fin
+	cons.jan jan,
+	cons.fev fev,
+	cons.mar mar,
+	cons.avr avr,
+	cons.mai mai,
+	cons.jun jun,
+	cons.jul jul,
+	cons.aou aou,
+	cons.sep sep,
+	cons.oct oct,
+	cons.nov nov,
+	cons.dec dec,
+	DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,(DECODE(PI.PROJAXEMETIER, NULL, (DECODE(ita.TACHEAXEMETIER, NULL,NULL, ita.TACHEAXEMETIER) ), PI.PROJAXEMETIER) ) , DPCOPI.DPCOPIAXEMETIER) Ref_demande,
+	DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,(DECODE(PI.PROJAXEMETIER, NULL,(DECODE(ita.TACHEAXEMETIER,NULL,NULL, DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(ita.TACHEAXEMETIER)
+	AND ROWNUM = 1
+	), NULL,'???',DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(ita.TACHEAXEMETIER)
+	AND ROWNUM = 1
+	), NULL, '???',
+	(SELECT DMPLIBEL
+	FROM DMP_RESEAUXFRANCE
+	WHERE TRIM(DMPNUM) = TRIM(ita.TACHEAXEMETIER)
+	AND ROWNUM = 1
+	)) ))), DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER)
+	AND ROWNUM = 1
+	), NULL, '???',
+	(SELECT DMPLIBEL
+	FROM DMP_RESEAUXFRANCE
+	WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER)
+	AND ROWNUM = 1
+	))) ) , DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER)
+	AND ROWNUM = 1
+	), NULL, '???',
+	(SELECT DMPLIBEL
+	FROM DMP_RESEAUXFRANCE
+	WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER)
+	AND ROWNUM = 1
+	))) Ref_demandeLib ,
+	(SELECT LIBTYET
+	FROM TYPE_ETAPE
+	WHERE iet.typetape = TYPE_ETAPE.TYPETAP
+	AND ROWNUM = 1
+	) TypeEtapeLib ,
+	DPCOPI.DPCOPIAXEMETIER DpCopiAxeMetierCode ,
+	DECODE(DPCOPI.DPCOPIAXEMETIER, NULL, NULL, DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER)
+	AND ROWNUM = 1
+	), NULL, '???',
+	(SELECT DMPLIBEL
+	FROM DMP_RESEAUXFRANCE
+	WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER)
+	AND ROWNUM = 1
+	)) ) DpCopiAxeMetierLib,
+	PI.PROJAXEMETIER ProjAxeMetierCode ,
+	DECODE(PI.PROJAXEMETIER, NULL, NULL, DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER)
+	AND ROWNUM = 1
+	), NULL, '???',
+	(SELECT DMPLIBEL
+	FROM DMP_RESEAUXFRANCE
+	WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER)
+	AND ROWNUM = 1
+	)) ) ProjAxeMetierLib,
+	TACHEAXEMETIER TacheAxeMetierCode ,
+	DECODE(ita.TACHEAXEMETIER, NULL, NULL, DECODE(
+	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(ita.TACHEAXEMETIER)
+	AND ROWNUM = 1
+	), NULL, '???',
+	(SELECT DMPLIBEL
+	FROM DMP_RESEAUXFRANCE
+	WHERE TRIM(DMPNUM) = TRIM(ita.TACHEAXEMETIER)
+	AND ROWNUM = 1
+	)) ) TacheAxeMetierLib,
+	cons.DPG_ress DPG_ress,
+	lb.pcpi RESP_ligne
+FROM
+	ligne_bip lb
+JOIN proj_info pi ON lb.icpi = pi.icpi
+LEFT JOIN DOSSIER_PROJET_COPI DPCOPI ON PI.dp_copi = DPCOPI.dp_copi
+
+JOIN isac_sous_tache isst ON isst.pid = lb.pid
+JOIN isac_etape iet ON isst.etape = iet.etape
+JOIN isac_tache ita ON isst.tache = ita.tache
+
+
+JOIN 
+	(SELECT
+		i.ident,
+		i.sous_tache,
+		s.CPIDENT CPIDENT,
+		s.CODSG DPG_ress,
+		s.FIDENT FIDENT,
+		r.RNOM RNOM,
+		s.PRESTATION,
+		l.SOCCONT SOCCONT,
+		l.NUMCONT NUMCONT,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '01', i.cusag, 0)) jan,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '02', i.cusag, 0)) fev,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '03', i.cusag, 0)) mar,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '04', i.cusag, 0)) avr,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '05', i.cusag, 0)) mai,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '06', i.cusag, 0)) jun,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '07', i.cusag, 0)) jul,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '08', i.cusag, 0)) aou,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '09', i.cusag, 0)) sep,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '10', i.cusag, 0)) oct,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '11', i.cusag, 0)) nov,
+		SUM(DECODE(TO_CHAR(i.cdeb, 'MM'), '12', i.cusag, 0)) dec
+
+	FROM isac_consomme i
+	JOIN datdebex d ON TO_CHAR(i.cdeb, 'YYYY') = TO_CHAR(d.datdebex, 'YYYY')
+	--FAD QC 1883
+	LEFT JOIN SITU_RESS s ON s.ident = i.ident AND (trunc(i.cdeb)>=trunc(s.datsitu)) AND (trunc(i.cdeb)<=trunc(s.datdep) or s.datdep is null)
+	LEFT JOIN ressource r on s.fident = r.ident
+	LEFT JOIN ligne_cont l on s.fident = l.ident  AND s.datsitu >= l.lresdeb AND s.datdep <= l.lresfin
+
+	GROUP BY
+		i.ident,
+		i.sous_tache,
+		s.CPIDENT,
+		s.CODSG,
+		s.FIDENT,
+		r.RNOM,
+		s.PRESTATION,
+		l.SOCCONT,
+		l.NUMCONT
+	)
+	cons ON isst.sous_tache = cons.sous_tache
+JOIN ressource ress ON cons.ident = ress.ident
+
+&P_WHERE
+
+ORDER BY isst.pid ,
+	iet.ecet,
+	ita.acta ,
+	isst.acst,
+	cons.ident;]]>
+      </select>
+      <displayInfo x="0.35400" y="0.08337" width="0.89575" height="0.20837"/>
+      <group name="G_ligne">
+        <displayInfo x="0.09143" y="0.82288" width="1.40857" height="4.87402"
+        />
+        <dataItem name="ligne" datatype="vchar2" columnOrder="13" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ligne">
+          <dataDescriptor expression="isst.pid" descriptiveExpression="LIGNE"
+           order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_ligne" datatype="vchar2" columnOrder="14"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Ligne">
+          <dataDescriptor expression="lb.pnom"
+           descriptiveExpression="LIB_LIGNE" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="etape" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="15" width="2"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Etape">
+          <dataDescriptor expression="iet.ecet" descriptiveExpression="ETAPE"
+           order="3" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="type_etape" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="39" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type Etape">
+          <dataDescriptor expression="iet.typetape"
+           descriptiveExpression="TYPE_ETAPE" order="4"
+           oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_etape" datatype="vchar2" columnOrder="16"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Etape">
+          <dataDescriptor expression="iet.libetape"
+           descriptiveExpression="LIB_ETAPE" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tache" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="17" width="2"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Tache">
+          <dataDescriptor expression="ita.acta" descriptiveExpression="TACHE"
+           order="6" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_tache" datatype="vchar2" columnOrder="18"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Tache">
+          <dataDescriptor expression="ita.libtache"
+           descriptiveExpression="LIB_TACHE" order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sous_tache" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="19" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sous Tache">
+          <dataDescriptor expression="isst.acst"
+           descriptiveExpression="SOUS_TACHE" order="8"
+           oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_sous_tache" datatype="vchar2" columnOrder="20"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Sous Tache">
+          <dataDescriptor expression="isst.asnom"
+           descriptiveExpression="LIB_SOUS_TACHE" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="type" datatype="vchar2" columnOrder="21" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type">
+          <dataDescriptor expression="isst.aist" descriptiveExpression="TYPE"
+           order="10" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="zone_libre" datatype="vchar2" columnOrder="38"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Zone Libre">
+          <dataDescriptor expression="isst.param_local"
+           descriptiveExpression="ZONE_LIBRE" order="11" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="imputation" datatype="vchar2" columnOrder="22"
+         width="4" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Imputation">
+          <dataDescriptor
+           expression="DECODE ( SUBSTR ( NVL ( isst.aist , &apos;  &apos; ) , 1 , 2 ) , &apos;FF&apos; , SUBSTR ( isst.aist , 3 , 4 ) , isst.pid )"
+           descriptiveExpression="IMPUTATION" order="12" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpg_ligne" oracleDatatype="number" columnOrder="23"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg_ligne">
+          <dataDescriptor expression="lb.codsg"
+           descriptiveExpression="DPG_ligne" order="13"
+           oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom" datatype="vchar2" columnOrder="24" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nom">
+          <dataDescriptor expression="ress.rnom" descriptiveExpression="NOM"
+           order="14" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="code_ress" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ress">
+          <dataDescriptor expression="cons.ident"
+           descriptiveExpression="CODE_RESS" order="15"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RESP_ress" oracleDatatype="number" columnOrder="40"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="RESP_ress">
+          <dataDescriptor expression="cons.CPIDENT"
+           descriptiveExpression="RESP_ress" order="16"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ID_forfait" oracleDatatype="number" columnOrder="41"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Id Forfait">
+          <dataDescriptor expression="cons.FIDENT"
+           descriptiveExpression="ID_FORFAIT" order="17"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_forfait" datatype="vchar2" columnOrder="42"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Forfait">
+          <dataDescriptor expression="cons.RNOM"
+           descriptiveExpression="LIB_FORFAIT" order="18" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Societe" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="43" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Societe">
+          <dataDescriptor expression="cons.SOCCONT"
+           descriptiveExpression="SOCIETE" order="19"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="num_contrat" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="44" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Num Contrat">
+          <dataDescriptor expression="cons.NUMCONT"
+           descriptiveExpression="NUM_CONTRAT" order="20"
+           oracleDatatype="aFixedChar" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="jan" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jan">
+          <dataDescriptor expression="cons.jan" descriptiveExpression="JAN"
+           order="21" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fev" oracleDatatype="number" columnOrder="27"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Fev">
+          <dataDescriptor expression="cons.fev" descriptiveExpression="FEV"
+           order="22" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mar" oracleDatatype="number" columnOrder="28"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mar">
+          <dataDescriptor expression="cons.mar" descriptiveExpression="MAR"
+           order="23" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="avr" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Avr">
+          <dataDescriptor expression="cons.avr" descriptiveExpression="AVR"
+           order="24" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mai" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mai">
+          <dataDescriptor expression="cons.mai" descriptiveExpression="MAI"
+           order="25" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="jun" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jun">
+          <dataDescriptor expression="cons.jun" descriptiveExpression="JUN"
+           order="26" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="jul" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jul">
+          <dataDescriptor expression="cons.jul" descriptiveExpression="JUL"
+           order="27" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="aou" oracleDatatype="number" columnOrder="33"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Aou">
+          <dataDescriptor expression="cons.aou" descriptiveExpression="AOU"
+           order="28" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sep" oracleDatatype="number" columnOrder="34"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sep">
+          <dataDescriptor expression="cons.sep" descriptiveExpression="SEP"
+           order="29" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="oct" oracleDatatype="number" columnOrder="35"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Oct">
+          <dataDescriptor expression="cons.oct" descriptiveExpression="OCT"
+           order="30" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nov" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nov">
+          <dataDescriptor expression="cons.nov" descriptiveExpression="NOV"
+           order="31" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dec" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dec">
+          <dataDescriptor expression="cons.dec" descriptiveExpression="DEC"
+           order="32" oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande" datatype="vchar2" columnOrder="45"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demande" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande&quot;"/>
+          <dataDescriptor
+           expression="DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL,( DECODE ( PI.PROJAXEMETIER, NULL, ( DECODE(ita.TACHEAXEMETIER, NULL, NULL, ita.TACHEAXEMETIER) ), PI.PROJAXEMETIER) ) , DPCOPI.DPCOPIAXEMETIER)"
+           descriptiveExpression="REF_DEMANDE" order="33" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demandeLib" datatype="vchar2" columnOrder="46"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demandeLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demandeLib&quot;"/>
+          <dataDescriptor
+           expression="DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL, ( DECODE ( PI.PROJAXEMETIER, NULL, ( DECODE ( ita.TACHEAXEMETIER,NULL,NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( ita.TACHEAXEMETIER )  AND ROWNUM = 1 ) , NULL,&apos;???&apos;,DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( ita.TACHEAXEMETIER ) AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( ita.TACHEAXEMETIER )  AND ROWNUM = 1) )   ) ) ) , DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) ) )   )  , DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1 ) , NULL, &apos;???&apos; ,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1  )  )  )"
+           descriptiveExpression="REF_DEMANDELIB" order="34" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TypeEtapeLib" datatype="vchar2" columnOrder="47"
+         width="60" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TypeEtapeLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TypeEtapeLib&quot;"/>
+          <dataDescriptor
+           expression="( SELECT LIBTYET FROM TYPE_ETAPE WHERE iet.typetape = TYPE_ETAPE.TYPETAP AND ROWNUM = 1 )"
+           descriptiveExpression="TYPE_ETAPE_LIB" order="35" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierCode" datatype="vchar2"
+         columnOrder="48" width="50" defaultWidth="10000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierCode&quot;"/>
+          <dataDescriptor expression="DPCOPI.DPCOPIAXEMETIER"
+           descriptiveExpression="DPCOPIAXEMETIERCODE" order="36" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierLib" datatype="vchar2" columnOrder="49"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierLib&quot;"/>
+          <dataDescriptor
+           expression="DECODE ( DPCOPI.DPCOPIAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1 )  ))"
+           descriptiveExpression="DPCOPIAXEMETIERLIB" order="37" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierCode" datatype="vchar2" columnOrder="50"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierCode&quot;"/>
+          <dataDescriptor expression="PI.PROJAXEMETIER"
+           descriptiveExpression="PROJAXEMETIERCODE" order="38" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierLib" datatype="vchar2" columnOrder="51"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierLib&quot;"/>
+          <dataDescriptor
+           expression="DECODE ( PI.PROJAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( PI.PROJAXEMETIER )  AND ROWNUM = 1 )  )   )"
+           descriptiveExpression="PROJAXEMETIERLIB" order="39" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TacheAxeMetierCode" datatype="vchar2" columnOrder="52"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TacheAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TacheAxeMetierCode&quot;"/>
+          <dataDescriptor expression="ita.TACHEAXEMETIER"
+           descriptiveExpression="TACHEAXEMETIERCODE" order="40" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TacheAxeMetierLib" datatype="vchar2" columnOrder="53"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TacheAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TacheAxeMetierLib&quot;"/>
+          <dataDescriptor
+           expression="DECODE ( ita.TACHEAXEMETIER, NULL, NULL, DECODE (  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( ita.TACHEAXEMETIER )  AND ROWNUM = 1 ) , NULL, &apos;???&apos;,  ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM )  = TRIM ( ita.TACHEAXEMETIER )  AND ROWNUM = 1 )  )   )"
+           descriptiveExpression="TACHEAXEMETIERLIB" order="41" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<!-- FAD PPM 63559 : Ajout de deux colonnes -->
+		<dataItem name="DPG_ress" datatype="vchar2" columnOrder="54"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DPG_ress" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG_ress&quot;"/>
+          <dataDescriptor
+           expression="cons.DPG_ress"
+           descriptiveExpression="DPG_ress" order="42" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="RESP_ligne" datatype="vchar2" columnOrder="55"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="RESP_ligne" breakOrder="none">
+          <xmlSettings xmlTag="&quot;RESP_ligne&quot;"/>
+          <dataDescriptor
+           expression="lb.pcpi"
+           descriptiveExpression="RESP_ligne" order="43" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<!-- FAD PPM 63559 : Fin -->
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" orientation="portrait"/>
+  <section name="main">
+    <body width="8.00000" height="9.50000">
+      <location x="0.25000" y="0.75000"/>
+      <frame name="M_G_ligne_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.81250" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_ligne" source="G_ligne"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.81250"
+           height="0.25000"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_ligne" source="ligne" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.00000" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_jul" source="jul" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.00000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_lib_ligne" source="lib_ligne" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.31250" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_aou" source="aou" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.25000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_sep" source="sep" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.50000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_etape" source="etape" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.75000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_oct" source="oct" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="0.75000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nov" source="nov" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="1.00000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_type_etape" source="type_etape" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="1.18750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_dec" source="dec" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="1.25000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_lib_etape" source="lib_etape" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="1.62500" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_tache" source="tache" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="2.06250" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_lib_tache" source="lib_tache" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="2.50000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_sous_tache" source="sous_tache" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="2.93750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_lib_sous_tache" source="lib_sous_tache"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="3.25000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_type" source="type" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="3.68750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_zone_libre" source="zone_libre" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="4.00000" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_imputation" source="imputation" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="4.31250" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_dpg" source="dpg_ligne" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="4.75000" y="0.31250" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nom" source="nom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="5.43750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_code_ress" source="code_ress" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="5.87500" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_jan" source="jan" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="6.43750" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_fev" source="fev" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="6.68750" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_mar" source="mar" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="6.93750" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_avr" source="avr" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="7.18750" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_mai" source="mai" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="7.43750" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_jun" source="jun" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="4"/>
+            <geometryInfo x="7.68750" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_ligne_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.81250"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_ligne" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Ligne]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_lib_ligne" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.31250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Lib Ligne]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_etape" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Etape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_type_etape" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Type Etape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_lib_etape" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.62500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Lib Etape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_lib_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.50000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Lib Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_sous_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Sous
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_lib_sous_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.25000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Lib Sous
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_type" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.68750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Type]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_zone_libre" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.00000" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Zone
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Libre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_imputation" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.31250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Imputation]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dpg" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.75000" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Dpg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.43750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Nom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_code_ress" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Code Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_jan" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.43750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Jan]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_fev" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.68750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Fev]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_mar" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.93750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Mar]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_avr" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.18750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Avr]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_mai" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.43750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Mai]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_jun" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.68750" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Jun]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_jul" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Jul]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_aou" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.25000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Aou]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_sep" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.50000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Sep]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_oct" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Oct]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nov" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Nov]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.25000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Arial" size="4" bold="yes"/>
+              <string>
+              <![CDATA[Dec]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="OR$_BPAGENUM_ARIALBLD_SEC2" minWidowLines="1"
+       templateSection="main">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.16650" y="10.45825" width="2.33337"
+         height="0.16663"/>
+        <visualSettings lineWidth="1"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[Page &<PhysicalPageNumber>]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.35730" y="0.25000" width="1.78528" height="0.22925"
+        />
+        <textSegment>
+          <font face="Arial" size="14"/>
+          <string>
+          <![CDATA[Consommes]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_chefsProjets VARCHAR2(4000);--PPM 63485 : modification de taille 4000
+begin
+	l_chefsProjets := pack_global.lire_globaldata(:P_GLOBAL).chefprojet;
+	--srw.message(1, 'Chefs de projets : ' || l_chefsProjets);
+
+	--srw.message(1,:P_where);
+	--FAD QC 1880
+	:P_WHERE := 'WHERE (INSTR(''' || l_chefsProjets || ''' ,TO_CHAR(lb.pcpi, ''FM00000'')) > 0 ';
+	:P_WHERE := :P_WHERE || 'OR cons.ident in ( ';
+	:P_WHERE := :P_WHERE || 'select distinct f.ident ';
+	:P_WHERE := :P_WHERE || 'from situ_ress f, datdebex d ';
+	:P_WHERE := :P_WHERE || 'where ';
+	:P_WHERE := :P_WHERE || '((TRUNC(f.datsitu,''YEAR'') <= TRUNC(d.DATDEBEX,''YEAR'') OR f.datsitu IS NULL) ';
+	:P_WHERE := :P_WHERE || 'AND (TRUNC(f.datdep,''YEAR'') >= TRUNC(d.DATDEBEX,''YEAR'') OR f.datdep IS NULL)) ';
+	:P_WHERE := :P_WHERE || 'and ((INSTR(''' || l_chefsProjets || ''', TO_CHAR(f.cpident, ''FM00000''))>0) ';
+	:P_WHERE := :P_WHERE || 'or(INSTR(''' || l_chefsProjets || ''', TO_CHAR(f.ident, ''FM00000''))>0))))';
+
+	return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   templateName="draft" sectionTitle="Consommes"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

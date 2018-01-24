@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_connexions" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_CONNEXIONS" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="2000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT DISTINCT rl.user_rtfe, TO_CHAR(r.ident), r.nom, r.prenom , TO_CHAR(rl.mois,'mm/yyyy'), rl.nbr_connexion
+FROM RTFE_LOG rl, RTFE r
+WHERE UPPER(rl.user_rtfe) = UPPER(r.user_rtfe)
+&P_WHERE
+UNION
+SELECT DISTINCT rl.user_rtfe, '', r.nom, r.prenom, TO_CHAR(rl.mois,'mm/yyyy'), rl.nbr_connexion
+FROM RTFE_LOG rl, RTFE_ERROR r
+WHERE UPPER(rl.user_rtfe) = UPPER(r.user_rtfe)
+&P_WHERE
+UNION
+SELECT rl.user_rtfe, '', '', '', TO_CHAR(rl.mois,'mm/yyyy'), rl.nbr_connexion
+FROM RTFE_LOG rl
+WHERE NOT EXISTS  (SELECT * FROM RTFE WHERE UPPER(user_rtfe) = UPPER(rl.user_rtfe) )
+AND NOT EXISTS  (SELECT * FROM RTFE_ERROR WHERE UPPER(user_rtfe) = UPPER(rl.user_rtfe) )
+&P_WHERE
+ORDER BY 1;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_user_rtfe1">
+        <displayInfo x="1.22046" y="1.68958" width="1.53845" height="3.33594"
+        />
+        <dataItem name="user_rtfe1" datatype="vchar2" columnOrder="13"
+         width="60" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="User Rtfe">
+          <xmlSettings xmlTag="&quot;USER_RTFE&quot;"/>
+          <dataDescriptor expression="rl.user_rtfe"
+           descriptiveExpression="USER_RTFE" order="1" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TO_CHAR_r_ident" datatype="vchar2" columnOrder="17"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="To Char R Ident">
+          <xmlSettings xmlTag="&quot;RIDENT&quot;"/>
+          <dataDescriptor expression="TO_CHAR ( r.ident )"
+           descriptiveExpression="TO_CHAR(R.IDENT)" order="2" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom1" datatype="vchar2" columnOrder="11" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom">
+          <xmlSettings xmlTag="&quot;NOM&quot;"/>
+          <dataDescriptor expression="r.nom" descriptiveExpression="NOM"
+           order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom1" datatype="vchar2" columnOrder="12" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rprenom">
+          <xmlSettings xmlTag="&quot;PRENOM&quot;"/>
+          <dataDescriptor expression="r.prenom" descriptiveExpression="PRENOM"
+           order="4" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TO_CHAR_rl_mois_mm_yyyy" datatype="vchar2"
+         columnOrder="18" width="7" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="To Char Rl Mois Mm Yyyy">
+          <xmlSettings xmlTag="&quot;MOIS&quot;"/>
+          <dataDescriptor
+           expression="TO_CHAR ( rl.mois , &apos;mm/yyyy&apos; )"
+           descriptiveExpression="TO_CHAR(RL.MOIS,&apos;MM/YYYY&apos;)"
+           order="5" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nbr_connexion" oracleDatatype="number"
+         columnOrder="19" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Nbr Connexion">
+          <xmlSettings xmlTag="&quot;NOMBRE_CONNEXIONS&quot;"/>
+          <dataDescriptor expression="rl.nbr_connexion"
+           descriptiveExpression="NBR_CONNEXION" order="6"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <margin>
+      <frame name="M_G_user_rtfe1_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.31250" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_user_rtfe1" source="G_user_rtfe1"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.37500" width="7.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_user_rtfe1" source="user_rtfe1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="0.00000" y="0.37500" width="0.87500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TO_CHAR_r_ident" source="TO_CHAR_r_ident"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="1.00000" y="0.37500" width="1.31250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nom1" source="nom1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="2.43750" y="0.37500" width="0.87500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_prenom1" source="prenom1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="3.43750" y="0.37500" width="0.87500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TO_CHAR_rl_mois_mm_yyyy"
+           source="TO_CHAR_rl_mois_mm_yyyy" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="4.43750" y="0.37500" width="1.93750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nbr_connexion" source="nbr_connexion"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="6.50000" y="0.37500" width="0.81250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_user_rtfe1_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.31250"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_user_rtfe1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.87500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[User Rtfe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TO_CHAR_r_ident" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00000" y="0.00000" width="1.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[To Char R Ident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nom1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.43750" y="0.00000" width="0.87500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_prenom1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.00000" width="0.87500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[Rprenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TO_CHAR_rl_mois_mm_yyyy" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.43750" y="0.00000" width="1.93750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[To Char Rl Mois Mm Yyyy]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nbr_connexion" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.50000" y="0.00000" width="0.81250"
+             height="0.37500"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[Nbr
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[Connexion]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <text name="B_OR$BODY_SECTION" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="3.87476" y="0.25000" width="0.75037"
+           height="0.16675"/>
+          <textSegment>
+            <font face="Courier New" size="10"/>
+            <string>
+            <![CDATA[x_Resserr]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.05054" y="0.23962" width="2.02075" height="0.21875"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes" underline="yes"/>
+      <string>
+      <![CDATA[Paramètres de lancement]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.42712" y="0.81250" width="2.10413" height="0.37500"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de début:
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.41675" y="1.44800" width="2.10413" height="0.38538"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de fin:
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_2" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.55212" y="0.86462" width="1.17700" height="0.25000"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_1" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.55261" y="1.43579" width="1.17700" height="0.25000"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+  
+where1 varchar2(400);
+where2 varchar2(400);
+l_date varchar2(10);
+
+begin
+  where1 :='';
+  where2 :='';
+  
+   IF (:P_PARAM6 is not null or :P_PARAM6<>'') THEN
+  	  where1 := ' AND rl.MOIS >= to_date('''||:P_PARAM6||''',''mm/yyyy'') '; 
+  END IF; 
+
+  IF (:P_PARAM7 is not null or :P_PARAM7<>'') THEN 
+  		where2 := ' AND rl.MOIS <= to_date('''||:P_PARAM7||''',''mm/yyyy'') '; 
+  END IF;
+	 	
+  :P_WHERE := where1 || where2;
+
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="x_Resserr"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

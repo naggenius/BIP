@@ -1,0 +1,1271 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_suivifinancier" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_SUIVIFINANCIER" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     precision="10" label="P Where" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10"
+     initialValue="X116028;DIR;11050;3261212;01 ;00000000000;102323190;0;36662;;;;;;ges,cli,isac,ginv,act,fin,supach,acdet,fidet,admin,copi;;dir,me,mo,isacm,inv,ach,suiviact,rbip,ref,ore,req;;031010040"
+     label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="512"
+     precision="10" label="P Perime" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_HABILI_DP" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_P" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_A" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MENU" datatype="character" width="52"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HAB" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMCLI" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMO" datatype="character" width="1024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT DISTINCT
+ 	lb.pid IdProj,
+	lb.pnom LibProj,
+	lb.typproj TypProj,
+	lb.codsg CodSect,
+	si.libdsg LibDPG,
+	lb.clicode CodMO,
+	lb.metier CodeMetier,
+	lb.icpi Projet,
+	pi.ilibel LibProjet,
+	lb.airt Applic,
+	lb.dpcode CodDossProj,
+	dp.dplib LibDosProj,
+	NVL(cc.SG_AA, 0) SG_AA,
+	NVL(cc.SSII_AA, 0) SSII_AA,
+	NVL(cc.SG_envAA, 0) SG_envAA,
+	NVL(cc.SSII_envAA, 0) SSII_envAA,
+	NVL(cc.SG_jhAA, 0) SG_jhAA,
+	NVL(cc.SSII_jhAA, 0) SSII_jhAA,
+	
+	NVL(cc1.SG_AAm1, 0) SG_AAm1,
+	NVL(cc1.SSII_AAm1, 0) SSII_AAm1,
+	NVL(cc1.SG_envAAm1, 0)  SG_envAAm1,
+	NVL(cc1.SSII_envAAm1, 0) SSII_envAAm1,
+	NVL(cc1.SG_jhAAm1, 0) SG_jhAAm1,
+	NVL(cc1.SSII_jhAAm1, 0) SSII_jhAAm1,
+	
+	NVL(cc2.SG_avAAm1, 0) SG_avAAm1,
+	NVL(cc2.SSII_avAAm1, 0) SSII_avAAm1,
+	NVL(cc2.SG_envavAAm1, 0) SG_envavAAm1,
+	NVL(cc2.SSII_envavAAm1, 0) SSII_envavAAm1,
+	NVL(cc2.SG_jhavAAm1, 0) SG_jhavAAm1,
+	NVL(cc2.SSII_jhavAAm1, 0) SSII_jhavAAm1
+FROM
+	ligne_bip lb,
+	proj_info pi,
+	struct_info si,
+	dossier_projet  dp,
+	(SELECT 	pid,  
+		NVL(consoft_sg, 0) SG_AA, 
+		NVL(consoft_ssii, 0) SSII_AA,
+		NVL(consoenv_sg, 0) SG_envAA,
+		NVL(consoenv_ssii, 0) SSII_envAA,
+		NVL(consojh_sg, 0) SG_jhAA, 
+		NVL(consojh_ssii, 0) SSII_jhAA
+	FROM	synthese_activite, datdebex
+	WHERE  annee = to_number(to_char(moismens,'YYYY'))
+	) cc,
+	(SELECT 	pid,  
+		NVL(consoft_sg, 0) SG_AAm1, 
+		NVL(consoft_ssii, 0) SSII_AAm1,
+		NVL(consoenv_sg, 0) SG_envAAm1,
+		NVL(consoenv_ssii, 0) SSII_envAAm1,
+		NVL(consojh_sg, 0) SG_jhAAm1, 
+		NVL(consojh_ssii, 0) SSII_jhAAm1
+	FROM	synthese_activite, datdebex
+	WHERE  annee = (to_number(to_char(moismens,'YYYY')) - 1)
+	) cc1,
+	(SELECT 	pid,  
+		SUM(NVL(consoft_sg, 0)) SG_avAAm1, 
+		SUM(NVL(consoft_ssii, 0)) SSII_avAAm1,
+		SUM(NVL(consoenv_sg, 0)) SG_envavAAm1,
+		SUM(NVL(consoenv_ssii, 0)) SSII_envavAAm1,
+		SUM(NVL(consojh_sg, 0)) SG_jhavAAm1, 
+		SUM(NVL(consojh_ssii, 0)) SSII_jhavAAm1
+	FROM	synthese_activite, datdebex
+	WHERE  annee < (to_number(to_char(moismens,'YYYY')) - 1)
+	GROUP BY pid	
+	)cc2
+WHERE
+	--jointure ligne_bip et proj_info
+	 lb.icpi = pi.icpi
+	--jointure ligne_bip et struct_info
+	AND lb.codsg = si.codsg
+	--jointure ligne_bip et dossier_projet
+	AND lb.dpcode = dp.dpcode
+	and lb.pid =cc.pid (+)
+	-- Année n-1
+	and lb.pid =cc1.pid (+)
+	-- Années précédentes à n-1
+	and lb.pid =cc2.pid (+)
+	-- Selon les périmètres d'habilitation
+	&P_WHERE
+ORDER BY lb.pid]]>
+      </select>
+      <displayInfo x="1.72876" y="0.15771" width="0.69995" height="0.19995"/>
+      <group name="G_IdProj">
+        <displayInfo x="1.42505" y="0.85767" width="2.49158" height="4.87402"
+        />
+        <dataItem name="IdProj" datatype="vchar2" columnOrder="22" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pid">
+          <xmlSettings xmlTag="IdProj"/>
+          <dataDescriptor expression="lb.pid" descriptiveExpression="IDPROJ"
+           order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LibProj" datatype="vchar2" columnOrder="23" width="30"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pnom" breakOrder="none">
+          <xmlSettings xmlTag="LibProj"/>
+          <dataDescriptor expression="lb.pnom" descriptiveExpression="LIBPROJ"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="typproj" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="24" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Typproj" breakOrder="none">
+          <xmlSettings xmlTag="TypProj"/>
+          <dataDescriptor expression="lb.typproj"
+           descriptiveExpression="TYPPROJ" order="3"
+           oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CodSect" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg" breakOrder="none">
+          <xmlSettings xmlTag="CodSect"/>
+          <dataDescriptor expression="lb.codsg"
+           descriptiveExpression="CODSECT" order="4" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LibDPG" datatype="vchar2" columnOrder="26" width="30"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdsg" breakOrder="none">
+          <xmlSettings xmlTag="LibDPG"/>
+          <dataDescriptor expression="si.libdsg"
+           descriptiveExpression="LIBDPG" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CodMO" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="27" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clicode" breakOrder="none">
+          <xmlSettings xmlTag="CodMO"/>
+          <dataDescriptor expression="lb.clicode"
+           descriptiveExpression="CODMO" order="6" oracleDatatype="aFixedChar"
+           width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CodeMetier" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="28" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="CodeMetier"/>
+          <dataDescriptor expression="lb.metier"
+           descriptiveExpression="CODEMETIER" order="7"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Projet" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="29" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Icpi" breakOrder="none">
+          <xmlSettings xmlTag="Projet"/>
+          <dataDescriptor expression="lb.icpi" descriptiveExpression="PROJET"
+           order="8" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LibProjet" datatype="vchar2" columnOrder="30"
+         width="50" defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ilibel" breakOrder="none">
+          <xmlSettings xmlTag="LibProjet"/>
+          <dataDescriptor expression="pi.ilibel"
+           descriptiveExpression="LIBPROJET" order="9" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Applic" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="31" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Airt" breakOrder="none">
+          <xmlSettings xmlTag="Applic"/>
+          <dataDescriptor expression="lb.airt" descriptiveExpression="APPLIC"
+           order="10" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CodDossProj" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dpcode" breakOrder="none">
+          <xmlSettings xmlTag="CodDossProj"/>
+          <dataDescriptor expression="lb.dpcode"
+           descriptiveExpression="CODDOSSPROJ" order="11"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LibDosProj" datatype="vchar2" columnOrder="33"
+         width="50" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dplib" breakOrder="none">
+          <xmlSettings xmlTag="LibDosProj"/>
+          <dataDescriptor expression="dp.dplib"
+           descriptiveExpression="LIBDOSPROJ" order="12" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_AA" oracleDatatype="number" columnOrder="34"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Aam1" breakOrder="none">
+          <xmlSettings xmlTag="SGEurAA"/>
+          <dataDescriptor expression="NVL ( cc.SG_AA , 0 )"
+           descriptiveExpression="SG_AA" order="13" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_AA" oracleDatatype="number" columnOrder="35"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ssii Aam1" breakOrder="none">
+          <xmlSettings xmlTag="SSIIEurAA"/>
+          <dataDescriptor expression="NVL ( cc.SSII_AA , 0 )"
+           descriptiveExpression="SSII_AA" order="14" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_envAA" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Envaam1" breakOrder="none">
+          <xmlSettings xmlTag="SGEurEnvAA"/>
+          <dataDescriptor expression="NVL ( cc.SG_envAA , 0 )"
+           descriptiveExpression="SG_ENVAA" order="15" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_envAA" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ssii Envaam1" breakOrder="none">
+          <xmlSettings xmlTag="SSIIEurEnvAA"/>
+          <dataDescriptor expression="NVL ( cc.SSII_envAA , 0 )"
+           descriptiveExpression="SSII_ENVAA" order="16"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_jhAA" oracleDatatype="number" columnOrder="46"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sg Jhaa">
+          <dataDescriptor expression="NVL ( cc.SG_jhAA , 0 )"
+           descriptiveExpression="SG_JHAA" order="17" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_jhAA" oracleDatatype="number" columnOrder="47"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ssii Jhaa">
+          <dataDescriptor expression="NVL ( cc.SSII_jhAA , 0 )"
+           descriptiveExpression="SSII_JHAA" order="18"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_AAm1" oracleDatatype="number" columnOrder="42"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Aam1" breakOrder="none">
+          <xmlSettings xmlTag="SGEurAAm1"/>
+          <dataDescriptor expression="NVL ( cc1.SG_AAm1 , 0 )"
+           descriptiveExpression="SG_AAM1" order="19" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_AAm1" oracleDatatype="number" columnOrder="43"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ssii Aam1" breakOrder="none">
+          <xmlSettings xmlTag="SSIIEurAAm1"/>
+          <dataDescriptor expression="NVL ( cc1.SSII_AAm1 , 0 )"
+           descriptiveExpression="SSII_AAM1" order="20"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_envAAm1" oracleDatatype="number" columnOrder="44"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Envaam1" breakOrder="none">
+          <xmlSettings xmlTag="SGEurEnvAAm1"/>
+          <dataDescriptor expression="NVL ( cc1.SG_envAAm1 , 0 )"
+           descriptiveExpression="SG_ENVAAM1" order="21"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_envAAm1" oracleDatatype="number" columnOrder="45"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ssii Envaam1" breakOrder="none">
+          <xmlSettings xmlTag="SSIIEurEnvAAm1"/>
+          <dataDescriptor expression="NVL ( cc1.SSII_envAAm1 , 0 )"
+           descriptiveExpression="SSII_ENVAAM1" order="22"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_jhAAm1" oracleDatatype="number" columnOrder="48"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sg Jhaam1">
+          <dataDescriptor expression="NVL ( cc1.SG_jhAAm1 , 0 )"
+           descriptiveExpression="SG_JHAAM1" order="23"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_jhAAm1" oracleDatatype="number" columnOrder="49"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ssii Jhaam1">
+          <dataDescriptor expression="NVL ( cc1.SSII_jhAAm1 , 0 )"
+           descriptiveExpression="SSII_JHAAM1" order="24"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_avAAm1" oracleDatatype="number" columnOrder="38"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Avaam1" breakOrder="none">
+          <xmlSettings xmlTag="SGEuravAAm1"/>
+          <dataDescriptor expression="NVL ( cc2.SG_avAAm1 , 0 )"
+           descriptiveExpression="SG_AVAAM1" order="25"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_avAAm1" oracleDatatype="number" columnOrder="39"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ssii Avaam1" breakOrder="none">
+          <xmlSettings xmlTag="SSIIEuravAAm1"/>
+          <dataDescriptor expression="NVL ( cc2.SSII_avAAm1 , 0 )"
+           descriptiveExpression="SSII_AVAAM1" order="26"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_envavAAm1" oracleDatatype="number" columnOrder="40"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sg Envavaam1" breakOrder="none">
+          <xmlSettings xmlTag="SGEurenvavAAm1"/>
+          <dataDescriptor expression="NVL ( cc2.SG_envavAAm1 , 0 )"
+           descriptiveExpression="SG_ENVAVAAM1" order="27"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_envavAAm1" oracleDatatype="number"
+         columnOrder="41" width="22" defaultWidth="40000"
+         defaultHeight="10000" columnFlags="0" defaultLabel="Ssii Envavaam1"
+         breakOrder="none">
+          <xmlSettings xmlTag="SSIIEurenvavAAm1"/>
+          <dataDescriptor expression="NVL ( cc2.SSII_envavAAm1 , 0 )"
+           descriptiveExpression="SSII_ENVAVAAM1" order="28"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SG_jhavAAm1" oracleDatatype="number" columnOrder="50"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sg Jhavaam1">
+          <dataDescriptor expression="NVL ( cc2.SG_jhavAAm1 , 0 )"
+           descriptiveExpression="SG_JHAVAAM1" order="29"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SSII_jhavAAm1" oracleDatatype="number"
+         columnOrder="51" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Ssii Jhavaam1">
+          <dataDescriptor expression="NVL ( cc2.SSII_jhavAAm1 , 0 )"
+           descriptiveExpression="SSII_JHAVAAM1" order="30"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_IdProj_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.31250" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_IdProj" source="G_IdProj"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.31250"
+           height="0.25000"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_IdProj" source="IdProj" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.31250" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_envAAm1" source="SG_envAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.43750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LibProj" source="LibProj" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.25000" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_typproj" source="typproj" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.56250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_envAAm1" source="SSII_envAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.50000" y="0.43750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CodSect" source="CodSect" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.93750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_jhAAm1" source="SG_jhAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.06250" y="0.43750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LibDPG" source="LibDPG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.31250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_jhAAm1" source="SSII_jhAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.50000" y="0.43750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CodMO" source="CodMO" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.68750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CodeMetier" source="CodeMetier" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.06250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_avAAm1" source="SG_avAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.00000" y="0.43750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Projet" source="Projet" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.43750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_avAAm1" source="SSII_avAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.43750" y="0.43750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LibProjet" source="LibProjet" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.75000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_envavAAm1" source="SG_envavAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.43750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Applic" source="Applic" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.12500" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CodDossProj" source="CodDossProj" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.43750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_envavAAm1" source="SSII_envavAAm1"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.50000" y="0.43750" width="0.50000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LibDosProj" source="LibDosProj" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.81250" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_AA" source="SG_AA" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.12500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_jhavAAm1" source="SG_jhavAAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.12500" y="0.43750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_AA" source="SSII_AA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.50000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_jhavAAm1" source="SSII_jhavAAm1"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.62500" y="0.43750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_envAA" source="SG_envAA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.93750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_envAA" source="SSII_envAA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.31250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_jhAA" source="SG_jhAA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.68750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_jhAA" source="SSII_jhAA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.12500" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SG_AAm1" source="SG_AAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.56250" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SSII_AAm1" source="SSII_AAm1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.00000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_IdProj_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.31250"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_IdProj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LibProj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.25000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_typproj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Typproj]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CodSect" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.93750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LibDPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libdsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CodMO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.68750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Clicode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CodeMetier" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Projet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.43750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Icpi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LibProjet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.75000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ilibel]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Applic" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.12500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Airt]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CodDossProj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpcode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LibDosProj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.81250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dplib]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_AA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.12500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Aam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_AA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.50000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Aam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_envAA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.93750" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Envaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_envAA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.31250" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Envaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_jhAA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.68750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Jhaa]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_jhAA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.12500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Jhaa]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_AAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.56250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Aam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_AAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.00000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Aam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_envAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Envaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_envAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.50000" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Envaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_jhAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.06250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Jhaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_jhAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.50000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Jhaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_avAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.00000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Avaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_avAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.43750" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Avaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_envavAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Envavaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_envavAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.50000" y="0.18750" width="0.50000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Envavaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SG_jhavAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.12500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sg Jhavaam1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SSII_jhavAAm1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.62500" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ssii Jhavaam1]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_GLOBAL" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.54138" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+	:P_WHERE :=' ';
+	-- On récupère le menu courrant
+	:P_Menu := pack_global.lire_globaldata(:P_GLOBAL).menutil;
+	
+	IF (:P_MENU='MO') THEN				
+				:P_PERIMCLI:=pack_global.lire_perimcli(:P_GLOBAL);
+				:P_WHERE := ' AND (LB.clicode IN (SELECT clicode FROM vue_clicode_perimo where INSTR('''||:P_PERIMCLI||''', bdclicode) > 0 )) ';	
+					
+	ELSE
+	IF (:P_MENU<>'REF') THEN
+			
+		-- Si ce n'est pas le menu par référentiel, On fait le tri sur le périmètre ME
+		:P_PERIME:=pack_global.lire_perime(:P_GLOBAL);
+	
+		:P_WHERE :=' AND (   (lb.codsg IN (SELECT codsg FROM vue_dpg_perime WHERE INSTR('''||:P_PERIME||''',codbddpg) > 0 ) ) ) ';
+		
+	ELSE		
+
+		:P_HAB:='VIDE';
+
+	   -- Informations pour l'habilitation par référentiels
+		:P_habili_DP := pack_global.lire_doss_proj(:P_GLOBAL);
+	  :P_habili_P  := pack_global.lire_projet(:P_GLOBAL);
+	  :P_habili_A  := pack_global.lire_appli(:P_GLOBAL);
+
+	  IF (:P_habili_DP is null or :P_habili_DP='') THEN
+			  :P_habili_DP := 'VIDE';
+	  END IF;	
+	  IF (:P_habili_P is null or :P_habili_P='') THEN
+			  :P_habili_P := 'VIDE';
+	  END IF;	
+	  IF (:P_habili_A is null or :P_habili_A='') THEN
+			  :P_habili_A := 'VIDE';
+	  END IF;	
+  
+--		--srw.message(1,:P_habili_DP);
+--		--srw.message(1,:P_habili_P);
+--		--srw.message(1,:P_habili_A);
+  	
+	  -- Si on a une valeur égale à TOUS - on ne fait aucune Restriction
+	  IF (:P_habili_DP='TOUS' or :P_habili_P='TOUS' or :P_habili_A='TOUS' )THEN
+  		:P_HAB := '';
+  	ELSE	
+
+		  IF (:P_habili_DP<>'VIDE')THEN
+			  :P_HAB := ' lb.dpcode in ('||:P_habili_DP||') ';
+		  END IF;		
+		  -- Projet demandé
+		  -- On fait aussi le contrôle que sur le projet principal (icpir)
+		  IF (:P_habili_P<>'VIDE') THEN
+		  		IF (:P_HAB<>'VIDE') THEN  	
+		  			:P_HAB := :P_HAB 	||' OR ' ;
+		  		ELSE
+		  			:P_HAB := '' ;
+		  		END IF;	
+					:P_HAB := :P_HAB || ' (INSTR('''||:P_habili_P||''', lb.icpi) > 0) ';		  
+		  END IF;
+										
+			-- Application demandée
+		  -- On fait aussi le contrôle sur l'application principale
+		  IF (:P_habili_A<>'VIDE') THEN
+			  	IF (:P_HAB<>'VIDE') THEN  	
+			  		:P_HAB := :P_HAB 	||' OR ' ;
+		  		ELSE
+		  			:P_HAB := '' ;
+			  	END IF;	
+			 	  :P_HAB := :P_HAB ||' (INSTR('''||:P_habili_A||''', lb.airt) > 0) ' ; 
+		  END IF;
+		  
+		  -- On rajoute le 'AND devant P_HAB
+	  	IF (:P_HAB<>'VIDE') THEN  	
+		  		:P_WHERE := ' AND ( ' || :P_HAB || ' ) ' ;
+		  		--srw.message(1,:P_HAB);
+	  	ELSE 
+	  		:P_WHERE := '';
+	  	END IF;	
+		END IF;  		  
+
+		:P_CA_PAYEUR:= pack_global.lire_ca_payeur(:P_GLOBAL);
+			
+			-- On vérifie que le CA_PAYEUR n'est pas vide et qu'il ne contient pas TOUS
+			IF (NOT (:P_CA_PAYEUR IS NULL)) AND (NVL(:P_CA_PAYEUR, ' ') <> 'TOUS') THEN
+				:P_WHERE := :P_WHERE || ' AND lb.codcamo IN (SELECT codcamo FROM centre_activite WHERE codcamo IN (' 
+												|| :P_CA_PAYEUR || ') OR CANIV1 IN (' || :P_CA_PAYEUR 
+												|| ') OR CANIV2 IN (' || :P_CA_PAYEUR 
+												|| ') OR CANIV3 IN (' || :P_CA_PAYEUR 
+												|| ') OR CANIV4 IN (' || :P_CA_PAYEUR || ') )';
+			END IF;	
+					END IF;-- Fin si Menu = menu client
+						END IF;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

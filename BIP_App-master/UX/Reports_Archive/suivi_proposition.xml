@@ -1,0 +1,1957 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="suivi_proposition" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform0008" unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="SUIVI_PROPOSITION" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="250"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="4"
+     initialValue="2004" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="3"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="6"
+     precision="10" initialValue="27579" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="1"
+     precision="10" initialValue="O" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="number" width="1" precision="10"
+     initialValue="1" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="number" width="1" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="number" width="1" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM12" datatype="number" width="1" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_T_WHERE" datatype="character" width="100"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="character" width="150"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_TAUX" datatype="number" width="50" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT     DISTINCT  ca.clibrca clibrca,
+                ca.codcamo || ' - ' || LPAD(lig.codinv,3,'0') ligne,
+                lig.libelle libelle_inv,
+                lig.type || ' - ' || inv.lib_type type_inv,
+                LPAD(lr.codinv,3,'0') || ' - ' || LPAD(lr.codrea,2,'0')  lib_type,
+                decode(lr.codrea,null,'vide','ok') test,
+    lr.type_eng type_eng,
+                proj.icpi || ' - '|| proj.ilibel lib_proj,
+                ca.codcamo codcamo,
+                (inv.codposte|| ' - ' || p.lib_poste) poste,
+    lig.annee annee,
+                lig.demande propose_ht,
+    sum(lig.demande*decode(lig.not_tvarecup, null,(1+t1.tva/100*(1-tr.taux/100)) ,1+lig.not_tvarecup/100)) propose_htr,            
+    sum(lig.notifie*decode(lig.not_tvarecup, null,(1+t1.tva/100*(1-tr.taux/100)) ,1+lig.not_tvarecup/100)) budget
+       
+FROM      centre_activite ca,
+      ligne_investissement lig,
+      investissements inv,
+          ligne_realisation lr,
+          proj_info proj,
+      poste p,
+      taux_recup tr,
+      tva t1
+WHERE 
+--jointures
+inv.codposte=p.codposte
+AND ca.codcamo=lig.codcamo
+AND inv.codtype = lig.type
+AND lig.icpi=proj.icpi
+AND lr.codcamo(+)=lig.codcamo
+AND lr.codinv(+)=lig.codinv
+AND lr.annee(+)=lig.annee
+--
+AND tr.filcode = ca.filcode
+--AND tr.annee = lig.annee
+&P_T_WHERE
+AND t1.datetva =(select max(TVA.datetva) from tva where datetva <= pack_suivi_investissement.cherche_date_exercice)   
+--conditions
+--AND to_char(lig.annee)=:P_PARAM7
+&P_WHERE
+  
+GROUP BY 
+inv.codposte,
+p.lib_poste,
+ca.codcamo,
+ca.clibrca ,
+lig.type,
+lig.codinv ,
+lig.libelle,
+lr.codrea ,
+lr.codinv ,
+lig.demande,
+lr.type_eng ,
+inv.lib_type,
+proj.icpi,
+proj.ilibel,
+lig.annee,
+lig.not_tvarecup,
+t1.tva,
+tr.taux]]>
+      </select>
+      <displayInfo x="3.28104" y="0.23813" width="1.77788" height="0.50788"/>
+      <group name="G_codcamo">
+        <displayInfo x="0.23502" y="1.01048" width="3.21314" height="2.39613"
+        />
+        <dataItem name="codcamo" oracleDatatype="number" columnOrder="21"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo">
+          <dataDescriptor expression="ca.codcamo"
+           descriptiveExpression="CODCAMO" order="9" oracleDatatype="number"
+           width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="clibrca" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="13" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Clibrca">
+          <dataDescriptor expression="ca.clibrca"
+           descriptiveExpression="CLIBRCA" order="1"
+           oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_budget" source="budget" function="sum" width="20"
+         precision="10" reset="G_codcamo" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Budget">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_propose_ht" source="propose_ht" function="sum"
+         width="20" precision="10" reset="G_codcamo" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Propose Ht">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_propose_htr" source="propose_htr" function="sum"
+         width="20" precision="10" reset="G_codcamo" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Propose Htr">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_poste_budg">
+        <displayInfo x="0.26169" y="3.85000" width="3.29685" height="1.96205"
+        />
+        <dataItem name="poste" datatype="vchar2" columnOrder="22" width="107"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Poste">
+          <dataDescriptor
+           expression="( inv.codposte || &apos; - &apos; || p.lib_poste )"
+           descriptiveExpression="POSTE" order="10" width="107"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_type_inv">
+        <displayInfo x="0.41982" y="6.41976" width="3.38057" height="3.26430"
+        />
+        <dataItem name="type_inv" datatype="vchar2" columnOrder="16"
+         width="107" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type Inv">
+          <dataDescriptor
+           expression="lig.type || &apos; - &apos; || inv.lib_type"
+           descriptiveExpression="TYPE_INV" order="4" width="107"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_sous_total_budget" source="budget" function="sum"
+         width="20" precision="10" reset="G_type_inv" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_sous_total_propose_ht" source="propose_ht"
+         function="sum" width="20" precision="10" reset="G_type_inv"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_sous_total_propose_htr" source="propose_htr"
+         function="sum" width="20" precision="10" reset="G_type_inv"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_type">
+        <displayInfo x="0.68461" y="10.03195" width="4.56344" height="4.13246"
+        />
+        <dataItem name="ligne" datatype="vchar2" columnOrder="14" width="46"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ligne">
+          <dataDescriptor
+           expression="ca.codcamo || &apos; - &apos; || LPAD ( lig.codinv , 3 , &apos;0&apos; )"
+           descriptiveExpression="LIGNE" order="2" width="46"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_inv" datatype="vchar2" columnOrder="15"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libelle Inv" breakOrder="none">
+          <dataDescriptor expression="lig.libelle"
+           descriptiveExpression="LIBELLE_INV" order="3" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_proj" datatype="vchar2" columnOrder="20"
+         width="58" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Lib Proj" breakOrder="none">
+          <dataDescriptor
+           expression="proj.icpi || &apos; - &apos; || proj.ilibel"
+           descriptiveExpression="LIB_PROJ" order="8" width="58"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="propose_ht" oracleDatatype="number" columnOrder="24"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Propose Ht" breakOrder="none">
+          <dataDescriptor expression="lig.demande"
+           descriptiveExpression="PROPOSE_HT" order="12"
+           oracleDatatype="number" width="22" scale="2" precision="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="budget" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Budget" breakOrder="none">
+          <dataDescriptor
+           expression="sum ( lig.notifie * decode ( lig.not_tvarecup , null , ( 1 + t1.tva / 100 * ( 1 - tr.taux / 100 ) ) , 1 + lig.not_tvarecup / 100 ) )"
+           descriptiveExpression="BUDGET" order="14" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="propose_htr" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Propose Htr" breakOrder="none">
+          <dataDescriptor
+           expression="sum ( lig.demande * decode ( lig.not_tvarecup , null , ( 1 + t1.tva / 100 * ( 1 - tr.taux / 100 ) ) , 1 + lig.not_tvarecup / 100 ) )"
+           descriptiveExpression="PROPOSE_HTR" order="13"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_poste">
+        <displayInfo x="6.47960" y="11.60053" width="7.29661" height="2.83021"
+        />
+        <dataItem name="type_eng" datatype="vchar2" columnOrder="19"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Type Eng" breakOrder="none">
+          <dataDescriptor expression="lr.type_eng"
+           descriptiveExpression="TYPE_ENG" order="7" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_type" datatype="vchar2" columnOrder="17" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Lib Type" breakOrder="none">
+          <dataDescriptor
+           expression="LPAD ( lr.codinv , 3 , &apos;0&apos; ) || &apos; - &apos; || LPAD ( lr.codrea , 2 , &apos;0&apos; )"
+           descriptiveExpression="LIB_TYPE" order="5" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="annee" oracleDatatype="number" columnOrder="23"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Annee" breakOrder="none">
+          <dataDescriptor expression="lig.annee" descriptiveExpression="ANNEE"
+           order="11" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="test" datatype="vchar2" columnOrder="18" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Test" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( lr.codrea , null , &apos;vide&apos; , &apos;ok&apos; )"
+           descriptiveExpression="TEST" order="6" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_2">
+      <select>
+      <![CDATA[SELECT 	DISTINCT
+lig.type || ' - ' || inv.lib_type type_inv,
+ca.codcamo || ' - ' || LPAD(lig.codinv,3,'0') ligne,
+lig.libelle libelle_inv1,
+LPAD(lr.codinv,3,'0') || ' - ' || LPAD(lr.codrea,2,'0') lib_type,
+decode(lr.codrea,null,'vide','ok') test,
+lr.type_eng type_eng,
+                  proj.icpi || ' - '|| proj.ilibel lib_proj,
+                  (inv.codposte|| ' - ' || p.lib_poste) poste,
+	  lig.annee annee,
+lig.demande propose_ht,
+sum(  lig.demande*decode(lig.not_tvarecup, null,(1+t1.tva/100*(1-tr.taux/100)) ,1+lig.not_tvarecup/100))  propose_htr,
+sum(	  lig.notifie*decode(lig.not_tvarecup, null,(1+t1.tva/100*(1-tr.taux/100)) ,1+lig.not_tvarecup/100)) budget
+	   
+FROM      centre_activite ca,
+	  ligne_investissement lig,
+	  investissements inv,
+                  ligne_realisation lr,
+                  proj_info proj,
+	  poste p,
+	  taux_recup tr,
+	  tva t1
+WHERE 
+--jointures
+inv.codposte=p.codposte
+AND ca.codcamo=lig.codcamo
+AND inv.codtype = lig.type
+AND lig.icpi=proj.icpi
+AND lr.codcamo(+)=lig.codcamo
+AND lr.codinv(+)=lig.codinv
+AND lr.annee(+)=lig.annee
+--
+--
+AND tr.filcode = ca.filcode
+--AND tr.annee = lig.annee
+&P_T_WHERE
+AND t1.datetva =(select max(TVA.datetva) from tva where datetva <= pack_suivi_investissement.cherche_date_exercice)   
+--conditions
+--AND to_char(lig.annee)=:P_PARAM7
+&P_WHERE
+  
+GROUP BY 
+inv.codposte,
+p.lib_poste,
+lig.type,
+lig.codinv ,
+lr.codinv ,
+lig.libelle,
+lr.codrea ,
+ca.codcamo,
+lig.demande,
+lr.type_eng ,
+inv.lib_type,
+proj.icpi,
+proj.ilibel,
+lig.annee,
+lig.not_tvarecup,
+t1.tva,
+tr.taux]]>
+      </select>
+      <displayInfo x="12.30313" y="0.13240" width="1.77788" height="0.50788"/>
+      <group name="G_poste_budg1">
+        <displayInfo x="11.47961" y="1.67587" width="3.45560" height="1.09389"
+        />
+        <dataItem name="poste1" datatype="vchar2" columnOrder="34" width="107"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Poste1">
+          <dataDescriptor
+           expression="( inv.codposte || &apos; - &apos; || p.lib_poste )"
+           descriptiveExpression="POSTE" order="8" width="107"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_type_inv1">
+        <displayInfo x="11.13544" y="2.91610" width="3.37189" height="1.52797"
+        />
+        <dataItem name="type_inv1" datatype="vchar2" columnOrder="27"
+         width="107" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type Inv1">
+          <dataDescriptor
+           expression="lig.type || &apos; - &apos; || inv.lib_type"
+           descriptiveExpression="TYPE_INV" order="1" width="107"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_type1">
+        <displayInfo x="11.10909" y="4.96652" width="3.45560" height="2.83021"
+        />
+        <dataItem name="ligne1" datatype="vchar2" columnOrder="28" width="46"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ligne1">
+          <dataDescriptor
+           expression="ca.codcamo || &apos; - &apos; || LPAD ( lig.codinv , 3 , &apos;0&apos; )"
+           descriptiveExpression="LIGNE" order="2" width="46"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_inv1" datatype="vchar2" columnOrder="29"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libelle Inv1" breakOrder="none">
+          <dataDescriptor expression="lig.libelle"
+           descriptiveExpression="LIBELLE_INV1" order="3" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lib_proj1" datatype="vchar2" columnOrder="33"
+         width="58" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Lib Proj1" breakOrder="none">
+          <dataDescriptor
+           expression="proj.icpi || &apos; - &apos; || proj.ilibel"
+           descriptiveExpression="LIB_PROJ" order="7" width="58"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="budget1" oracleDatatype="number" columnOrder="38"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Budget1" breakOrder="none">
+          <dataDescriptor
+           expression="sum ( lig.notifie * decode ( lig.not_tvarecup , null , ( 1 + t1.tva / 100 * ( 1 - tr.taux / 100 ) ) , 1 + lig.not_tvarecup / 100 ) )"
+           descriptiveExpression="BUDGET" order="12" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="propose_htr1" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Propose Htr1" breakOrder="none">
+          <dataDescriptor
+           expression="sum ( lig.demande * decode ( lig.not_tvarecup , null , ( 1 + t1.tva / 100 * ( 1 - tr.taux / 100 ) ) , 1 + lig.not_tvarecup / 100 ) )"
+           descriptiveExpression="PROPOSE_HTR" order="11"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="propose_ht1" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Propose Ht1" breakOrder="none">
+          <dataDescriptor expression="lig.demande"
+           descriptiveExpression="PROPOSE_HT" order="10"
+           oracleDatatype="number" width="22" scale="2" precision="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_poste1">
+        <displayInfo x="15.10450" y="7.98060" width="3.53932" height="3.26430"
+        />
+        <dataItem name="lib_type1" datatype="vchar2" columnOrder="30"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Lib Type1" breakOrder="none">
+          <dataDescriptor
+           expression="LPAD ( lr.codinv , 3 , &apos;0&apos; ) || &apos; - &apos; || LPAD ( lr.codrea , 2 , &apos;0&apos; )"
+           descriptiveExpression="LIB_TYPE" order="4" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="test1" datatype="vchar2" columnOrder="31" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Test1" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( lr.codrea , null , &apos;vide&apos; , &apos;ok&apos; )"
+           descriptiveExpression="TEST" order="5" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="type_eng1" datatype="vchar2" columnOrder="32"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Type Eng1" breakOrder="none">
+          <dataDescriptor expression="lr.type_eng"
+           descriptiveExpression="TYPE_ENG" order="6" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="annee1" oracleDatatype="number" columnOrder="35"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Annee1" breakOrder="none">
+          <dataDescriptor expression="lig.annee" descriptiveExpression="ANNEE"
+           order="9" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <summary name="CS_budget_total" source="budget" function="sum" width="20"
+     precision="10" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="8">
+      <displayInfo x="6.21760" y="1.24365" width="2.03181" height="0.66135"/>
+    </summary>
+    <formula name="CF_taux_recup" source="cf_taux_recupformula"
+     datatype="number" width="20" precision="10" defaultWidth="0"
+     defaultHeight="0" columnFlags="16" breakOrder="none">
+      <displayInfo x="5.13302" y="3.96875" width="2.03181" height="0.50788"/>
+    </formula>
+    <summary name="CS_budget_cumul" source="budget1" function="sum" width="20"
+     precision="10" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="8">
+      <displayInfo x="15.45146" y="4.65677" width="2.03181" height="0.50788"/>
+    </summary>
+    <summary name="CS_propose_ht_total" source="propose_ht" function="sum"
+     width="20" precision="10" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="8">
+      <displayInfo x="6.19125" y="2.24885" width="2.38125" height="0.50788"/>
+    </summary>
+    <summary name="CS_propose_htr_total" source="propose_htr" function="sum"
+     width="20" precision="10" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="8">
+      <displayInfo x="6.05885" y="3.30740" width="2.03181" height="0.50788"/>
+    </summary>
+    <summary name="CS_propose_ht_cumul" source="propose_ht1" function="sum"
+     width="20" precision="10" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="8">
+      <displayInfo x="15.24000" y="5.50323" width="3.17500" height="0.50788"/>
+    </summary>
+    <summary name="CS_propose_htr_cumul" source="propose_htr1" function="sum"
+     width="20" precision="10" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="8">
+      <displayInfo x="15.45177" y="6.16490" width="3.57188" height="0.76708"/>
+    </summary>
+  </data>
+  <layout>
+  <section name="header" width="21.59000" height="27.94000">
+    <body width="19.05000" height="22.86000">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="trailer" width="21.59000" height="27.94000">
+    <body width="19.05000" height="22.86000">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" heightInChar="140"
+   orientation="portrait">
+    <body width="18.45996" height="24.61989">
+      <location x="1.27000" y="2.54000"/>
+      <repeatingFrame name="R_listCA1" source="G_codcamo"
+       printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+       columnMode="no">
+        <geometryInfo x="1.07373" y="0.00186" width="17.18221"
+         height="8.33251"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="r_listca1formattrigger"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8"/>
+        <frame name="M_4">
+          <geometryInfo x="7.87735" y="0.06759" width="5.47408"
+           height="1.31062"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillForegroundColor="r0g50b75"
+           fillBackgroundColor="gray8"/>
+          <text name="B_12" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="8.65808" y="0.07131" width="0.82724"
+             height="0.39377"/>
+            <generalLayout verticalElasticity="variable"
+             horizontalElasticity="variable"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[CA :]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_codcamo1" source="codcamo" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="9.54577" y="0.07100" width="1.80454"
+             height="0.52524"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+          </field>
+          <text name="B_13" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.87735" y="0.71500" width="1.83524"
+             height="0.52431"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+            <textSegment>
+              <font face="Courier New" size="8" textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Entité : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_libca1" source="clibrca" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8" textColor="r0g50b88"/>
+            <geometryInfo x="9.65491" y="0.72802" width="3.69652"
+             height="0.45331"/>
+            <generalLayout verticalElasticity="variable"/>
+          </field>
+        </frame>
+        <repeatingFrame name="R_poste_budg2" source="G_poste_budg"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="1.07373" y="2.36265" width="16.96982"
+           height="4.52624"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillForegroundColor="r0g50b75"
+           fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+          <frame name="M_entete_poste2">
+            <geometryInfo x="1.27000" y="2.89254" width="16.51000"
+             height="1.06598"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="r88g100b100"
+             linePattern="solid" lineForegroundColor="gray32"/>
+            <text name="B_11" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="7.34622" y="3.08415" width="1.11435"
+               height="0.32866"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[PROJET]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_propose_ht" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="11.85354" y="3.02586" width="1.20861"
+               height="0.22603"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[PROPOSE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_9" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.41976" y="3.05408" width="1.77260"
+               height="0.29642"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[CA / ligne]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_8" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="3.02090" y="3.08415" width="0.97730"
+               height="0.32866"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[TYPE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget11" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="11.85354" y="3.37499" width="1.27124"
+               height="0.32866"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[K€ HT]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_propose_htr" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="13.90861" y="3.02586" width="1.21636"
+               height="0.34199"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[PROPOSE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget9" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="16.11747" y="3.08384" width="0.89886"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[BUDGET]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget8" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="13.90861" y="3.40785" width="1.21636"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[K€ HTR]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget7" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="16.11747" y="3.40785" width="0.89700"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[K€ HTR]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_projet2" source="G_type_inv"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.23310" y="3.93495" width="16.54535"
+             height="2.88572"/>
+            <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+             linePattern="solid" lineForegroundColor="gray32"/>
+            <repeatingFrame name="R_lig_inv2" source="G_type"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="1.28612" y="4.52562" width="16.43900"
+               height="1.37635"/>
+              <generalLayout verticalElasticity="variable"/>
+              <visualSettings fillPattern="transparent"
+               fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+               lineForegroundColor="gray32"/>
+              <field name="F_cod_proj2" source="ligne" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="1.28612" y="4.64344" width="1.63184"
+                 height="0.33982"/>
+                <generalLayout horizontalElasticity="expand"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+              </field>
+              <field name="F_libel_inv1" source="libelle_inv"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="3.08942" y="4.63383" width="4.07479"
+                 height="0.33827"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+              </field>
+              <field name="F_projet2" source="lib_proj" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="7.22840" y="4.64344" width="3.39669"
+                 height="0.40370"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+              </field>
+              <field name="F_propose_ht2" source="propose_ht"
+               minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+               alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="10.73485" y="4.59197" width="2.21320"
+                 height="0.45765"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8"/>
+              </field>
+              <field name="F_propose_htr2" source="propose_htr"
+               minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+               alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="13.11610" y="4.59197" width="1.89570"
+                 height="0.45765"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8"/>
+              </field>
+              <field name="F_budget2" source="budget" minWidowLines="1"
+               formatMask="NNNGNN0D00" spacing="0" alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="15.24961" y="4.59197" width="1.90500"
+                 height="0.45765"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8"/>
+              </field>
+              <repeatingFrame name="R_POSTE2" source="G_poste"
+               printDirection="down" minWidowRecords="1" columnMode="no">
+                <geometryInfo x="4.82854" y="5.17829" width="12.84356"
+                 height="0.65732"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout formatTrigger="r_poste2formattrigger"/>
+                <visualSettings fillPattern="transparent"
+                 fillForegroundColor="r0g50b75" fillBackgroundColor="custom5"
+                 lineForegroundColor="gray16"/>
+                <field name="F_lib_type2" source="lib_type" minWidowLines="1"
+                 spacing="0" alignment="start">
+                  <font face="Courier New" size="7" bold="yes"/>
+                  <geometryInfo x="4.82854" y="5.30789" width="1.24861"
+                   height="0.26262"/>
+                  <visualSettings fillForegroundColor="r0g50b75"
+                   fillBackgroundColor="gray8" lineForegroundColor="r0g88b0"/>
+                </field>
+                <field name="F_type2" source="type_eng" minWidowLines="1"
+                 spacing="0" alignment="left">
+                  <font face="Courier New" size="7" bold="yes"/>
+                  <geometryInfo x="6.11498" y="5.30975" width="1.56177"
+                   height="0.45703"/>
+                  <visualSettings fillForegroundColor="r0g50b75"
+                   fillBackgroundColor="gray8"/>
+                </field>
+              </repeatingFrame>
+            </repeatingFrame>
+            <frame name="M_total3">
+              <geometryInfo x="8.05873" y="5.98320" width="9.45400"
+               height="0.70259"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100" lineForegroundColor="gray32"/>
+              <text name="B_10" minWidowLines="1">
+                <textSettings justify="end" spacing="0"/>
+                <geometryInfo x="8.05873" y="6.16086" width="1.77478"
+                 height="0.37052"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r88g100b100" lineForegroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="7" bold="yes"/>
+                  <string>
+                  <![CDATA[Total : ]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_sous_budget_total2" source="CS_sous_total_budget"
+               minWidowLines="1" formatMask="NNNGNNNGNN0D00" spacing="0"
+               alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="15.24961" y="6.09482" width="1.90500"
+                 height="0.45951"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g50b88"/>
+              </field>
+              <field name="F_sous_propose_ht_total2"
+               source="CS_sous_total_propose_ht" minWidowLines="1"
+               formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="10.50230" y="6.09482" width="2.44574"
+                 height="0.45951"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g50b88"/>
+              </field>
+              <field name="F_sous_propose_htr_total2"
+               source="CS_sous_total_propose_htr" minWidowLines="1"
+               formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="13.20105" y="6.09482" width="1.81074"
+                 height="0.45951"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g50b88"/>
+              </field>
+            </frame>
+            <field name="F_type_inv2" source="type_inv" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="7" bold="yes"/>
+              <geometryInfo x="3.03702" y="4.05464" width="8.42584"
+               height="0.33827"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+            </field>
+          </repeatingFrame>
+          <field name="F_poste1" source="poste" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="4.76808" y="2.51333" width="6.69479"
+             height="0.38571"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+          </field>
+          <text name="B_2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.11342" y="2.51147" width="3.54800"
+             height="0.32835"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Poste budgétaire :]]>
+              </string>
+            </textSegment>
+          </text>
+        </repeatingFrame>
+        <frame name="M_2">
+          <geometryInfo x="6.62812" y="7.08577" width="10.99096"
+           height="0.85390"/>
+          <advancedLayout formatTrigger="m_2formattrigger"/>
+          <visualSettings fillForegroundColor="r0g50b75"
+           fillBackgroundColor="gray8" lineForegroundColor="r0g88b50"/>
+          <frame name="M_total1">
+            <geometryInfo x="6.62812" y="7.14158" width="10.83438"
+             height="0.66787"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="r88g100b100"
+             linePattern="solid" lineForegroundColor="gray32"/>
+            <text name="B_3" minWidowLines="1">
+              <textSettings justify="end" spacing="0"/>
+              <geometryInfo x="6.62812" y="7.25382" width="2.91951"
+               height="0.37052"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100" lineForegroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Total du CA :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_budget_total2" source="CS_budget" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="7" bold="yes"
+               textColor="r0g50b88"/>
+              <geometryInfo x="15.25829" y="7.24669" width="1.89632"
+               height="0.45951"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r0g50b88"/>
+            </field>
+            <field name="F_propose_ht_total2" source="CS_propose_ht"
+             minWidowLines="1" formatMask="NNNGNNNGNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="7" bold="yes"
+               textColor="r0g50b88"/>
+              <geometryInfo x="10.36216" y="7.24669" width="2.58589"
+               height="0.45951"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r0g50b88"/>
+            </field>
+            <field name="F_propose_htr_total2" source="CS_propose_htr"
+             minWidowLines="1" formatMask="NNNGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="7" bold="yes"
+               textColor="r0g50b88"/>
+              <geometryInfo x="12.98897" y="7.24669" width="2.02282"
+               height="0.45951"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r0g50b88"/>
+            </field>
+          </frame>
+        </frame>
+      </repeatingFrame>
+      <frame name="M_CUMUL1">
+        <geometryInfo x="0.95436" y="8.85806" width="17.46064"
+         height="4.85769"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_cumul1formattrigger"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="r0g100b0" lineForegroundColor="r88g50b50"/>
+        <repeatingFrame name="R_poste_budg1" source="G_poste_budg1"
+         printDirection="down" minWidowRecords="1" columnMode="no"
+         horizSpaceBetweenFrames="2.5400">
+          <geometryInfo x="0.95436" y="9.18642" width="17.24856"
+           height="4.39787"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillForegroundColor="r0g50b75"
+           fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+          <frame name="M_entete_poste1">
+            <geometryInfo x="1.19869" y="9.84312" width="16.84486"
+             height="0.95932"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="r88g100b100"
+             linePattern="solid" lineForegroundColor="gray32"/>
+            <text name="B_7" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="7.46590" y="10.08094" width="1.11404"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[PROJET]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_6" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.19869" y="10.08094" width="1.50719"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[CA / ligne]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_5" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="3.10865" y="10.08094" width="0.97730"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[TYPE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget6" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="11.85354" y="10.08094" width="1.20861"
+               height="0.32060"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[PROPOSE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget5" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="11.85354" y="10.37487" width="1.33356"
+               height="0.26355"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[K€ HT]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget4" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="13.97093" y="10.08094" width="1.27868"
+               height="0.22603"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[PROPOSE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget3" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="16.11747" y="10.08094" width="1.19435"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[BUDGET]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="13.97093" y="10.34262" width="1.27868"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[K€ HTR]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_budget1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="16.11747" y="10.34262" width="1.25698"
+               height="0.29580"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100"
+               lineForegroundColor="r0g75b100"/>
+              <textSegment>
+                <font face="Courier New" size="7" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[K€ HTR]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_projet1" source="G_type_inv1"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.17977" y="10.80430" width="16.86378"
+             height="2.64573"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillPattern="transparent"
+             fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+             linePattern="solid" lineForegroundColor="gray32"/>
+            <repeatingFrame name="R_lig_inv1" source="G_type1"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="1.17977" y="11.52581" width="16.75774"
+               height="1.59618"/>
+              <generalLayout verticalElasticity="variable"/>
+              <visualSettings fillPattern="transparent"
+               fillForegroundColor="r0g50b75" fillBackgroundColor="gray4"
+               lineForegroundColor="r25g50b88"/>
+              <field name="F_budget1" source="budget1" minWidowLines="1"
+               formatMask="NNNGNN0D00" spacing="0" alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="15.44743" y="11.59030" width="1.70718"
+                 height="0.45951"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8"/>
+              </field>
+              <field name="F_cod_proj1" source="ligne1" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="1.17977" y="11.57821" width="1.63215"
+                 height="0.26262"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+              </field>
+              <field name="F_projet1" source="lib_proj1" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="7.22840" y="11.57821" width="3.83418"
+                 height="0.40370"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+              </field>
+              <repeatingFrame name="R_POSTE1" source="G_poste1"
+               printDirection="down" minWidowRecords="1" columnMode="no">
+                <geometryInfo x="4.76498" y="12.30933" width="13.11951"
+                 height="0.68151"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout formatTrigger="r_poste1formattrigger"/>
+                <visualSettings fillPattern="transparent"
+                 fillForegroundColor="r0g50b75" fillBackgroundColor="custom5"
+                 lineForegroundColor="gray16"/>
+                <field name="F_lib_type1" source="lib_type1" minWidowLines="1"
+                 spacing="0" alignment="start">
+                  <font face="Courier New" size="7" bold="yes"/>
+                  <geometryInfo x="4.86978" y="12.43893" width="2.29443"
+                   height="0.26262"/>
+                  <visualSettings fillForegroundColor="r0g50b75"
+                   fillBackgroundColor="gray8" lineForegroundColor="r0g88b0"/>
+                </field>
+                <field name="F_type1" source="type_eng1" minWidowLines="1"
+                 spacing="0" alignment="left">
+                  <font face="Courier New" size="7" bold="yes"/>
+                  <geometryInfo x="7.22095" y="12.44079" width="3.39266"
+                   height="0.45703"/>
+                  <visualSettings fillForegroundColor="r0g50b75"
+                   fillBackgroundColor="gray8"/>
+                </field>
+              </repeatingFrame>
+              <field name="F_libel_inv2" source="libelle_inv1"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="2.86525" y="11.57821" width="4.24563"
+                 height="0.26262"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+              </field>
+              <field name="F_propose_ht1" source="propose_ht1"
+               minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+               alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="11.11250" y="11.52581" width="1.83555"
+                 height="0.45951"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8"/>
+              </field>
+              <field name="F_budget4" source="propose_htr1" minWidowLines="1"
+               formatMask="NNNGNN0D00" spacing="0" alignment="right">
+                <font face="Courier New" size="7" bold="yes"/>
+                <geometryInfo x="13.33500" y="11.52581" width="1.67680"
+                 height="0.45951"/>
+                <visualSettings fillForegroundColor="r0g50b75"
+                 fillBackgroundColor="gray8"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_1">
+              <geometryInfo x="2.01600" y="13.19051" width="0.37145"
+               height="0.13146"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r88g100b100" lineForegroundColor="gray4"/>
+            </frame>
+            <field name="F_type_inv1" source="type_inv1" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="7" bold="yes"/>
+              <geometryInfo x="2.82463" y="11.05483" width="6.93973"
+               height="0.26262"/>
+              <visualSettings fillForegroundColor="r0g50b75"
+               fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+            </field>
+          </repeatingFrame>
+          <field name="F_poste2" source="poste1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="4.60902" y="9.31726" width="6.69479"
+             height="0.38571"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+          </field>
+          <text name="B_4" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.95436" y="9.31540" width="3.54800"
+             height="0.32835"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g100b0" lineForegroundColor="r0g88b0"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Poste budgétaire :]]>
+              </string>
+            </textSegment>
+          </text>
+        </repeatingFrame>
+      </frame>
+      <frame name="M_3">
+        <geometryInfo x="5.57082" y="13.95636" width="11.94222"
+         height="0.94041"/>
+        <advancedLayout formatTrigger="m_3formattrigger"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="gray32"/>
+        <frame name="M_total2">
+          <geometryInfo x="6.49635" y="14.03418" width="10.85732"
+           height="0.73143"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillPattern="transparent"
+           fillForegroundColor="r0g50b75" fillBackgroundColor="r88g100b100"
+           linePattern="solid" lineForegroundColor="gray32"/>
+          <text name="B_1" minWidowLines="1">
+            <textSettings justify="end" spacing="0"/>
+            <geometryInfo x="6.49635" y="14.16596" width="3.23732"
+             height="0.37052"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r88g100b100" lineForegroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Total général : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_budget_total1" source="CS_budget_total"
+           minWidowLines="1" formatMask="NNNGNNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="7" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="15.08125" y="14.18239" width="2.07336"
+             height="0.45951"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g50b88"/>
+          </field>
+          <field name="F_propose_htr_total1" source="CS_propose_htr_total"
+           minWidowLines="1" formatMask="NNNGNNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="7" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="12.93626" y="14.18239" width="2.07553"
+             height="0.45951"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g50b88"/>
+          </field>
+          <field name="F_propose_ht_total1" source="CS_propose_ht_total"
+           minWidowLines="1" formatMask="NNNGNNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="7" bold="yes" textColor="r0g50b88"
+            />
+            <geometryInfo x="10.54540" y="14.18239" width="2.40264"
+             height="0.45951"/>
+            <visualSettings fillForegroundColor="r0g50b75"
+             fillBackgroundColor="r0g50b88"/>
+          </field>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_19" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.17202" y="0.52834" width="3.71574" height="0.40463"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Suivi édité le  :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_date1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY" spacing="0" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="4.39043" y="0.51656" width="2.08762" height="0.37827"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+      </field>
+      <field name="F_page1" source="PageNumber" minWidowLines="1"
+       formatMask="NNNN" spacing="0" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="17.39150" y="0.58229" width="0.76864"
+         height="0.36091"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_18" minWidowLines="1">
+        <textSettings justify="right" spacing="0"/>
+        <geometryInfo x="16.14227" y="0.60399" width="1.29542"
+         height="0.33021"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page :]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_listpers1" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="6.95461" y="0.73794" width="9.69956" height="0.35998"
+        />
+        <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"/>
+          <string>
+          <![CDATA[SITUATION DE LA PROPOSITION BUDGETAIRE]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_annee1" source="P_PARAM7" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="3.23670" y="1.50006" width="2.36668" height="0.43749"
+        />
+        <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+      </field>
+      <text name="B_17" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.18194" y="1.50781" width="3.07175" height="0.57919"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[EXERCICE:  ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_nbpages1" source="TotalPages" minWidowLines="1"
+       formatMask="NNNN" spacing="0" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="18.41841" y="0.58229" width="1.01823"
+         height="0.33796"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_ca_non1" minWidowLines="1">
+        <textSettings justify="end" spacing="0"/>
+        <geometryInfo x="8.80473" y="1.26132" width="3.28848" height="0.35998"
+        />
+        <advancedLayout formatTrigger="b_ca_non1formattrigger"/>
+        <visualSettings lineWidth="1" fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"/>
+          <string>
+          <![CDATA[CA NIVEAU <> 0 :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_ca_non1" source="P_PARAM6" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Courier New" size="9" bold="yes" textColor="r0g50b88"/>
+        <geometryInfo x="12.41103" y="1.24675" width="2.49287"
+         height="0.45951"/>
+        <advancedLayout formatTrigger="f_ca_non1formattrigger"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+      </field>
+      <text name="B_16" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.18194" y="1.95399" width="4.63010" height="0.34044"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="r88g100b100" lineForegroundColor="r0g75b100"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Taux de récupération TVA:]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_15" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.18194" y="1.01575" width="4.81800" height="0.34044"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="r88g100b100" lineForegroundColor="r0g75b100"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Etat: suivi_proposition ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_taux_recup1" source="P_TAUX" minWidowLines="1"
+       spacing="0" alignment="end">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="6.00025" y="1.93756" width="0.53144" height="0.31471"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+      </field>
+      <text name="B_14" minWidowLines="1">
+        <textSettings justify="left" spacing="0"/>
+        <geometryInfo x="6.63773" y="1.93570" width="0.23813" height="0.34199"
+        />
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[%]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_20" minWidowLines="1">
+        <textSettings justify="left" spacing="0"/>
+        <geometryInfo x="18.18742" y="0.56245" width="0.18510"
+         height="0.37052"/>
+        <visualSettings fillForegroundColor="r0g50b75"
+         fillBackgroundColor="gray8" lineForegroundColor="r0g50b75"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000"/>
+  <programUnits>
+    <function name="m_2formattrigger">
+      <textSource>
+      <![CDATA[function M_2FormatTrigger return boolean is
+l_niv entite_structure.niveau%type;
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+    
+  if :P_PARAM8 <> 'O' and l_niv <> 0 then 
+    return (FALSE);
+  else return(TRUE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_3formattrigger">
+      <textSource>
+      <![CDATA[function M_3FormatTrigger return boolean is
+l_niv entite_structure.niveau%type;
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+    --affichage quand le centre d'activite est de niveau different de 0
+   --:P_PARAM8 <> 'O'
+  if l_niv <> 0 then 
+    return (TRUE);
+  else return(FALSE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_poste1formattrigger">
+      <textSource>
+      <![CDATA[function R_POSTE1FormatTrigger return boolean is
+begin
+  if :test1 = 'vide' then
+  return (FALSE);
+  else
+  	return (TRUE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_cumul1formattrigger">
+      <textSource>
+      <![CDATA[function M_CUMUL1FormatTrigger return boolean is
+l_niv entite_structure.niveau%type;
+
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+  
+  if :P_PARAM8 <> 'O' and l_niv <> 0 then 
+    return (TRUE);
+  else return(FALSE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_listca1formattrigger">
+      <textSource>
+      <![CDATA[function R_listCA1FormatTrigger return boolean is
+l_niv entite_structure.niveau%type;
+
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+  
+  if :P_PARAM8 <> 'O' and l_niv <> 0 then 
+    return (FALSE);
+  else return(TRUE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_ca_non1formattrigger">
+      <textSource>
+      <![CDATA[function F_ca_non1FormatTrigger return boolean is
+l_niv entite_structure.niveau%type;
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+  
+  
+  if l_niv = 0 then 
+    return (FALSE);
+  else return(TRUE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_ca_non1formattrigger">
+      <textSource>
+      <![CDATA[function B_ca_non1FormatTrigger return boolean is
+l_niv entite_structure.niveau%type;
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+  
+  
+  if l_niv = 0 then 
+    return (FALSE);
+  else return(TRUE);
+  	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_taux_recupformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_taux_recupFormula return Number is
+
+-- Declaration des variables
+t_recup taux_recup.taux%TYPE;
+t_recup_max taux_recup.taux%TYPE;
+
+begin
+	
+select min(taux) into t_recup
+from taux_recup tr,
+centre_activite c,
+centre_activite c2
+where 
+c2.codcamo=:p_param6
+and ((c2.codcamo = c.codcamo)
+or (c.caniv1 = c2.codcamo)
+or (c.caniv2 = c2.codcamo)
+or (c.caniv3 = c2.codcamo)
+or (c.caniv4 = c2.codcamo)) 
+and c.filcode = tr.filcode
+and  to_char(tr.annee) =:P_PARAM7;
+
+select tr3.TAUX into t_recup_max
+from taux_recup tr3
+where tr3.ANNEE IN (SELECT MAX(tr2.ANNEE) 
+from taux_recup tr2);
+
+if (t_recup!=0 or t_recup!=null or t_recup!='0') then
+		return t_recup;
+else
+		return t_recup_max;
+end if;
+
+-- Exception
+exception
+when no_data_found then 
+return t_recup_max;
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+l_niv entite_structure.niveau%type;
+
+
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+  
+  
+  if l_niv = 0 then 
+  	:p_where:= ' and  ca.codcamo = :p_param6 ';
+  end if;
+  
+  if l_niv = 1 then 
+  	:p_where:= ' and  ca.caniv1  = :p_param6 ';
+  end if;
+  
+  if l_niv = 2 then 
+  	:p_where:= ' and  ca.caniv2  = :p_param6 ';
+  end if;
+  
+  if l_niv = 3 then 
+  	:p_where:= ' and ca.caniv3   = :p_param6 ';
+  end if;
+  
+  if l_niv = 4 then 
+  	:p_where:= ' and ca.caniv4   = :p_param6 ';
+  end if;  		  	
+	
+  return (true);
+  end;]]>
+      </textSource>
+    </function>
+    <function name="afterpform0008">
+      <textSource>
+      <![CDATA[function AFTERPFORM0008 return boolean is
+
+l_niv entite_structure.niveau%type;
+t_recup taux_recup.taux%TYPE;
+t_recup_max taux_recup.taux%TYPE;
+DATDEBEX varchar(4);
+
+begin
+	
+  SELECT es.niveau into l_niv
+  FROM entite_structure es
+  WHERE es.codcamo = :p_param6;
+
+  -- // Pour Récupérer le taux de TVA
+ 
+ 		select min(taux) into t_recup 
+ 		from taux_recup tr, centre_activite c, centre_activite c2
+		where 
+		c2.codcamo=:p_param6 and ((c2.codcamo = c.codcamo) or (c.caniv1 = c2.codcamo) or (c.caniv2 = c2.codcamo) or (c.caniv3 = c2.codcamo)
+		or (c.caniv4 = c2.codcamo)) and c.filcode = tr.filcode and  to_char(tr.annee) =:P_PARAM7;
+
+		select tr3.TAUX into t_recup_max
+		from taux_recup tr3
+		where tr3.ANNEE IN (SELECT MAX(tr2.ANNEE) from taux_recup tr2);
+
+		if (t_recup!=0 or t_recup!=null or t_recup!='0') then 
+				:P_TAUX := t_recup;
+				--srw.message(1, 'P_TAUX = ' ||  :P_TAUX);
+		else
+				:P_TAUX := t_recup_max;  -- La Dernière valeur du Taux de TVA ( table Taux_recup )
+				--srw.message(1, 'P_TAUX MAX = ' ||  :P_TAUX);
+		end if;
+
+  -- // ---------------------------------------------
+	
+	select to_char(dbex.datdebex,'YYYY') into DATDEBEX from datdebex dbex; -- Récupérer l'année fonctionelle
+  
+  --srw.message(1, 'P_Param7 = ' ||  :P_PARAM7);
+  --srw.message(1, 'DATDEBEX = ' ||  DATDEBEX);
+  
+	IF (:P_PARAM7 <= DATDEBEX) THEN  -- Si l'exercice demandé est égal ou antérieur à l'année fonctionnelle en cours
+  
+  :P_T_WHERE:= ' AND tr.annee = lig.annee AND to_char(lig.annee) = :P_PARAM7 '; 
+  
+  --srw.message(1, 'P_T_WHERE = ' ||  :P_T_WHERE);
+    
+  CASE l_niv
+  
+       WHEN 0 Then :p_where:= ' and  ca.codcamo = :p_param6 '; :P_T_WHERE:=:P_T_WHERE; 
+       WHEN 1 Then :p_where:= ' and  ca.caniv1  = :p_param6 '; :P_T_WHERE:=:P_T_WHERE;
+       WHEN 2 Then :p_where:= ' and  ca.caniv2  = :p_param6 '; :P_T_WHERE:=:P_T_WHERE;
+       WHEN 3 Then :p_where:= ' and  ca.caniv3  = :p_param6 '; :P_T_WHERE:=:P_T_WHERE;
+       WHEN 4 Then :p_where:= ' and  ca.caniv4  = :p_param6 '; :P_T_WHERE:=:P_T_WHERE;
+       WHEN 5 Then :p_where:= ' and  ca.caniv5  = :p_param6 '; :P_T_WHERE:=:P_T_WHERE;
+       WHEN 6 Then :p_where:= ' and  ca.caniv6  = :p_param6 '; :P_T_WHERE:=:P_T_WHERE;
+       
+	END CASE ;
+	
+	ELSE -- L'exercice demandé est ultérieure à l'année fonctionnelle en cours
+	
+	--srw.message(1, 'L''exercice demandé : ' || :P_PARAM7 || ' est ultérieure à l''année fonctionnelle en cours DATDEBEX : ' ||  DATDEBEX);
+	
+	:P_ANNEE  := ' (SELECT MAX(tr2.ANNEE) from taux_recup tr2) ';
+	:P_WHERE := ' and tr.annee in ' || :P_ANNEE || ' AND to_char(lig.annee) = ' || :P_PARAM7 ;
+	
+	--srw.message(1, 'P_WHERE = ' ||  :P_WHERE);
+	--srw.message(1, 'P_T_WHERE = ' ||  :P_T_WHERE);
+	
+	CASE l_niv
+  
+       WHEN 0 Then :P_WHERE:=:P_WHERE || ' and  ca.codcamo = :p_param6 ';
+       WHEN 1 Then :P_WHERE:=:P_WHERE || ' and  ca.caniv1  = :p_param6 ';
+       WHEN 2 Then :P_WHERE:=:P_WHERE || ' and  ca.caniv2  = :p_param6 ';
+       WHEN 3 Then :P_WHERE:=:P_WHERE || ' and  ca.caniv3  = :p_param6 ';
+       WHEN 4 Then :P_WHERE:=:P_WHERE || ' and  ca.caniv4  = :p_param6 ';
+       WHEN 5 Then :P_WHERE:=:P_WHERE || ' and  ca.caniv5  = :p_param6 ';
+       WHEN 6 Then :P_WHERE:=:P_WHERE || ' and  ca.caniv6  = :p_param6 ';
+       
+	END CASE ;
+		
+	END IF;
+   
+ -- // --------------------------------------------- 
+  
+  	
+  return (true);
+  end;]]>
+      </textSource>
+    </function>
+    <function name="r_poste2formattrigger">
+      <textSource>
+      <![CDATA[function R_POSTE2FormatTrigger return boolean is
+begin
+ if :test = 'vide' then
+  return (FALSE);
+  else
+  	return (TRUE);
+  	end if;
+end;
+
+
+]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

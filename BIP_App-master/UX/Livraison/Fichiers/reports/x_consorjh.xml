@@ -1,0 +1,941 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_consorjh" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_CONSORJH" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_param6" datatype="character" width="7"
+     precision="10" label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_global" datatype="character" width="5024"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param7" datatype="character" width="7"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Code DPG]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_perime" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param4" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_A" datatype="character" width="2000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_DP" datatype="character" width="2000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_P" datatype="character" width="2000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_CAFI" datatype="character" width="2000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HAB" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+r.rnom Nom_ress, 
+rc.cdeb CDEB,
+rc.pid_origine Ligne_origine,
+l1.typproj TYPE,
+l1.pnom Libelle,
+l1.codsg DPG,
+rc.ident IdRess,
+rc.pid Ligne_repart,
+l2.pnom Libelle_repart,
+to_char(rc.consojh,'FM00000D0000000') CONSOMME,
+l2.clicode CodeMO, 
+l2.codcamo CA_MO,
+sr.codsg DPG_RESS,
+si.centractiv CA_DPG_RESS,
+sr.soccode Société,
+sr.PRESTATION Qualif,
+l2.METIER METIER,
+pack_utile_cout.getCout ( sr.soccode,r.rtype,TO_NUMBER(TO_CHAR(rc.cdeb,'YYYY')),l2.METIER,sr.NIVEAU,sr.codsg,sr.cout) COUT_HT,
+pack_utile_cout.getCoutTTC ( sr.soccode,r.rtype,TO_NUMBER(TO_CHAR(rc.cdeb,'YYYY')),l2.METIER,sr.NIVEAU,sr.codsg,sr.cout,TO_CHAR(rc.cdeb,'DD/MM/YYYY'))  COUT_TTC,
+pack_x_ressmoi.getCoutHTR ( sr.soccode,r.rtype,l2.METIER,sr.NIVEAU,sr.codsg,si.cafi,sr.cout,sr.prestation,rc.ident,TO_CHAR(rc.cdeb,'DD/MM/YYYY'),si.filcode)  COUT_HTR
+FROM RJH_CONSOMME rc, RESSOURCE r, LIGNE_BIP l1, LIGNE_BIP l2, SITU_RESS_FULL sr, STRUCT_INFO si
+WHERE rc.ident=r.ident
+AND rc.pid_origine=l1.pid
+--where habilitaion codsg du l1.codsg 
+AND l1.codsg>=to_number(replace(:P_param6,'*','0'))
+AND l1.codsg<=to_number(replace(:P_param6,'*','9'))
+AND rc.pid=l2.pid
+AND rc.ident = sr.ident
+AND (rc.cdeb >=sr.datsitu OR sr.datsitu IS NULL)
+AND (rc.cdeb <=sr.datdep OR sr.datdep IS NULL )
+AND sr.codsg=si.codsg
+AND (rc.pid,rc.ident,rc.cdeb) IN  (SELECT  DISTINCT rc.pid,r.ident,rc.cdeb  
+ FROM
+				RJH_CONSOMME rc,
+				SITU_RESS_FULL sr ,
+				LIGNE_BIP l ,
+				RESSOURCE r,
+				CENTRE_ACTIVITE ca,
+				PROJ_INFO p,
+				STRUCT_INFO si1,
+				STRUCT_INFO si2,
+				DOSSIER_PROJET dp,
+				DATDEBEX d
+	WHERE
+	-- Consommés sur l'année courante :
+ 		TO_CHAR(rc.cdeb,'YYYY')=TO_CHAR(d.moismens,'YYYY')
+		AND TO_CHAR(rc.cdeb,'MM')<= TO_CHAR(d.moismens,'MM')
+	-- jointure ligne_bip et rjh_consomme
+		AND l.pid=rc.pid
+	-- jointure ligne_bip et centre_activite
+		AND l.codcamo = ca.codcamo
+   -- On ne prend pas les lignes dont le ctopact est égal à S
+		AND ca.ctopact<>'S'
+ 	-- jointure ligne_bip et projet_info
+		AND l.icpi = p.icpi
+	-- jointure ligne_bip et dossier_projet
+		AND l.dpcode = dp.dpcode
+	-- jointure cons_sstache_res et situ_ress
+         AND r.ident =sr.ident
+		 AND rc.ident = sr.ident
+		AND (rc.cdeb >=sr.datsitu OR sr.datsitu IS NULL)
+		AND (rc.cdeb <=sr.datdep OR sr.datdep IS NULL )
+	-- On ne prend pas les lignes dont le consommé est égal à 0
+	     AND rc.consojh<>0
+	-- ressource dont le CAFI du DPG <> 99999 et 88888 et 99810
+		AND sr.codsg=si2.codsg
+		AND si2.CAFI<>88888 
+		AND si2.CAFI<>99999
+		AND si2.CAFI<>99810
+
+	-- ressource dont la prestation <>(IFO,MO ,GRA,INT,STA)
+		AND sr.PRESTATION NOT IN ('IFO','MO ','GRA','INT','STA')
+   -- TYPE de la ligne =9
+	  AND  l.typproj=9
+	-- Centre d'activité de la ligne <> 66666 : Exclut lignes d'origine de la répartition
+	 AND  l.codcamo<>66666)
+&P_WHERE
+ORDER BY
+		rc.cdeb  	         ASC,
+		l1.typproj	         ASC,
+		rc.pid_origine 	ASC,
+		rc.ident 	           ASC;]]>
+      </select>
+      <displayInfo x="1.05212" y="0.43750" width="0.69995" height="0.19995"/>
+      <group name="G_Nom_ress">
+        <displayInfo x="0.69714" y="1.09570" width="1.41797" height="4.36133"
+        />
+        <dataItem name="Nom_ress" datatype="vchar2" columnOrder="32"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Nom Ress">
+          <dataDescriptor expression="r.rnom" descriptiveExpression="NOM_RESS"
+           order="1" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDEB" datatype="date" oracleDatatype="date"
+         columnOrder="11" width="9" defaultWidth="60000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cdeb">
+          <xmlSettings xmlTag="DATE"/>
+          <dataDescriptor expression="rc.cdeb" descriptiveExpression="CDEB"
+           order="2" oracleDatatype="date" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ligne_origine" datatype="vchar2" columnOrder="33"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ligne Origine">
+          <dataDescriptor expression="rc.pid_origine"
+           descriptiveExpression="LIGNE_ORIGINE" order="3" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="34" width="2" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type">
+          <dataDescriptor expression="l1.typproj" descriptiveExpression="TYPE"
+           order="4" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Libelle" datatype="vchar2" columnOrder="35" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="l1.pnom" descriptiveExpression="LIBELLE"
+           order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg">
+          <dataDescriptor expression="l1.codsg" descriptiveExpression="DPG"
+           order="6" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IdRess" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Idress">
+          <dataDescriptor expression="rc.ident" descriptiveExpression="IDRESS"
+           order="7" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ligne_repart" datatype="vchar2" columnOrder="38"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ligne Repart">
+          <dataDescriptor expression="rc.pid"
+           descriptiveExpression="LIGNE_REPART" order="8" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Libelle_repart" datatype="vchar2" columnOrder="39"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Repart">
+          <dataDescriptor expression="l2.pnom"
+           descriptiveExpression="LIBELLE_REPART" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME" datatype="vchar2" columnOrder="40"
+         width="14" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consomme">
+          <dataDescriptor
+           expression="to_char ( rc.consojh , &apos;FM00000D0000000&apos; )"
+           descriptiveExpression="CONSOMME" order="10" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CodeMO" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="41" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codemo">
+          <dataDescriptor expression="l2.clicode"
+           descriptiveExpression="CODEMO" order="11"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_MO" oracleDatatype="number" columnOrder="42"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Mo">
+          <dataDescriptor expression="l2.codcamo"
+           descriptiveExpression="CA_MO" order="12" oracleDatatype="number"
+           width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_RESS" oracleDatatype="number" columnOrder="43"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Ress">
+          <dataDescriptor expression="sr.codsg"
+           descriptiveExpression="DPG_RESS" order="13" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_DPG_RESS" oracleDatatype="number" columnOrder="22"
+         width="22" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ca Dpg Ress" breakOrder="none">
+          <dataDescriptor expression="si.centractiv"
+           descriptiveExpression="CA_DPG_RESS" order="14"
+           oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Société" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="44" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Société">
+          <dataDescriptor expression="sr.soccode"
+           descriptiveExpression="SOCIÉTÉ" order="15"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="QUALIF" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="12" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Qualif" breakOrder="none">
+          <xmlSettings xmlTag="&quot;qualif&quot;"/>
+          <dataDescriptor expression="sr.PRESTATION"
+           descriptiveExpression="QUALIF" order="16"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="23" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Métier&quot;"/>
+          <dataDescriptor expression="l2.METIER"
+           descriptiveExpression="METIER" order="17"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT_HT" oracleDatatype="number" columnOrder="45"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout Ht">
+          <dataDescriptor
+           expression="pack_utile_cout.getCout ( sr.soccode , r.rtype , TO_NUMBER ( TO_CHAR ( rc.cdeb , &apos;YYYY&apos; ) ) , l2.METIER , sr.NIVEAU , sr.codsg , sr.cout )"
+           descriptiveExpression="COUT_HT" order="18" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT_TTC" oracleDatatype="number" columnOrder="46"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout Ttc">
+          <dataDescriptor
+           expression="pack_utile_cout.getCoutTTC ( sr.soccode , r.rtype , TO_NUMBER ( TO_CHAR ( rc.cdeb , &apos;YYYY&apos; ) ) , l2.METIER , sr.NIVEAU , sr.codsg , sr.cout , TO_CHAR ( rc.cdeb , &apos;DD/MM/YYYY&apos; ) )"
+           descriptiveExpression="COUT_TTC" order="19" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUTHTR" oracleDatatype="number" columnOrder="24"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Couthtr" breakOrder="none">
+          <xmlSettings xmlTag="COUT_HTR"/>
+          <dataDescriptor
+           expression="pack_x_ressmoi.getCoutHTR ( sr.soccode , r.rtype , l2.METIER , sr.NIVEAU , sr.codsg , si.cafi , sr.cout , sr.prestation , rc.ident , TO_CHAR ( rc.cdeb , &apos;DD/MM/YYYY&apos; ) , si.filcode )"
+           descriptiveExpression="COUT_HTR" order="20" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_Nom_ress_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.37500" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_Nom_ress" source="G_Nom_ress"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.37500"
+           height="0.25000"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_Nom_ress" source="Nom_ress" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_COUTHTR" source="COUTHTR" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.43750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CDEB" source="CDEB" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.43750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Ligne_origine" source="Ligne_origine"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.81250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TYPE" source="TYPE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.18750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Libelle" source="Libelle" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.50000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DPG" source="DPG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.87500" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_IdRess" source="IdRess" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.31250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Ligne_repart" source="Ligne_repart" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.68750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Libelle_repart" source="Libelle_repart"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.06250" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CONSOMME" source="CONSOMME" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.43750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CodeMO" source="CodeMO" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.87500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CA_MO" source="CA_MO" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.25000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DPG_RESS" source="DPG_RESS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.68750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CA_DPG_RESS" source="CA_DPG_RESS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.12500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Société" source="Société" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.50000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_QUALIF" source="QUALIF" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.87500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.25000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_COUT_HT" source="COUT_HT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.62500" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_COUT_TTC" source="COUT_TTC" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.06250" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_Nom_ress_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.37500"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_Nom_ress" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nom Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CDEB" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.43750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cdeb]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Ligne_origine" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.81250" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Origine]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Type]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Libelle" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.87500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_IdRess" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.31250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Idress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Ligne_repart" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Repart]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Libelle_repart" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.06250" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Repart]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CodeMO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codemo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CA_MO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.25000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ca Mo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DPG_RESS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.68750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpg Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CA_DPG_RESS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.12500" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ca Dpg
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Société" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Société]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_QUALIF" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Qualif]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.25000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUT_HT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.62500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cout Ht]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUT_TTC" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.06250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cout Ttc]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUTHTR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Couthtr]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_P_param6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_global" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.54138" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_param6" source="P_param6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_global" source="P_global" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+   l_param   VARCHAR2(40);
+begin
+	
+	-- Initialisation des paramètres	  
+ 	:P_PERIME:='';
+	:P_WHERE := '';   	
+  
+    
+   -- Informations pour le lancement par les autres menus 	
+		:P_PERIME:=pack_global.lire_perime(:P_GLOBAL);
+	
+  	:P_WHERE :=' AND l1.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIME||''', codbddpg) > 0 ) '; 
+  
+	  
+	  --srw.message(1,:P_WHERE);
+	
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

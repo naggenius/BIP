@@ -1,0 +1,1565 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_sstacheress_orbre" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="X_SSTACHERESS_ORBRE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_SEPARATEUR" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="12000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="number" width="4" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIM_ME" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIM_CAFI" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_SMENUS_GES" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM16" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="40"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="40000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" display="yes"/>
+    <systemParameter name="ORIENTATION" display="yes"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[select distinct
+a.ilibel as LibProjet,
+a.Ligneimputation,
+a.LIBELLE_LIGNE_IMPUTATION,
+null as Lignedesaisie,
+null as Type_etape,
+null as Etape,
+a.LibellE_ETAPE,
+null as Tache,
+a.LIBELLE_TACHE,
+null as Sous_tache,
+null as type_Sous_tache,
+a.LibellE_sous_tAche,
+null as DPG_imputation,
+null as LibDir_imputation,
+a.NOM_RESSOURCE,
+a.Identifiant_de_ressource,
+a.DPG_RESSOURCE,
+a.SOCIETE,
+null as Metier,
+a.ConsommE_JANVIER,
+a.ConsommE_FEVRIER, 			
+a.ConsommE_MARS,			
+a.ConsommE_AVRIL,			
+a.ConsommE_MAI, 	
+a.ConsommE_JUIN,
+a.ConsommE_JUILLET,			
+a.ConsommE_AOUT,			
+a.ConsommE_septembre,			
+a.ConsommE_OCTOBRE,			
+a.ConsommE_NOVEMBRE, 
+a.ConsommE_DECEMBRE,
+a.COUTHTR,
+a.COUTENV,
+null as Type_de_ressource,
+null as Code_prestation,
+null as Mode_contractuel_indicatif,
+a.StacheParamLocal,
+--NEW COLUMNS
+a.CLIENT,
+a.LIB_DPG_RESSOURCE ,
+NVL(SUBSTR(a.LIB_CSM_LIGNE,1,INSTR(a.LIB_CSM_LIGNE||'/','/',1,4)-1),a.LIB_CSM_LIGNE) LIB_CSM_LIGNE,
+a.Code_IRT, --Application
+a.TYPE_DE_PLAN,
+a.ConsommE_Annuel,
+NVL(SUBSTR(a.LIB_DPG_RESSOURCE,1,INSTR(a.LIB_DPG_RESSOURCE||'/','/',1,3)-1),a.LIB_DPG_RESSOURCE) CDS_RESSOURCE,
+CASE 
+WHEN (SUBSTR(TRIM(a.DPG_RESSOURCE),-1) = '7')
+THEN 'SG EBS'
+WHEN (SUBSTR(TRIM(a.DPG_RESSOURCE),-1) = '8')
+THEN 'Nearshore'
+WHEN (SUBSTR(TRIM(a.DPG_RESSOURCE),-1) = '9')
+THEN 'SG GSC'
+WHEN ((SUBSTR(TRIM(a.DPG_RESSOURCE),-1) BETWEEN 1 AND 6) AND  (a.SOCIETE = 'SG..'))
+THEN 'SG PARIS'
+ELSE
+'P2I Onshore'
+END Sourcing,
+NVL(SUBSTR(a.LIB_CSM_LIGNE,1,INSTR(a.LIB_CSM_LIGNE||'/','/',1,3)-1),a.LIB_CSM_LIGNE) CDS_LIGNE_BIP,
+NVL(SUBSTR(a.LIB_DPG_RESSOURCE,1,INSTR(a.LIB_DPG_RESSOURCE||'/','/',1,4)-1),a.LIB_CSM_LIGNE) CSM_RESSOURCE,
+(a.COUTHTR+a.COUTENV) as Cout_Total,
+nvl(A.COUNT_FT, (a.COUTHTR+a.COUTENV) ) COUNT_FT,
+a.ActivitE from (    
+   select 
+   PI.ilibel as ilibel,
+ligne_bip.pid AS Ligneimputation,
+LIGNE_BIP.PNOM as LIBELLE_LIGNE_IMPUTATION,
+CONSO.libetape as LibellE_ETAPE,
+CONSO.LIBTACHE as LIBELLE_TACHE,
+CONSO.asnom as LibellE_sous_tAche,
+RESSOURCE.RNOM as NOM_RESSOURCE,
+CONSO.IDENT as Identifiant_de_ressource,
+CONSO.CODSG as DPG_RESSOURCE,
+CONSO.SOCCODE as SOCIETE,
+CONSO.JANVIER as ConsommE_JANVIER,
+CONSO.FEVRIER as ConsommE_FEVRIER, 			
+CONSO.MARS as ConsommE_MARS,			
+CONSO.AVRIL as ConsommE_AVRIL,			
+CONSO.MAI as ConsommE_MAI, 	
+CONSO.JUIN as ConsommE_JUIN,
+CONSO.JUILLET as ConsommE_JUILLET,			
+CONSO.AOUT as ConsommE_AOUT,			
+CONSO.septembre AS ConsommE_septembre,			
+CONSO.OCTOBRE as ConsommE_OCTOBRE,			
+CONSO.NOVEMBRE as ConsommE_NOVEMBRE, 
+CONSO.DECEMBRE as ConsommE_DECEMBRE,
+TO_CHAR(PACK_UTILE_COUT.GETCOUTHTR(CONSO.SOCCODE, RESSOURCE.RTYPE,:P_ANNEE,LIGNE_BIP.METIER, CONSO.NIVEAU, CONSO.CODSG, CONSO.COUT, 
+TO_CHAR(CONSO.CDEB,'DDMMYYYY'), STRUCT_INFO.FILCODE), 'FM9999999990D00') as COUTHTR,
+
+PACK_UTILE_COUT.GET_COUT_FI_TOTAL(ligne_bip.pid,CONSO.ident,ligne_bip.codcamo,CONSO.cafi) AS COUNT_FT,
+
+TO_CHAR(PACK_UTILE_COUT.GETCOUTENVHTR(CONSO.SOCCODE ,RESSOURCE.RTYPE ,:P_ANNEE,CONSO.CODSG ,LIGNE_BIP.METIER,
+TO_CHAR ( CONSO.cdeb , 'DDMMYYYY') ,struct_info.filcode), 'FM9999999990D00')as COUTENV,
+CONSO.PARAM_SSTACHE as StacheParamLocal,
+--NEW COLUMNS
+--CM.CLISIGLE CLIENT,
+cm.CLILIB CLIENT,
+STRUCT_INFO.LIBDSG LIB_DPG_RESSOURCE ,
+(select LIBDSG from STRUCT_INFO where CODSG = CONSO.codsg) LIB_CSM_LIGNE,
+ ap.acdareg
+  ||'-'
+  ||APG.alibel AS Code_IRT, --Application
+CASE
+    WHEN ((l.type_proj = '1') or (l.type_proj = '2' and t.arctype in ('39','12','B02','B09')))
+    THEN 'CHANGE'
+     WHEN (l.type_proj = '2' and t.arctype not in ('39','12','B02','B09'))
+    THEN 'PLAN INTERNE'
+    WHEN l.type_proj = '5'
+    THEN 'STRUCTURE'
+    ELSE 'RUN'
+  END TYPE_DE_PLAN,
+--(select cusag from CONSOMME where pid = ligne_bip.pid and annee = (TO_CHAR(CONSO.cdeb,'YYYY'))) as ConsommE_Annuel,
+(CONSO.janvier+CONSO.fevrier+CONSO.mars+CONSO.avril+CONSO.mai+CONSO.juin+CONSO.juillet+CONSO.aout+CONSO.septembre+CONSO.octobre+CONSO.novembre+CONSO.decembre) as ConsommE_Annuel,
+CONSO.SOCCODE AS Sourcing,
+ ligne_bip.LINEAXISBUSINESS1 AS  ActivitE
+
+FROM
+(SELECT    DECODE(tache.aistty, 'FF', tache.aistpid, tache.pid) factpid
+        ,tache.pid,
+        nvl(libetapetache.libsstache,tache.asnom)asnom
+        , tache.ecet
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 1, cons_sstache_res_mois.cusag, 0))    janvier
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 2, cons_sstache_res_mois.cusag, 0))    fevrier
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 3, cons_sstache_res_mois.cusag, 0))    mars
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 4, cons_sstache_res_mois.cusag, 0))    avril
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 5, cons_sstache_res_mois.cusag, 0))    mai
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 6, cons_sstache_res_mois.cusag, 0))    juin
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 7, cons_sstache_res_mois.cusag, 0))    juillet
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 8, cons_sstache_res_mois.cusag, 0))    aout
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 9, cons_sstache_res_mois.cusag, 0))    septembre
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 10, cons_sstache_res_mois.cusag, 0))    octobre
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 11, cons_sstache_res_mois.cusag, 0))    novembre
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 12, cons_sstache_res_mois.cusag, 0))    decembre
+        ,situ_ress_full.ident
+        ,situ_ress_full.codsg
+        ,situ_ress_full.soccode
+        ,situ_ress_full.niveau
+        ,situ_ress_full.cout
+        ,decode(libetapetache.libetape,'',libetapetachebips.etapelibel,libetapetache.libetape) libetape		
+		,decode(libetapetache.libtache,'',libetapetachebips.tachelibel,libetapetache.libtache) libtache
+		,libetapetache.param_sstache
+         --Fin KRA PPM 60727
+        --,si1.cafi 
+       -- , ress.RTYPE TYPE_RESSOURCE
+   , situ_ress_full.PRESTATION CODE_PRESTATION
+,si1.cafi 
+        , MAX(cons_sstache_res_mois.cdeb) cdeb
+     FROM situ_ress_full
+        , ligne_bip
+        , tache
+        , cons_sstache_res_mois
+        , datdebex
+        --KRA PPM 60727
+        , (select ie.pid, ie.ecet,  ie.libetape, it.acta,  it.libtache, iss.asnom libsstache, iss.acst
+            ,iss.ADEB date_deb_ini, 
+            iss.AFIN  date_fin_ini, 
+            iss.ANDE date_deb_rev,
+            iss.ANFI date_fin_rev,
+            iss.ASTA statut_sstache,
+            iss.ADUR duree_sstache,
+            iss.PARAM_LOCAL param_sstache from isac_etape ie, isac_tache it, isac_sous_tache iss where ie.etape=it.etape and ie.etape = iss.etape and it.tache = iss.tache ) libetapetache -- TD 712 
+			,(select lignebipcode, etapenum,  etapelibel, 
+			tachenum,  tachelibel, 
+			stachenum,
+			stachelibel
+            from BIPS_ACTIVITE bips  ) libetapetachebips
+			
+    -- annee courante
+    ,STRUCT_INFO si1
+    , ressource ress
+
+   WHERE cons_sstache_res_mois.cdeb >= datdebex.datdebex
+        AND situ_ress_full.CODSG = si1.CODSG     
+        AND ress.IDENT = situ_ress_full.IDENT
+        AND cons_sstache_res_mois.pid=tache.pid
+        AND cons_sstache_res_mois.ecet=tache.ecet
+        AND cons_sstache_res_mois.acta=tache.acta
+        AND cons_sstache_res_mois.acst=tache.acst
+        AND cons_sstache_res_mois.ident!=0
+        AND cons_sstache_res_mois.cusag!=0
+        AND DECODE(tache.aistty, 'FF', tache.aistpid, tache.pid)=ligne_bip.pid
+        AND cons_sstache_res_mois.ident=situ_ress_full.ident
+        AND (cons_sstache_res_mois.cdeb>=situ_ress_full.datsitu OR situ_ress_full.datsitu IS NULL)
+        AND (cons_sstache_res_mois.cdeb<=situ_ress_full.datdep OR situ_ress_full.datdep IS NULL)
+        AND ( situ_ress_full.prestation not in ('GRA', 'MO', 'IFO', 'INT', 'STA') or situ_ress_full.prestation is null)
+        and tache.pid = libetapetache.pid(+)
+        and tache.ecet = libetapetache.ecet(+)
+        and tache.acta = libetapetache.acta(+)
+        and tache.acst = libetapetache.acst(+)
+		and tache.pid = libetapetachebips.lignebipcode(+)
+        and tache.ecet = libetapetachebips.etapenum(+)
+        and tache.acta = libetapetachebips.tachenum(+)
+        and tache.acst = libetapetachebips.stachenum(+)
+
+    GROUP BY
+        tache.pid
+        ,DECODE(tache.aistty, 'FF', tache.aistpid, tache.pid)
+        ,tache.asnom
+        , tache.ecet
+        , tache.acta
+        , tache.acst
+        ,tache.aist
+		,tache.tacheaxemetier
+        ,situ_ress_full.ident,situ_ress_full.codsg,situ_ress_full.soccode, situ_ress_full.niveau, situ_ress_full.cout  
+		,libetapetache.libetape -- TD 712 
+        ,libetapetache.libtache -- TD 712 
+        ,libetapetache.libsstache 
+		,libetapetachebips.etapelibel
+		,libetapetachebips.tachelibel
+		,libetapetachebips.stachelibel
+		,si1.cafi 
+        , ress.RTYPE
+        , situ_ress_full.PRESTATION
+        , situ_ress_full.MODE_CONTRACTUEL_INDICATIF
+        --KRA PPM 60727
+        ,libetapetache.date_deb_ini
+        ,libetapetache.date_fin_ini
+        ,libetapetache.date_deb_rev
+        ,libetapetache.date_fin_rev
+        ,libetapetache.statut_sstache
+        ,LIBETAPETACHE.DUREE_SSTACHE
+		,libetapetache.param_sstache) CONSO,		
+ligne_bip,
+proj_info PI,
+    etape,
+    directions,
+    APPLICATION AP,
+    APPLICATION APG,
+    RESSOURCE,
+    STRUCT_INFO,
+    CLIENT_MO CM,
+    vue_dpg_perime VDP,
+     type_activite t,
+  lien_types_proj_act l 
+  WHERE CONSO.ecet   = etape.ecet
+  AND CONSO.pid      = etape.pid
+  AND ligne_bip.pid  =CONSO.factpid
+  AND PI.icpi=ligne_bip.icpi
+  AND ligne_bip.codsg=struct_info.codsg
+    AND   INSTR(:P_PERIM_ME, VDP.codbddpg) > 0
+  AND struct_info.coddir=directions.coddir
+  AND CONSO.ident       =ressource.ident
+  AND ligne_bip.CLICODE =CM.CLICODE
+  AND ligne_bip.airt    = AP.airt
+  AND AP.ACDAREG        = APG.AIRT
+  AND (CONSO.codsg      =VDP.codsg
+  OR ligne_bip.codsg    = VDP.codsg)
+  and trim(ligne_bip.TYPPROJ) = trim(l.type_proj)
+AND ligne_bip.ARCTYPE         = t.arctype
+AND l.type_act         = t.arctype
+AND t.actif            ='O'
+	&P_WHERE
+	) a
+ORDER BY a.Identifiant_de_ressource,a.Ligneimputation;]]>
+      </select>
+      <displayInfo x="1.41663" y="0.04175" width="0.69995" height="0.19995"/>
+      <group name="G_libelle_projet">
+        <displayInfo x="1.02478" y="0.52063" width="2.03772" height="6.92480"
+        />
+        <dataItem name="LIBPROJET" datatype="vchar2" columnOrder="58"
+         width="50" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libprojet">
+          <dataDescriptor expression="LIBPROJET"
+           descriptiveExpression="LIBPROJET" order="1" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIGNEIMPUTATION" datatype="vchar2" columnOrder="26"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ligneimputation">
+          <dataDescriptor expression="LIGNEIMPUTATION"
+           descriptiveExpression="LIGNEIMPUTATION" order="2" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_LIGNE_IMPUTATION" datatype="vchar2"
+         columnOrder="27" width="30" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle Ligne Imputation">
+          <dataDescriptor expression="LIBELLE_LIGNE_IMPUTATION"
+           descriptiveExpression="LIBELLE_LIGNE_IMPUTATION" order="3"
+           width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIGNEDESAISIE" datatype="vchar2" columnOrder="59"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lignedesaisie">
+          <dataDescriptor expression="LIGNEDESAISIE"
+           descriptiveExpression="LIGNEDESAISIE" order="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_ETAPE" datatype="vchar2" columnOrder="60"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type Etape">
+          <dataDescriptor expression="TYPE_ETAPE"
+           descriptiveExpression="TYPE_ETAPE" order="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ETAPE" datatype="vchar2" columnOrder="61" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Etape">
+          <dataDescriptor expression="ETAPE" descriptiveExpression="ETAPE"
+           order="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_etape" datatype="vchar2" columnOrder="24"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Etape">
+          <xmlSettings xmlTag="&quot;Libellé étape&quot;"/>
+          <dataDescriptor expression="LIBELLE_ETAPE"
+           descriptiveExpression="LIBELLE_ETAPE" order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TACHE" datatype="vchar2" columnOrder="62" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Tache">
+          <dataDescriptor expression="TACHE" descriptiveExpression="TACHE"
+           order="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_tache" datatype="vchar2" columnOrder="25"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Tache">
+          <xmlSettings xmlTag="&quot;Libellé tâche&quot;"/>
+          <dataDescriptor expression="LIBELLE_TACHE"
+           descriptiveExpression="LIBELLE_TACHE" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOUS_TACHE" datatype="vchar2" columnOrder="63"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sous Tache">
+          <dataDescriptor expression="SOUS_TACHE"
+           descriptiveExpression="SOUS_TACHE" order="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_SOUS_TACHE" datatype="vchar2" columnOrder="64"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type Sous Tache">
+          <dataDescriptor expression="TYPE_SOUS_TACHE"
+           descriptiveExpression="TYPE_SOUS_TACHE" order="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_SOUS_TACHE" datatype="vchar2" columnOrder="28"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Sous Tache">
+          <dataDescriptor expression="LIBELLE_SOUS_TACHE"
+           descriptiveExpression="LIBELLE_SOUS_TACHE" order="12" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_IMPUTATION" datatype="vchar2" columnOrder="65"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Imputation">
+          <dataDescriptor expression="DPG_IMPUTATION"
+           descriptiveExpression="DPG_IMPUTATION" order="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDIR_IMPUTATION" datatype="vchar2" columnOrder="66"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdir Imputation">
+          <dataDescriptor expression="LIBDIR_IMPUTATION"
+           descriptiveExpression="LIBDIR_IMPUTATION" order="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOM_RESSOURCE" datatype="vchar2" columnOrder="29"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Nom Ressource">
+          <dataDescriptor expression="NOM_RESSOURCE"
+           descriptiveExpression="NOM_RESSOURCE" order="15" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENTIFIANT_DE_RESSOURCE" oracleDatatype="number"
+         columnOrder="30" width="22" defaultWidth="70000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Identifiant De Ressource">
+          <dataDescriptor expression="IDENTIFIANT_DE_RESSOURCE"
+           descriptiveExpression="IDENTIFIANT_DE_RESSOURCE" order="16"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_RESSOURCE" oracleDatatype="number"
+         columnOrder="31" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Dpg Ressource">
+          <dataDescriptor expression="DPG_RESSOURCE"
+           descriptiveExpression="DPG_RESSOURCE" order="17"
+           oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCIETE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="32" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Societe">
+          <dataDescriptor expression="SOCIETE" descriptiveExpression="SOCIETE"
+           order="18" oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="67" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor expression="METIER" descriptiveExpression="METIER"
+           order="19"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_JANVIER" oracleDatatype="number"
+         columnOrder="33" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Janvier">
+          <dataDescriptor expression="CONSOMME_JANVIER"
+           descriptiveExpression="CONSOMME_JANVIER" order="20"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_FEVRIER" oracleDatatype="number"
+         columnOrder="34" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Fevrier">
+          <dataDescriptor expression="CONSOMME_FEVRIER"
+           descriptiveExpression="CONSOMME_FEVRIER" order="21"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_MARS" oracleDatatype="number"
+         columnOrder="35" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Mars">
+          <dataDescriptor expression="CONSOMME_MARS"
+           descriptiveExpression="CONSOMME_MARS" order="22"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_AVRIL" oracleDatatype="number"
+         columnOrder="36" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Avril">
+          <dataDescriptor expression="CONSOMME_AVRIL"
+           descriptiveExpression="CONSOMME_AVRIL" order="23"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_MAI" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consomme Mai">
+          <dataDescriptor expression="CONSOMME_MAI"
+           descriptiveExpression="CONSOMME_MAI" order="24"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_JUIN" oracleDatatype="number"
+         columnOrder="38" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Juin">
+          <dataDescriptor expression="CONSOMME_JUIN"
+           descriptiveExpression="CONSOMME_JUIN" order="25"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_JUILLET" oracleDatatype="number"
+         columnOrder="39" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Juillet">
+          <dataDescriptor expression="CONSOMME_JUILLET"
+           descriptiveExpression="CONSOMME_JUILLET" order="26"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_AOUT" oracleDatatype="number"
+         columnOrder="40" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Aout">
+          <dataDescriptor expression="CONSOMME_AOUT"
+           descriptiveExpression="CONSOMME_AOUT" order="27"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_SEPTEMBRE" oracleDatatype="number"
+         columnOrder="41" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consomme Septembre">
+          <dataDescriptor expression="CONSOMME_SEPTEMBRE"
+           descriptiveExpression="CONSOMME_SEPTEMBRE" order="28"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_OCTOBRE" oracleDatatype="number"
+         columnOrder="42" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Octobre">
+          <dataDescriptor expression="CONSOMME_OCTOBRE"
+           descriptiveExpression="CONSOMME_OCTOBRE" order="29"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_NOVEMBRE" oracleDatatype="number"
+         columnOrder="43" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consomme Novembre">
+          <dataDescriptor expression="CONSOMME_NOVEMBRE"
+           descriptiveExpression="CONSOMME_NOVEMBRE" order="30"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_DECEMBRE" oracleDatatype="number"
+         columnOrder="44" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consomme Decembre">
+          <dataDescriptor expression="CONSOMME_DECEMBRE"
+           descriptiveExpression="CONSOMME_DECEMBRE" order="31"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutHTR" datatype="vchar2" columnOrder="23" width="14"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Couthtr" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Coût HTR&quot;"/>
+          <dataDescriptor expression="COUTHTR" descriptiveExpression="COUTHTR"
+           order="32" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutenv" datatype="vchar2" columnOrder="22" width="14"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pack Utile Cout Getcoutenv Con" breakOrder="none">
+          <xmlSettings xmlTagAttrs="&quot;coût env&quot;"/>
+          <dataDescriptor expression="COUTENV" descriptiveExpression="COUTENV"
+           order="33" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_DE_RESSOURCE" datatype="vchar2" columnOrder="68"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type De Ressource">
+          <dataDescriptor expression="TYPE_DE_RESSOURCE"
+           descriptiveExpression="TYPE_DE_RESSOURCE" order="34"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_PRESTATION" datatype="vchar2" columnOrder="69"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Prestation">
+          <dataDescriptor expression="CODE_PRESTATION"
+           descriptiveExpression="CODE_PRESTATION" order="35"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MODE_CONTRACTUEL_INDICATIF" datatype="vchar2"
+         columnOrder="70" width="0" defaultWidth="10000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Mode Contractuel Indicatif">
+          <dataDescriptor expression="MODE_CONTRACTUEL_INDICATIF"
+           descriptiveExpression="MODE_CONTRACTUEL_INDICATIF" order="36"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="STACHEPARAMLOCAL" datatype="vchar2" columnOrder="45"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Stacheparamlocal">
+          <dataDescriptor expression="STACHEPARAMLOCAL"
+           descriptiveExpression="STACHEPARAMLOCAL" order="37" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLIENT" datatype="vchar2" columnOrder="46" width="25"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Client">
+          <dataDescriptor expression="CLIENT" descriptiveExpression="CLIENT"
+           order="38" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_DPG_RESSOURCE" datatype="vchar2" columnOrder="47"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Dpg Ressource">
+          <dataDescriptor expression="LIB_DPG_RESSOURCE"
+           descriptiveExpression="LIB_DPG_RESSOURCE" order="39" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CSM_LIGNE" datatype="vchar2" columnOrder="48"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Csm Ligne">
+          <dataDescriptor expression="LIB_CSM_LIGNE"
+           descriptiveExpression="LIB_CSM_LIGNE" order="40" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_IRT" datatype="vchar2" columnOrder="49"
+         width="56" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Code Irt">
+          <dataDescriptor expression="CODE_IRT"
+           descriptiveExpression="CODE_IRT" order="41" width="56"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_DE_PLAN" datatype="vchar2" columnOrder="50"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type De Plan">
+          <dataDescriptor expression="TYPE_DE_PLAN"
+           descriptiveExpression="TYPE_DE_PLAN" order="42" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME_ANNUEL" oracleDatatype="number"
+         columnOrder="51" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Consomme Annuel">
+          <dataDescriptor expression="CONSOMME_ANNUEL"
+           descriptiveExpression="CONSOMME_ANNUEL" order="43"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDS_RESSOURCE" datatype="vchar2" columnOrder="52"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cds Ressource">
+          <dataDescriptor expression="CDS_RESSOURCE"
+           descriptiveExpression="CDS_RESSOURCE" order="44" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOURCING" datatype="vchar2" columnOrder="53"
+         width="11" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sourcing">
+          <dataDescriptor expression="SOURCING"
+           descriptiveExpression="SOURCING" order="45" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDS_LIGNE_BIP" datatype="vchar2" columnOrder="54"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cds Ligne Bip">
+          <dataDescriptor expression="CDS_LIGNE_BIP"
+           descriptiveExpression="CDS_LIGNE_BIP" order="46" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CSM_RESSOURCE" datatype="vchar2" columnOrder="55"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Csm Ressource">
+          <dataDescriptor expression="CSM_RESSOURCE"
+           descriptiveExpression="CSM_RESSOURCE" order="47" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT_TOTAL" oracleDatatype="number" columnOrder="57"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout Total">
+          <dataDescriptor expression="COUT_TOTAL"
+           descriptiveExpression="COUT_TOTAL" order="48"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACTIVITE" datatype="vchar2" columnOrder="56"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Activite">
+          <dataDescriptor expression="ACTIVITE"
+           descriptiveExpression="ACTIVITE" order="50" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUNT_FT" oracleDatatype="number" columnOrder="71"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Count Ft">
+          <dataDescriptor expression="COUNT_FT"
+           descriptiveExpression="COUNT_FT" order="49" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_libelle_projet_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.43750" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_libelle_projet" source="G_libelle_projet"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.43750"
+           height="0.25000"/>
+          <generalLayout verticalElasticity="expand"/>
+        </repeatingFrame>
+        <frame name="M_G_libelle_projet_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.43750"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_coutenv" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pack Utile Cout]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Getcoutenv Con]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_coutHTR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Couthtr]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libelle_etape" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.81250" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Etape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libelle_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.06250" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIGNEIMPUTATION" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligneimputation]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE_LIGNE_IMPUTATION" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.87500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle Ligne]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Imputation]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE_SOUS_TACHE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.31250" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sous Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NOM_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nom]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_IDENTIFIANT_DE_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.00000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Identifiant]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[De Ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DPG_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpg]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SOCIETE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.75000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Societe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_JANVIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.00000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Janvier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_FEVRIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.31250" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Fevrier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_MARS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.62500" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mars]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_AVRIL" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.93750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Avril]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_MAI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.25000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mai]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_JUIN" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.56250" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Juin]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_JUILLET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Juillet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_AOUT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.18750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Aout]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_SEPTEMBRE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.50000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Septembre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_OCTOBRE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.81250" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Octobre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_NOVEMBRE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.12500" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Novembre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_DECEMBRE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme Decembre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_STACHEPARAMLOCAL" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.62500" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Stacheparamlocal]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CLIENT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Client]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_DPG_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.43750" y="0.18750" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Lib Dpg Ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CSM_LIGNE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Lib Csm Ligne]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_IRT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.50000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Code Irt]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPE_DE_PLAN" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.81250" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Type De Plan]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSOMME_ANNUEL" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.25000" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consomme Annuel]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CDS_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.81250" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cds Ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SOURCING" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.25000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sourcing]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CDS_LIGNE_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.56250" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cds Ligne Bip]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CSM_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.00000" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Csm Ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COÛT_TOTAL" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.43750" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Coût Total]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ACTIVITE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.81250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Activite]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="0.96875" y="1.46875" width="3.03125" height="0.27087"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM16" source="P_PARAM16" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.32410" y="1.92615" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.32410" y="2.23865" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.33337" y="0.97913" width="1.00000" height="0.16663"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[.TXT ou .CSV]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.26038" y="1.55212" width="0.75000" height="0.16663"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes"/>
+      <string>
+      <![CDATA[P_Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM16" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.34741" y="2.03040" width="0.87134" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param16]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.35828" y="2.35413" width="0.87134" height="0.12695"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param7]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+	l_ssoumenu			VARCHAR2(100);
+	p_dpg VARCHAR2(10) := '';
+  p_axe VARCHAR2(40) := '';
+	
+begin
+ 
+	:P_WHERE := '';
+  :P_PERIM_ME:=pack_global.lire_perime(:P_GLOBAL);
+  if INSTR(:P_PERIM_ME, '00000000000') > 0
+			then
+				:P_PERIM_ME:= '06320000000';	
+			end if;
+	:P_PERIM_CAFI := pack_global.lire_ca_fi(:P_GLOBAL);
+	
+	-- utilise pour l affichage des colonnes
+	l_ssoumenu := Pack_Global.lire_globaldata(:P_GLOBAL).sousmenus;
+	IF ( INSTR(UPPER(l_ssoumenu),'GES') > 0 ) THEN
+		:P_SMENUS_GES := 'O';
+	ELSE
+		:P_SMENUS_GES := 'N';
+	END IF;
+	
+	
+    SELECT to_number(to_char(DATDEBEX.DATDEBEX,'YYYY' )) INTO :P_ANNEE FROM DATDEBEX;
+  
+  	if (:P_param6='.CSV') then
+  		:P_separateur :='"';
+  	else
+  		:P_separateur:='';
+  	end if;
+ 
+	-- SEL 17/09/2014 PPM 58375 QC 1647 Gerer le cas de ******* avec la prise en compte du perim_me
+  	   -- p_dpg := RTRIM(LTRIM(:P_PARAM7));
+  	    p_dpg := RTRIM(LTRIM(:P_PARAM9));
+		p_axe := RTRIM(LTRIM(:P_PARAM16));
+		
+		IF LPAD(p_dpg, 7, '*') != '*******' OR p_dpg IS NULL THEN
+		p_dpg := REPLACE(p_dpg,'*','%');
+			
+			    IF p_axe = 'DPG de ressource' THEN
+				
+				:P_WHERE := :P_WHERE || ' AND  TO_CHAR(CONSO.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+				
+				ELSIF p_axe = 'DPG de ligne' THEN				
+					
+				:P_WHERE := :P_WHERE || ' AND TO_CHAR(ligne_bip.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+									
+				ELSE
+				
+				:P_WHERE := :P_WHERE || ' AND  (TO_CHAR(CONSO.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+				:P_WHERE := :P_WHERE || ' OR TO_CHAR(ligne_bip.codsg, ''FM0000000'') like ''' || p_dpg || ''')';
+					
+				--:P_WHERE := :P_WHERE || ' AND TO_CHAR(VDP.codsg, ''FM0000000'') like ''' || p_dpg || '%''';	
+					
+				END IF;		
+				
+		ELSIF p_dpg = '*******' THEN
+			
+			    IF p_axe = 'DPG de ressource' THEN
+				
+				:P_WHERE := :P_WHERE || ' AND ((CONSO.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0)))'; 
+				
+				ELSIF p_axe = 'DPG de ligne' THEN				
+					
+				:P_WHERE := :P_WHERE || ' AND ( ligne_bip.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0 ))'; 
+									
+				ELSE
+				
+				:P_WHERE := :P_WHERE || ' AND ((CONSO.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0))';	
+				:P_WHERE := :P_WHERE || ' OR ( ligne_bip.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0 )))'; 				
+					
+				END IF;		
+				
+		END IF;
+	
+  		
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

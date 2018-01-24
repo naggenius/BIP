@@ -1,0 +1,1349 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="refficprj" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="REFFICPRJ" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="5"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT
+     	pi.icpi          	 	                                                ICPI,
+	pi.ilibel          	 	                                                ILIBEL,
+                TO_CHAR(pi.datcre,'DD/MM/YYYY')          	 	DATCRE,
+     	pi.icpir          	 	                                                ICPIR,
+	pi2.ilibel          	 	                                                ILIBEL_G,
+	pi.icodproj          	 	                                                ICODPROJ,
+                dp.dplib                                                                                    DP_DPLIB,
+	TO_CHAR(pi.cada) 	 	                                                CADA,
+                ca.clibrca                                                                                 CA_CLIBRCA,
+                TO_CHAR(pi.datprod,'MM/YYYY')          	 	DATPROD,
+                TO_CHAR(pi.datrpro,'MM/YYYY')           	 	DATRPRO,
+	pi.statut          	 	                                                STATUT,
+                cs.libstatut                                                                               LIBSTATUT,
+                TO_CHAR(pi.datdem,'MM/YYYY')            	 	DATDEM,
+                TO_CHAR(pi.datstatut,'DD/MM/YYYY')          	 	DATSTATUT,
+	pi.librpb          	 	                                                LIBRPB,
+	pi.idrpb          	 	                                                IDRPB,
+	pi.clicode          	 	                                                CLICODE,
+                cm.clilib                                                                                    CLILIB,
+	pi.imop          	 	                                                IMOP,
+	pi.codsg          	 	                                                CODSG,
+	si.libdsg          	 	                                                LIBDSG,
+	pi.icme          	 	                                                ICME,
+	pi.descr          	 	                                                DESCR,
+                d.libelle                                                                                  DB_LIB_DB,
+                ss.libelle                                                                                  EA_LIB_EA,
+                pi.dureeamor                                                                           DUREEAMOR,
+	pi.CODCAMO1 				   LB_CODCAMOCA1,
+	pi.CLIBCA1				   LB_CLIBCA1,
+	pi.CODCAMO2 				   LB_CODCAMOCA2,
+	pi.CLIBCA2				   LB_CLIBCA2,
+	pi.CODCAMO3				   LB_CODCAMOCA3,
+	pi.CLIBCA3				   LB_CLIBCA3,
+                pi.CODCAMO4				   LB_CODCAMOCA4,
+	pi.CLIBCA4				   LB_CLIBCA4,	
+	pi.CODCAMO5				   LB_CODCAMOCA5,
+	pi.CLIBCA5				   LB_CLIBCA5,
+	decode(pi.TOPENVOI,'O','Oui','N','Non',null)			   TOPENVOI,
+	TO_CHAR(pi.DATE_ENVOI,'DD/MM/YYYY')			   DATE_ENVOI
+FROM   
+                proj_info                        pi,
+	dossier_projet               dp,
+	centre_activite             ca,
+                sous_systeme      ss,
+                domaine       d,
+                client_mo                      cm,
+                struct_info                     si,
+                proj_info                        pi2,
+                code_statut                  cs 
+WHERE
+                  pi.ICODPROJ = dp.DPCODE (+)
+           and pi.cada = ca.codcamo (+)
+           and pi.cod_db = d.code_d (+)
+           and d.code_ss = ss.code_ss (+)
+           and pi.icpir = pi2.icpi(+)
+           and pi.codsg = si.codsg(+)
+           and pi.clicode = cm.clicode(+)
+           and pi.statut = cs.astatut(+)
+       &P_WHERE
+ORDER BY pi.icpi;
+ 
+
+
+
+
+]]>
+      </select>
+      <displayInfo x="1.67090" y="0.13538" width="0.69995" height="0.19995"/>
+      <group name="G_DATCRE">
+        <displayInfo x="1.50195" y="1.10425" width="1.39197" height="5.21582"
+        />
+        <dataItem name="DUREEAMOR" oracleDatatype="number" columnOrder="51"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dureeamor">
+          <dataDescriptor expression="pi.dureeamor"
+           descriptiveExpression="DUREEAMOR" order="27" width="22"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CODCAMOCA1" oracleDatatype="number"
+         columnOrder="39" width="22" defaultWidth="80000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Lb Codcamoca1">
+          <dataDescriptor expression="pi.CODCAMO1"
+           descriptiveExpression="LB_CODCAMOCA1" order="28"
+           oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CLIBCA1" datatype="vchar2" columnOrder="40"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lb Clibca1">
+          <dataDescriptor expression="pi.CLIBCA1"
+           descriptiveExpression="LB_CLIBCA1" order="29" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CODCAMOCA2" oracleDatatype="number"
+         columnOrder="41" width="22" defaultWidth="80000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Lb Codcamoca2">
+          <dataDescriptor expression="pi.CODCAMO2"
+           descriptiveExpression="LB_CODCAMOCA2" order="30"
+           oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CLIBCA2" datatype="vchar2" columnOrder="42"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lb Clibca2">
+          <dataDescriptor expression="pi.CLIBCA2"
+           descriptiveExpression="LB_CLIBCA2" order="31" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CODCAMOCA3" oracleDatatype="number"
+         columnOrder="43" width="22" defaultWidth="80000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Lb Codcamoca3">
+          <dataDescriptor expression="pi.CODCAMO3"
+           descriptiveExpression="LB_CODCAMOCA3" order="32"
+           oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CLIBCA3" datatype="vchar2" columnOrder="44"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lb Clibca3">
+          <dataDescriptor expression="pi.CLIBCA3"
+           descriptiveExpression="LB_CLIBCA3" order="33" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CODCAMOCA4" oracleDatatype="number"
+         columnOrder="45" width="22" defaultWidth="80000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Lb Codcamoca4">
+          <dataDescriptor expression="pi.CODCAMO4"
+           descriptiveExpression="LB_CODCAMOCA4" order="34"
+           oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CLIBCA4" datatype="vchar2" columnOrder="46"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lb Clibca4">
+          <dataDescriptor expression="pi.CLIBCA4"
+           descriptiveExpression="LB_CLIBCA4" order="35" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CODCAMOCA5" oracleDatatype="number"
+         columnOrder="47" width="22" defaultWidth="80000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Lb Codcamoca5">
+          <dataDescriptor expression="pi.CODCAMO5"
+           descriptiveExpression="LB_CODCAMOCA5" order="36"
+           oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LB_CLIBCA5" datatype="vchar2" columnOrder="48"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lb Clibca5">
+          <dataDescriptor expression="pi.CLIBCA5"
+           descriptiveExpression="LB_CLIBCA5" order="37" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ICPI" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="12" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Projet">
+          <dataDescriptor expression="pi.icpi" descriptiveExpression="ICPI"
+           order="1" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATCRE" datatype="vchar2" columnOrder="14"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Date de création" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( pi.datcre , &apos;DD/MM/YYYY&apos; )"
+           descriptiveExpression="DATCRE" order="3" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ILIBEL" datatype="vchar2" columnOrder="13" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libellé" breakOrder="none">
+          <dataDescriptor expression="pi.ilibel"
+           descriptiveExpression="ILIBEL" order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ICPIR" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="15" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Projet Groupe" breakOrder="none">
+          <dataDescriptor expression="pi.icpir" descriptiveExpression="ICPIR"
+           order="4" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ILIBEL_G" datatype="vchar2" columnOrder="16"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libellé" breakOrder="none">
+          <dataDescriptor expression="pi2.ilibel"
+           descriptiveExpression="ILIBEL_G" order="5" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ICODPROJ" oracleDatatype="number" columnOrder="17"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Code Dossier Projet" breakOrder="none">
+          <dataDescriptor expression="pi.icodproj"
+           descriptiveExpression="ICODPROJ" order="6" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DP_DPLIB" datatype="vchar2" columnOrder="18"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libellé" breakOrder="none">
+          <dataDescriptor expression="dp.dplib"
+           descriptiveExpression="DP_DPLIB" order="7" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CADA" datatype="vchar2" columnOrder="19" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="CADA" breakOrder="none">
+          <dataDescriptor expression="TO_CHAR ( pi.cada )"
+           descriptiveExpression="CADA" order="8" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_CLIBRCA" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="20" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libellé" breakOrder="none">
+          <dataDescriptor expression="ca.clibrca"
+           descriptiveExpression="CA_CLIBRCA" order="9"
+           oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATPROD" datatype="vchar2" columnOrder="21" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Date de MEP" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( pi.datprod , &apos;MM/YYYY&apos; )"
+           descriptiveExpression="DATPROD" order="10" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATRPRO" datatype="vchar2" columnOrder="22" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Date révisée de MEP" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( pi.datrpro , &apos;MM/YYYY&apos; )"
+           descriptiveExpression="DATRPRO" order="11" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBSTATUT" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="24" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libstatut" breakOrder="none">
+          <dataDescriptor expression="cs.libstatut"
+           descriptiveExpression="LIBSTATUT" order="13"
+           oracleDatatype="aFixedChar" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATDEM" datatype="vchar2" columnOrder="25" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Datdem" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( pi.datdem , &apos;MM/YYYY&apos; )"
+           descriptiveExpression="DATDEM" order="14" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATSTATUT" datatype="vchar2" columnOrder="26"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Datstatut" breakOrder="none">
+          <dataDescriptor
+           expression="TO_CHAR ( pi.datstatut , &apos;DD/MM/YYYY&apos; )"
+           descriptiveExpression="DATSTATUT" order="15" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBRPB" datatype="vchar2" columnOrder="27" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Librpb" breakOrder="none">
+          <dataDescriptor expression="pi.librpb"
+           descriptiveExpression="LIBRPB" order="16" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDRPB" datatype="vchar2" columnOrder="28" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Idrpb" breakOrder="none">
+          <dataDescriptor expression="pi.idrpb" descriptiveExpression="IDRPB"
+           order="17" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLICODE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="29" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clicode" breakOrder="none">
+          <dataDescriptor expression="pi.clicode"
+           descriptiveExpression="CLICODE" order="18"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLILIB" datatype="vchar2" columnOrder="30" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clilib" breakOrder="none">
+          <dataDescriptor expression="cm.clilib"
+           descriptiveExpression="CLILIB" order="19" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IMOP" datatype="vchar2" columnOrder="31" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Imop" breakOrder="none">
+          <dataDescriptor expression="pi.imop" descriptiveExpression="IMOP"
+           order="20" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg" breakOrder="none">
+          <dataDescriptor expression="pi.codsg" descriptiveExpression="CODSG"
+           order="21" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDSG" datatype="vchar2" columnOrder="33" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdsg" breakOrder="none">
+          <dataDescriptor expression="si.libdsg"
+           descriptiveExpression="LIBDSG" order="22" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ICME" datatype="vchar2" columnOrder="34" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Icme" breakOrder="none">
+          <dataDescriptor expression="pi.icme" descriptiveExpression="ICME"
+           order="23" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DESCR" datatype="vchar2" columnOrder="35" width="305"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Descr" breakOrder="none">
+          <dataDescriptor expression="pi.descr" descriptiveExpression="DESCR"
+           order="24" width="305"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DB_LIB_DB" datatype="vchar2" columnOrder="36"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Db Lib Db" breakOrder="none">
+          <dataDescriptor expression="d.libelle"
+           descriptiveExpression="DB_LIB_DB" order="25" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EA_LIB_EA" datatype="vchar2" columnOrder="37"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Ea Lib Ea" breakOrder="none">
+          <dataDescriptor expression="ss.libelle"
+           descriptiveExpression="EA_LIB_EA" order="26" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="STATUT" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="23" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Statut" breakOrder="none">
+          <dataDescriptor expression="pi.statut"
+           descriptiveExpression="STATUT" order="12"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOPENVOI" datatype="vchar2" columnOrder="49" width="3"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Topenvoi">
+          <dataDescriptor
+           expression="decode ( pi.TOPENVOI , &apos;O&apos; , &apos;Oui&apos; , &apos;N&apos; , &apos;Non&apos; , null )"
+           descriptiveExpression="TOPENVOI" order="38" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_ENVOI" datatype="vchar2" columnOrder="50"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date Envoi">
+          <dataDescriptor
+           expression="TO_CHAR ( pi.DATE_ENVOI , &apos;DD/MM/YYYY&apos; )"
+           descriptiveExpression="DATE_ENVOI" order="39" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" height="13.00000" heightInChar="70">
+    <body height="11.00000">
+      <repeatingFrame name="R_G_DATCRE" source="G_DATCRE"
+       printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+       columnMode="no">
+        <geometryInfo x="0.00000" y="0.37500" width="7.50000" height="9.06250"
+        />
+        <field name="F_DATCRE" source="DATCRE" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="1.00000" width="1.25000"
+           height="0.18750"/>
+        </field>
+        <text name="B_DATCRE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="1.00000" width="2.18750"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Date de création    :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_ICPI" source="ICPI" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.91870" y="0.62500" width="1.26880"
+           height="0.18750"/>
+        </field>
+        <text name="B_ICPI" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.05005" y="0.62500" width="2.69995"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Code Projet         :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_ILIBEL" source="ILIBEL" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="0.62500" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_ILIBEL_G" source="ILIBEL_G" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="1.37500" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DP_DPLIB" source="DP_DPLIB" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="1.68750" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CA_CLIBRCA" source="CA_CLIBRCA" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="2.00000" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <text name="B_CA_CLIBRCA" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="2.00000" width="1.81250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DP_DPLIB" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="1.68750" width="1.50000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_ILIBEL_G" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="1.37500" width="1.43750"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_ILIBEL" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.41248" y="0.62500" width="1.65002"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_ICPIR" source="ICPIR" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.94373" y="1.37500" width="1.24377"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_ICODPROJ" source="ICODPROJ" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="1.68750" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CADA" source="CADA" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="2.00000" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DATPROD" source="DATPROD" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="2.37500" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DATRPRO" source="DATRPRO" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="2.68750" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_LIBSTATUT" source="LIBSTATUT" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.06250" y="3.31250" width="4.00000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DATDEM" source="DATDEM" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.06250" y="3.62500" width="4.00000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DATSTATUT" source="DATSTATUT" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.06250" y="3.93750" width="2.68750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DATE_ENVOI" source="DATE_ENVOI" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.31250" y="4.25000" width="1.37500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DUREEAMOR" source="DUREEAMOR" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="2.06250" y="3.00000" width="0.31250"
+           height="0.18750"/>
+          <visualSettings lineForegroundColor="white"/>
+        </field>
+        <text name="B_LIBSTATUT" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="3.31250" width="3.62500"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Statut du Projet                  :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DATDEM" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="3.62500" width="3.43750"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Date de prise en compte du statut :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DATSTATUT" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="3.93750" width="3.75000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Date de dernière modification     :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_TOPENVOI" source="TOPENVOI" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="2.00000" y="4.25000" width="1.06250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_EA_LIB_EA" source="EA_LIB_EA" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="2.00000" y="4.56250" width="3.68750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DB_LIB_DB" source="DB_LIB_DB" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="2.00000" y="4.87500" width="3.68750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_LIBRPB" source="LIBRPB" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.00000" y="5.18750" width="4.43750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_IDRPB" source="IDRPB" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.00000" y="5.43750" width="4.43750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CLICODE" source="CLICODE" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="6.37500" y="5.81250" width="1.12500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_IMOP" source="IMOP" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.00000" y="6.06250" width="4.43750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CODSG" source="CODSG" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="6.37500" y="6.43750" width="1.12500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_ICME" source="ICME" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.00000" y="6.68750" width="4.43750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CODCAMOCA1" source="LB_CODCAMOCA1" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="7.06250" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CODCAMOCA2" source="LB_CODCAMOCA2" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="7.31250" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CODCAMOCA3" source="LB_CODCAMOCA3" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="7.56250" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CODCAMOCA4" source="LB_CODCAMOCA4" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="7.81250" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CODCAMOCA5" source="LB_CODCAMOCA5" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.93750" y="8.06250" width="1.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <text name="B_DESCR" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="8.62500" width="2.00000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Description :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CAPRECONISE5" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="8.06250" width="2.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[CA                :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CAPRECONISE4" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="7.81250" width="2.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[CA                :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CAPRECONISE3" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="7.56250" width="2.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[CA                :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CAPRECONISE2" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="7.31250" width="2.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[CA                :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_CA_CLIBCA1" source="LB_CLIBCA1" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="7.06250" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CA_CLIBCA2" source="LB_CLIBCA2" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="7.31250" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CA_CLIBCA3" source="LB_CLIBCA3" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="7.56250" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CA_CLIBCA4" source="LB_CLIBCA4" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="7.81250" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_CA_CLIBCA5" source="LB_CLIBCA5" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="4.25000" y="8.06250" width="3.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <field name="F_DESCR" source="DESCR" minWidowLines="1" spacing="0"
+         alignment="flush">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="1.25000" y="8.62500" width="5.93750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <text name="B_CA_CLIBCA5" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="8.06250" width="1.81250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CA_CLIBCA4" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="7.81250" width="1.81250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CA_CLIBCA3" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="7.56250" width="1.81250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CA_CLIBCA2" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="7.31250" width="1.81250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CA_CLIBCA1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.43750" y="7.06250" width="1.81250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Libellé :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CODSG" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="5.81250" y="6.43750" width="0.93750"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Code :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_LIBDSG" source="LIBDSG" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.00000" y="6.43750" width="2.75000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <text name="B_ICME" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="6.68750" width="3.75000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Nom de la maîtrise d'oeuvre      :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CAPRECONISE1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="7.06250" width="2.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[CA                :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_LIBDSG" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="6.43750" width="3.68750"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Service de la maîtrise d'oeuvre  :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CLICODE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="5.81250" y="5.81250" width="1.06250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Code :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_CLILIB" source="CLILIB" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Courier" size="10"/>
+          <geometryInfo x="3.00000" y="5.81250" width="2.75000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+        </field>
+        <text name="B_IMOP" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="6.06250" width="3.62500"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Nom de la maîtrise d'ouvrage     :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CLILIB" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="5.81250" width="3.75000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Service de la maîtrise d'ouvrage :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_IDRPB" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="5.43750" width="3.68750"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Nom du Responsable bancaire      :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_LIBRPB" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="5.18750" width="3.50000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Service du Responsable bancaire  :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DB_LIB_DB" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="4.87500" width="2.62500"
+           height="0.25000"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Domaine    :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_EA_LIB_EA" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="4.56250" width="2.62500"
+           height="0.25000"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Sous système :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DATSTATUT1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="4.25000" width="2.12500"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Envoi Expense       :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DATSTATUT2" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.25000" y="4.25000" width="1.37500"
+           height="0.18750"/>
+          <generalLayout>
+            <conditionalFormat>
+              <formatException label="(:DATE_ENVOI IS NULL)">
+                <font face="Courier New" size="12"/>
+              <cond name="first" column="DATE_ENVOI" exception="11"
+               conjunction="1"/>
+              </formatException>
+            </conditionalFormat>
+          </generalLayout>
+          <advancedLayout formatTrigger="b_datstatut2formattrigger"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Date envoi :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_2" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="2.37500" y="3.00000" width="0.33337"
+           height="0.13538"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[mois]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DATRPRO" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="2.68750" width="2.37500"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Date révisée de MEP :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DUREEAMOR" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="3.00000" width="1.91663"
+           height="0.13538"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Durée d'amortissement :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DATPROD" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="2.37500" width="2.75000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Date de MEP         :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CADA" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="2.00000" width="2.31250"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[CADA                :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_ICODPROJ" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.00000" y="1.68750" width="2.25000"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Code Dossier Projet :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_ICPIR" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.07495" y="1.37500" width="2.17505"
+           height="0.18750"/>
+          <textSegment>
+            <font face="Courier" size="10"/>
+            <string>
+            <![CDATA[Projet Groupe       :]]>
+            </string>
+          </textSegment>
+        </text>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="1.50000" y="0.62500" width="5.18750" height="0.62500"
+        />
+        <visualSettings linePattern="solid" lineForegroundColor="gray96"/>
+        <textSegment>
+          <font face="Courier New" size="12"/>
+          <string>
+          <![CDATA[
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="12"/>
+          <string>
+          <![CDATA[Fiche descriptive d'un Projet Informatique
+]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Date_Courante" source="CurrentDate" minWidowLines="1"
+       formatMask="DD-MON-RR HH24:MI:SS" spacing="single" alignment="end">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="6.00000" y="0.06250" width="1.93750" height="0.18750"
+        />
+        <visualSettings fillPattern="transparent"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+      l_where_dpcode  VARCHAR2(100) := ' ';
+      l_param6        VARCHAR2(5)    := '';
+begin
+  -- gestion du PARAM6 contenant la valeur du sous projet ICPI.
+	
+	-- On enlève tous les espaces et on passe la chaîne en majuscules
+  	l_param6 := UPPER(RTRIM(LTRIM(:P_PARAM6)));
+	
+	------------------------------------------------------------------------
+ 	-- Conditions WHERE sur icpi
+ 	------------------------------------------------------------------------
+ 		IF (l_param6 is not null) THEN
+			  l_where_dpcode := ' AND pi.ICPI = '''||l_param6||'''  ';
+        :P_WHERE := l_where_dpcode;
+		END IF;
+
+ 	  --srw.message(1, ':P_WHERE : ' || l_where_dpcode);
+ 	  
+  RETURN TRUE;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_datstatut2formattrigger">
+      <textSource>
+      <![CDATA[function B_DATSTATUT2FormatTrigger return boolean is
+begin
+
+  -- Généré automatiquement à partir de Report Builder.
+  if (:DATE_ENVOI IS NULL)
+  then
+    return (FALSE);
+  end if;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="g_datcregroupfilter">
+      <textSource>
+      <![CDATA[function G_DATCREGroupFilter return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="formLike" versionFlags2="0"
+   templateName="" sectionTitle="Fiche descriptive Projet Informatique"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

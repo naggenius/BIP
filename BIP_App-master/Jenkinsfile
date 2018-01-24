@@ -1,0 +1,245 @@
+stage ("\u2600 Checkout Sources")
+        {
+            node ('linux')
+                    {
+                        git branch: 'BIP_SPRINT12_UAT_DEFECTS', url: 'https://sgithub.fr.world.socgen/BSC-CORE-Apps/BIP_App.git'
+                    }
+        }
+
+stage ("\u2600 Build/Compile")
+        {
+            node ('linux')
+                    {
+                        withEnv(["JAVA_HOME=${ tool 'jdk1.8' }", "PATH+MAVEN=${tool 'maven'}/bin:${env.JAVA_HOME}/bin"])
+                                {
+                                    def v = version()
+
+                                    if (v) { echo "\u2600 Building version ${v}"}
+
+                                    sh "mvn clean compile -DskipTests"
+
+                                    stash excludes: 'target/', includes: '**/*', name: 'source'
+                                }
+                    }
+        }
+
+stage ("\u2600 Run Technical Tests (Unit Tests)")
+        {
+            node ('linux')
+                    {
+                        withEnv(["JAVA_HOME=${ tool 'jdk1.8' }", "PATH+MAVEN=${tool 'maven'}/bin:${env.JAVA_HOME}/bin"])
+                                {
+                                    deleteDir()
+
+                                    unstash 'source'
+
+                                    sh "mvn clean test"
+
+                                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml, **/target/test-reports/*.xml, **/test-results/*.xml'
+                                }
+                    }
+        }
+
+stage ("\u2600 Run Code Source Analysis")
+        {
+            node ('linux')
+                    {
+                        withEnv(["JAVA_HOME=${ tool 'jdk1.8' }", "PATH+MAVEN=${tool 'maven'}/bin:${env.JAVA_HOME}/bin" ])
+                                {
+                                    deleteDir()
+
+                                    unstash 'source'
+
+                                    withSonarQubeEnv
+                                            {
+                                                
+                                                sh "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true sonar:sonar -Dsonar.branch=${env.BRANCH_NAME}"
+                                                
+                                            }
+
+                                }
+                    }
+        }
+
+stage ("\u2600 Archive/Install Artifacts (Nexus)")
+        {
+            node ('linux')
+                    {
+                        withEnv(["JAVA_HOME=${ tool 'jdk1.8' }", "PATH+MAVEN=${tool 'maven'}/bin:${env.JAVA_HOME}/bin" ])
+                                {
+                                    deleteDir()
+
+                                    unstash 'source'
+
+                                    sh "mvn deploy -DskipTests"
+
+                                }
+                    }
+        }
+
+
+stage ("\u2600 Deployment to Dev Env")
+        {
+            node ('linux')
+                    {
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'jenkins_bip', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])
+                                {
+                                    def buildVersion = version()
+
+                                    if (buildVersion)
+                                    {
+                                        echo "\u2600 Deploying  version ${buildVersion}"
+                                    }
+
+                                    /* def devEnvChoices = ['JOB_BIP_SRC_D1', 'JOB_BIP_SRC_D2'].join('\n')
+                                     def DEPLOY_TO = input(message: 'Deploy this build to Dev?',
+                                             ok: 'Yes deploy now!',
+                                             parameters: [choice(choices: devEnvChoices, name: 'DEPLOY_TO')]
+                                     )
+                                     echo "jobTemplate = ${DEPLOY_TO}"
+                                     build job: 'PIPELINE-ANSIBLE-DEPLOY',
+                                             parameters: [string(name: 'PROJECT_VERSION', value: "${buildVersion}"),
+                                                          string(name: 'PROJECT_TRIGRAMME', value: 'BIP'),
+                                                          string(name: 'SUB_ENV', value: 'BIP'),
+                                                          string(name: 'BUILD_CAUSE', value: 'MANUALTRIGGER'),
+                                                          string(name: 'ANSIBLE_USER', value: "${USERNAME}"),
+                                                          string(name: 'ANSIBLE_HOSTNAME', value: 'tower.dns20.socgen'),
+                                                          string(name: 'ANSIBLE_PASSWORD', value: "${PASSWORD}"),
+                                                          string(name: 'ANSIBLE_JOB_TEMPLATE', value: "${DEPLOY_TO}")]*/
+
+                                }
+                    }
+        }
+
+stage ("\u2600 Prompt for UAT Deployment")
+        {
+            timeout(time: 1, unit: 'DAYS')
+                    {
+                        mail (to: 'sami.zouari@socgen.com',
+                                subject: "[BIP] Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting you to deploy last version in UAT",
+                                body: "Please go to ${env.BUILD_URL}.");
+                        input message: 'Let\'s deploy to UAT/Homologation ?', ok: 'Continue'
+                    }
+        }
+
+
+stage ("\u2600 PL SQL Deployment to UAT Env")
+        {
+            node ('linux')
+                    {
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'jenkins_bip', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])
+                                {
+
+                                    def buildVersion = version()
+                                    if (buildVersion)
+                                    {
+                                        echo "\u2600 Deploying  version ${buildVersion}"
+                                    }
+                                    def userPasswordInput = input( id: 'choose', message: "Input parameters",
+                                            ok: 'Continue', parameters: [
+                                            text(defaultValue: "false", description: 'Install SQL', name: 'DEPLOY_SQL'),
+                                            text(defaultValue: "false", description: 'Install PL SQL', name: 'DEPLOY_PLSQL')
+                                    ])
+
+                                    def SQL_input = userPasswordInput['DEPLOY_SQL']
+                                    def PLSQL_input = userPasswordInput['DEPLOY_PLSQL']
+
+                                    build job: 'PIPELINE-ANSIBLE-DEPLOY',
+                                            parameters: [string(name: 'PROJECT_VERSION', value: "${buildVersion}"),
+                                                         string(name: 'PROJECT_TRIGRAMME', value: 'BIP'),
+                                                         string(name: 'SUB_ENV', value: "${SQL_input}-${PLSQL_input}"),
+                                                         string(name: 'BUILD_CAUSE', value: 'MANUALTRIGGER'),
+                                                         string(name: 'ANSIBLE_USER', value: "${USERNAME}"),
+                                                         string(name: 'ANSIBLE_HOSTNAME', value: 'tower.dns20.socgen'),
+                                                         string(name: 'ANSIBLE_PASSWORD', value: "${PASSWORD}"),
+                                                         string(name: 'ANSIBLE_JOB_TEMPLATE', value: "JOB_BIP_SQL_HF")]
+
+                                }
+                    }
+        }
+
+stage ("\u2600 BIP FILE Deployment to UAT Env")
+        {
+            node ('linux')
+                    {
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'jenkins_bip', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])
+                                {
+
+                                    def buildVersion = version()
+
+                                    if (buildVersion)
+                                    {
+                                        echo "\u2600 Deploying  version ${buildVersion}"
+                                    }
+
+
+                                    build job: 'ANSIBLE-PIPELINE-DEPLOY-JUMP',
+                                            parameters:
+                                                    [string(name: 'PROJECT_VERSION', value: "${buildVersion}"),
+                                                     string(name: 'Environnement', value: 'Homologation'),
+                                                     text(name: 'Description', value: 'TEST - Installation Automatisé SOFA'),
+                                                     string(name: 'RequestedBy', value: 'A445424'),
+                                                     string(name: 'RequestedByFullName', value: 'ZOUARI Sami'),
+                                                     string(name: 'Entity', value: 'RESG/BSC/H2R'),
+                                                     string(name: 'BusinessService', value: 'IS_APPLI_MUTUALIZED_SOLUTIONS'),
+                                                     string(name: 'CI', value: 'A0374'),
+                                                     string(name: 'CIName', value: 'BIP'),
+                                                     string(name: 'AssetTag', value: 'A0374-BIP'),
+                                                     string(name: 'AssociatedCIs', value: 'pbiplx01.dns20.socgen'),
+                                                     string(name: 'Impact', value: 'Aucun'),
+                                                     string(name: 'PROJECT_TRIGRAMME', value: 'BIP'),
+                                                     string(name: 'SUB_ENV', value: 'BIP'),
+                                                     string(name: 'BUILD_CAUSE', value: 'MANUALTRIGGER'),
+                                                     string(name: 'ANSIBLE_USER', value: "${USERNAME}"),
+                                                     string(name: 'ANSIBLE_HOSTNAME', value: 'tower.dns20.socgen'),
+                                                     password(name: 'ANSIBLE_PASSWORD', value: "${PASSWORD}"),
+                                                     string(name: 'ANSIBLE_JOB_TEMPLATE', value: "JOB_BIP_FILES_HF")]
+
+                                }
+                    }
+        }
+
+
+stage ("\u2600 WAR Deployment to UAT Env")
+        {
+            node ('linux')
+                    {
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'jenkins_bip', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']])
+                                {
+
+                                    def buildVersion = version()
+
+                                    if (buildVersion)
+                                    {
+                                        echo "\u2600 Deploying  version ${buildVersion}"
+                                    }
+                                    build job: 'PIPELINE-ANSIBLE-DEPLOY',
+                                            parameters: [string(name: 'PROJECT_VERSION', value: "${buildVersion}"),
+                                                         string(name: 'PROJECT_TRIGRAMME', value: 'BIP'),
+                                                         string(name: 'SUB_ENV', value: 'BIP'),
+                                                         string(name: 'BUILD_CAUSE', value: 'MANUALTRIGGER'),
+                                                         string(name: 'ANSIBLE_USER', value: "${USERNAME}"),
+                                                         string(name: 'ANSIBLE_HOSTNAME', value: 'tower.dns20.socgen'),
+                                                         string(name: 'ANSIBLE_PASSWORD', value: "${PASSWORD}"),
+                                                         string(name: 'ANSIBLE_JOB_TEMPLATE', value: "JOB_BIP_SRC_HF")]
+
+                                }
+                    }
+        }
+
+stage ("\u2600 Run TFA")
+        {
+            node ('Slave_Windows_TFA_UFT_NQC_DEV')
+                    {
+                        build job: 'BIP-A0374_TFA', propagate: false, quietPeriod: 1, wait: false
+                    }
+        }
+
+
+
+def version()
+{
+    def pom = readMavenPom file: 'pom.xml'
+    def version = pom.version
+    version
+}

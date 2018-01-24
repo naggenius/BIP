@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="organisation" DTDVersion="9.0.2.0.10"
+ beforeReportTrigger="beforereport" afterReportTrigger="afterreport"
+ unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="ORGANISATION" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_TITRE_ETAT" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="1000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ_2" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_REQ_PRINC">
+      <select>
+      <![CDATA[select CODSG,  LIBDSG, GNOM , LIBPOLE, IDENT , CHEF_PROJET,
+           REESTIME, ANMONT, CUSAG, NB_RESS, NB_RESS_SG,
+           NB_RESS_SSII
+from    TMP_ORGANISATION 
+where NUMSEQ= :p_numseq_2
+order by codsg, ident;
+]]>
+      </select>
+      <displayInfo x="1.71958" y="1.35124" width="2.96323" height="0.55563"/>
+      <group name="G_CODSG">
+        <displayInfo x="1.74098" y="2.78154" width="3.07423" height="9.34145"
+        />
+        <dataItem name="CODSG" oracleDatatype="number" columnOrder="24"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codsg">
+          <xmlSettings xmlTag="Code DPG"/>
+          <dataDescriptor expression="CODSG" descriptiveExpression="CODSG"
+           order="1" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDSG" datatype="vchar2" columnOrder="25" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdsg">
+          <xmlSettings xmlTag="Libellé DPG"/>
+          <dataDescriptor expression="LIBDSG" descriptiveExpression="LIBDSG"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="GNOM" datatype="vchar2" columnOrder="26" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Gnom">
+          <xmlSettings xmlTag="Nom Resp"/>
+          <dataDescriptor expression="GNOM" descriptiveExpression="GNOM"
+           order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBPOLE" datatype="vchar2" columnOrder="27" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libpole">
+          <xmlSettings xmlTag="Libellé Pole"/>
+          <dataDescriptor expression="LIBPOLE" descriptiveExpression="LIBPOLE"
+           order="4" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENT1" oracleDatatype="number" columnOrder="23"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <xmlSettings xmlTag="Code CP"/>
+          <dataDescriptor expression="IDENT" descriptiveExpression="IDENT"
+           order="5" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHEF_PROJET" datatype="vchar2" columnOrder="28"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Chef Projet">
+          <xmlSettings xmlTag="Nom Chef Projet"/>
+          <dataDescriptor expression="CHEF_PROJET"
+           descriptiveExpression="CHEF_PROJET" order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REESTIME" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Reestime">
+          <xmlSettings xmlTag="Réestime"/>
+          <dataDescriptor expression="REESTIME"
+           descriptiveExpression="REESTIME" order="7" oracleDatatype="number"
+           width="22" scale="2" precision="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ANMONT" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Anmont">
+          <xmlSettings xmlTag="Arbitre"/>
+          <dataDescriptor expression="ANMONT" descriptiveExpression="ANMONT"
+           order="8" oracleDatatype="number" width="22" scale="2"
+           precision="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CUSAG" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cusag">
+          <xmlSettings xmlTag="Consomme"/>
+          <dataDescriptor expression="CUSAG" descriptiveExpression="CUSAG"
+           order="9" oracleDatatype="number" width="22" scale="2"
+           precision="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NB_RESS" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nb Ress">
+          <xmlSettings xmlTag="Nb Ressources"/>
+          <dataDescriptor expression="NB_RESS" descriptiveExpression="NB_RESS"
+           order="10" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NB_RESS_SG" oracleDatatype="number" columnOrder="33"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nb Ress Sg">
+          <xmlSettings xmlTag="Nb Ressources SG"/>
+          <dataDescriptor expression="NB_RESS_SG"
+           descriptiveExpression="NB_RESS_SG" order="11"
+           oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NB_RESS_SSII" oracleDatatype="number" columnOrder="34"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nb Ress Ssii">
+          <xmlSettings xmlTag="Nb Ressources SSII"/>
+          <dataDescriptor expression="NB_RESS_SSII"
+           descriptiveExpression="NB_RESS_SSII" order="12"
+           oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" width="20.99996" height="29.69989"
+   orientation="portrait">
+    <body width="18.45996" height="24.61989">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="29.69989" widthInChar="100"
+   orientation="landscape">
+    <body width="27.15989" height="24.61989">
+      <location x="0.63500" y="0.00000"/>
+      <frame name="M_G_CODSG_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="19.43106"
+         height="2.11677"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_CODSG" source="G_CODSG"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="1.27000" width="19.43106"
+           height="0.84677"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_CODSG" source="CODSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="0.00000" y="1.27000" width="2.42900"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CUSAG" source="CUSAG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="0.00000" y="1.69323" width="2.42900"
+             height="0.42354"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBDSG" source="LIBDSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="2.96850" y="1.27000" width="1.61944"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NB_RESS" source="NB_RESS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="2.96850" y="1.69323" width="1.88919"
+             height="0.42354"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_GNOM" source="GNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="5.12775" y="1.27000" width="1.34938"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NB_RESS_SG" source="NB_RESS_SG" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="5.39750" y="1.69323" width="2.69875"
+             height="0.42354"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBPOLE" source="LIBPOLE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="7.01663" y="1.27000" width="1.88919"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NB_RESS_SSII" source="NB_RESS_SSII" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="8.63606" y="1.69323" width="3.23856"
+             height="0.42354"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_IDENT1" source="IDENT1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="9.44563" y="1.27000" width="1.88919"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CHEF_PROJET" source="CHEF_PROJET" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="11.87462" y="1.27000" width="1.61913"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_REESTIME" source="REESTIME" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="14.03356" y="1.27000" width="2.42869"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ANMONT" source="ANMONT" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="17.00206" y="1.27000" width="2.42900"
+             height="0.42323"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CODSG_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="19.43106"
+           height="1.27000"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_CODSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="2.42900"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBDSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.96850" y="0.00000" width="1.61944"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Libdsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_GNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.12775" y="0.00000" width="1.34938"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Gnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBPOLE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.01663" y="0.00000" width="1.88919"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Libpole]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_IDENT1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="9.44563" y="0.00000" width="1.88919"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Ident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CHEF_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="11.87462" y="0.00000" width="1.61913"
+             height="0.84677"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Chef
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Projet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_REESTIME" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="14.03356" y="0.00000" width="2.42869"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Reestime]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ANMONT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="17.00206" y="0.00000" width="2.42900"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Anmont]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CUSAG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.84677" width="2.42900"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Cusag]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NB_RESS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.96850" y="0.84677" width="1.88919"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Nb Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NB_RESS_SG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.39750" y="0.84677" width="2.69875"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Nb Ress Sg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NB_RESS_SSII" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="8.63606" y="0.84677" width="3.23856"
+             height="0.42323"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Nb Ress Ssii]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="OR$_BPAGENUM_ARIALBLD_SEC3" minWidowLines="1"
+       templateSection="trailer">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="8.04292" y="26.56396" width="5.92677"
+         height="0.42323"/>
+        <visualSettings lineWidth="1"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[Page &<PhysicalPageNumber>]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  <section name="main" width="21.59000" height="27.94000">
+    <body width="20.32000" height="24.13000">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000">
+  <text name="PB_TITRE1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.60691" y="0.18510" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_TITRE2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.82618" y="0.56772" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="1.19869" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="2.12452" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.05036" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.97619" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="0.96490" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="1.89074" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="2.81657" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="3.74241" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM8" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="6.51991" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="6.75370" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM8]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="4.66824" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="5.59408" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="4.90203" width="2.18684" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="5.82786" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM7]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM9" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="7.44575" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="7.67953" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM9]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="8.37282" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_GLOBAL" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="8.60661" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="beforereport">
+      <textSource>
+      <![CDATA[function BeforeReport return boolean is
+l_coddep VARCHAR2(10) ;
+begin
+	-- Récupere le code département à traiter
+	l_coddep := RTRIM(LTRIM(:P_PARAM7));
+  -- Calcule les données à afficher
+  :p_numseq_2 := pack_organisation.select_organisation(l_coddep);
+						  
+  IF :p_numseq_2 = 0 THEN
+	return (FALSE);
+  END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+l_bool BOOLEAN ;
+begin
+    -- Calcule les données à afficher
+  l_bool := pack_organisation.delete_organisation(:p_numseq_2);
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   templateName="draft"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,3744 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE BipMenu [
+	<!ELEMENT BipMenu (menus,infos,items,filters)>
+	
+	<!ELEMENT menus (menu*)>
+	<!ATTLIST menus
+		defaultBackGroundColor CDATA #IMPLIED
+	>
+	
+	<!ELEMENT menu (menuInfo*, menuItem*)>
+	<!ATTLIST menu
+		id		IDREF	#REQUIRED
+		backGroundColor CDATA #IMPLIED
+	>
+	
+	<!ELEMENT menuInfo EMPTY>
+	<!ATTLIST menuInfo
+		id IDREF	#REQUIRED
+	>
+	
+	<!ELEMENT menuItem ( (filter_and | filter_or | filter_field | filter_other | filter_id)? , menuItem*)>
+	<!ATTLIST menuItem
+		id IDREF	#REQUIRED
+	>
+	
+	<!ELEMENT filter_and ((filter_and*, filter_or*, filter_field*, filter_id*, filter_other*)*)>
+	<!ATTLIST filter_and
+		not (true|false) "false"
+	>
+	
+	<!ELEMENT filter_or  ((filter_and*, filter_or*, filter_field*, filter_id*, filter_other*)*)>
+	<!ATTLIST filter_or
+		not (true|false) "false"
+	>
+	
+	<!ELEMENT filter_field EMPTY>
+	<!ATTLIST filter_field
+		not (true|false) "false"
+		fieldName CDATA #REQUIRED
+		validValues CDATA #REQUIRED
+	>
+	
+	<!ELEMENT filter_other EMPTY>
+	<!ATTLIST filter_other
+		not (true|false) "false"
+		className CDATA #REQUIRED
+		functionName CDATA	#REQUIRED
+	>
+	
+	<!ELEMENT filter_id EMPTY>
+	<!ATTLIST filter_id
+		not (true|false) "false"
+		id IDREF #REQUIRED
+	>
+	
+	
+	<!ELEMENT items (item*)>
+	<!ATTLIST items
+		defaultHelpPage		CDATA	#REQUIRED
+		defaultFilterId	CDATA	#REQUIRED
+	>
+	
+	<!ELEMENT item	(#PCDATA)>
+	<!ATTLIST item
+		id	ID	#REQUIRED
+		label	CDATA	#REQUIRED
+		altLabel	CDATA	#IMPLIED
+		link	CDATA	#IMPLIED
+		linkOptions	CDATA #IMPLIED
+		helpPage	CDATA #IMPLIED
+		filterId	CDATA #IMPLIED
+	>
+	
+	<!ELEMENT infos (info*)>
+	
+	<!ELEMENT info EMPTY>
+	<!ATTLIST info
+		id	ID	#REQUIRED
+		className CDATA #REQUIRED
+		functionName CDATA	#REQUIRED
+	>
+	
+	<!ELEMENT filters (filter*)>
+	
+	<!ELEMENT filter (filter_and | filter_or | filter_field | filter_other)>
+	<!ATTLIST filter
+		id	ID	#REQUIRED
+	>
+]>
+
+<!--
+	Gestion des apostrophes dans les altLabel (info bulle) :
+	on genere le & par &amp;
+	puis on met rsquo; qui correspond a une quote fermante
+	*******************************************************************************************************************************
+-->
+
+<BipMenu>
+	<menus defaultBackGroundColor="#DDDDFF">
+
+		<!--
+			*******************************************************************************************************************************
+			NOUVEAUX MENUS
+			*******************************************************************************************************************************
+		-->
+
+		<!--	Menu Adminstration -->
+
+		<!--    ATTENTION : Le nom des menus de premier niveau doit être en MAJUSCULES -->
+
+		<menu id="DIR">
+			<menuItem id="Favoris" />
+			<menuItem id="Table">
+			<!-- KRA 64733 -->
+			<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				<menuItem id="ssMAJTable">
+					<filter_field fieldName="SousMenus"
+						validValues="admin" />
+					<menuItem id="majDPG" />
+					<menuItem id="majClients" />
+					<menuItem id="majSocietes" />
+					<menuItem id="majCAMO" />
+					<menuItem id="majPrestations" />
+					<menuItem id="majStandards" />
+					<menuItem id="majProfilFi" />
+					<menuItem id="majProfilDomFonc" />
+					<!-- Start of Profils Localisés Menu -->
+					<menuItem id="majProfileLoc" />
+					<!-- End of Profils Localisés Menu -->
+					<menuItem id="majCoutMoyenComplet" />
+					<menuItem id="majImmeubles" />
+					<menuItem id="majType1" />
+					<menuItem id="majType2" />
+					<menuItem id="majSousType" />
+					<menuItem id="majProjetsSpeciaux" />
+					<menuItem id="majFiliales" />
+					<menuItem id="majCompta" />
+					<menuItem id="majCentre2Frais" />
+					<menuItem id="majTxAnnuels" />
+					<menuItem id="majInvestissements" />
+					<menuItem id="majPoste" />
+					<menuItem id="majNature" />
+					<menuItem id="majSousSysteme" />
+					<menuItem id="majDomaine" />
+					<menuItem id="majBloc" />
+					<menuItem id="majCompte" />
+					<menuItem id="majRubrique" />
+					<menuItem id="majBranches" />
+					<menuItem id="majDirections" />
+					<!-- YNI -->
+					<menuItem id="majDateEffet" />
+					<menuItem id="majLocalisation" />
+					<menuItem id="majContractuel" />
+					<menuItem id="majTraitement" />
+					<menuItem id="majTypeEtape" />
+					<!-- Fin YNI -->
+				</menuItem>
+				<menuItem id="ssEdTable">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+					<menuItem id="eTableDPG" />
+					<menuItem id="eTableClients" />
+					<menuItem id="eTableSocietes" />
+					<menuItem id="eTablePrestations" />
+					<menuItem id="eModeContractuel" />
+					<menuItem id="eTableStandards" />
+					<menuItem id="eProfilsFi" />
+					<menuItem id="eProfilsDomFonc" />
+					<!-- New Edition report for Profile localize - Starts -->
+					<menuItem id="eProfilsLocalize" />
+					<!-- New Edition report for Profile localize - Ends -->
+					<menuItem id="eTableCoutMoyenComplet" />
+					<menuItem id="eTableImmeubles" />
+					<menuItem id="eTableInvestissements" />
+					<menuItem id="eTableTypesProjet" />
+					<menuItem id="eTableCompta" />
+					<menuItem id="eTableProjets" />
+					<menuItem id="eTableApplications" />
+					<menuItem id="eTableDossiersProjet" />
+					<menuItem id="eTableCentre2Frais" />
+					<menuItem id="eRubriques" />
+					<menuItem id="eDirections" />
+					<menuItem id="eParamBip" />
+					<menuItem id="eTypeEtape" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="Referentiels">
+			<!-- KRA 64733 -->
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				<menuItem id="majProjet">
+				<filter_field fieldName="SousMenus" validValues="admin"/>
+				</menuItem>
+				<menuItem id="majApplications">
+				<filter_field fieldName="SousMenus" validValues="admin"/>
+				</menuItem>
+				<menuItem id="majDossierProjet">
+				<filter_field fieldName="SousMenus" validValues="admin"/>
+				</menuItem>
+				<!-- TD 532 -->
+				<!-- menuItem id="majLienDPDomBancaire"/-->
+				<!-- TD 532 -->
+				<menuItem id="ssEdRef">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+					<menuItem id="eRef" />
+					<menuItem id="eRefProj" />
+					<menuItem id="ePCA4" />
+					<menuItem id="eSuiviType1" />
+					<menuItem id="eProjetsSpeciaux" />
+				</menuItem>
+				<!-- TD 532 -->
+				<menuItem id="ssExportRef">
+					<filter_field fieldName="SousMenus"
+						validValues="admin" />
+					<menuItem id="xDossierProjet" />
+					<menuItem id="ssXProjet">
+						<menuItem id="xProjet" />
+						<menuItem id="xProjet2" />
+						<menuItem id="xProjet3" />
+						<menuItem id="xProjet4" />
+						<menuItem id="xProjet5" />
+						<menuItem id="xProjet6" />
+					</menuItem>
+					<menuItem id="xApplication" />
+					<menuItem id="xLiensProjetsCA" />
+					<menuItem id="xLiensApplicationsCA" />
+					<menuItem id="xDephasagesCAlignesCAprojetsapplic" />
+					<menuItem id="xProjetVersDEVL" />
+				</menuItem>
+				<!-- TD 532 -->
+			</menuItem>
+			<menuItem id="Copi">
+				<filter_field fieldName="SousMenus" validValues="copi" />
+				<menuItem id="ssMAJTable">
+					<menuItem id="BudgetCopiP">
+						<menuItem id="CreationCopi" />
+						<menuItem id="ModifSuppCopi" />
+						<menuItem id="MajMasseCopiP" />
+						<menuItem id="ValidMasseCopiP" />
+					</menuItem>
+					<menuItem id="BudgetCopiNP">
+						<menuItem id="MajMasseCopiNP" />
+					</menuItem>
+					<menuItem id="ExceptionCopi" />
+					<menuItem id="DateCopi" />
+					<menuItem id="DpCopi" />
+					<menuItem id="FourCopi" />
+					<menuItem id="NotationCopi" />
+					<menuItem id="AxeStrategiqueCopi" />
+					<menuItem id="EtapesCopi" />
+					<menuItem id="ValidationDpCopi" />
+				</menuItem>
+				<menuItem id="ssEdTable">
+					<menuItem id="eExceptionCopi" />
+					<menuItem id="eDateCopi" />
+					<menuItem id="eDpCopi" />
+					<menuItem id="eFourCopi" />
+				</menuItem>
+				<menuItem id="SuiviCopi">
+					<filter_field fieldName="SousMenus"
+						validValues="copi" />
+				</menuItem>
+				<!-- YNI FDT 798 -->
+				<menuItem id="LogDpCopi">
+					<filter_field fieldName="SousMenus"
+						validValues="copi" />
+				</menuItem>
+				<menuItem id="LogBudgetCopi">
+					<filter_field fieldName="SousMenus"
+						validValues="copi" />
+				</menuItem>
+				<!-- Fin YNI FDT 798 -->
+			</menuItem>
+			<menuItem id="Ressources">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="ssEdRess">
+					<menuItem id="eRessources" />
+					<menuItem id="eListeTel" />
+					<menuItem id="eSuiviSSII" />
+					<menuItem id="eSuiviPrestations" />
+					<menuItem id="eContratsEchus" />
+					<menuItem id="eRessOrdreAlpha" />
+					<menuItem id="eRessCodeRess" />
+					<!--  menuItem id="eOrganisation"/ -->
+					<menuItem id="eDetailAbsSG" />
+					<menuItem id="eSyntheseAbsSG" />
+					<menuItem id="eEcarts" />					
+				</menuItem>
+				<!-- menuItem id="detailMe"/-->
+				<menuItem id="Consultation" />
+				<menuItem id="ssMAJRess">
+					<menuItem id="majAgentSG" />
+					<menuItem id="majPrestataires" />
+					<menuItem id="majLogiciels" />
+					<menuItem id="majForfaits" />
+				</menuItem>
+				<menuItem id="ssBouclageRess">
+					<menuItem id="bjhValidErreurs" />
+					<menuItem id="eBjh" />
+					<menuItem id="majTypeAbs" />
+				</menuItem>
+				<menuItem id="majEcarts" />
+				<menuItem id="eSyntheseGlobaleMe" />
+			</menuItem>
+			<menuItem id="LigneBIP">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="majLigneBip" />
+				<menuItem id="majMultiCA" />
+				<menuItem id="ssEdLigneBip">
+					<menuItem id="eLigneBipFiche" />
+					<menuItem id="xLigneBipAd" />
+					<menuItem id="eLigneBipSSTrait" />
+					<menuItem id="eMultiCA" />
+					<menuItem id="eTableRepart" />
+				</menuItem>
+				<menuItem id="ssLiensLigneBip">
+					<menuItem id="majLienDP" />
+					<menuItem id="majLienDPG" />
+					<menuItem id="majLienMO" />
+					<menuItem id="majLienCAMO" />
+					<menuItem id="majLienProjet" />
+					<menuItem id="majLienApp" />
+					<menuItem id="majLienCpBIP" />
+				</menuItem>
+				<menuItem id="ssRJHLigneBip">
+					<menuItem id="majTableRepart" />
+					<menuItem id="majLoadTableRepart" />
+					<!-- menuItem id="majLoadLigneBip"/ -->
+					<menuItem id="vRapportTableRepart" />
+					<!-- menuItem id="majProposesTableRepart"/-->
+					<!-- menuItem id="majArbitresTableRepart"/-->
+					<menuItem id="eLogAlimConsoRepart" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="BudgetJH">
+			<filter_field fieldName="SousMenus" validValues="admin admbase"/>
+				<menuItem id="majNotificationBudjet">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="ssParLigneBujetJH">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+					<menuItem id="majBudjetJH" />
+					<menuItem id="majPropose" />
+					<menuItem id="majReestime" />
+				</menuItem>
+				<!-- menuItem id="majBudActJh"/-->
+				<menuItem id="ssSaisieMasse">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+					<menuItem id="majBudgetMesLignes" />
+					<menuItem id="majBudgetLignesMO" />
+				</menuItem>
+				<menuItem id="editionBudJh">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+					<!-- menuItem id="eSuiviMensuelG"/-->
+					<menuItem id="eSuiviMensuel" />
+					<menuItem id="xEcartsBudgets" />
+					<menuItem id="xPIDValide" />
+				</menuItem>
+				<menuItem id="majEcartsBudgets">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="majArbitrageLignes">
+				<filter_field fieldName="SousMenus" validValues="admin admbase"/>
+				</menuItem>				
+			</menuItem>
+			<menuItem id="EditionsAd">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="eRapprochement" />
+				<menuItem id="xLigneFact" />
+			</menuItem>
+			<menuItem id="Export">
+				<filter_field fieldName="SousMenus" validValues="admin admbase" /> <!-- KRA 64733 -->
+				<menuItem id="xLigneBip">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xLigneBipAct">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xOriSaisieConso">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xRessMois">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xPersonne">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<!-- TD 532 -->
+				<!-- menuItem id="xDossierProjet"/-->
+				<!-- menuItem id="ssXProjet">
+					<menuItem id="xProjet"/>
+					<menuItem id="xProjet2"/>
+					<menuItem id="xProjet3"/>
+					<menuItem id="xProjet4"/>
+					<menuItem id="xProjet5"/>
+					<menuItem id="xProjet6"/>			        
+					</menuItem-->
+				<!-- menuItem id="xApplication"/-->
+				<!-- TD 532 -->
+				<menuItem id="xRessActive">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="eEcartsCons">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="ssXEBis">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+					<menuItem id="xLogsContratsEbis" />
+					<menuItem id="xLogsFacturesEbis" />
+					<menuItem id="xLogsTTEbis" />
+					<menuItem id="xLogsLigneContEbis" />
+				</menuItem>
+				<menuItem id="xDPG" />
+
+				<menuItem id="xMO" />				
+				<menuItem id="xAuditFonct">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xStockFI">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xSynthStockFI">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xSynthFICompta">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xStockImmo">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xStockRA">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xMultica">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xHBudget">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xConsoTableRepart">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xRubriques">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xSuiviFinancier">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xSuiviFinancierKe">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xSoussysteme">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xDomaine">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xBloc">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+				<menuItem id="xNPSI">
+				<!-- KRA 64733 -->
+					<filter_field not="true" fieldName="SousMenus" validValues="admbase"/>
+				</menuItem>
+			</menuItem>
+			<menuItem id="Compta">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="eFacintg" />
+				<menuItem id="majStatut" />
+				<menuItem id="eDetailBIP" />
+				<menuItem id="xAuditImmo" />
+				<menuItem id="xSynthImmo" />
+				<menuItem id="xAnaImmo" />
+				<menuItem id="majAuditImmo" />
+				<menuItem id="xAuditCompta" />
+				<menuItem id="eRubriquesAd" />
+			</menuItem>
+			<menuItem id="Exploitation">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="majCalendrier" />
+				<menuItem id="majParametresBIP" />
+				<menuItem id="ssEdStat">
+					<menuItem id="eStatEdTotEtat" />
+					<menuItem id="eStatEdTotUser" />
+					<menuItem id="eStatEdUser" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="Historique">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="eHRess" />
+				<menuItem id="eHLigneBIP" />
+				<menuItem id="eHClientME" />
+				<menuItem id="eHClientMO" />
+				<menuItem id="eHDetailLigne" />
+				<menuItem id="eHBudget" />
+			</menuItem>
+			<menuItem id="Surveillance">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="Tracabilite">
+					<filter_field fieldName="SousMenus" validValues="admin" />
+					<menuItem id="consultLogsParamBip" />
+					<menuItem id="consultLogsModeContractual" />
+					<menuItem id="consultLogsCodePrestation" />
+					<menuItem id="consultLogsDpg" />
+					<menuItem id="consultLogsCoutStd" />
+					<menuItem id="consultLogsCoutStdKE" />
+					<menuItem id="consultLogLigneBIP" />
+					<menuItem id="consultLogNotif" />
+					<menuItem id="consultLogRessources" />
+					<menuItem id="consultLogsApplication" />
+					<menuItem id="consultLogsProjet" />
+					<menuItem id="consultLogsDossierProjet" />
+					<menuItem id="consultLogsDossierProjetCopi" />
+					<menuItem id="consultLogContrats" />
+					<menuItem id="consultLogsFacture" />
+				</menuItem>
+				<menuItem id="eRess0" />
+				<menuItem id="eLignesCloses" />
+				<menuItem id="xSSTache" />
+				<menuItem id="xSSTacheRess" />
+				<menuItem id="eSuiviJH" />
+				<menuItem id="consultRBIP" />
+				<menuItem id="consultLogsBip" />
+				<!-- TD 532 -->
+				<menuItem id="remiseZeroLigneBip" />
+				<menuItem id="xVerifRTFE" />
+				<menuItem id="xSurvSst" />
+				<menuItem id="xSurConnexion" />
+				<!-- YNI FDT 876 -->
+				<menuItem id="consultPerimsRestit" />
+				<!-- Fin YNI FDT 876 -->
+				<menuItem id="consultControleCa" />
+			</menuItem>
+			<!--menuItem id="Traitbatch">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<menuItem id="shell" />
+				<menuItem id="upload" />
+				<menuItem id="planifbatch" />
+			</menuItem-->
+			<menuItem id="PriseEnChargeISAC">
+				<filter_field fieldName="SousMenus" validValues="admin" />					
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+			<!-- PPM 65058 -->
+				<menuItem id="consultCRMens">	
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>			
+				<menuItem id="Paramsession">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="ChargerProfil">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="eStructLigneBIP" />
+				<menuItem id="eVisuLigne" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="eProfilCp">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<!-- BIP 509 Hierarchy  -->
+				<menuItem id="xRessHierarchy"/>
+				<menuItem id="eProfilRess">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="majMail">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="xLibStat">
+				<!-- PPM 65058 -->
+					<filter_or>
+				<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				
+				<menuItem id="traitBatch">
+				<!-- PPM 65058 -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				
+				<menuItem id="eAdminLocaux">
+				<!-- PPM 65058 -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus" validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="uploadMens">
+				<!-- PPM 65058 -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="admin" />
+				<filter_field not="true" fieldName="SousMenus"  validValues="admbase" />
+				</filter_or>
+				</menuItem>
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					<menuItem id="forumMsgAValider"/>	
+					<menuItem id="forumMsgRejeter"/>	
+					</menuItem-->
+			</menuItem>
+			<menuItem id="majActualites">
+				<filter_field fieldName="SousMenus" validValues="admin" />
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+	    <!-- BIP 173 changes -->
+	    <menu id="GENERAL">
+	    	<menuItem id="Favoris" />
+			<menuItem id="Table">
+	    		<menuItem id="eTableDPG" />
+				<menuItem id="eTableClients" />
+				<menuItem id="eTableSocietes" />
+				<menuItem id="eTablePrestations" />
+				<menuItem id="eModeContractuel" />
+				<menuItem id="eTableImmeubles" />
+				<menuItem id="eTableTypesProjet" />
+				<menuItem id="eTableCompta" />
+				<menuItem id="eTableProjets" />
+				<menuItem id="eTableApplications" />
+				<menuItem id="eTableDossiersProjet" />
+				<menuItem id="eTableCentre2Frais" />
+				<menuItem id="eTableInvestissements" />
+			</menuItem>
+			<menuItem id="Referentiels">
+				<menuItem id="ssEdRef">
+					<menuItem id="eRef" />
+					<menuItem id="eRefProj" />
+					<menuItem id="ePCA4" />
+					<menuItem id="eSuiviType1" />
+					<menuItem id="eSuiviMOProj" />
+					<menuItem id="eSuiviMOAppli" />
+					<menuItem id="eSuiviMOProjSynth" />
+					<menuItem id="eP9000" />
+					<menuItem id="eProjetsSpeciaux" />
+					<menuItem id="eDossierMultiMO" />
+				</menuItem>
+				<menuItem id="eRecherche" />
+			</menuItem>
+			<menuItem id="Export">
+				<menuItem id="xLigneBip"/>
+				<menuItem id="xDemandeLigneBip"/>
+	    		<menuItem id="xDPG"/>
+	    		<menuItem id="xSSTacheRessPublic"/>
+	    	</menuItem>
+	    	<menuItem id="BoiteOutils">
+	    		<menuItem id="consultCRMens" />
+	    		<menuItem id="eStructLigneBIP" />
+	    		<menuItem id="eVisuLigne" />
+				<menuItem id="consultLogLigneBIP" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessourcesNew" >
+				<filter_field fieldName="SousMenus" validValues="suivbase"/>
+				</menuItem>
+				<!-- BIP 509 Hierarchy  -->
+				<menuItem id="xRessHierarchy" />
+				<menuItem id="documentionReferenceBIP" />
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+			
+	    </menu>
+
+		<!--	Menu Maitrise d'oeuvre -->
+
+		<menu id="ME">
+			<menuInfo id="infoSousMenu" />
+			<menuInfo id="infoDPG" />
+			<menuItem id="Favoris" />
+			<menuItem id="Table">
+				<menuItem id="eTableDPG" />
+				<menuItem id="eTableClients" />
+				<menuItem id="eTableSocietes" />
+				<menuItem id="eTablePrestations" />
+				<menuItem id="eModeContractuel" />
+				<menuItem id="eTableStandards">
+					<filter_field fieldName="SousMenus" validValues="ges"/>
+				</menuItem>
+				<menuItem id="eProfilsFi">
+					<filter_field fieldName="SousMenus" validValues="ges"/>
+				</menuItem>
+				<!-- New Edition report for Profile localize - Starts -->
+				<menuItem id="eProfilsLocalize" >
+					<filter_field fieldName="SousMenus" validValues="ges"/>
+				</menuItem>
+					<!-- New Edition report for Profile localize - Ends -->
+				<menuItem id="eProfilsDomFoncLong">
+					<filter_field fieldName="SousMenus" validValues="ges"/>
+				</menuItem>
+				<menuItem id="eTableCoutMoyenComplet">
+					<filter_field fieldName="SousMenus"
+						validValues="ges" />
+				</menuItem>
+				<menuItem id="eTableImmeubles" />
+				<menuItem id="eTableTypesProjet" />
+				<menuItem id="eTableCompta" />
+				<menuItem id="eTableProjets" />
+				<menuItem id="eTableApplications" />
+				<menuItem id="eTableDossiersProjet" />
+				<menuItem id="eTableCentre2Frais" />
+				<menuItem id="eTableInvestissements" />
+				<!-- Test evolution 1234 -->
+				<!--  <menuItem id="consulModify" />-->
+			</menuItem>
+			<menuItem id="Referentiels">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase"/>
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="ssEdRef">
+					<menuItem id="eRef" />
+					<menuItem id="eRefProj" />
+					<menuItem id="ePCA4" />
+					<menuItem id="eSuiviType1" />
+					<menuItem id="eSuiviMOProj" />
+					<menuItem id="eSuiviMOAppli" />
+					<menuItem id="eSuiviMOProjSynth" />
+					<menuItem id="eP9000" />
+					<menuItem id="eProjetsSpeciaux" />
+					<menuItem id="eDossierMultiMO" />
+				</menuItem>
+				<!-- FAD PPM 63988 : Suppression des menus "Recherche(chaîne)" et "Recherche(alpha)" et création du menu "Recherche" -->
+				<menuItem id="eRecherche" />
+				<!-- FAD PPM 63988 : Fin -->
+			</menuItem>
+			<menuItem id="Ressources">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="ssEdRess">
+					<menuItem id="eRessources" />
+					<menuItem id="eListeTel" />
+					<menuItem id="eSuiviSSII" />
+					<menuItem id="eSuiviPrestations" />
+					<menuItem id="eContratsEchus" />
+					<menuItem id="eRessOrdreAlpha" />
+					<menuItem id="eRessCodeRess" />
+					<!--  menuItem id="eOrganisation" -->
+					<!--    filter_field fieldName="SousMenus" validValues="bud pcm ges"/ -->
+					<!-- menuItem-->
+					<menuItem id="eDetailAbsSG" />
+					<menuItem id="eSyntheseAbsSG" />
+					 <menuItem id="eContratRF" />  <!-- PPM_59805 -->
+					<menuItem id="eEchangePac">
+						<filter_field fieldName="SousMenus" validValues="ges pcm"/>
+					</menuItem>
+					<!-- ABN - HP PPM 57714 - DEBUT -->
+					<!-- <menuItem id="eEchangeOalia">
+						<filter_field fieldName="SousMenus" validValues="ges pcm"/>
+					</menuItem> -->
+					<!-- ABN - HP PPM 57714 - FIN -->
+					<menuItem id="eEcarts">
+					         <filter_field fieldName="SousMenus" validValues="pcm ges"/>
+					</menuItem>
+
+
+
+				</menuItem>
+				<menuItem id="Consultation" />
+				<!-- menuItem id="detailMe"/>
+					<menuItem id="Consultation">
+					<filter_field not="true" fieldName="SousMenus" validValues="pcm ges"/>
+					<menuItem id="consultAgentSG"/>
+					<menuItem id="consultPrestation"/>
+					<menuItem id="consultLogiciel"/>
+					<menuItem id="consultForfait"/>
+					</menuItem-->
+				<menuItem id="ssMAJRess">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+					<menuItem id="majAgentSG" />
+					<menuItem id="majPrestataires" />
+					<menuItem id="majLogiciels" />
+					<menuItem id="majForfaits" />
+				</menuItem>
+				<menuItem id="ssBouclageRess">
+					<menuItem id="bjhValidErreurs">
+						<filter_field fieldName="SousMenus"
+							validValues="pcm ges" />
+					</menuItem>
+					<menuItem id="eBjh" />
+				</menuItem>
+				<menuItem id="majEcarts">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="eSyntheseGlobaleMe" />
+			</menuItem>
+			<menuItem id="FacturesContrats">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="eProvisions" />
+				<menuItem id="xFacturesContrats" />
+				<menuItem id="eFacturesContratsCodeRess" />
+<!-- BSA 1165
+				<menuItem id="lFactureAvalider">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="lFactureValidee">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="eFactureAvalider">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+ -->				
+				<menuItem id="xSuiviFactureME" />
+			</menuItem>
+			<menuItem id="LigneBIP">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="majLigneBip">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="majMultiCA">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="majLigneBipFermeture">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="ssEdLigneBip">
+					<menuItem id="eLigneBipFiche" />
+					<menuItem id="xLigneBipAd" />
+					<menuItem id="eLigneBipSSTrait" />
+					<menuItem id="eLigneBipDetailSSTrait" />
+					<menuItem id="eMultiCA">
+						<filter_field fieldName="SousMenus"
+							validValues="pcm ges" />
+					</menuItem>
+					<menuItem id="eTableRepart">
+						<filter_field fieldName="SousMenus"
+							validValues="ges" />
+					</menuItem>
+				</menuItem>
+				<menuItem id="ssLiensLigneBip">
+					<filter_field fieldName="SousMenus"
+						validValues="ges" />
+					<menuItem id="majLienDPG" />
+				</menuItem>
+				<menuItem id="ssRJHLigneBip">
+					<filter_field fieldName="SousMenus"
+						validValues="ges" />
+					<menuItem id="majTableRepart" />
+					<menuItem id="majLoadTableRepart" />
+					<!-- menuItem id="majLoadLigneBip"/ -->
+					<menuItem id="vRapportTableRepart" />
+					<!-- menuItem id="majProposesTableRepart"/ -->
+					<!-- menuItem id="majArbitresTableRepart"/-->
+					<menuItem id="eLogAlimConsoRepart" />
+				</menuItem>
+
+			</menuItem>
+			<menuItem id="BudgetJH">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_field fieldName="SousMenus"
+					validValues="bud pcm ges bubase" />
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="ssParLigneBujetJH">
+					<menuItem id="majBudjetJH">
+						<!-- FAD PPM 63828 : Affectation du menu Gestion budgets aux sous menu pcm, bud et bubase -->
+						<filter_field fieldName="SousMenus"
+							validValues="bud pcm ges bubase" />
+						<!-- FAD PPM 63828 : Fin -->
+					</menuItem>
+					<menuItem id="majPropose" />
+					<menuItem id="majReestime" />
+				</menuItem>
+				<menuItem id="ssSaisieMasse">
+					<menuItem id="majBudgetMesLignes" />
+					<menuItem id="majBudgetLignesMO" />
+				</menuItem>
+				<menuItem id="editionBudJh">
+					<!-- menuItem id="eSuiviMensuelG"/-->
+					<menuItem id="eSuiviMensuel" />
+					<menuItem id="xEcartsBudgets">
+						<filter_field fieldName="SousMenus"
+							validValues="pcm ges" />
+					</menuItem>
+					<menuItem id="xPIDValide">
+						<filter_field fieldName="SousMenus"
+							validValues="pcm ges" />
+					</menuItem>
+				</menuItem>
+				<menuItem id="majEcartsBudgets">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="EditionsAd">
+				<filter_field fieldName="SousMenus" validValues="ges" />
+				<menuItem id="eRapprochement" />
+				<menuItem id="xLigneFact" />
+			</menuItem>
+			<menuItem id="eMensuelle">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+			</menuItem>
+			<menuItem id="Export">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase"/>
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="xLigneBip">
+					<!-- FAD PPM 63956 : Menu autorisé à tous les sous menus sauf bubase -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud suivbase"/>
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase"/>
+					</filter_or>
+					<!-- FAD PPM 63956 : Fin -->
+				</menuItem>
+				<menuItem id="xLigneBipAct">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xOrbre" />
+				<menuItem id="xDemandeLigneBip"> <!-- KRA PPM 62325 : F1 -->
+					<!-- FAD PPM 63956 : Menu autorisé à tous les sous menus sauf bubase -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud suivbase"/>
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase"/>
+					</filter_or>
+					<!-- FAD PPM 63956 : Fin -->
+				</menuItem>
+				<menuItem id="xDdeNonUtilisee">  <!-- ZAA PPM 62325 : F7 -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xOriSaisieConso">
+					<!-- FAD PPM 63956 : Ajout du menu "Lignes/origine saisie cons." au sous-menu ges -->
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+					<!-- FAD PPM 63956 : Fin -->
+				</menuItem>
+				<menuItem id="xDossierProjet">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="ssXProjet">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<menuItem id="xProjetAl" />
+					<menuItem id="xProjet2" />
+					<menuItem id="xProjet3" />
+					<menuItem id="xProjet4" />
+					<menuItem id="xProjet5" />
+					<menuItem id="xProjet6" />
+				</menuItem>
+				<menuItem id="xApplication">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xRessActive">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="eEcartsCons" >
+					<filter_field fieldName="SousMenus"
+							validValues="pcm ges" />
+				</menuItem>						
+				<menuItem id="xDPG"/>
+				<menuItem id="xMO">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xPersonne">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xFACONS">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xRessMois">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xMensuelle">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xAuditFonct">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xSSTacheRess">
+					<!-- FAD PPM 63956 : Menu autorisé à tous les sous menus sauf bubase -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud suivbase"/>
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase"/>
+					</filter_or>
+					<!-- FAD PPM 63956 : Fin -->
+				</menuItem>
+				<menuItem id="xSociete">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xSynthFICompta">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xSuiviFinancier">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xSuiviFinancierKe">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xStockRA">
+					<filter_field fieldName="SousMenus"
+						validValues="ges" />
+				</menuItem>
+				<menuItem id="xMultica">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="xConsoTableRepart">
+					<filter_field fieldName="SousMenus"
+						validValues="ges" />
+				</menuItem>
+				<menuItem id="xSoussysteme">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xDomaine">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xBloc">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+				<menuItem id="xNPSI">
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+				</menuItem>
+			</menuItem>
+			<menuItem id="Compta">
+				<filter_field fieldName="SousMenus" validValues="ges" />
+				<menuItem id="consultStatut" />
+				<menuItem id="eRubriquesAd" />
+			</menuItem>
+			<menuItem id="Historique">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+				<menuItem id="eHRess" />
+				<menuItem id="eHLigneBIP" />
+				<menuItem id="eHClientME" />
+				<menuItem id="eHClientMO">
+					<filter_field fieldName="SousMenus"
+						validValues="ges" />
+				</menuItem>
+				<menuItem id="eHDetailLigne" />
+				<menuItem id="eHBudget" />
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="eAnoSSTrait">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="eStructLigneBIP" />
+				<menuItem id="eFactureConsomme">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="eVisuLigne" />
+				<menuItem id="consultLogLigneBIP" />
+				<menuItem id="consultLogRessources">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<!-- TD 532 -->
+				<menuItem id="consultLogsProjet">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="consultLogsDossierProjet">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="consultLogsApplication">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<!-- TD 532 -->
+				<menuItem id="eSurveillanceRemonteJH">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="eProfilCp">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<!-- BIP 509 Hierarchy  -->
+				<menuItem id="xRessHierarchy" />
+				<menuItem id="eProfilRess">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+				<menuItem id="documentionReferenceBIP" />
+				<menuItem id="majCP">
+					<filter_field fieldName="SousMenus"
+						validValues="pcm ges" />
+				</menuItem>
+				<menuItem id="eAdminLocaux">
+					<!-- FAD PPM 63547 : Début -->
+					<filter_or>
+						<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+						<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+						<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+						<!-- FAD PPM 63956 : Fin -->
+					</filter_or>
+					<!-- FAD PPM 63547 : Fin -->
+				</menuItem>
+
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="majPole">
+				<!-- FAD PPM 63547 : Début -->
+				<filter_or>
+					<filter_field fieldName="SousMenus" validValues="ges pcm bud"/>
+					<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+					<filter_field not="true" fieldName="SousMenus" validValues="bubase suivbase"/>
+					<!-- FAD PPM 63956 : Fin -->
+				</filter_or>
+				<!-- FAD PPM 63547 : Fin -->
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Client -->
+		<menu id="MO">
+			<menuInfo id="infoSousMenu" />
+			<menuInfo id="infoDirection" />
+			<menuItem id="Favoris" />
+			<menuItem id="Table">
+				<menuItem id="Editions">
+					<menuItem id="eTableDPG" />
+					<menuItem id="eTableClients" />
+					<menuItem id="eTableTypesProjet" />
+					<menuItem id="eTableProjets" />
+					<menuItem id="eTableApplications" />
+					<menuItem id="eTableDossiersProjet" />
+					<menuItem id="eTableInvestissements" />
+				</menuItem>
+				<menuItem id="Exports">
+					<menuItem id="xDossierProjet" />
+					<menuItem id="ssXProjet">
+						<menuItem id="xProjetAl" />
+						<menuItem id="xProjet2" />
+						<menuItem id="xProjet3" />
+						<menuItem id="xProjet4" />
+						<menuItem id="xProjet5" />
+						<menuItem id="xProjet6" />
+					</menuItem>
+					<menuItem id="xApplication" />
+					<menuItem id="xDPG" />
+					<menuItem id="xMO" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="Export">
+				<menuItem id="xLignes" />
+				<menuItem id="xLigneBipAct" />
+				<menuItem id="xMulticaMO" />
+				<menuItem id="xApplication" />
+			</menuItem>
+			<menuItem id="SuivFin">
+				<menuItem id="xSynthFICompta" />
+				<menuItem id="xSuiviFinancier" />
+				<menuItem id="xStockFI_Client" />
+				<menuItem id="eFactIntClient" />
+				<menuItem id="eImmoClient" />
+			</menuItem>
+			<!--  fiche 1206 -->
+			<menuItem id="xSynthImmoMo" />
+			<menuItem id="LigneBIP">
+				<filter_field fieldName="SousMenus" validValues="cli" />
+				<menuItem id="majLigneBIPMO" />
+				<menuItem id="mBudCopiePropMasse" />
+				<menuItem id="majBudgetLignesMO2" />
+			</menuItem>
+			<menuItem id="Editions">
+				<menuItem id="eSuiviCC" />
+				<menuItem id="eSuiviJHOper" />
+				<menuItem id="eRef" />
+				<menuItem id="eRefProj" />
+				<menuItem id="eDetailClientTout" />
+				<menuItem id="eDetailClientSelect" />
+				<menuItem id="Historique">
+					<menuItem id="eHClientME" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eVisuLigne" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="majDirection" />
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Saisie des réalisés (isac) -->
+		<menu id="ISACM">
+			<menuInfo id="infoSousMenu" />
+			<menuItem id="Favoris" />
+			<menuItem id="IsacParam">
+				<filter_field fieldName="SousMenus" validValues="isac" />
+				<menuItem id="paramStructLb" />
+				<menuItem id="paramCopieStructure" />
+				<menuItem id="RessourceSSTache">
+					<menuItem id="consultSSTacheRess" />
+					<menuItem id="majSSTacheRess" />
+					<menuItem id="copieAffectation" />
+				</menuItem>
+				<menuItem id="majCopierCollerSSTache" />
+				<menuItem id="paramFavoriSr" />
+			</menuItem>
+			<menuItem id="saisieConso" />
+			<menuItem id="consultCalendrier" />
+			<menuItem id="Editions">
+				<menuItem id="eStructLigneBIPISAC">
+					<filter_field fieldName="SousMenus"
+						validValues="isac" />
+				</menuItem>
+				<menuItem id="eDetCons" />
+				<menuItem id="eCra" />
+				<menuItem id="eSuiviAn">
+					<filter_field fieldName="SousMenus"
+						validValues="isac" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="Export">
+				<menuItem id="xConsoSaisi"/>
+				<menuItem id="Cra"/>
+				<menuItem id="xStructLigne">
+					<filter_field fieldName="SousMenus" validValues="isac" />
+				</menuItem>
+				<menuItem id="xBips"/>
+			</menuItem>
+			<menuItem id="eMensSr">
+				<filter_field fieldName="SousMenus" validValues="isac" />
+			</menuItem>
+			<menuItem id="Historique">
+				<filter_field fieldName="SousMenus" validValues="isac" />
+				<menuItem id="eHRess" />
+				<menuItem id="eHLigneBIP" />
+				<menuItem id="eHClientME" />
+				<menuItem id="eHDetailLigne" />
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="eVisuLigne" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<!-- BIP 509 Hierarchy  -->
+				<menuItem id="xRessHierarchy" />
+				<menuItem id="eProfilRess" />
+				<menuItem id="documentionReferenceBIP" />
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="listeDifferes" />
+		</menu>
+
+		<!--	Menu Suivi des investissements -->
+		<menu id="INV">
+			<menuInfo id="infoSousMenu" />
+			<menuItem id="Favoris" />
+			<menuItem id="majNotifLigneBudget">
+				<filter_field fieldName="SousMenus" validValues="ginv" />
+			</menuItem>
+			<menuItem id="majLigneInv">
+				<filter_field fieldName="SousMenus"
+					validValues="sinv ginv" />
+			</menuItem>
+			<menuItem id="majLigneReal">
+				<filter_field fieldName="SousMenus"
+					validValues="sinv ginv" />
+			</menuItem>
+			<menuItem id="consultLigneInv" />
+			<menuItem id="eLigneInv" />
+			<menuItem id="xLigneInv" />
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Ordonnancement -->
+		<menu id="ACH">
+			<menuInfo id="infoSousMenu" />
+			<menuInfo id="infoCentreFrais" />
+			<menuInfo id="infoFiliale" />
+			<menuItem id="Favoris" />
+			<menuItem id="Contrats">
+				<menuItem id="consultContratAffi" />
+				<menuItem id="majContratAvenant" >
+				<filter_or>
+					<filter_field fieldName="SousMenus"
+							validValues="supach" />
+					
+					<filter_field not="true" fieldName="SousMenus"
+							validValues="affi" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="majContratDateSuivi" >
+				<filter_or>
+					<filter_field fieldName="SousMenus"
+							validValues="supach" />
+					
+					<filter_field not="true" fieldName="SousMenus"
+							validValues="affi" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="eContratRecent" >
+				<filter_or>
+					<filter_field fieldName="SousMenus"
+							validValues="supach" />
+					
+					<filter_field not="true" fieldName="SousMenus"
+							validValues="affi" />
+				</filter_or>
+				</menuItem>
+				<menuItem id="eContratRecentAffi" >
+				<filter_and>
+					<filter_field fieldName="SousMenus"
+						validValues="affi" />
+						
+					<filter_field not="true" fieldName="SousMenus"
+						validValues="supach" />
+				</filter_and>
+				</menuItem>
+			</menuItem>
+			<menuItem id="Factures">
+				<filter_or>
+					<filter_field fieldName="SousMenus"
+							validValues="supach" />
+					
+					<filter_field not="true" fieldName="SousMenus"
+							validValues="affi" />
+				</filter_or>
+				<menuItem id="Gestion">
+					<menuItem id="majFactures" />
+					<menuItem id="majFactureDateSuivi" />
+					<menuItem id="majFactureValidee" />
+					<!-- 1165 <menuItem id="lDemandeValFacture" /> -->
+				</menuItem>
+				<!-- Fin demat depuis fin 2008, on retire du menu -->
+				<!--  menuItem id="Integration">
+					<menuItem id="loadFactures"/>
+					<menuItem id="traceChargement"/>
+					</menuItem -->
+				<menuItem id="eFactureRecente" />
+				<menuItem id="EbisFactRejet" />
+			</menuItem>
+			<menuItem id="Editions">
+				<menuItem id="eContratRF" />  <!-- PPM_59805 -->  
+				<menuItem id="eContOr" />
+				<menuItem id="eContPac" >
+				<filter_or>
+					<filter_field fieldName="SousMenus"
+							validValues="supach" />
+					
+					<filter_field not="true" fieldName="SousMenus"
+							validValues="affi" />
+				</filter_or>
+				</menuItem>
+				<!-- ABN - HP PPM 57714 - DEBUT -->
+				<!-- <menuItem id="eContOalia" >
+				<filter_or>
+					<filter_field fieldName="SousMenus"
+							validValues="supach" />
+					
+					<filter_field not="true" fieldName="SousMenus"
+							validValues="affi" />
+				</filter_or>
+				</menuItem> -->
+				<!-- ABN - HP PPM 57714 - FIN -->
+				<menuItem id="ssEdFactures">
+					<menuItem id="xSuiviFactureORD" />
+					<menuItem id="eFactures" />
+<!-- 1165
+					<menuItem id="eFactAttente" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactAttenteDPG" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactAttenteSoc" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+-->
+					<menuItem id="eFactReglee" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactStatutSE" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactSynthese" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactSaisie" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactSansLigne" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactRess" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="eFactAnnulee" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+<!-- 1165
+					<menuItem id="eDemandeValFacture" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+-->
+				</menuItem>
+<!-- 1165				
+				<menuItem id="eFactInvalide" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+-->					
+			</menuItem>
+			<menuItem id="Export">
+				<menuItem id="xFactOrd" />
+<!-- 1165
+				<menuItem id="xFactAttente" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+-->
+				<menuItem id="ssXEBis">
+					<menuItem id="xLogsContratsEbis" />
+					<menuItem id="xLogsFacturesEbis" />
+					<menuItem id="xLogsTTEbis" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+					<menuItem id="xLogsLigneContEbis" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+				</menuItem>
+			</menuItem>
+			<menuItem id="Table">
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+				<menuItem id="ssMAJTable">
+					<filter_field fieldName="SousMenus"
+						validValues="supach" />
+					<menuItem id="majSocietes" />
+					<menuItem id="majCompta" />
+				</menuItem>
+				<menuItem id="eTableDPG" />
+				<menuItem id="eTableClients" />
+				<menuItem id="eTableSocietes" />
+				<menuItem id="eTablePrestations" />
+				<menuItem id="eModeContractuel" />
+				<menuItem id="eTableStandards" />
+				<menuItem id="eTableCoutMoyenComplet" />
+				<menuItem id="eTableImmeubles" />
+				<menuItem id="eTableTypesProjet" />
+				<menuItem id="eTableCompta" />
+				<menuItem id="eTableProjets" />
+				<menuItem id="eTableApplications" />
+				<menuItem id="eTableDossiersProjet" />
+				<menuItem id="eTableCentre2Frais" />
+				<menuItem id="eTableInvestissements" />
+				<!-- Test evolution 1234 -->
+				<!-- <menuItem id="consulModify" />-->
+			</menuItem>
+			<menuItem id="xRessSSII" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+			<menuItem id="Situations">
+				<menuItem id="eRessources" />
+				<menuItem id="eRessOrdreAlpha" />
+				<menuItem id="eRessCodeRess" />
+				<menuItem id="eContratsEchusOr" />
+			</menuItem>
+<!-- 1165					
+			<menuItem id="ImportExport">
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+				<menuItem id="eResultExport" />
+				<menuItem id="eResultImport" />
+
+			</menuItem>
+-->			
+			<menuItem id="Facons">
+				<filter_field fieldName="SousMenus"
+					validValues="supach" />
+				<menuItem id="eFactureConsomme" />
+				<menuItem id="xFACONS" />
+			</menuItem>
+			<menuItem id="xAuditFonct" >
+					<filter_or>
+						<filter_field fieldName="SousMenus"
+								validValues="supach" />
+						
+						<filter_field not="true" fieldName="SousMenus"
+								validValues="affi" />
+					</filter_or>
+					</menuItem>
+			<menuItem id="Historique">
+				<filter_field fieldName="SousMenus"
+					validValues="supach" />
+				<menuItem id="eHRess" />
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+				<!--menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="majCfrais" />
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Habilitation par référentiel -->
+
+		<menu id="REF">
+			<menuItem id="Favoris" />
+			<menuItem id="Table">
+				<menuItem id="eTableDPG" />
+				<menuItem id="eTableClients" />
+				<menuItem id="eTableSocietes" />
+				<menuItem id="eTablePrestations" />
+				<menuItem id="eModeContractuel" />
+				<menuItem id="eTableImmeubles" />
+				<menuItem id="eTableTypesProjet" />
+				<menuItem id="eTableCompta" />
+				<menuItem id="eTableCentre2Frais" />
+				<menuItem id="eTableInvestissements" />
+			</menuItem>
+			<menuItem id="Referentiels">
+				<menuItem id="eTableProjets" />
+				<menuItem id="eTableApplications" />
+				<menuItem id="eTableDossiersProjet" />
+				<!-- FAD PPM 63988 : Suppression des menus "Recherche(chaîne)" et "Recherche(alpha)" et création du menu "Recherche" -->
+				<menuItem id="eRecherche" />
+				<!-- FAD PPM 63988 : Fin -->
+			</menuItem>
+			<menuItem id="Copi">
+				<filter_field fieldName="SousMenus" validValues="copi" />
+				<menuItem id="ssMAJTable">
+					<menuItem id="BudgetCopiP">
+						<!-- Fiche 920 -->
+						<!-- menuItem id="CreationCopi" />
+						<menuItem id="ModifSuppCopi" /-->
+						<menuItem id="MajMasseCopiP" />
+					</menuItem>
+					<menuItem id="BudgetCopiNP">
+						<menuItem id="MajMasseCopiNP" />
+					</menuItem>
+
+				</menuItem>
+
+				<menuItem id="SuiviCopi">
+					<filter_field fieldName="SousMenus"
+						validValues="copi" />
+				</menuItem>
+
+				<!-- YNI FDT 798 -->
+				<menuItem id="LogDpCopi">
+					<filter_field fieldName="SousMenus"
+						validValues="admin" />
+				</menuItem>
+				<menuItem id="LogBudgetCopi">
+					<filter_field fieldName="SousMenus"
+						validValues="admin" />
+				</menuItem>
+				<!-- Fin YNI FDT 798 -->
+			</menuItem>
+
+			<menuItem id="SuiviActBud">
+				<filter_field fieldName="SousMenus" validValues="act" />
+				<menuItem id="eSuiviBudgProj" /> <!-- HMI 62325 -->		
+				<menuItem id="eSuiviRefMet" />
+				<menuItem id="eSuiviRefCli" />
+				<menuItem id="eSuiviRefFourn" />
+				<menuItem id="xLigneBip2" />
+				<menuItem id="xLigneInv2" />
+			</menuItem> 
+			<menuItem id="SuiviActBudDet">
+				<filter_field fieldName="SousMenus" validValues="acdet" />
+				<menuItem id="xRessMois" />
+				<menuItem id="xSSTacheRessRef" />
+			</menuItem>
+			<menuItem id="SuiviFinCom">
+				<filter_field fieldName="SousMenus" validValues="fin" />
+				<menuItem id="xSuiviFinancier" />
+				<!--  fiche 890 -->
+				<menuItem id="xSynthImmoRf" />
+				<!--  fiche 842 -->
+				<!-- menuItem id="eSyntheseCouts" /-->
+				<menuItem id="eFactInt" />
+				<menuItem id="eImmo" />
+			</menuItem>
+			<menuItem id="SuiviFinComDet">
+				<filter_field fieldName="SousMenus" validValues="fidet" />
+				<menuItem id="xStockFI_ref" />
+				<menuItem id="xStockImmo_ref" />
+				<menuItem id="xStockImmoSCRef" />
+				<menuItem id="xAnaImmo" />
+				<menuItem id="xSimulImmo" />
+			</menuItem>
+			<menuItem id="Export">
+				<menuItem id="xLigneRfAct" />
+				<menuItem id="xDossierProjetAl" />
+				<menuItem id="ssXProjet">
+					<menuItem id="xProjetAl" />
+					<menuItem id="xProjet2" />
+					<menuItem id="xProjet3" />
+					<menuItem id="xProjet4" />
+					<menuItem id="xProjet5" />
+					<menuItem id="xProjet6" />
+				</menuItem>
+				<menuItem id="xApplicationAl" />
+				<menuItem id="xSoussysteme" />
+				<menuItem id="xDomaine" />
+				<menuItem id="xBloc" />
+				<menuItem id="xNPSI" />
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="eVisuLigne" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Outil de réestimé par ressources -->
+		<menu id="ORE">
+			<menuItem id="Favoris" />
+			<menuItem id="MiseaJourOre">
+				<menuItem id="majActivite" />
+				<menuItem id="majActiviteLigne" />
+				<menuItem id="majRessource" />
+				<menuItem id="majRessourceAct" />
+				<menuItem id="majScenario" />
+			</menuItem>
+			<menuItem id="majSaisieReestime" />
+			<menuItem id="EditionsOre">
+				<menuItem id="eActivite" />
+				<menuItem id="eDetailReestime" />
+				<menuItem id="eRessourceReestime" />
+				<menuItem id="eSyntheseLocale" />
+				<menuItem id="eSyntheseGlobale" />
+			</menuItem>
+			<menuItem id="ExportOre">
+				<menuItem id="xDetailActivite" />
+				<menuItem id="xDetailReestime" />
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="eVisuLigne" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+				<!-- menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Suivi d'activité ( repris tel quel ) -->
+
+		<menu id="SUIVIACT">
+			<menuInfo id="infoDPG" />
+			<menuItem id="Favoris" />
+			<menuItem id="Table">
+				<menuItem id="eTableDPG" />
+				<menuItem id="eTableClients" />
+				<menuItem id="eTableTypesProjet" />
+				<menuItem id="eTableCompta" />
+				<menuItem id="eTableProjets" />
+				<menuItem id="eTableApplications" />
+				<menuItem id="eTableDossiersProjet" />
+				<menuItem id="eTableCentre2Frais" />
+				<menuItem id="eTableInvestissements" />
+			</menuItem>
+			<menuItem id="Referentiels">
+				<menuItem id="ssEdRef">
+					<menuItem id="eRef" />
+					<menuItem id="eRefProj" />
+					<menuItem id="ePCA4" />
+					<menuItem id="eSuiviType1" />
+					<menuItem id="eSuiviMOProj" />
+					<menuItem id="eSuiviMOAppli" />
+					<menuItem id="eSuiviMOProjSynth" />
+					<menuItem id="eP9000" />
+					<menuItem id="eProjetsSpeciaux" />
+					<menuItem id="eDossierMultiMO" />
+				</menuItem>
+				<!-- FAD PPM 63988 : Suppression des menus "Recherche(chaîne)" et "Recherche(alpha)" et création du menu "Recherche" -->
+				<menuItem id="eRecherche" />
+				<!-- FAD PPM 63988 : Fin -->
+			</menuItem>
+			<menuItem id="Ressources">
+				<menuItem id="eListeTel" />
+			</menuItem>
+			<menuItem id="LigneBIP">
+				<menuItem id="ssEdLigneBip">
+					<menuItem id="eLigneBipFiche" />
+					<menuItem id="eLigneBipSSTrait" />
+					<menuItem id="eLigneBipDetailSSTrait" />
+				</menuItem>
+			</menuItem>
+			<menuItem id="eMensuelle" />
+			<menuItem id="Historique">
+				<menuItem id="eHRess" />
+				<menuItem id="eHLigneBIP" />
+				<menuItem id="eHClientME" />
+				<menuItem id="eHDetailLigne" />
+			</menuItem>
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="eAnoSSTrait" />
+				<menuItem id="eStructLigneBIP" />
+				<menuItem id="eVisuLigne" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+				<!--  menuItem id="Forum">
+					<menuItem id="forumMesMsg"/>
+					<menuItem id="forumListe"/>
+					<menuItem id="forumRecherche"/>
+					</menuItem-->
+			</menuItem>
+			<menuItem id="majPole" />
+			<menuItem id="consultCalendrier" />
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+		<!--	Menu Remontée BIP ( repris tel quel ) -->
+
+		<menu id="RBIP" />
+		<menu id="REQ">
+			<menuItem id="Favoris" />
+			<menuItem id="consultContrat" />
+			<menuItem id="xAuditImmo" />
+			<menuItem id="xSynthImmo" />
+			<menuItem id="BoiteOutils">
+				<menuItem id="consultCRMens" />
+				<menuItem id="consultCalendrier" />
+				<menuItem id="eMonProfil" />
+				<menuItem id="eProfilsListeRessources" />
+				<menuItem id="documentionReferenceBIP" />
+			</menuItem>
+			<menuItem id="TraitDifferes" />
+		</menu>
+
+	</menus>
+
+	<!--
+		*******************************************************************************************************************************
+	-->
+
+	<infos>
+		<info id="infoDirection"
+			className="com.socgen.bip.menu.info.InfoMenu"
+			functionName="getInfoDirection" />
+		<info id="infoCentreFrais"
+			className="com.socgen.bip.menu.info.InfoMenu"
+			functionName="getInfoCentreFrais" />
+		<info id="infoFiliale"
+			className="com.socgen.bip.menu.info.InfoMenu"
+			functionName="getInfoFiliale" />
+		<info id="infoDPG" className="com.socgen.bip.menu.info.InfoMenu"
+			functionName="getInfoDPG" />
+		<info id="infoSousMenu"
+			className="com.socgen.bip.menu.info.InfoMenu"
+			functionName="getInfoSousMenu" />
+
+	</infos>
+
+	<!--
+		*******************************************************************************************************************************
+	-->
+
+	<items defaultHelpPage="jsp/aide/hvide.htm"
+		defaultFilterId="aucun">
+
+
+
+
+		<!--
+			*******************************************************************************************************************************
+			Description des menus de premier niveau
+			NOUVEAUX MENUS 
+			*******************************************************************************************************************************
+		-->
+
+		<!--    ATTENTION : Le nom des menus de premier niveau doit être en MAJUSCULES -->
+
+
+		<item id="DIR" label="Administration"
+			altLabel="Menu administrateur" helpPage="jsp/aide/hvide.htm" />
+		<!-- BIP 173 changes -->
+		<item id="GENERAL" label="Suivi d'activité tout public "
+			altLabel="Suivi d'activité public(GENERAL) "
+			helpPage="jsp/aide/Guide_Resp_etudes.doc" />
+			
+		<item id="ME" label="Responsable d'études"
+			altLabel="Menu fournisseur (ME)"
+			helpPage="jsp/aide/Guide_Resp_etudes.doc" />
+
+		<item id="MO" label="Menu Client" altLabel="Menu Client(MO)"
+			helpPage="jsp/aide/Guide_Menu_Client.doc" />
+
+		<item id="ISACM" label="Saisie des réalisés"
+			altLabel="Saisie des réalisés (ISAC)"
+			helpPage="jsp/aide/Guide_saisie_allegee.doc" />
+
+		<item id="INV" label="Suivi des investissements"
+			altLabel="Suivi des investissements"
+			helpPage="jsp/aide/Guide_Suivi_investissements.doc" />
+		<item id="ACH" label="Ordonnancement"
+			altLabel="Suivi des achats" />
+		<item id="REF" label="Suivi par Référentiel"
+			altLabel="Suivi par Référentiel" />
+
+		<item id="ORE" label="Outil de Réestimé par Ressources"
+			altLabel="Outil de Réestimé par Ressources"
+			helpPage="jsp/aide/Guide_outil_reestime.doc" />
+
+		<item id="SUIVIACT" label="Suivi d'activité" />
+
+		<item id="RBIP" label="Remontée Bip Intranet"
+			altLabel="Remontée Bip Intranet" link="jsp/rBipRemontee.jsp" />
+
+		<!--		Sous Menus rattachés au menu ach ( Ordonnancement ) -->
+		<item id="REQ" label="Requêtes/Immo" altLabel="Rêquetes/Immo" />
+
+
+		<!--
+			*******************************************************************************************************************************
+			Description des sous-menus 
+			*******************************************************************************************************************************
+		-->
+		<!--		Sous Menus rattachés au menu DIR (Administration ) -->
+		<item id="admin" label="Administration" />
+		<!-- KRA 64733 -->
+		<item id="admbase" label="Administration de Base" />
+		<!--		Sous Menus rattachés au menu me ( Maitrise d'oeuvre ) -->
+		<item id="bud" label="Gestion Budgétaire" />
+		<item id="bubase" label="Gestion Budgétaire de Base" />
+		<!-- FAD PPM 63956 : Ajout du sous menu suivbase -->
+		<item id="suivbase" label="Suivi des Directions" />
+		<!-- FAD PPM 63956 : Fin -->
+		<item id="pcm" label="Administrateur Local" />
+		<item id="ges" label="Gestionnaire" />
+
+		<!--		Sous Menus rattachés au menu mo ( Maitrise d'ouvrage ) -->
+		<item id="cli" label="Saisie Client" />
+
+		<!--		Sous Menus rattachés au menu isacm ( Saisie des réalisés ) -->
+		<item id="isac" label="Paramétrage et saisie des réalisés" />
+
+
+		<!--		Sous Menus rattachés au menu inv ( Suivi des investissements ) -->
+		<item id="sinv" label="Saisie des investissements" />
+		<item id="ginv" label="Supervision des investissements" />
+
+		<!--		Sous Menus rattachés au menu ach ( Ordonnancement ) -->
+		<item id="supach" label="Supervision des achats" />
+		<item id="affi" label="Consultation des contrats" />
+
+		<!--		Sous Menus rattachés au menu ref ( Suivi par référentiel ) -->
+		<item id="act" label="Suivi d'Activité/Budget" />
+		<item id="acdet" label="Suivi d'Activité/Budget - Détail" />
+		<item id="fin" label="Suivi Financier / Comptable" />
+		<item id="fidet" label="Suivi Financier / Comptable - Détail" />
+		<item id="copi" label="Suivi COPI" />
+
+		<!--
+			*******************************************************************************************************************************
+			Description des autres options de menus de regroupement ( sans traitement attaché )
+			*******************************************************************************************************************************
+		-->
+
+
+		<item id="Table" label="Tables"
+			altLabel="Consultation et Mise à Jour des Tables" />
+		<item id="ssMAJTable" label="Mise à jour"
+			altLabel="Mise à jour des Tables" helpPage="jsp/aide/hvide.htm" />
+		<item id="ssEdTable" label="Editions"
+			altLabel="Editions des Tables" />
+		<item id="Referentiels" label="Référentiels"
+			altLabel="Gestion des référentiels" />
+		<item id="ssEdRef" label="Editions"
+			altLabel="Editions des référentiels" />
+		<!-- TD 532 -->
+		<item id="ssExportRef" label="Export"
+			altLabel="Export des référentiels" />
+		<!-- TD 532 -->
+		<item id="Ressources" label="Ressources"
+			altLabel="Edition et mise à jour des ressources"
+			helpPage="jsp/aide/Guide_Ressources.doc" />
+		<item id="ssEdRess" label="Editions"
+			altLabel="Edition des Ressources"
+			helpPage="jsp/aide/Guide_Resp_etudes.doc" />
+		<item id="ssMAJRess" label="Mise à jour"
+			altLabel="Mise à jour des Ressources" />
+		<item id="ssBouclageRess" label="Bouclage J/H"
+			altLabel="Bouclage Jour/Homme" />
+		<item id="majEcarts" label="Ecarts"
+			altLabel="Gestion des écarts pour les ressources" link="/ecarts.do"
+			linkOptions="action=initialiser" />
+		<item id="majEcartsBudgets" label="Ecarts Budgétaires"
+			altLabel="Gestion des écarts budgétaires" link="/ecartsbudgets.do"
+			linkOptions="action=initialiser" />
+		<item id="LigneBIP" label="Lignes BIP"
+			altLabel="Gestion et éditions des Lignes BIP"
+			helpPage="jsp/aide/Guide_Lignes_Bip.doc" />
+		<item id="ssEdLigneBip" label="Editions"
+			altLabel="Edition des Lignes BIP" />
+		<item id="ssLiensLigneBip" label="Liens"
+			altLabel="Gestion des liens" />
+		<item id="BudgetJH" label="Budget JH"
+			helpPage="jsp/aide/Guide_Budget.doc" />
+		<item id="ssParLigneBujetJH" label="Par Ligne" />
+		<item id="ssSaisieMasse" label="Saisie en masse" />
+		<item id="editionBudJh" label="Editions" />
+		<item id="Editions" label="Editions" />
+		<item id="EditionsAd" label="Suivi provisions n-1" />
+		<item id="Export" label="Exports sur PC"
+			altLabel="Génération des fichiers d&amp;rsquo;export" />
+		<item id="Compta" label="Comptabilité"
+			altLabel="Edition des immobilisations" />
+		<item id="Exploitation" label="Exploitation"
+			altLabel="Fonctions d&amp;rsquo;exploitation" />
+		<item id="ssEdStat" label="Statistiques Editions"
+			altLabel="Statistiques de lancement des Etats" />
+		<item id="ssXProjet" label="Projets"
+			altLabel="Extractions des Projets" />
+		<item id="ssXEBis" label="Expense"
+			altLabel="Extractions Expense" />
+		<item id="Historique" label="Historique"
+			altLabel="Edition des historiques" />
+		<item id="Forum" label="Forum" altLabel="Forum" />
+		<item id="Surveillance" label="Surveillance" />
+		<item id="Traitbatch" label="Traitement Batch" />
+		<item id="PriseEnChargeISAC" label="Prise en charge ISAC"
+			link="jsp/fPecisacAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+			<item id="BoiteOutils" label="Boîte à outils"
+			altLabel="Boîte à outils administrateurs" />
+		<item id="TraitDifferes" label="Traitements différés"
+			altLabel="Accès aux éditions et extractions différées"
+			link="jsp/cRecupAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="Contrats" label="Contrats" />
+		<item id="Factures" label="Factures" />
+		<item id="Gestion" label="Gestion" />
+		<item id="Integration" label="Intégration" />
+		<item id="ssEdFactures" label="Factures" />
+		<item id="Situations" label="Situations" />
+		<item id="ImportExport" label="Import/Export" />
+		<!-- FAD PPM 63988 : Suppression des menus "Recherche(chaîne)" et "Recherche(alpha)" et création du menu "Recherche" -->
+		<!-- <item id="ssRechercheChaine" label="Recherche(chaîne)" /> -->
+		<!-- <item id="ssRechercheAlpha" label="Recherche(alpha)" /> -->
+		<!-- FAD PPM 63988 : Fin -->
+		<!-- item id="Consultation"
+			label="Consultation"/-->
+		<item id="Consultation" label="Consultation"
+			altLabel="Detail Ressources" 
+			link="jsp/consultationRess.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="FacturesContrats" label="Factures-Contrats" />
+		<item id="Facons" label="FACONS" />
+		<item id="IsacParam" label="Paramétrage"
+			helpPage="jsp/aide/Guide_saisie_realises.doc" />
+		<item id="RessourceSSTache" label="Ressource/sous-tâches" />
+		<item id="SuiviActBud" label="Suivi d'Activité/Budget"
+			altLabel="Suivi d'Activité/Budget" />
+
+		<item id="SuiviActBudDet" label="Activité - Détail"
+			altLabel="Suivi d'Activité/Budget - Détail" />
+
+		<item id="SuiviFinCom" label="Suivi Financier / Comptable"
+			altLabel="Suivi Financier / Comptable" />
+
+		<item id="SuiviFinComDet" label="Suivi Comptable - Détail"
+			altLabel="Suivi Financier / Comptable - Détail" />
+
+		<item id="MiseaJourOre" label="Mise à Jour"
+			altLabel="Mise à Jour - Outil Réestimé" />
+		<item id="EditionsOre" label="Editions"
+			altLabel="Editions - Outil Réestimé" />
+		<item id="ExportOre" label="Export sur PC"
+			altLabel="Export sur PC - Outil Réestimé" />
+
+		<item id="ssRJHLigneBip" label="Répartition JH"
+			altLabel="Gestion des répartitions JH" helpPage="jsp/aide/hvide.htm" />
+
+		<item id="Copi" label="COPI" />
+
+		<!--
+			*******************************************************************************************************************************
+			
+			Description des options de menus avec un traitement attaché
+			
+			*******************************************************************************************************************************
+		-->
+
+		<item id="Favoris" label="Favoris" altLabel="Liste des favoris"
+			link="/listeFavoris.do"
+			linkOptions="addFav=no&amp;action=initialiser" />
+		<item id="bjhValidErreurs" label="Validation erreurs"
+			altLabel="Validation des erreurs du bouclage J/H"
+			link="jsp/bAnomalieAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="consultAgentSG" label="Agents SG"
+			link="jsp/bConsultpersCr.jsp"
+			linkOptions="rtype=A&amp;addFav=yes&amp;typFav=T" />
+		<item id="consultCalendrier" label="Calendrier"
+			link="/calendrierShow.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="consultCRMens" label="CR Mensuelle"
+			link="jsp/bCrmensuelAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="consultForfait" label="Forfaits"
+			link="jsp/bConsultforfCr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="consultLigneInv" label="Consulter les demandes"
+			link="jsp/bLigneInvLb.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=consulter" />
+		<item id="consultLogiciel" label="Logiciels"
+			link="jsp/bConsultlogCr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="consultLogsBip" label="Logs Application BIP"
+			link="/LogsBip.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="consultPrestation" label="Prestations"
+			link="jsp/bConsultpersCr.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;rtype=P" />
+		<item id="consultRBIP" label="Consultation RBip"
+			altLabel="Consultation des fichiers de remontée Bip"
+			link="jsp/rBipDisplayAdmin.jsp"
+					linkOptions="addFav=yes&amp;typFav=T"/>	
+		<item id="consultSSTacheRess"
+			label="Sous-tâches d'une ressource"
+			altLabel="Liste des sous-tâches d&amp;rsquo;une ressource"
+			link="/affectation.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=consulter" />
+		<item id="consultStatut" label="Consultation Statuts"
+			link="jsp/fConsulstatutGe.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="copieAffectation" label="Copier Affectation Ressource"
+			altLabel="Copier Affectation Ressource"
+			link="jsp/fCopieAffectationSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=affecter" />
+		<item id="documentionReferenceBIP" label="Documentation"
+			altLabel="Documentation de référence BIP"
+			link="/recupliendoc.do" linkOptions="action=initialiser" />
+		<item id="paramStructLb" label="Structure ligne BIP"
+			altLabel="Structure d&amp;rsquo;une ligne BIP" link="/structLb.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="paramCopieStructure" label="Copie de structure"
+			link="jsp/fCopieStructureSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="remiseZeroLigneBip" label="Remise à zéro ligne BIP"
+			altLabel="Remise à zéro des lignes BIP"
+			link="jsp/mLigneBipRemZero.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="saisieConso" label="Saisie des consommés"
+			link="/saisieConso.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+		<!--<item id="calendrier"
+			label="Calendrier"
+			link="jsp/bCalendrierAl.jsp"/>-->
+		<item id="listeDifferes" label="Traitements différés"
+			altLabel="Accès aux éditions/extractions différées"
+			link="jsp/cRecupAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+
+		<!-- feuilles -->
+
+		<item id="eActivite" label="Activités"
+			altLabel="Edition des Activites" link="jsp/eReestimeOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eAnoSSTrait" label="Ano. sous-traitance"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_peanost" />
+		<item id="eBjh" label="Editions"
+			altLabel="Edition des erreurs du bouclage J/H" link="jsp/eJhAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+						<!-- ADD MLA PPM_59805 -->
+		<item id="eContratRF" label="Contrats / Ress / Fact"
+			link="jsp/eContratRF.jsp" 
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_aecontrf&amp;titre=Edition Contrats / Ressources / Factures" />
+			
+		<item id="eContrats" label="Contrats Avenant"
+			link="jsp/bContrataveOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eContPac" label="Contrats P@C"
+			link="jsp/eContratsPacOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- ABN - HP PPM 57714 - DEBUT -->
+		<!-- <item id="eContOalia" label="Contrats Avenant Resao"
+			link="jsp/eEsourcingContOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />  -->
+		<!-- ABN - HP PPM 57714 - FIN -->
+		<item id="eContOr" label="Contrats Avenant"
+			link="jsp/eContOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eContratsEchus" label="Contrats échus"
+			altLabel="Edition des contrats échus" link="jsp/eCtrfinAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eContratsEchusOr" label="Contrats échus"
+			altLabel="Edition des contrats échus" link="jsp/eCtrfinOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eContratRecent" label="Edition d'un contrat"
+			altLabel="Edition d&amp;rsquo;un contrat"
+			link="jsp/eConrecOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eContratRecentAffi" label="Edition Contrat/Avenant"
+			altLabel="Edition Contrat/Avenant"
+			link="jsp/eConrecOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eDetailAbsSG" label="Détail absences SG"
+			altLabel="Edition du détail des absences SG"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_dedetsg" />
+		<item id="eDetailBIP" label="Détail ligne" link="jsp/eBip.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_dedetbip" />
+		<item id="eDetailClientSelect" label="Détail client (sélect)"
+			link="jsp/eProdec2.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eDetcliCc&amp;p_param6=prodec4&amp;p_param10" />
+		<item id="eDetailClientTout" label="Détail client (tout)"
+			link="jsp/eProdec2.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eClientCc" />
+		<item id="eDetailReestime" label="Détail"
+			altLabel="Edition Détail du Réestimé"
+			link="jsp/eDetailReestimeRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eDetailReestimeRe" />
+
+		<item id="eDetCons" label="Détail conso. par Ress."
+			altLabel="Détail du consommé par ressource" link="jsp/eDetconsSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eCra" label="CRA Ressources" altLabel="CRA Ressources"
+			link="jsp/eCraSr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eDirections" label="Directions"
+			altLabel="Edition de la table des Directions"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_directions" />
+		<item id="eDossierMultiMO" label="Doss. Proj. multi MO"
+			altLabel="Dossier Projet multi MO" link="jsp/eRefmmoCr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eEcarts" label="Ecarts"
+			altLabel="Edition des écarts pour les ressources"
+			link="jsp/eEcarts.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eEcarts" />
+		<item id="eParamBip" label="Paramètres Bip"
+			altLabel="Edition de la table des paramètres Bip"
+			link="jsp/eParamBipAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eTypeEtape" label="Types d'étapes"
+			altLabel="Edition des tupes d'étapes"
+			link="jsp/eTypeEtapeAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eProfilsFi" label="Profils de FI"
+			altLabel="Edition de la table Profils de FI"
+			link="jsp/eProfilsFiAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eProfilsDomFonc" label="Profils DomFonc"
+			altLabel="Edition de la table Profils DomFonc"
+			link="jsp/eProfilsDomFoncAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- Edition new report for Profile Localize - starts -->	
+		<item id="eProfilsLocalize" label="Profils Localisés"
+			altLabel="Edition de la table Profils Localisés"
+			link="jsp/eProfilsLocalizeAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- Edition new report for Profile Localize - ends -->		
+		<item id="eProfilsDomFoncLong" label="Profils par Domaine Fonctionnel"
+			altLabel="Edition de la table Profils DomFonc"
+			link="jsp/eProfilsDomFoncAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+			<!-- CMA 969 Trait. exceptionnel -->
+		<item id="traitBatch" label="Trait. exceptionnel"
+			altLabel="Planification des traitements exceptionnels" link="jsp/fmTraitBatchAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;init=true" />
+		<item id="xEcartsBudgets" label="Ecarts Budgétaires"
+			altLabel="Edition des écarts bugétaires"
+			link="jsp/xEcartsBudgets.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=xEcartsBudgets" />
+		<item id="xPIDValide" label="Contrôle des lignes"
+			altLabel="Edition de contrôle des lignes BIP"
+			link="jsp/xControlePIDValide.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=xPIDValide" />
+		<item id="eEchangePac" label="Ressources P@C"
+			altLabel="Edition des Ressources P@C" link="jsp/eRessourcesPacAl.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- ABN - HP PPM 57714 - DEBUT -->
+		<!-- <item id="eEchangeOalia" label="Echanges RESAO"
+			altLabel="Edition accessible à SISE" link="jsp/eEsourcingAl.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" /> -->
+		<!-- ABN - HP PPM 57714 - FIN -->
+		<item id="eFacintg" label="Editions Factintg"
+			link="jsp/eFactintgAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactAnnulee" label="Factures annulées"
+			link="jsp/eFacannuleeOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+<!--  1165 			
+		<item id="eFactAttente" label="Factures en attente"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_aefacatt" />
+		<item id="eFactAttenteDPG" label="Fact.en attente/DPG"
+			link="jsp/eFacdpgOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactAttenteSoc" label="Fact.en attente/Soc"
+			link="jsp/eFacsocOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+-->
+		<item id="eFactInt" label="Facturation Interne des études"
+			altLabel="Facturation Interne des études infos. non amortissables"
+			link="jsp/eFactIntRf.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactIntClient" label="Facturation Interne des études"
+			altLabel="Facturation Interne des études infos. non amortissables"
+			link="jsp/eFactIntRfClient.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+<!--  1165
+		<item id="eFactInvalide" label="Factures invalides"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_aefacin" />
+-->			
+		<item id="eFactReglee" label="Factures réglées"
+			link="jsp/eFacregOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactRess" label="Par code ressource"
+			link="jsp/eFacresOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactSaisie" label="Factures saisies"
+			link="jsp/eNbfactOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactSansLigne" label="Fact. sans ligne de F."
+			altLabel="Factures sans ligne de facture"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_aefactslf" />
+		<item id="eFactStatutSE" label="Factures en statut SE"
+			link="jsp/eFacseOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactSynthese" label="Synthèse des factures"
+			link="jsp/eSynfacOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactureConsomme" label="Facturé/Consommé"
+			link="jsp/eFaconsCr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactures" label="Critères de sélection"
+			link="jsp/eFactOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFacturesContratsCodeRess" label="Par code ressource"
+			link="jsp/eFacresOr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eFactureRecente" label="Consult. Fact. récentes"
+			altLabel="Consulter les Factures récentes" link="jsp/eFacrecOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="EbisFactRejet" label="Gest. rejets Expense"
+			altLabel="Gestion des rejets Expense"
+			link="jsp/fmEbisFactRejetOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eHRess" label="Ressources"
+			altLabel="Historique ressources" link="jsp/eHisresAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eHLigneBIP" label="Ligne" altLabel="Historique Ligne"
+			link="jsp/eHisbipAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eHClientME" label="Client ME"
+			altLabel="Historique Client ME" link="jsp/eProdec2.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eHisclimeAd&amp;p_param6=prodecl&amp;p_param7&amp;p_param8&amp;p_param9" />
+		<item id="eHClientMO" label="Client MO"
+			altLabel="Historique Client MO" link="jsp/eProdec2.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eHisclimoAd&amp;p_param6=prodec3&amp;p_param7&amp;p_param8" />
+		<item id="eHDetailLigne" label="Détail ligne"
+			altLabel="Historique détail ligne" link="jsp/eDetprjAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eHBudget" label="Budget"
+			altLabel="Historique Budget et Consommé" link="jsp/eHistBud.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eImmo" label="Immobilisation des études"
+			altLabel="Immobilisation des études informatiques"
+			link="jsp/eImmoRf.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eImmoClient" label="Immobilisation des études"
+			altLabel="Immobilisation des études informatiques"
+			link="jsp/eImmoRfClient.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eLigneBipFiche" label="Edition fiches"
+			altLabel="Edition détail des lignes BIP" link="jsp/eFicbipAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eLigneBipSSTrait" label="Sous-traitance"
+			altLabel="Edition des sous-traitances" link="jsp/eSsttntAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eLigneBipDetailSSTrait" label="Détail sous-traitance"
+			link="jsp/eDetstrCr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eLigneInv" label="Edition" link="jsp/eSuivInvLb.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eLignesCloses" label="Lignes closes/budget"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_debipclo" />
+			
+		<item id="consultControleCa" label="Contrôle des CA"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=e_controleca" />
+										
+		<item id="eListeTel" label="Liste téléphonique"
+			altLabel="Edition de la liste téléphonique" link="jsp/eRestelAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eMensuelle" label="Mensuelle" link="jsp/eMensAl.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eMensSr" label="Mensuelle" link="jsp/eMensSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eMonProfil" label="Mon Profil"
+			link="jsp/eMonProfilAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eProfilsListeRessources" label="Profils liste ressources" 
+			altLabel="Edition des profils pour une liste de ressources"
+			link="jsp/eProfilsListeRessourcesAd.jsp" linkOptions="addFav=yes&amp;typFav=E" helpPage="jsp/aide/hvide.htm"/>
+			
+			<item id="eProfilsListeRessourcesNew" label="Profils liste ressources" 
+			altLabel="Edition des profils pour une liste de ressources"
+			link="jsp/eProfilsListeRessourcesNewAd.jsp" linkOptions="addFav=yes&amp;typFav=E" helpPage="jsp/aide/hvide.htm"/>
+			
+		<item id="eMultiCA" label="Multi-CA"
+			altLabel="Edition des répartitions multi-CA"
+			link="jsp/eMulticaAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eMultiCAMO" label="Multi-CA"
+			altLabel="Edition des répartitions multi-CA"
+			link="jsp/eMulticaMoAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eOrganisation" label="Organisation"
+			altLabel="Edition de l&amp;rsquo;organisation par département"
+			link="jsp/eOrganisationAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eP9000" label="P9000 par application"
+			link="jsp/eDetappCr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="ePCA4" label="PCA4" link="jsp/eRefoldAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="ePrestation" label="Prestations"
+			altLabel="Edition des Prestations" link="jsp/ePrestAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eProfilCp" label="Profil Cp: Paramétrage hierarchique"
+			link="jsp/eProfilCpAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eProfilRess" label="Profil Saisie directe ress."
+			link="jsp/eProfilRessAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="majMail" label="Gestion des @ mail"
+			link="jsp/bMailAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="eProjetsSpeciaux" label="Projets spéciaux"
+			link="jsp/ePrjspcAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eRapprochement" label="Etat de synthèse"
+			altLabel="Edition du rapprochement" link="jsp/eRapsynAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="xLigneFact" label="Export détaillé des factures"
+			altLabel="Export détaillé des factures" link="jsp/xLigneFactAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eRef" label="Référentiels au choix"
+			link="jsp/eRefAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eRefProj" label="Projet - Dossier Projet"
+			link="jsp/eRefPrjAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- FAD PPM 63988 : Suppression des menus "Recherche(chaîne)" et "Recherche(alpha)" et création du menu "Recherche" -->
+		<item id="eRecherche" label="Recherche" altLabel="Référentiels - Recherche"
+			link="jsp/eRecherche.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- FAD PPM 63988 : Fin -->
+		<item id="Tracabilite" label="Traçabilité"
+			altLabel="Total des éditions par User" />
+		<item id="consultLogsParamBip" label="Paramètres Bip"
+			link="jsp/eLogsParamBipAd.jsp" linkOptions="addFav=yes&amp;typFav=E"/>
+		<item id="consultLogsModeContractual" label="Log Mode contractuel"
+			link="jsp/eLogsModeContractAd.jsp" linkOptions="addFav=yes&amp;typFav=E"/>
+		<item id="consultLogsCodePrestation" label="Log Code prestation"
+			link="jsp/eLogsPrestationAd.jsp" linkOptions="addFav=yes&amp;typFav=E"/>
+		<item id="consultLogsDpg" label="Log Dpg"
+			link="jsp/eLogsDpgAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogsCoutStd" label="Log Coûts Standards"
+			altLabel="Log Coûts std" link="jsp/eLogsCoutsStandards.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogsCoutStdKE" label="Log Coûts moyens complets"
+			altLabel="Log des Coûts std en KE"
+			link="jsp/eLogsCoutsStandardsKE.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogLigneBIP" label="Logs ligne BIP"
+			link="jsp/eLogslbAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogNotif" label="Log Notifications budg."
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=eLogsNotif" />
+		<item id="consultLogRessources" label="Log Ressource"
+			link="jsp/eLogsRessourcesAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+        <item id="consultLogsApplication" label="Log Application"
+				link="jsp/eLogsAppAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogsProjet" label="Log Projet"
+			link="jsp/eLogsPrjAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogsDossierProjetCopi" label="Log DP COPI"
+			link="jsp/eLogsDossProjCopiAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogContrats" label="Log Contrats"
+			link="jsp/eLogsContratsAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="consultLogsFacture" label="Log Facture"
+				link="jsp/eLogsFactAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eRess0" label="Ressources 0"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_deresa0" />
+		<item id="eRessCodeRess" label="Par code ressource"
+			altLabel="Edition des ressources par code" link="jsp/eResidAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eRessMois" label="Ressources mois"
+			altLabel="Edition des ressources mois"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_deresmoi" />
+		<item id="eRessOrdreAlpha" label="Par ordre alphabétique"
+			altLabel="Edition des ressources par ordre alphabétique"
+			link="jsp/eResabcAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eRessourceReestime" label="Ressources"
+			altLabel="Edition des Ressources" link="jsp/eEditionRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eRessourceRe" />
+		<item id="eRessources" label="Edition des ressources"
+			link="jsp/eResdpgAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+<!-- BSA 1165			
+		<item id="eResultExport" label="Résultats Export"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_axcomres" />
+		<item id="eResultImport" label="Résultats Import"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_aiseglres&amp;filiale" />
+-->			
+		<item id="eStatEdTotEtat" label="Total par Etat"
+			altLabel="Total des éditions par Etat" link="jsp/eStatEdition.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eStatEdTotEtat" />
+		<item id="eStatEdTotUser" label="Total par User"
+			altLabel="Total des éditions par User" link="jsp/eStatEdition.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eStatEdTotUser" />
+		<item id="eStatEdUser" label="Détail par User"
+			altLabel="Détail de lancement des états par User"
+			link="jsp/eStatEdUser.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eStatEdUser" />
+		<item id="eStructLigneBIP" label="Structure Ligne"
+			link="jsp/eBip.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_pebip" />
+		<item id="eStructLigneBIPISAC" label="Structure de la ligne"
+			link="jsp/eStructlbSr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSuiviAn" label="Suivi annuel"
+			altLabel="Suivi annuel par ligne BIP" link="jsp/eSuivilbSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSuiviCC" label="Etat Suivi JH"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eSuiviCc&amp;p_param6=" />
+		<item id="eSuiviJH" label="Suivi JH" link="jsp/eSuivijhrAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSuiviJHOper" label="Etat suivi JH par MO Oper"
+			altLabel="Etat suivi JH par MO Opérationnelle"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eSuiviOperCc&amp;p_param6=OPER" />
+		<item id="eSuiviMOAppli" label="Suivi par MO/Appli"
+			link="jsp/eRefappCr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSuiviMOProj" label="Suivi par MO/Projet"
+			link="jsp/eRefprjCr.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSuiviMOProjSynth" label="Suivi par MO Proj. Syn"
+			altLabel="Suivi par MO Projet Synth." link="jsp/eRefsynAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSuiviSSII" label="Suivi SSII"
+			altLabel="Edition du suivi SSII" link="jsp/eResssiiAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="SuiviCopi" label="Suivi COPI"
+			altLabel="Suivi des budgets COPI - JH/KE Export - Editions"
+			link="jsp/feSuiviCopiRef.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- YNI FDT 798 -->
+		<item id="LogDpCopi" label="log DP COPI" altLabel="log DP COPI"
+			link="jsp/eLogDpCopi.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="LogBudgetCopi" label="log Budget COPI"
+			altLabel="log Budget COPI" link="jsp/eLogBudgetCopi.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- Fin YNI FDT 798 -->
+		<!-- HMI 62325 -->	
+		<item id="eSuiviBudgProj" label="Suivi budgétaire projets"
+			altLabel="Etat suivi budgétaire projets"			
+			link="jsp/SuiviBudgProj.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_suivibudgproj" />
+		<item id="eSuiviRefMet" label="Suivi par référentiel/métier"
+			altLabel="Etat suivi budgétaire par référentiel/métier"
+			link="jsp/eSuiviRefRf.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eSuiviMetRf" />
+		<item id="eSuiviRefCli" label="Suivi par référentiel/client"
+			altLabel="Etat suivi budgétaire par référentiel/client"
+			link="jsp/eSuiviRefRf.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eSuiviCliRf" />
+		<item id="eSuiviRefFourn"
+			label="Suivi par référentiel/fournisseur"
+			altLabel="Etat suivi budgétaire par référentiel/fournisseur"
+			link="jsp/eSuiviRefRf.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eSuiviFouRf" />
+		<item id="eSuiviType1" label="Suivi types 1"
+			link="jsp/eRefdosAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSurveillanceRemonteJH" label="Surveil. remontées JH"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eSuivijhrAd" />
+		<item id="eSyntheseAbsSG" label="Synthèse absences SG"
+			altLabel="Edition de la synthèse des absences SG"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_desynsg" />
+		<item id="eSyntheseCouts" label="Synthèse des coûts projets"
+			altLabel="Synthèse des coûts projets" link="jsp/eSyntheseCoutRf.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSyntheseGlobale" label="Synthèse Globale"
+			altLabel="Synthèse Globale - Outil Réestimé"
+			link="jsp/eSyntheseGlobaleRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eSyntheseGlobaleMe" label="Simulations Ressources"
+			altLabel="Etat de Synthèse - Outil Réestimé par ressources"
+			link="jsp/eSyntheseGlobaleRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- item id="detailMe"
+			label="Detail Ressources"
+			altLabel="Detail Ressources"
+			link="jsp/consultationRess.jsp"
+			linkOptions="addFav=yes&amp;typFav=E"/-->
+		<item id="eSyntheseLocale" label="Synthèse Locale"
+			altLabel="Synthèse Locale - Outil Réestimé"
+			link="jsp/eSyntheseLocaleRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eTableApplications" label="Applications"
+			altLabel="Edition des Applications" link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_deappli" />
+		<item id="eTableCentre2Frais" label="Centre de frais"
+			altLabel="Edition des Centres de frais"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_decfrais" />
+		<item id="eTableClients" label="Clients"
+			altLabel="Edition de la table des Clients" link="jsp/eClientAd.jsp" />
+		<item id="eRubriques" label="Rubriques"
+			altLabel="Edition de la table des Rubriques"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_rubriques" />
+		<item id="eRubriquesAd" label="Rubriques"
+			altLabel="Edition de la table des Rubriques"
+			link="jsp/eRubriqueAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_RubriquesAd" />
+		<item id="eTableCompta" label="Compta"
+			altLabel="Edition des Codes comptables"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_decodes" />
+		<item id="eTableDossiersProjet" label="Dossiers projet"
+			altLabel="Edition des Dossiers projets"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_dedosprj" />
+		<item id="eTableDPG" label="DPG"
+			altLabel="Edition de la table des DPG"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_depoles" />
+		<item id="eTableImmeubles" label="Immeubles"
+			altLabel="Edition des Immeubles" link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_deimmeub" />
+		<item id="eTableInvestissements" label="Investissements"
+			altLabel="Edition des Investissements"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_deinvests" />
+			
+			<!-- Test evolution 1234 -->
+		<!-- <item id="consulModify" label="Consultation"
+		altLabel="consultation/Modification"
+		link="/consulModify.do"
+		linkOptions="addFav=yes&amp;typFav=E&amp;action=suite" /> -->
+			
+		<item id="eTablePrestations" label="Prestations"
+			altLabel="Edition des Prestations" link="jsp/ePrestationAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_decoutql" />
+		<item id="eModeContractuel" label="Modes Contractuels"
+			altLabel="Edition des Prestations" link="jsp/eModeContractuelAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_modecontractuel" />	
+		<item id="eTableProjets" label="Projets"
+			altLabel="Edition des Projets informatiques"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=e_deprjinf" />
+		<item id="eTableSocietes" label="Sociétés"
+			altLabel="Edition des Sociétés" link="jsp/eSocAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eTableRepart" label="Table répartition JH"
+			altLabel="Edition des tables de répartition JH"
+			link="jsp/eTableRepartJH.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eTableRepartJH" />
+		<item id="eTableStandards" label="Standards"
+			altLabel="Edition des Coûts standards" link="jsp/eCoutstAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E" />
+		<!-- YNI Fiche 876 
+			jsp/eConsultPerimsRestit.jsp -->
+		<item id="consultPerimsRestit"
+			label="Consult perims restitutions"
+			altLabel="Consult des Perims Restitutions" link="/perimsRestit.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<!-- Fin YNI Fiche 876 -->
+		
+		<item id="eTableCoutMoyenComplet" label="coûts moyens complets"
+			altLabel="Edition des coûts moyens complets"
+			link="jsp/eCoutstAdKE.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="eTableTypesProjet" label="Type / Typologie"
+			altLabel="Types activités/Typologies secondaires"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eTypesprojAd" />
+		<item id="eVisuLigne" label="Visu. ligne"
+			link="jsp/eLigneAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="majActivite" label="Activités"
+			altLabel="Mise à jour des Activités" link="jsp/bActiviteRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majActiviteLigne" label="Activités Lignes Bip"
+			altLabel="Rattachement des lignes Bip à une Activité"
+			link="jsp/bActiviteLigneRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majActualites" label="Gestion des actualites"
+			link="jsp/fActuAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majAgentSG" label="Agents SG"
+			altLabel="Mise à jour des Agents SG ou Assimilés"
+			link="jsp/bPersonneAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;rtype=A&amp;soccode=SG.." />
+		<item id="majApplications" label="Applications"
+			altLabel="Gestion des Applications" link="jsp/fmApplicationAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBloc" label="Bloc"
+			altLabel="Mise à jour des blocs " link="jsp/fmBlocAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBudActJh" label="Activités JH"
+			altLabel="Saisie du budget Activités JH" link="jsp/bBudActJhAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBudjetJH" label="Gestion budgets"
+			link="jsp/bGestionbudgAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBudgetLignesMO" label="Lignes Clients"
+			link="jsp/fPropoMassMOAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBudgetLignesMO2" label="Saisie en masse"
+			link="jsp/fPropoMassMOAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBudgetMesLignes" label="Mes lignes"
+			link="jsp/fBudgMassMEAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majArbitrageLignes" label="Arbitrage ligne BIP"
+			link="jsp/fArbitrageAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCalendrier" label="MAJ calendrier"
+			link="jsp/fMajcalendAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCAMO" label="CA MO"
+			altLabel="Mise à jour des Centres d&amp;rsquo;activités MO"
+			link="jsp/fmCamoAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCentre2Frais" label="Centre de frais"
+			altLabel="Mise à jour des Centres de frais"
+			link="jsp/bCentrefraisAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCfrais" label="Changer Centre Frais"
+			altLabel="Changer le Centre de frais" link="/changeCF.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=ecran" />
+		<item id="majClients" label="Client"
+			altLabel="Mise à jour des Clients" link="jsp/fmClientAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCompta" label="Compta"
+			altLabel="Mise à jour des Codes comptables" link="jsp/fmComptaAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majContratAvenant" label="Gestion d'un contrat"
+			altLabel="Gestion d&amp;rsquo;un contrat"
+			link="jsp/bContrataveOr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majContratDateSuivi" label="Dates de suivi"
+			link="jsp/fDatesuiviOr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCopierCollerSSTache"
+			label="Copier/coller ss-tâches" altLabel="Copier/coller sous-tâches"
+			link="jsp/fSoustachecopierSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCP" label="MAJ CP"
+			altLabel="Modifcation des codes chefs de projets"
+			link="jsp/mCodeCpAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCompte" label="Compte"
+			altLabel="Mise à jour des Comptes" link="jsp/fmCompteAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majRubrique" label="Rubrique"
+			altLabel="Mise à jour des Rubriques" link="jsp/fmRubriqueAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majBranches" label="Branches"
+			altLabel="Mise à jour des branches" link="jsp/fmBranchesAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majTraitement" label="Traitements"
+			altLabel="Mise à jour des traitements" link="jsp/fmTraitementAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majDirections" label="Directions"
+			altLabel="Mise à jour des directions" link="jsp/fmDirectionsAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<!-- YNI FDT 970 -->
+		<item id="majDateEffet" label="Paramètres Bip"
+			altLabel="Mise à jour des paramètres Bip" link="jsp/fmDatesEffetAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLocalisation" label="Localisations"
+			altLabel="Mise à jour des localisations" link="jsp/fmLocalisationsAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majContractuel" label="Modes contractuels"
+			altLabel="Mise à jour des modes contractuels" link="jsp/fmModesContractuelAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<!-- Fin YNI FDT 970 -->
+		<item id="majDirection" label="MAJ Direction"
+			link="/majClient.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=initial" />
+		<item id="majDossierProjet" label="Dossiers projet"
+			altLabel="Gestion des Dossiers projets"
+			link="jsp/fmDossierprojAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majDPG" label="DPG" altLabel="Mise à jour des DPG"
+			link="jsp/fmDpgAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majDomaine" label="Domaine"
+			altLabel="Mise à jour des Domaines " link="jsp/fmDomaineAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majSousSysteme" label="Sous-système"
+			altLabel="Mise à jour des sous-systèmes"
+			link="jsp/fmSousSystemeAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majFactures" label="Factures"
+			link="jsp/bFactureOr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majFactureDateSuivi" label="Dates de suivi"
+			link="jsp/fDatefactureOr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majFactureValidee" label="Correct.fact.validée"
+			link="jsp/fFactValideeOr.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="loadFactures" label="Chargement"
+			link="/loadDematFactures.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=initial" />
+		<item id="traceChargement" label="Rapport"
+			link="/rapportDematFactures.do"
+			linkOptions="action=initialiser&amp;addFav=yes&amp;typFav=T&amp;mode=consulter" />
+		<item id="majFiliales" label="Filiales"
+			altLabel="Mise à jour des Filiales" link="jsp/fmFilialeAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majForfaits" label="Forfaits"
+			altLabel="Mise à jour des Forfaits" link="jsp/bForfaitAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;rtype=F" />
+		<item id="majImmeubles" label="Immeubles"
+			altLabel="Mise à jour des Immeubles" link="/immeuble.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="majInvestissements" label="Investissements"
+			altLabel="Consultation et mise à jour des lignes budgétaires"
+			link="jsp/fmInvAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienApp" label="Application"
+			link="jsp/fLienappliAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienCpBIP" label="Lien CP"
+			altLabel="Gestion des liens Chef de Projet" link="jsp/fLiencpAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienCAMO" label="Lien CA MO"
+			altLabel="Gestion des liens CA MO" link="jsp/fLiencamoAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienDP" label="Lien DP"
+			altLabel="Gestion des liens Dossier Projet" link="jsp/fLiendpAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienDPDomBancaire" label="Lien DP/Dom. Bancaire"
+			altLabel="Lien DP/Dom. Bancaire" link="/dpDomBancaire.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=modifier" />
+		<item id="majLienDPG" label="Lien DPG"
+			altLabel="Gestion des liens DPG" link="jsp/fLiendpgAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienMO" label="Lien MO"
+			altLabel="Gestion des liens MO" link="jsp/fLienmoAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLienProjet" label="Projet"
+			link="jsp/fLienprojetAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLigneBip" label="Création/Modif"
+			altLabel="Mise à jour des lignes BIP" link="jsp/bLignebipAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLigneBipFermeture" label="Fermeture"
+			link="jsp/fFermeLigneAl.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLigneBIPMO" label="Mise à jour"
+			link="jsp/bLignebipMoCc.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLigneInv" label="Gestion des lignes"
+			altLabel="Gestion des lignes budgétaires" link="jsp/bLigneInvLb.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majLigneReal" label="Saisie des réalisés"
+			link="jsp/bLigneReaLb.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=ligne" />
+		<item id="majLogiciels" label="Logiciels"
+			altLabel="Mise à jour des Logiciels" link="jsp/bLogicielAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;rtype=L" />
+		<item id="majMultiCA" label="Gestion multi-CA"
+			link="jsp/fMulticaAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majNature" label="Nature"
+			altLabel="Consultation et mise à jour des natures d&amp;rsquo;investissements"
+			link="jsp/fmNatureAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majNotificationBudjet" label="Notification"
+			altLabel="Notification des budgets" link="jsp/fNotificationAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majNotifLigneBudget" label="Notification"
+			altLabel="Notification des saisies budgétaires"
+			link="jsp/mNotificationLb.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=notifier" />
+		<item id="majParametresBIP" label="Etat BIP"
+			link="jsp/fmParametreAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majPrestataires" label="Prestations"
+			altLabel="Mise à jour des Prestations" link="jsp/bPersonneAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;rtype=P" />
+		<item id="majPole" label="MAJ DPG" link="/majDpg.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=initial" />
+		<item id="majPoste" label="Poste"
+			altLabel="Consultation et mise à jour des postes d&amp;rsquo;investissements"
+			link="jsp/fmPosteAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majPrestations" label="Prestations"
+			altLabel="Mise à jour des Prestations" link="jsp/fmPrestationAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majProjet" label="Projets"
+			altLabel="Gestion des Projets informatiques"
+			link="jsp/fmProjetAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majProjetsSpeciaux" label="Projets spéciaux"
+			altLabel="Mise à jour des Projets spéciaux" link="/projspec.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="majPropose" label="Proposé" link="jsp/fProposeAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majReestime" label="Réestimé"
+			link="jsp/fReestimeAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majRessource" label="Ressources"
+			altLabel="Mise à jour des Ressources" link="jsp/bRessourceRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majRessourceAct" label="Ressources Activités"
+			altLabel="Rattachement des activités à une Ressource"
+			link="jsp/bRessourceActRe.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majSaisieReestime" label="Saisie Réestimé"
+			altLabel="Saisie du Réestimé pour une Ressource"
+			link="/saisieRees.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="majScenario" label="Scénarios"
+			altLabel="Mise à jour des Scénarios" link="jsp/bScenarioRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majSocietes" label="Sociétés"
+			altLabel="Mise à jour des Sociétés" link="jsp/bSocieteAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majSSTacheRess" label="Affectation"
+			altLabel="Affectation des sous-tâches aux ressources"
+			link="/affectation.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=affecter" />
+		<item id="majStandards" label="Standards"
+			altLabel="Mise à jour des Coûts standards" link="jsp/fStandardAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majCoutMoyenComplet" label="Coûts moyens complets"
+			altLabel="Mise à jour des coûts moyens complets"
+			link="jsp/fStandardKEAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majStatut" label="MAJ Statut"
+			link="jsp/fMajstatAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majType1" label="Type 1"
+			altLabel="Mise à jour des Types 1" link="jsp/fmType1Ad.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majType2" label="Type 2"
+			altLabel="Mise à jour des Types 2" link="/type2.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;addFav=yes&amp;typFav=T" />
+		<item id="majSousType" label="DBS"
+			altLabel="Mise à jour du DBS"
+			link="jsp/fmSousTypoAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majTypeAbs" label="Types absence"
+			altLabel="Gestion des types d&amp;rsquo;absences"
+			link="jsp/fmTypeabsAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majTxAnnuels" label="Taux annuels"
+			altLabel="Mise à jour des Taux de récupération et de charge salariale"
+			link="jsp/fmTauxrecAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="majTableRepart" label="Table de répartition"
+			altLabel="Mise à jour des tables de répartition"
+			link="/tabRepartJH.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=initial" />
+		<item id="majLoadTableRepart" label="Chargement"
+			altLabel="Chargement des tables de répartition"
+			link="/loadTabRepartJH.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=initial" />
+		<item id="majLoadLigneBip" label="Chargement Ligne BIP"
+			altLabel="Chargement des lignes BIP" link="/loadLigneBip.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=initial" />
+		<item id="vRapportTableRepart" label="Rapport"
+			altLabel="Rapport des chargements des tables de répartition"
+			link="/rapportTabRepartJH.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;mode=consulter" />
+		<!-- 
+			<item id="majProposesTableRepart"
+			label="Proposés"
+			altLabel="Mise à jour des proposés avec les tables de répartition"
+			link="jsp/bmProposeRJH.jsp"
+			linkOptions="addFav=yes&amp;typFav=T"/>	
+			<item id="majArbitresTableRepart"
+			label="Arbitrés"
+			altLabel="Mise à jour des arbitrés avec les tables de répartition"
+			link="jsp/bmArbitreRJH.jsp"					
+			linkOptions="addFav=yes&amp;typFav=T"/>	
+		-->
+
+		<item id="paramLigneBip" label="Paramétrage"
+			altLabel="Paramétrage de l&amp;rsquo;édition Ligne BIP"
+			link="jsp/fParamLigneBipAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;" />
+		<item id="Paramsession" label="Paramètres session"
+			altLabel="Modifier les paramètres de la session" link="/paramsess.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+		<item id="ChargerProfil" label="Charger profil"
+			altLabel="Charge le profil de session avec le RTFE d'un utilisateur" link="jsp/mChargerProfil.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+		<item id="xVerifRTFE" label="Vérification RTFE"
+			altLabel="Vérification des profils RTFE" link="jsp/xVerifRTFE.jsp"
+			linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xSurvSst" label="Sous-traitances incohérentes"
+			altLabel="Surveillance des sous-traitances incohérentes"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSurv_sst" />
+		<item id="xSurConnexion" label="Connexions"
+			altLabel="Surveillance des connexions" link="jsp/xSurConnexionAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xApplication" label="Applications"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xAppliAd" />
+		<item id="xApplicationAl" label="Applications"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xAppliAl" />
+		<item id="xAuditCompta" label="Audit" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xAuditAd" />
+		<item id="xAuditFonct" label="Audits fonctionnels"
+			link="jsp/bAuditAd.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xConsoSaisi" label="Extraction Consommé Saisi"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xConsoSr" />
+		<item id="Cra" label="CRA" 
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xCraSr" />
+
+		<item id="xStructLigne" label="Extraction structure Lignes BIP" 
+			link="jsp/xStructLigneBipSr.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStructLigneSr" />
+		
+		<item id="xBips" label="Génération fichier .BIPS"
+			link="jsp/xBips.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xBips" />
+			
+		<item id="xDetailActivite" label="Activités"
+			altLabel="Export Activités" link="jsp/xSuiviActivites.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuiviActivites" />	
+		<item id="xDetailReestime" label="Détail du Réestimé"
+			altLabel="Export Détail du Réestimé" link="jsp/xDetailReestimeRe.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xDetailReestimeRe" />
+		<item id="xDossierProjet" label="Dossiers projet"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xDosprjAd" />
+		<item id="xDossierProjetAl" label="Dossiers projet"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xDosprjAl" />
+		<item id="xDPG" label="DPG" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xPolesAl" />
+		<item id="xFACONS" label="Extractions FACONS"
+			link="jsp/xFaconsCr.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xFacturesContrats" label="Extraction"
+			link="jsp/xFacconCr.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+<!--  1165		
+		<item id="xFactAttente" label="Fact. en attente"
+			link="jsp/xFactattOr.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+-->			
+		<item id="xFactOrd" label="Factures"
+			link="jsp/xOrdFactattOr.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		
+		<!-- FAD PPM 63956 : Redirection vers le nouveau menu "Lignes BIP" dans le cas du sous menu suivbase --> 
+		<item id="xLigneBip" label="Lignes BIP" altLabel="Lignes BIP"
+			link="jsp/xRedirectLigne.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<!-- FAD PPM 63956 : Fin -->
+
+		<!-- FAD PPM 63956 : Redirection vers le nouveau menu "Extract. des demandes et lignes BIP" dans le cas du sous menu suivbase -->
+		<item id="xDemandeLigneBip" label="Extract. des demandes et lignes BIP"
+		 	link="jsp/xRedirectDemandeLigneBip.jsp"
+		 	linkOptions="addFav=yes&amp;typFav=X" />
+		<!-- FAD PPM 63956 : Fin -->
+
+		<!-- FAD PPM 63956 : Redirection vers le nouveau menu ""Extract. ss-tâche/ress." dans le cas du sous menu suivbase -->
+		<!-- <item id="xSSTacheRess" label="Extract. ss-tâche/ress." -->
+		<!-- 	altLabel="Extraction sous-tâche / ressources" -->
+		<!-- 	link="jsp/xSstresAd.jsp" linkOptions="addFav=yes&amp;typFav=X" /> -->
+		<item id="xSSTacheRess" label="Extract. ss-tâche/ress."
+			altLabel="Extraction sous-tâche / ressources"
+			link="jsp/xRedirectSstress.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<!-- BIP 173 changes -->
+			<item id="xSSTacheRessPublic" label="Extract. S-tâches/ress. tout public"
+			altLabel="Extraction sous-tâche public/ ressources"
+			link="jsp/xRedirectSstress.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<!-- FAD PPM 63956 : Fin -->
+
+		<item id="xLigneBipAct" label="Lignes BIP Actives"
+			link="jsp/xLigneAdAct.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		
+		<!-- Changes for ORBRE -->
+		<item id="xOrbre" label="ORBE BSC"
+			link="jsp/xOrbre.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+			
+			<!-- KRA PPM 62325 : F1 -->
+			<!-- ZAA PPM 62325 : F7 -->
+		<item id="xDdeNonUtilisee" label="Extract. des demandes non utilisées"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xDMPNonUtilisee" /> 
+		<item id="xLigneRfAct" label="Lignes BIP Actives"
+			link="jsp/xLigneRfAct.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xOriSaisieConso" label="Lignes/origine saisie cons."
+			link="jsp/xOriSaisieAd.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xLigneBip2" label="Export Lignes BIP"
+			link="jsp/xLigneAdRef.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xLigneInv" label="Extraction"
+			link="jsp/xSuivInvLb.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xLigneInv2" label="Export lignes investissement"
+			link="jsp/xSuiviInvRf.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuivInvLb2" />
+		<item id="xLignes" label="Export Excel Lignes BIP"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xLigneMc" />
+		<item id="xMO" label="Clients (MO)" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xClientAl" />
+		<item id="xMultica" label="Multi-Ca" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xMulticaAd" />
+		<item id="xMulticaMO" label="Multi-Ca" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xMulticaMOAd" />
+		<item id="xPersonne" label="Personnes" link="jsp/xPersAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xProjet" label="Projets" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xPrjAl" />
+		<item id="xProjet2" label="Projets Actifs"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xPrjAl2" />
+		<item id="xProjet3" label="Date de révision passée"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xPrjAl3" />
+		<item id="xProjet4" label="Hors Grands Projets"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xPrjAl4" />
+		<item id="xProjet5" label="Associés à un CADA"
+			link="jsp/xPrjCada.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xProjet6" label="Associés à un acteur"
+			link="jsp/xPrjActeur.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xProjetAl" label="Projets" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xPrjAl" />
+		<item id="xProjetVersDEVL" label="Déclaration DEVL"
+			altLabel="Déclaration des projets à DEVL " link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xProjetVersDEVL" />
+		<item id="xRessActive" label="Ressources Actives"
+			link="jsp/xRessActParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xResactAd" />
+		
+		<!-- BIP 509 Hierarchy  -->
+		<item id="xRessHierarchy" label="Hiérarchie ressources"
+			link="jsp/xHierarchy.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;" />
+			
+			
+		<item id="eEcartsCons" label="Consommés en écarts"
+			altLabel="Edition des consommés en écarts"
+			link="jsp/eEcartsCons.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eEcartsCons" />					
+		<item id="xRessMois" label="Ressources par mois"
+			link="jsp/xRessmoisAd.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xRessSSII" label="Fichiers Ressources SSII"
+			link="jsp/xSsiiOr.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xSociete" label="Extraction société"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSocieteAl" />
+		<item id="xStockImmo" label="Stock lignes Immos"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockImmoAd" />
+		<item id="xRubriques" label="Rubriques"
+			altLabel="Extraction de la table des Rubriques"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xRubriques" />
+		<item id="xSuiviFinancierKe" label="Suivi financier + Budget"
+			altLabel="Suivi financier + Budget" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuiviFinancierKeCg" />
+		<item id="xStockImmo_ref" label="Export Stock Immos"
+			link="jsp/xStockImmoRef.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockImmoAd" />
+		<item id="xStockImmoSCRef" label="Export Stock Immos SANS compta"
+					link="jsp/xStockImmoSCRef.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockImmoSCRef" />
+		<item id="xSSTache" label="Extract. ss-tâche"
+			altLabel="Extraction sous-tâche" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSstconsoAd" />
+		<item id="xStockFI" label="Stock lignes FI"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockFiAd" />
+		<item id="xStockFI_ref" label="Export Stock FI"
+			link="jsp/xStockFiRef.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockFiAd" />
+		<item id="xSynthStockFI" label="Stock FI Synthèse"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSynthStockFiAd" />
+		<item id="xSynthFICompta" label="Export suivi comptable"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSynthFICompta" />
+		<item id="xStockRA" label="Stock RA"
+			altLabel="Stock des retours arrières" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockRaAd" />
+		<item id="xSuiviFinancier" label="Export suivi financier"
+			altLabel="Suivi financier des projets en coût réel"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuiviFinancierCg" />
+		<item id="xSuiviStatut" label="Suivi des statuts"
+			link="/extractParam.do"
+			linkOptions="addFav=yes&amp;typFav=X&amp;action=modifier&amp;filtreSql=&amp;titre=Suivi des statuts&amp;nomFichier=SUIVSTAT&amp;data=Id ligne;Libellé;Type;Libellé filiale;DPG;Statut;Top fermeture;Date statut;Demandeur;Date demande;Commentaire&amp;nbData=11" />
+		<item id="xHBudget" label="Budget"
+			altLabel="Historique Budget et Consommé" link="jsp/xHistBud.jsp"
+			linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="xConsoTableRepart" label="Consommés Répartition"
+			altLabel="Liste des consommés suivant la répartiton JH"
+			link="jsp/xConsoRJH.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xConsoRJH" />
+		<item id="eSuiviMensuel" label="Suivi Mensuel détaillé"
+			altLabel="Suivi mensuel détaillé par DPG"
+			link="jsp/xSuiviMensuel.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuiviMensuel" />
+		<item id="eSuiviMensuelG" label="Suivi Mensuel"
+			altLabel="Suivi mensuel par DPG" link="jsp/xSuiviMensuel.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuiviMensuelG" />
+		<item id="eSuiviPrestations" label="Suivi Prestations"
+			altLabel="Suivi global des prestations en cours"
+			link="jsp/xSuiviPrestations.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSuiviPrestations" />
+		<item id="xLibStat" label="Extract. Lib. Statistique"
+			altLabel="Extraction libellé des statistiques Weborama"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xLibStatAd" />
+
+		<item id="eProvisions" label="Edition des provisions"
+			altLabel="Edition des provisions" link="jsp/xProvisions.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;jobId=xProvisions" />
+
+		<item id="xLigneBipAd" label="Edition Personnalisée"
+			altLabel="Edition personnalisée" link="jsp/xLigneBipAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;jobId=xLigneBipAd1" />
+
+<!-- BSA 1165
+		<item id="lFactureAvalider"
+			label="Factures &amp;agrave; valider"
+			altLabel="Liste des factures &amp;agrave; valider"
+			link="/lFav2Val.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser&amp;statut=X" />
+
+		<item id="lFactureValidee" label="Factures validées"
+			altLabel="Liste des factures validées" link="/lFav2Val.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser&amp;statut=V" />
+		<item id="lDemandeValFacture" label="Demande validation"
+			altLabel="Liste des demandes de validation de facture"
+			link="/lValFav.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+
+		<item id="eFactureAvalider"
+			label="Edition factures &amp;agrave; valider"
+			altLabel="Liste des factures à valider" link="jsp/eDemValFact.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eListeDemValFact" />
+
+		<item id="eDemandeValFacture" label="Demande validation"
+			altLabel="Liste des demandes de validation de facture"
+			link="jsp/eDemValFact.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eListeDemValFact" />
+-->
+		<item id="forumListe" label="Liste des sujets"
+			altLabel="Liste des sujets du forum" link="/forumListe.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser&amp;titre=Liste des sujets" />
+
+		<item id="forumMesMsg" label="Mes messages"
+			altLabel="Mes messages" link="/forumListe.do"
+			linkOptions="action=initialiser&amp;typeEcran=MesMessages&amp;titre=Mes messages&amp;addFav=yes&amp;typFav=T" />
+
+		<item id="forumRecherche" label="Recherche avancée"
+			altLabel="Recherche avancée sur les messages du forum"
+			link="/forumRecherche.do"
+			linkOptions="action=initialiser&amp;addFav=yes&amp;typFav=T" />
+
+		<item id="forumMsgAValider" label="Messages à valider"
+			altLabel="Liste des messages à valider" link="/forumDiscussion.do"
+			linkOptions="action=initialiser&amp;typeEcran=MsgAValider&amp;titre=Messages à valider&amp;addFav=yes&amp;typFav=T" />
+
+		<item id="forumMsgRejeter" label="Messages rejetés"
+			altLabel="Liste des messages rejetés" link="/forumDiscussion.do"
+			linkOptions="action=initialiser&amp;typeEcran=MsgRejeter&amp;titre=Messages rejetés&amp;addFav=yes&amp;typFav=T" />
+
+		<item id="eLogAlimConsoRepart"
+			label="Log d'alimentation des consommés"
+			altLabel="Edition des Log alimentation des consommés"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;jobId=eLogAlimConsoRJH" />
+
+		<item id="xSuiviFactureME" label="Suivi Facturation"
+			altLabel="Edition des Factures de l&amp;rsquo;année"
+			link="jsp/xSuiviFactME.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;jobId=xSuiviFactME&amp;titre=Suivi Facturation " />
+		<item id="xSuiviFactureORD" label="Suivi Facturation"
+			altLabel="Edition des Factures de l&amp;rsquo;année"
+			link="jsp/xSuiviFactOrd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;jobId=xSuiviFactORD&amp;titre=Suivi Facturation " />
+		<item id="xLogsContratsEbis" label="Logs Contrats"
+			altLabel="Edition des Logs Contrats"
+			link="/jsp/xLogsContratsEbis.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+		<item id="xLogsFacturesEbis" label="Logs Factures"
+			altLabel="Edition des Logs Factures"
+			link="/jsp/xLogsFacturesEbis.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+		<item id="xLogsTTEbis" label="Logs TT"
+			altLabel="Edition des Logs TT" link="/jsp/xLogsTTEbis.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+		<item id="xLogsLigneContEbis" label="Logs Ligne Contrat"
+			altLabel="Edition des Lignes Contrats supprimées"
+			link="/jsp/xLogsLigneContEbis.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+
+		<!-- TD 532 -->
+		<item id="consultLogsDossierProjet" label="Log Dossier Projet"
+			link="jsp/eLogsDossProjAd.jsp" linkOptions="addFav=yes&amp;typFav=E" />
+		<item id="xLiensProjetsCA" label="Liens projets/CA"
+			altLabel="Extraction des Liens projets/CA" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xLienPrjCAAd" />
+		<item id="xLiensApplicationsCA" label="Liens applications/CA"
+			altLabel="Extraction des Liens applications/CA"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xLienAppliCAAd" />
+		<item id="xDephasagesCAlignesCAprojetsapplic"
+			label="Déphasages CA lignes/CA projets ou applic."
+			altLabel="Extraction des déphasages des CA lignes/CA projets ou applic."
+			link="jsp/xDephasagesCAligne.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xDephasageLigneCAPrjAppliAd" />
+		<!-- TD 532 -->
+		<item id="BudgetCopiP" label="Budget COPI prestation"
+			altLabel="Mise à jour des Budget COPI de prestation"
+			helpPage="jsp/aide/hvide.htm" />
+		<item id="BudgetCopiNP" label="Budget COPI non prestation"
+			altLabel="Mise à jour des Budget COPI de Non prestation"
+			helpPage="jsp/aide/hvide.htm" />
+		<item id="CreationCopi" label="Création unitaire"
+			altLabel="Création d'un budget COPI de prestation"
+			link="jsp/mBudgetCopiCreation.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="ModifSuppCopi" label="Modif / Supp unitaire"
+			altLabel="Modification ou suppression d'un Budget COPI de prestation"
+			link="jsp/mBudgetCopi.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="ExceptionCopi" label="Exception COPI"
+			altLabel="Mise à jour des Exceptions COPI"
+			link="jsp/mExceptionCopiAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="DateCopi" label="Date COPI"
+			altLabel="Mise à jour des Dates du COPI" link="jsp/mDateCopiAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="DpCopi" label="Dossier projet COPI"
+			altLabel="Mise à jour des Dossiers projets COPI"
+			link="jsp/fmDpcopiAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="FourCopi" label="Fournisseur COPI"
+			altLabel="Mise à jour des Fournisseurs COPI"
+			link="jsp/fmFourCopiAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="eExceptionCopi" label="Exception COPI"
+			altLabel="Edition des Exceptions COPI"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eException" />
+		<item id="eDateCopi" label="Date COPI"
+			altLabel="Edition des Dates du COPI" link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eDateCopi" />
+		<item id="eDpCopi" label="Dossier projet COPI"
+			altLabel="Edition des Dossiers projets COPI"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eDpCopi" />
+		<item id="eFourCopi" label="Fournisseur COPI"
+			altLabel="Edition des Fournisseurs COPI"
+			link="jsp/editionSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=eFourCopi" />
+		<item id="NotationCopi" label="Notation DP COPI"
+			altLabel="Notation DP COPI" link="/jsp/fmNotationCopi.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="AxeStrategiqueCopi" label="Enveloppe Budgétaire"
+			altLabel="Enveloppe Budgétaire" link="/jsp/mAxeStrategique.jsp"
+			linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="EtapesCopi" label="Etapes" altLabel="Etapes"
+			link="/jsp/mEtapeCopi.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="ValidationDpCopi" label="Validation DP provisoire"
+			altLabel="Validation DP provisoire" link="/valideDpcopiPro.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=refresh" />
+		<item id="xSoussysteme" label="Sous-système"
+			altLabel="Export des sous-systèmes" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xSoussysteme" />
+		<item id="xDomaine" label="Domaine"
+			altLabel="Export des domaines" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xDomaine" />
+		<item id="xBloc" label="Bloc" altLabel="Export des blocs"
+			link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xBloc" />
+		<item id="xNPSI" label="NPSI"
+			altLabel="Export de l'ensemble de la NPSI" link="jsp/xSansParam.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xNPSI" />
+		<item id="xAuditImmo" label="Audit des immos"
+			link="jsp/xAuditImmoAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=E&amp;jobId=xAuditImmo" />
+		<item id="xSynthImmo" label="Stock BIP synthèse"
+			link="jsp/xSynthImmoAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+		<item id="xSynthImmoRf" label="Stock BIP synthèse"
+					link="jsp/xSynthImmoRf.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+		<item id="xSynthImmoMo" label="Stock BIP synthèse"
+					link="jsp/xSynthImmoMo.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp; " />
+		<item id="xAnaImmo" label="Export Immos - analytique"
+			link="jsp/xAnaImmoAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp; " />
+		<item id="xSimulImmo" label="Export simul. Immos" altLabel="Simulation calcul immobilisations"
+			link="/simulimmoinit.do"
+			linkOptions="addFav=yes&amp;typFav=X&amp;action=initialiser&amp;jobId=xSimulImmoRef" />	
+		<item id="majAuditImmo" label="Audit - mise à jour"
+			altLabel="Consultation situation et mise à jour audit"
+			link="jsp/mAuditImmoAd.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+		<item id="consultContrat" label="Recherche de contrat" altLabel="Contrats"
+			link="jsp/bRequeteOr.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="consultContratAffi" label="Recherche de contrat" altLabel="Recherche de contrat"
+					link="jsp/bContratRechOrd.jsp"
+			linkOptions="perim=true&amp;addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="MajMasseCopiP" label="Màj en masse"
+			altLabel="Mise  à jour en masse d'un Budget COPI Prestation"
+			link="/budCopiMasse.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;type=Prestation" />
+		<item id="ValidMasseCopiP" label="Valid en masse"
+			altLabel="Validation en masse d'un Budget COPI Prestation"
+			link="/budCopiValidMasse.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite" />
+		<item id="MajMasseCopiNP" label="Màj en masse"
+			altLabel="Mise  à jour en masse d'un Budget COPI Non Prestation"
+			link="/budCopiMasse.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=suite&amp;type=NonPrestation" />
+		<item id="Exports" label="Exports" />
+		<item id="SuivFin" label="Suivis financiers" />
+		<item id="xStockFI_Client" label="Export stock FI"
+			link="jsp/xStockFiAdClient.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xStockFiAdClient" />
+		<item id="upload" label="Upload Fichier"
+			link="jsp/mLoadFichierBatchAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;" />
+		<item id="planifbatch" label="Planification Batch"
+			link="/traitBatch.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+		<item id="shell" label="Liste des Shells "
+			link="jsp/mListeShellAd.jsp"
+			linkOptions="addFav=yes&amp;typFav=T&amp;" />
+		<item id="xMensuelle" label="Mensuelle"
+			link="jsp/xMensuelleMe.jsp"
+			linkOptions="addFav=yes&amp;typFav=X&amp;jobId=xmensuelle" />	
+		<item id="mBudCopiePropMasse" label="Copie Prop. en masse"
+					altLabel="Copie en masse du budget proposé"
+					link="/budgetcopiepropmasse.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+		<item id="xSSTacheRessRef" label="Extract. ss-tâche/ress."
+					altLabel="Extraction sous-tâche / ressources"
+			link="jsp/xSstresRef.jsp" linkOptions="addFav=yes&amp;typFav=X" />
+
+		<item id="paramFavoriSr" label="Ressources favorites"
+					altLabel="Editions des ressources favorites"
+			link="/favoriRessource.do" linkOptions="addFav=yes&amp;typFav=X&amp;action=consulter" />
+		<item id="majTypeEtape" label="Types d'étapes"
+			altLabel="Mise à jour des types d'étapes" link="/type_etape.do"
+			linkOptions="addFav=yes&amp;typFav=T&amp;action=initialiser" />
+		<item id="majProfilFi" label="Profils de FI"
+			altLabel="Gestion des Profils de FI"
+			link="jsp/fmProfilsFIAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="eAdminLocaux" label="Rech. Admin. Locaux"
+			altLabel="Recherche des Administrateurs Locaux"
+			link="jsp/eAdminLocaux.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<item id="uploadMens" label="Upload"
+			altLabel="Upload fichiers métiers"
+			link="jsp/bUploadAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />	
+		<item id="majProfilDomFonc" label="Profils DomFonc"
+			altLabel="Gestion des Profils DomFonc"
+			link="jsp/fmProfilsDomFoncAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />		
+		<!-- Start of Profils Localisés Menu -->
+		<item id="majProfileLoc" label="Profils Localisés"
+			altLabel="Gestion des Profils Localisés"
+			link="jsp/fmProfilsLocAd.jsp" linkOptions="addFav=yes&amp;typFav=T" />
+		<!-- End of Profils Localisés Menu -->
+	</items>
+
+	<!--
+		*******************************************************************************************************************************
+	-->
+
+	<filters>
+		<!-- Vérifie que l'utilisateur appartient à la direction SISE -->
+		<filter id="fdirSISE">
+			<filter_other
+				className="com.socgen.bip.menu.filtre.FiltreMenuFonction"
+				functionName="filtreDirSISE" />
+		</filter>
+	</filters>
+</BipMenu>

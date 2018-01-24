@@ -1,0 +1,1564 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="lstcontc" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes"/>
+  <xmlSettings xmlTag="MYLSTCONTC" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[type facturation]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Code Filiale]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM7" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[code societe
+(API.)]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM8" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[code dep/pole]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM9" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[code ressource]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM11" datatype="character" width="50"
+     defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[date début enregistrement]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM12" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[date fin enregistrement]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM13" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Montant minimum]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="3"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[INUTILE]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="default"/>
+    <systemParameter name="ORIENTATION" initialValue="Landscape"/>
+    <systemParameter name="DECIMAL" initialValue=","/>
+    <systemParameter name="THOUSANDS" initialValue="." display="yes"/>
+    <systemParameter name="CURRENCY" display="yes"/>
+    <systemParameter name="COPIES" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180" display="yes"/>
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="" display="yes"/>
+    <dataSource name="Q_ligne">
+      <select>
+      <![CDATA[select C.CDATSAI, C.SOCCONT , S.SOCLIB , C.NUMCONT,
+       DECODE(c.top30,'O',DECODE(c.cav,'000',NULL,RPAD(c.cav,3)),'N',SUBSTR(c.cav,2,2) ) CAV,   
+       C.COBJET1, C.COBJET2,C.CCOUTHT,C.CODSG, 
+       C.CDATDEB, C.CDATFIN,
+       C.COMCODE, C.CDATRPOL, C.CDATDIR,
+       C.CTYPFACT, L.IDENT, R.RNOM, R.RPRENOM,
+       pack_situation_p.verif_situ_ligcont_rep(l.ident,l.soccont,l.lresdeb,l.lresfin)  LCPREST,--L.LCPREST, 
+       L.LCCOUACT, SR.DATSITU, SR.DATDEP,md.code_contractuel,md.LIBELLE,
+       l.lresdeb, l.lresfin
+from  SITU_RESS SR, RESSOURCE R, 
+      LIGNE_CONT L, CONTRAT C,  SOCIETE S , MODE_CONTRACTUEL md 
+where  C.SOCCONT = S.SOCCODE
+   and C.SOCCONT = L.SOCCONT
+   and C.NUMCONT = L.NUMCONT
+   and C.CAV = L.CAV
+   and L.IDENT = R.IDENT
+   and R.IDENT = SR.IDENT
+   and l.mode_contractuel = md.code_contractuel(+)
+   -- derniere situation de ressource
+   and (sr.ident, sr.datsitu) = (SELECT SR2.ident, MAX(SR2.datsitu)
+                                  FROM situ_ress SR2
+                                  WHERE SR2.ident = (r.ident)
+                                  GROUP BY SR2.ident
+                                  )
+   &P_WHERE
+
+ order by c.soccont, c.numcont, c.cav, l.ident
+ 
+--   and C.FILCODE = :P_PARAM6
+--   and C.SOCCONT = :P_PARAM7
+--   and C.CODSG =  :P_PARAM8
+--   and L.ident = :P_PARAM9
+--   and C.ctypfact = :P_PARAM10
+--   and c.cdatdeb <= TO_DATE(:P_PARAM11, 'dd/mm/yyyy')
+--   and C.cdatfin >= TO_DATE(:P_PARAM12, 'dd/mm/yyyy')
+--   and C.CCOUTHT >= :P_PARAM13
+
+]]>
+      </select>
+      <displayInfo x="2.08018" y="0.53981" width="2.54000" height="0.50788"/>
+      <group name="G_Soc">
+        <displayInfo x="1.95337" y="1.79989" width="2.79394" height="3.69838"
+        />
+        <dataItem name="SOCCONT" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="26" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="SOCIETE :">
+          <dataDescriptor expression="C.SOCCONT"
+           descriptiveExpression="SOCCONT" order="2"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCLIB" datatype="vchar2" columnOrder="27" width="25"
+         defaultWidth="250000" defaultHeight="10000" columnFlags="0"
+         breakOrder="none">
+          <dataDescriptor expression="S.SOCLIB" descriptiveExpression="SOCLIB"
+           order="3" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_Cont">
+        <displayInfo x="5.52990" y="1.63525" width="2.79394" height="2.39613"
+        />
+        <dataItem name="NUMCONT" datatype="vchar2" columnOrder="28" width="27"
+         defaultWidth="150000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="N° DE CONTRAT">
+          <dataDescriptor expression="C.NUMCONT"
+           descriptiveExpression="NUMCONT" order="4" width="27"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_LigneCont">
+        <displayInfo x="8.59917" y="1.68238" width="2.79394" height="5.43471"
+        />
+        <dataItem name="CAV" datatype="vchar2" columnOrder="46" width="3"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="35"
+         defaultLabel="Cav" breakOrder="descending">
+          <dataDescriptor
+           expression="DECODE ( c.top30 , &apos;O&apos; , DECODE ( c.cav , &apos;000&apos; , NULL , RPAD ( c.cav , 3 ) ) , &apos;N&apos; , SUBSTR ( c.cav , 2 , 2 ) )"
+           descriptiveExpression="CAV" order="5" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="80000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="CODE DEP/POL">
+          <dataDescriptor expression="C.CODSG" descriptiveExpression="CODSG"
+           order="9" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COBJET1" datatype="vchar2" columnOrder="29" width="50"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Cobjet1" breakOrder="none">
+          <dataDescriptor expression="C.COBJET1"
+           descriptiveExpression="COBJET1" order="6" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COBJET2" datatype="vchar2" columnOrder="30" width="50"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Cobjet2" breakOrder="none">
+          <dataDescriptor expression="C.COBJET2"
+           descriptiveExpression="COBJET2" order="7" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CCOUTHT" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="140000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="COUT TOT HT" breakOrder="none">
+          <dataDescriptor expression="C.CCOUTHT"
+           descriptiveExpression="CCOUTHT" order="8" oracleDatatype="number"
+           width="22" scale="2" precision="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDATDEB" datatype="date" oracleDatatype="date"
+         columnOrder="33" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="DEBUT =" breakOrder="none">
+          <dataDescriptor expression="C.CDATDEB"
+           descriptiveExpression="CDATDEB" order="10" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDATFIN" datatype="date" oracleDatatype="date"
+         columnOrder="34" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="FIN =" breakOrder="none">
+          <dataDescriptor expression="C.CDATFIN"
+           descriptiveExpression="CDATFIN" order="11" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COMCODE" datatype="vchar2" columnOrder="35" width="11"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="CODE COMPTABLE :" breakOrder="none">
+          <dataDescriptor expression="C.COMCODE"
+           descriptiveExpression="COMCODE" order="12" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDATRPOL" datatype="date" oracleDatatype="date"
+         columnOrder="36" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Date evoie pôle =" breakOrder="none">
+          <dataDescriptor expression="C.CDATRPOL"
+           descriptiveExpression="CDATRPOL" order="13" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDATDIR" datatype="date" oracleDatatype="date"
+         columnOrder="37" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Date retour pôle =" breakOrder="none">
+          <dataDescriptor expression="C.CDATDIR"
+           descriptiveExpression="CDATDIR" order="14" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CTYPFACT" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="38" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Type de facturation" breakOrder="none">
+          <dataDescriptor expression="C.CTYPFACT"
+           descriptiveExpression="CTYPFACT" order="15"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDATSAI" datatype="date" oracleDatatype="date"
+         columnOrder="25" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="DATE DE SAISIE :" breakOrder="none">
+          <dataDescriptor expression="C.CDATSAI"
+           descriptiveExpression="CDATSAI" order="1" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_Ress">
+        <displayInfo x="12.85813" y="1.31775" width="2.79394" height="7.17104"
+        />
+        <dataItem name="code_contractuel" datatype="vchar2" columnOrder="47"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Contractuel">
+          <dataDescriptor expression="md.code_contractuel"
+           descriptiveExpression="CODE_CONTRACTUEL" order="23" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="48" width="60"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="md.LIBELLE"
+           descriptiveExpression="LIBELLE" order="24" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENT" oracleDatatype="number" columnOrder="39"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="RESSOURCE =">
+          <dataDescriptor expression="L.IDENT" descriptiveExpression="IDENT"
+           order="16" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RNOM" datatype="vchar2" columnOrder="40" width="30"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="R.RNOM" descriptiveExpression="RNOM"
+           order="17" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RPRENOM" datatype="vchar2" columnOrder="41" width="15"
+         defaultWidth="150000" defaultHeight="10000" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="R.RPRENOM"
+           descriptiveExpression="RPRENOM" order="18" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LCPREST" datatype="vchar2" columnOrder="42"
+         width="4000" defaultWidth="30000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="QUALIF =" breakOrder="none">
+          <dataDescriptor
+           expression="pack_situation_p.verif_situ_ligcont_rep ( l.ident , l.soccont , l.lresdeb , l.lresfin )"
+           descriptiveExpression="LCPREST" order="19" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LCCOUACT" oracleDatatype="number" columnOrder="43"
+         width="22" defaultWidth="140000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="COUT JOURNALIER  =" breakOrder="none">
+          <dataDescriptor expression="L.LCCOUACT"
+           descriptiveExpression="LCCOUACT" order="20" oracleDatatype="number"
+           width="22" scale="2" precision="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATSITU" datatype="date" oracleDatatype="date"
+         columnOrder="44" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="DE" breakOrder="none">
+          <dataDescriptor expression="SR.DATSITU"
+           descriptiveExpression="DATSITU" order="21" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATDEP" datatype="date" oracleDatatype="date"
+         columnOrder="45" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="A" breakOrder="none">
+          <dataDescriptor expression="SR.DATDEP"
+           descriptiveExpression="DATDEP" order="22" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lresfin" datatype="date" oracleDatatype="date"
+         columnOrder="50" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lresfin">
+          <dataDescriptor expression="l.lresfin"
+           descriptiveExpression="LRESFIN" order="26" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lresdeb" datatype="date" oracleDatatype="date"
+         columnOrder="49" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lresdeb">
+          <dataDescriptor expression="l.lresdeb"
+           descriptiveExpression="LRESDEB" order="25" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="28.46648" height="17.99983">
+      <location x="0.53361" y="2.00019"/>
+      <repeatingFrame name="R_Soc" source="G_Soc" printDirection="down"
+       maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.20619" y="0.27037" width="27.51367"
+         height="8.09036"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_Cont" source="G_Cont" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.32990" y="1.89911" width="27.38841"
+           height="6.34256"/>
+          <generalLayout verticalElasticity="variable"/>
+          <repeatingFrame name="R_LigneCont" source="G_LigneCont"
+           printDirection="down" maxRecordsPerPage="3" minWidowRecords="1"
+           columnMode="no">
+            <geometryInfo x="4.99132" y="2.90556" width="22.71737"
+             height="5.21705"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="firstPage"
+             basePrintingOn="enclosingObject"/>
+            <repeatingFrame name="R_Ress" source="G_Ress"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="5.84274" y="6.19404" width="21.76301"
+               height="1.82283"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillBackgroundColor="r88g100b100"/>
+              <text name="B_IDENT" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.92522" y="6.50906" width="2.18746"
+                 height="0.37114"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[RESSOURCE =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_RNOM" source="RNOM" minWidowLines="1" spacing="0"
+               alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="9.57058" y="6.49604" width="3.27918"
+                 height="0.30975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_RPRENOM" source="RPRENOM" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="12.97347" y="6.49666" width="2.04205"
+                 height="0.30913"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_LCPREST" source="LCPREST" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="16.87153" y="6.49604" width="0.82507"
+                 height="0.30975"/>
+              </field>
+              <text name="B_LCPREST" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="15.26294" y="6.49790" width="1.54688"
+                 height="0.35161"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[QUALIF =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_LCCOUACT" source="LCCOUACT" minWidowLines="1"
+               formatMask="999G990D00" spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="21.28552" y="6.51712" width="6.04800"
+                 height="0.33238"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_LCCOUACT" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="17.92356" y="6.49790" width="3.32073"
+                 height="0.35161"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[COÛT JOURNALIER =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_DATSITU" source="lresdeb" minWidowLines="1"
+               formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="16.08956" y="7.46900" width="2.06251"
+                 height="0.34323"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_DATSITU" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="15.30325" y="7.46900" width="0.45393"
+                 height="0.34323"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[DE]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_DATDEP" source="lresfin" minWidowLines="1"
+               formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="19.09775" y="7.47086" width="2.06251"
+                 height="0.34323"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_DATDEP" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="18.48042" y="7.46900" width="0.51563"
+                 height="0.34323"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[A]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_Ident" source="IDENT" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="8.05532" y="6.49294" width="1.03125"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_tiret" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="9.20626" y="6.51712" width="0.17177"
+                 height="0.30417"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[-]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="15.28310" y="6.99430" width="3.23794"
+                 height="0.33641"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[Mode contractuel:]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_codecont" source="code_contractuel"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="18.61840" y="7.02097" width="1.01079"
+                 height="0.29270"/>
+              </field>
+              <field name="F_lib" source="LIBELLE" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="19.52098" y="7.02066" width="7.56946"
+                 height="0.29270"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_Ligne_EXP">
+              <geometryInfo x="5.83189" y="3.43824" width="17.46095"
+               height="1.00025"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <field name="F_COBJET1" source="COBJET1" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="6.24923" y="3.43824" width="10.56959"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_COBJET2" source="COBJET2" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="6.25171" y="3.90767" width="10.56711"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_CCOUTHT" source="CCOUTHT" minWidowLines="1"
+               formatMask="999G999G999G990D00" spacing="0" alignment="right">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="17.39987" y="3.47390" width="3.54366"
+                 height="0.35068"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <field name="F_CODSG" source="CODSG" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="21.47001" y="3.95108" width="1.31992"
+                 height="0.39967"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_CODSG" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="18.73126" y="3.95108" width="2.69937"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[CODE DEP/POL = ]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_SignSup1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.92832" y="3.47421" width="0.37145"
+                 height="0.37052"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[>]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_SignSup2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.92863" y="3.91139" width="0.32990"
+                 height="0.37052"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[>]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+            <frame name="M_Ligne_EXP1">
+              <geometryInfo x="5.82538" y="4.50887" width="16.80704"
+               height="1.50161"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <field name="F_CDATDEB" source="CDATDEB" minWidowLines="1"
+               formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="7.55799" y="4.54515" width="2.12235"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_CDATDEB" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.90786" y="4.54515" width="1.54502"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[DEBUT  =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_CDATFIN" source="CDATFIN" minWidowLines="1"
+               formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="7.55024" y="4.95939" width="2.13010"
+                 height="0.40122"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_CDATFIN" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.89390" y="4.93396" width="1.60021"
+                 height="0.40122"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[FIN    =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_COMCODE" source="COMCODE" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="13.03610" y="4.95536" width="2.60697"
+                 height="0.40122"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_COMCODE" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="10.01489" y="4.95164" width="2.98493"
+                 height="0.40122"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[CODE COMPTABLE :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_CDATRPOL" source="CDATRPOL" minWidowLines="1"
+               formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="19.24968" y="4.54515" width="2.03677"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_CDATRPOL" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="15.78353" y="4.54515" width="3.43886"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[Date envoi pôle  =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_CDATDIR" source="CDATDIR" minWidowLines="1"
+               formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="19.24503" y="4.94140" width="2.08266"
+                 height="0.40122"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_CDATDIR" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="15.77857" y="4.94140" width="3.52630"
+                 height="0.40122"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[Date retour pôle =]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_CTYPFACT" source="CTYPFACT" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="9.92777" y="5.47377" width="0.41269"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+              </field>
+              <text name="B_CTYPFACT" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.89731" y="5.49114" width="3.98921"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[Type de facturation :]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+            <field name="F_Cav" source="CAV" minWidowLines="1" spacing="0"
+             alignment="start">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="5.04186" y="2.97501" width="0.48555"
+               height="0.31285"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_CDATSAI1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="5.87406" y="2.96044" width="2.62465"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[DATE DE SAISIE :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CdatSai1" source="CDATSAI" minWidowLines="1"
+             formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="8.78892" y="2.94804" width="2.37195"
+               height="0.36060"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+          </repeatingFrame>
+          <text name="B_CCOUTHT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="18.76661" y="1.99523" width="2.43644"
+             height="0.82259"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[COUT TOTAL HT
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[-------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_OBJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.94940" y="1.99709" width="3.44134"
+             height="0.82073"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[LIBELLE DU CONTRAT
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[------------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NUMCONT1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.58043" y="1.99864" width="2.43644"
+             height="0.77515"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[N° DE CONTRAT
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[-------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.06016" y="1.98686" width="0.41238"
+             height="0.76740"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[AV
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[--]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_Numcont" source="NUMCONT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="0.33114" y="2.94897" width="4.61894"
+             height="0.39377"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+        </repeatingFrame>
+        <text name="B_FILIALE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.58539" y="0.90320" width="11.19746"
+           height="0.35006"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[FILIALE         : &F_Filiale]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_Filiale" source="P_PARAM3" visible="no"
+         minWidowLines="1" spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="14.64345" y="0.80522" width="5.45424"
+           height="0.46168"/>
+          <generalLayout horizontalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"
+           formatTrigger="f_filiale1formattrigger"/>
+        </field>
+        <text name="B_SOCCONT1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.58942" y="1.36612" width="8.72381"
+           height="0.35006"/>
+          <generalLayout horizontalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[SOCIETE         : &F_SOCCONT  &F_SOCLIB ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_SOCCONT" source="SOCCONT" visible="no"
+         minWidowLines="1" spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="10.25085" y="1.37480" width="0.94010"
+           height="0.36029"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_SOCLIB" source="SOCLIB" visible="no" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="11.49387" y="1.38503" width="4.12502"
+           height="0.35006"/>
+          <generalLayout horizontalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_CritereSelection1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.57671" y="0.48245" width="12.90712"
+           height="0.36060"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[CENTRE DE FRAIS : &F_CFRAIS ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_CFRAIS" source="P_PARAM5" visible="no"
+         minWidowLines="1" spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="14.53617" y="0.34292" width="1.44642"
+           height="0.35285"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout formatTrigger="f_cfrais1formattrigger"/>
+        </field>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <text name="B_TITRE" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="11.88238" y="1.48301" width="6.64921"
+         height="0.89576"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[- LISTE DES CONTRATS PAR SOCIETE -
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[------------------------------]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_DATE" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.66384" y="0.69639" width="1.37077" height="0.32866"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[DATE :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="2.27986" y="0.69639" width="4.03231" height="0.32897"
+        />
+      </field>
+      <text name="B_PAGE" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="23.81064" y="0.67500" width="4.50081"
+         height="0.52493"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page : &F_Pnum / &F_TotP]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Pnum" source="PageNumber" visible="no" minWidowLines="1"
+       spacing="0" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.54516" y="0.67500" width="1.00738"
+         height="0.52524"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_TITRE1" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="11.85912" y="0.69546" width="6.64921"
+         height="0.56679"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[- BIP ACHAT -]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_TITRE2" minWidowLines="1">
+        <textSettings justify="left" spacing="0"/>
+        <geometryInfo x="0.65329" y="1.18225" width="3.51296" height="0.47284"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ETAT : LSTCONTC]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_TotP" source="TotalPages" visible="no" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="20.73362" y="0.67500" width="1.16024"
+         height="0.49981"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="20.00000" height="20.00000">
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="4.08347" y="0.00000" width="2.06313" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Parametres etat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.99889" y="0.31781" width="4.23261" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Entrer les valeurs des parametres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.96552" y="1.05854" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.96552" y="1.79927" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.96552" y="2.43427" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_THOUSANDS" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.96552" y="3.17624" width="1.50750" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Thousands]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.49269" y="0.84615" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.49269" y="1.58688" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.49269" y="2.32761" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_THOUSANDS" source="THOUSANDS" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.49269" y="3.06958" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="4.14765" width="3.08229" height="0.34385"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Code Filiale (01)
+]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_codesoc" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.46106" y="4.76498" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="4.97396" width="3.64505" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Code société (API.)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="5.60927" width="1.93663" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Code dep/pôle]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="6.35000" width="2.19087" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Code ressource]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="7.09135" width="3.45746" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Ctype Facturation (M)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="7.83208" width="3.83232" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Date deb enreg (01/03/1999)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="8.67854" width="4.14486" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Date fin Enreg (01/01/2000)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_10" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.79251" y="9.41958" width="1.93663" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Montant Min]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_1" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.49269" y="5.50602" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_2" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.46106" y="6.24675" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_3" source="P_PARAM10" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.46106" y="6.98779" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_4" source="P_PARAM11" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.42944" y="7.83425" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_5" source="P_PARAM12" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.46106" y="8.68102" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_6" source="P_PARAM13" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.52462" y="9.42175" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_Filiale" source="P_PARAM3" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.49269" y="3.91573" width="4.98481" height="0.74073"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_7" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.52990" y="11.82284" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_14" source="P_PARAM5" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.50323" y="10.33642" width="4.72746" height="0.63500"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_11" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.89254" y="10.47719" width="1.79927" height="0.34385"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Centre de frais]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[------------------------------------------------------------------------------------------
+-- Rôle : Construire un Where conditionnel. La chaine construite sera affectée au parametre
+-- de P_WHERE. 
+------------------------------------------------------------------------------------------
+function AfterPForm return boolean is
+	
+	l_param varchar2(10);
+	
+begin
+ 
+  IF :P_PARAM3 IS NOT NULL THEN 
+	:p_where := ' and C.FILCODE = ''' || :P_PARAM3 ||'''';
+   END IF;
+
+  IF :P_PARAM7 IS NOT NULL THEN 
+	:p_where := :p_where || ' and C.SOCCONT = ''' || :P_PARAM7 ||'''';
+  END IF;
+
+ 
+-- -------------
+  IF :P_PARAM8 IS NOT NULL THEN 
+  	
+	   IF NVL(LENGTH(LPAD(:P_PARAM8, 7, '0')), 0) != 0 then 
+	   		-- ajout de '0' a gauche sur 7 caracteres + suppression des '*'
+	      l_param := rtrim(rtrim(LPAD(:P_PARAM8, 7, '0'),'*')) ;
+				:p_where := :p_where || ' and  TO_CHAR(C.codsg, ''FM0000000'') like ''' || l_param || '%'' ';
+	   END IF;  	
+	   
+  END IF;
+  
+  IF :P_PARAM9 IS NOT NULL THEN 
+	:p_where := :p_where || ' and L.IDENT= ' || :P_PARAM9 ;
+  END IF;
+  IF (:P_PARAM10 IS NOT NULL)  AND (:P_PARAM10 != ' ') THEN
+	:p_where := :p_where || ' and C.CTYPFACT = ''' || :P_PARAM10 || '''';
+  END IF;
+
+  -- sélectionner les lignes de contrats qui ont vécu au moins pendant une partie de leur vie dans
+  -- la période saisie. 
+  if (:P_PARAM11 is not null) and (:P_PARAM12 is not null) then 
+
+-- Modif qualif interne 5/5/2000
+
+  	:p_where := :P_where || ' and C.CDATDEB <= to_date(''' || :P_PARAM12 || ''',''dd/mm/yyyy'')';
+  	:p_where := :P_where || ' and C.CDATFIN >= to_date(''' || :P_PARAM11 || ''',''dd/mm/yyyy'')';
+
+
+  end if;
+ 
+  if :P_PARAM13 is not null then 
+	:p_where := :p_where || ' and  C.CCOUTHT >= ' || 
+                    to_char(TO_NUMBER(:P_PARAM13, '999999999999D99', 'NLS_NUMERIC_CHARACTERS = '',.'''));
+  end if;
+
+  IF (:P_PARAM5 !='0') THEN 
+	:p_where := :p_where || ' and to_char(C.CCENTREFRAIS) = ''' || :P_PARAM5 ||'''';
+  END IF; 
+
+  :p_where := :p_where || ' ';
+  --srw.message(1,:p_where);
+  RETURN (TRUE);
+END;]]>
+      </textSource>
+    </function>
+    <function name="rtrimetoile">
+      <textSource>
+      <![CDATA[FUNCTION RtrimEtoile(P_Text In VARCHAR2) RETURN VARCHAR2 IS
+  meta VARCHAR2(1);
+  L_Text VARCHAR2(7);
+BEGIN
+  L_Text := P_Text;
+  meta := SUBSTR(P_Text, NVL(length(P_Text), 0),1);
+  IF (meta = ' ') OR (meta = '*') THEN
+      L_Text := RTRIM(P_Text,meta);   
+  END IF;
+  RETURN(L_Text);
+END;]]>
+      </textSource>
+    </function>
+    <function name="f_filiale1formattrigger">
+      <textSource>
+      <![CDATA[function F_Filiale1FormatTrigger return boolean is
+Text varchar2(50);
+begin
+  IF :P_PARAM3 IS NOT NULL THEN
+	 SELECT filsigle INTO Text FROM filiale_cli WHERE RTRIM(filcode) = RTRIM(:P_PARAM3);
+	 Text := :P_PARAM3 || ' ' ||Text;
+	 SRW.SET_FIELD_CHAR(0,Text);
+  END IF;
+  RETURN (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cfrais1formattrigger">
+      <textSource>
+      <![CDATA[function F_CFRAIS1FormatTrigger return boolean is
+Text varchar2(60);
+begin
+  if NVL(LENGTH(:P_PARAM5), 0)!= 0 then 
+	 Select LIBCFRAIS into Text from centre_frais where to_char(codcfrais) = :P_PARAM5;
+	 Text := :P_PARAM5 || ' - ' ||Text;
+	 SRW.SET_FIELD_CHAR(0,Text);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

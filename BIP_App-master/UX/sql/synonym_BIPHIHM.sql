@@ -1,0 +1,8 @@
+spool synonym_type.log;
+
+CREATE SYNONYM BIPIHM.TMP_DMP_NONUTILISEE FOR BIP.TMP_DMP_NONUTILISEE;
+
+
+/
+exit;
+show errors

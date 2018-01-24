@@ -1,0 +1,69 @@
+#!/bin/ksh
+#_______________________________________________________________________________
+# Application Base d'Informations Projets
+# Nom du fichier : .profile.bip
+# Objet :
+#
+# Parametres d'entree
+#	$1	vue : facultatif corespond a la vue active (clearcase)
+#_______________________________________________________________________________
+# Creation : EGR     21/10/2002
+# Modification :
+# --------------
+# Auteur  Date       Objet
+# EGR	  28/11/02   .profile.bip est maintenant autonome vis a vis du .profile
+# EGR	  21/02/03   ajout de la variable BIP_ETC, les fichier de param de la bip
+#			seront desormais dans ce rep (bipparam.sh, .profile.bip, .profile.oracle)
+# EGR     10/10/04   affichage du quota disk
+#
+################################################################################
+clear
+#La modification de ce fichier affectera les membres de l'equipe BIP
+
+################################################################################
+#Variables d'environnement
+export APP_HOME=/vich/bip1
+export APP_ETC=$APP_HOME/etc
+export APP_BIN=$APP_HOME/bin
+
+PATH=/usr/j2se/bin:.:$HOME:/usr/bin:/etc:/usr/sbin:/produits/workshop/WS6/bin
+PATH=$PATH:/usr/bin/X11:/sbin:/usr/local/bin:/opt/FSFgzip/bin:/usr/openwin/bin
+PATH=$PATH:/usr/atria/bin:/produits/ccase/home/cctools:/produits/gnu/bin:/opt/bin:/usr/bin:/usr/ccs/bin
+PATH=$PATH:$APP_BIN
+export PATH
+export LD_LIBRARY_PATH=/produits/gnu/lib
+export TMPDIR=/usr/tmp
+export WORKDIR=/usr/tmp
+
+#Pour reexecuter systematiquement le .kshrc
+ENV=$APP_ETC/.kshrc
+export ENV
+
+#autre
+umask 002
+set -o vi
+stty erase
+
+################################################################################
+# les alias sont def dans le .kshrc
+
+################################################################################
+# Chargement de l'environnement oracle
+if ! [ -z $1 ]
+then
+	#si on a specifie la vue c'ets qu'a priori elle n'est pas encore chargee
+	#on passe docn par par view
+	. /view/$1$APP_ETC/.profile.oracle UTILITIES
+else
+	. $APP_ETC/.profile.oracle UTILITIES
+fi
+
+quota -v
+
+echo "Pour changer l'environnement de travail utilisez les alias suivant :"
+echo ' - setEnvMaint'
+echo ' - setEnvRec'
+echo ' - setEnvRe7Wl'
+echo ' - setEnvDevWl'
+echo ' - setEnvDev10'
+echo ' - setDisplay (A utiliser AVANT de lancer xclearcase !!)'

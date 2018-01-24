@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="logs_mode_contractuel" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="LOGS_MODE_CONTRACTUEL" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+       pil.CODE_CONTRACTUEL CODE_CONTRACTUEL,
+       pil.DATE_LOG DATE_DE_MODIFICATION,
+       pil.USER_LOG LOGIN_USER,
+       pil.COLONNE COLONNE_MODIFIEE,
+       pil.VALEUR_PREC VALEUR_PRECEDENTE,
+       pil.VALEUR_NOUV VALEUR_NOUVELLE,
+       pil.COMMENTAIRE COMENTAIRE
+FROM  mode_contractuel_logs pil 
+WHERE trim(pil.code_contractuel) = :P_PARAM6
+ORDER BY
+      pil.DATE_LOG DESC,
+      pil.USER_LOG,
+      pil.COLONNE]]>
+      </select>
+      <displayInfo x="1.45837" y="0.62500" width="0.69995" height="0.19995"/>
+      <group name="G_1">
+        <displayInfo x="1.03943" y="1.57495" width="1.92126" height="0.60156"
+        />
+        <dataItem name="CODE_CONTRACTUEL" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="18" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Contractuel">
+          <dataDescriptor expression="pil.CODE_CONTRACTUEL"
+           descriptiveExpression="CODE_CONTRACTUEL" order="1"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_CODE_CONTRACTUEL">
+        <displayInfo x="1.03418" y="2.92651" width="1.93176" height="1.28516"
+        />
+        <dataItem name="DATE_DE_MODIFICATION" datatype="date"
+         oracleDatatype="date" columnOrder="12" width="9" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="33"
+         defaultLabel="Date De Modification">
+          <dataDescriptor expression="pil.DATE_LOG"
+           descriptiveExpression="DATE_DE_MODIFICATION" order="2"
+           oracleDatatype="date" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGIN_USER" datatype="vchar2" columnOrder="13"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Login User">
+          <dataDescriptor expression="pil.USER_LOG"
+           descriptiveExpression="LOGIN_USER" order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COLONNE_MODIFIEE" datatype="vchar2" columnOrder="14"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Colonne Modifiee">
+          <dataDescriptor expression="pil.COLONNE"
+           descriptiveExpression="COLONNE_MODIFIEE" order="4" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VALEUR_PRECEDENTE" datatype="vchar2" columnOrder="15"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Valeur Precedente">
+          <dataDescriptor expression="pil.VALEUR_PREC"
+           descriptiveExpression="VALEUR_PRECEDENTE" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VALEUR_NOUVELLE" datatype="vchar2" columnOrder="16"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Valeur Nouvelle">
+          <dataDescriptor expression="pil.VALEUR_NOUV"
+           descriptiveExpression="VALEUR_NOUVELLE" order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COMENTAIRE" datatype="vchar2" columnOrder="17"
+         width="200" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Comentaire">
+          <dataDescriptor expression="pil.COMMENTAIRE"
+           descriptiveExpression="COMENTAIRE" order="7" width="200"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="10.00000" height="6.50000">
+      <frame name="M_G_1_GRPFR">
+        <geometryInfo x="0.03125" y="0.00000" width="9.96875" height="0.98962"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillPattern="transparent"
+         fillBackgroundColor="r100g100b100"/>
+        <repeatingFrame name="R_G_1" source="G_1" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.03125" y="0.00000" width="9.96875"
+           height="0.96350"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="TableCell"/>
+          <rectangle name="B_3">
+            <geometryInfo x="0.03638" y="0.11450" width="2.96362"
+             height="0.32300"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r75g100b100" linePattern="solid"/>
+            <points>
+              <point x="0.03638" y="0.11450"/>
+              <point x="2.96362" y="0.32300"/>
+            </points>
+          </rectangle>
+          <text name="B_CODE_CONTRACTUEL" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.13538" y="0.18616" width="1.67712"
+             height="0.18750"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Arial" size="12" bold="yes"/>
+              <string>
+              <![CDATA[Code Contractuel : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_CODE_CONTRACTUEL" source="CODE_CONTRACTUEL"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Arial" size="12" bold="yes" textColor="red"/>
+            <geometryInfo x="1.97925" y="0.18628" width="0.91663"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_CODE_CONTRACTUEL_GRPFR">
+            <geometryInfo x="0.03125" y="0.52991" width="9.96875"
+             height="0.43359"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r100g100b100"/>
+            <repeatingFrame name="R_G_CODE_CONTRACTUEL"
+             source="G_CODE_CONTRACTUEL" printDirection="down"
+             minWidowRecords="1" columnMode="no">
+              <geometryInfo x="0.03125" y="0.71741" width="9.96875"
+               height="0.24609"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TableCell"
+               hideLeftBorder="yes" hideRightBorder="yes" hideTopBorder="yes"/>
+              <field name="F_DATE_DE_MODIFICATION"
+               source="DATE_DE_MODIFICATION" minWidowLines="1"
+               formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="0.12500" y="0.71741" width="1.12500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_LOGIN_USER" source="LOGIN_USER" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="1.56250" y="0.71741" width="0.81250"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_COLONNE_MODIFIEE" source="COLONNE_MODIFIEE"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="2.68750" y="0.71741" width="1.08337"
+                 height="0.18884"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <line name="B_4" arrow="none">
+                <geometryInfo x="0.03125" y="0.93750" width="9.93225"
+                 height="0.00000"/>
+                <visualSettings fillPattern="transparent"
+                 fillBackgroundColor="black" linePattern="solid" dash="dot"/>
+                <points>
+                  <point x="9.96350" y="0.93750"/>
+                  <point x="0.03125" y="0.93750"/>
+                </points>
+              </line>
+              <field name="F_VALEUR_PRECEDENTE" source="VALEUR_PRECEDENTE"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="4.17188" y="0.71741" width="0.95313"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_VALEUR_NOUVELLE" source="VALEUR_NOUVELLE"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="5.87500" y="0.71741" width="1.00000"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_COMENTAIRE" source="COMENTAIRE" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="7.33325" y="0.71741" width="2.66675"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_G_CODE_CONTRACTUEL_HDR">
+              <geometryInfo x="0.03125" y="0.52991" width="9.96875"
+               height="0.18750"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="r88g75b88" linePattern="solid"/>
+              <text name="B_DATE_DE_MODIFICATION" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="0.03125" y="0.52991" width="1.25000"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="TableHeading"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes"/>
+                  <string>
+                  <![CDATA[Date ]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_LOGIN_USER" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="1.23950" y="0.52991" width="1.18750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes"/>
+                  <string>
+                  <![CDATA[Utilisateur]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_COLONNE_MODIFIEE" minWidowLines="1">
+                <textSettings justify="center" spacing="0"/>
+                <geometryInfo x="2.43750" y="0.52991" width="1.06250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes"/>
+                  <string>
+                  <![CDATA[Colonne]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_VALEUR_PRECEDENTE" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="4.00525" y="0.52991" width="1.25000"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes"/>
+                  <string>
+                  <![CDATA[Valeur Precedente]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_VALEUR_NOUVELLE" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.68750" y="0.52991" width="1.18750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes"/>
+                  <string>
+                  <![CDATA[Valeur Nouvelle]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_COMENTAIRE" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="7.48950" y="0.52991" width="1.18750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="r25g50b75"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes"/>
+                  <string>
+                  <![CDATA[Comentaire]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+          </frame>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_1" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="0.28113" y="0.20300" width="0.46350" height="0.17188"
+        />
+        <visualSettings fillBackgroundColor="r88g75b88" hideLeftBorder="yes"
+         hideRightBorder="yes" hideTopBorder="yes"/>
+        <textSegment>
+          <font face="Arial" size="10" bold="yes"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="CurrentDate" minWidowLines="1"
+       formatMask="MM/DD/RRRR" spacing="0" alignment="center">
+        <font face="Arial" size="10" bold="yes"/>
+        <geometryInfo x="0.76563" y="0.20300" width="0.80725" height="0.17712"
+        />
+        <visualSettings fillPattern="transparent"
+         fillBackgroundColor="custom1" hideLeftBorder="yes"
+         hideRightBorder="yes" hideTopBorder="yes"/>
+      </field>
+      <text name="B_2" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.98438" y="0.30200" width="3.42188" height="0.32300"
+        />
+        <visualSettings fillBackgroundColor="custom1" hideLeftBorder="yes"
+         hideRightBorder="yes" hideTopBorder="yes"/>
+        <textSegment>
+          <font face="Arial" size="16" bold="yes"/>
+          <string>
+          <![CDATA[LOGS MODE CONTRACTUEL]]>
+          </string>
+        </textSegment>
+      </text>
+      <rectangle name="B_5">
+        <geometryInfo x="3.51050" y="0.20825" width="4.23962" height="0.50000"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="custom1"
+         linePattern="transparent" lineBackgroundColor="black"/>
+        <points>
+          <point x="3.51050" y="0.20825"/>
+          <point x="4.23962" y="0.50000"/>
+        </points>
+      </rectangle>
+      <text name="B_6" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="9.81274" y="0.27087" width="0.51160" height="0.16785"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="custom1"
+         lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Arial" size="10" bold="yes"/>
+          <string>
+          <![CDATA[Page :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_2" source="PageNumber" minWidowLines="1" spacing="single"
+       alignment="end">
+        <font face="Arial" size="10" bold="yes"/>
+        <geometryInfo x="10.23975" y="0.28125" width="0.32300"
+         height="0.17700"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="custom1"
+         lineBackgroundColor="black"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_7" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="10.59387" y="0.28113" width="0.17834"
+         height="0.16785"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="custom1"
+         lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_3" source="TotalPages" minWidowLines="1" spacing="single"
+       alignment="start">
+        <font face="Arial" size="10" bold="yes"/>
+        <geometryInfo x="10.72925" y="0.28101" width="0.27075"
+         height="0.18750"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="custom1"
+         lineBackgroundColor="black"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#cccc99"/>
+    <color index="192" displayName="TableCell" value="#f7f7e7"/>
+    <color index="193" displayName="Totals" value="#ffffcc"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,1848 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_sstacheress" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="X_SSTACHERESS" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_SEPARATEUR" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="12000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="number" width="4" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIM_ME" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIM_CAFI" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_SMENUS_GES" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM0" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM16" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="40"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="40000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" display="yes"/>
+    <systemParameter name="ORIENTATION" display="yes"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[-- X_SSTACHE RESS
+-- maj : 14/03/2012
+-- maj : 12/04/2012
+--maj : 16/01/2015 - KRA - PPM 60727
+
+SELECT DISTINCT
+            :P_SEPARATEUR||rpad(nvl(PI.ilibel,' '),50,' ')    ||:P_SEPARATEUR                AS libelle_projet
+            , :P_SEPARATEUR||rpad(ligne_bip.pid,4,' ')||:P_SEPARATEUR                            AS code_BIP
+            , :P_SEPARATEUR||rpad(nvl(ligne_bip.pnom,' '),30,' ')||:P_SEPARATEUR                        AS libelle_ligne_BIP
+            , :P_SEPARATEUR||rpad(CONSO.pid,4,' ')||:P_SEPARATEUR                            AS ligne_depart_BIP
+            , :P_SEPARATEUR||rpad(nvl(etape.TYPETAP,' '),2,' ')||:P_SEPARATEUR                        AS typetap
+            , :P_SEPARATEUR||rpad(nvl(CONSO.ecet,' '),2,' ')    ||:P_SEPARATEUR                    AS etape
+            , :P_SEPARATEUR||rpad(nvl(CONSO.libetape,' '),30,' ') ||:P_SEPARATEUR                        AS libelle_etape -- TD 712 
+            , :P_SEPARATEUR||rpad(nvl(CONSO.acta,' '),2,' ')    ||:P_SEPARATEUR                    AS tache
+            , :P_SEPARATEUR||rpad(nvl(CONSO.libtache,' '),30,' ') ||:P_SEPARATEUR                        AS libelle_tache -- TD 712 
+            , :P_SEPARATEUR||rpad(nvl(CONSO.acst,' '),2,' ')    ||:P_SEPARATEUR                    AS ss_tache    --PID => sur 7
+            , :P_SEPARATEUR||rpad(nvl(CONSO.aist,' '),6,' ')    ||:P_SEPARATEUR                    AS id_ss_tache    -- F.115
+            , :P_SEPARATEUR||rpad(nvl(CONSO.asnom,' '),30,' ') ||:P_SEPARATEUR                        AS libelle_ss_tache
+            , :P_SEPARATEUR||rpad(struct_info.sigdep || '/' || struct_info.sigpole,7,' ') ||:P_SEPARATEUR            AS sigle_DPG
+            , :P_SEPARATEUR||rpad(nvl(directions.libdir,' '),30,' ') ||:P_SEPARATEUR                        AS libelle_direction
+
+            ,  :P_SEPARATEUR||    rpad(nvl(ressource.rnom,' '),30,' ')  ||  :P_SEPARATEUR                         AS nom
+
+
+
+            ,:P_SEPARATEUR|| lpad(nvl(to_char(CONSO.ident),' '),5,' ')    ||:P_SEPARATEUR                AS ident    
+            , :P_SEPARATEUR||to_char(rpad(nvl(CONSO.codsg,0),7,' ') ,'FM0000000')||:P_SEPARATEUR                AS codsg_ress
+            , :P_SEPARATEUR||rpad(nvl(CONSO.soccode,' '),4,' ') ||:P_SEPARATEUR                        AS soccode_ress
+            , :P_SEPARATEUR||rpad(nvl(ligne_bip.metier,' '),3,' ') ||:P_SEPARATEUR                        AS metier
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.janvier, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.janvier, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS janvier
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.fevrier, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.fevrier, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS fevrier
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.mars, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.mars, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS mars
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.avril, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.avril, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS avril
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.mai, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.mai, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS mai
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.juin, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.juin, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS juin
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.juillet, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.juillet, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS juillet
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.aout, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.aout, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS aout
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.septembre, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.septembre, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS septembre
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.octobre, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.octobre, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS octobre
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.novembre, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.novembre, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS novembre
+            ,decode(:P_param6,'.CSV',
+             lpad(nvl(to_char(CONSO.decembre, 'FM99990D00'),to_char(0, 'FM99990D00')),8,' ') ,
+            lpad (NVL (TO_CHAR(CONSO.decembre, 'FM00000.00'),to_char(0, 'FM00000.00')), 8, ' ')) AS decembre
+            ,decode(:P_param6,'.CSV',
+
+             lpad(nvl(to_char(pack_utile_cout.getCoutHTR(CONSO.soccode, ressource.rtype,:P_ANNEE,ligne_bip.metier, conso.niveau, CONSO.codsg, CONSO.cout, TO_CHAR(CONSO.cdeb,'DDMMYYYY'), struct_info.filcode), 'FM9999999990D00'),to_char(0, 'FM9999999990D00')),13,' ') ,
+            lpad (NVL(TO_CHAR(pack_utile_cout.getCoutHTR(CONSO.soccode, ressource.rtype,:P_ANNEE,ligne_bip.metier, conso.niveau, CONSO.codsg, CONSO.cout, TO_CHAR(CONSO.cdeb,'DDMMYYYY'), struct_info.filcode), 'FM0000000000.00'),to_char(0, 'FM0000000000.00')),13,' ')) AS coutHTR                        
+            
+            
+            ,decode(:P_param6,'.CSV',
+			
+            lpad(nvl(to_char(pack_utile_cout.getCoutEnvHTR(CONSO.soccode ,ressource.rtype ,:P_ANNEE,CONSO.codsg ,ligne_bip.metier,TO_CHAR ( CONSO.cdeb , 'DDMMYYYY') ,  struct_info.filcode), 'FM9999999990D00'),to_char(0, 'FM9999999990D00')),13,' ') ,
+            lpad(NVL(TO_CHAR(pack_utile_cout.getCoutEnvHTR(CONSO.soccode ,ressource.rtype ,:P_ANNEE,CONSO.codsg ,ligne_bip.metier,TO_CHAR ( CONSO.cdeb , 'DDMMYYYY') ,  struct_info.filcode), 'FM0000000000.00'),to_char(0, 'FM0000000000.00')),13,' ')) AS coutenv
+			,DECODE(:P_param6,'.TXT',CHR(13),NULL)  retour
+        , TYPE_RESSOURCE
+        , CODE_PRESTATION
+       , rpad(nvl(MCI,' '),3,' ') MCI
+
+, rpad(nvl(DECODE(:P_SMENUS_GES,'O', NVL( 
+pack_utile_cout.Get_Profil_Fi( CONSO.codsg, CONSO.cafi, CODE_PRESTATION, CONSO.ident, TO_CHAR(CONSO.cdeb,'DDMMYYYY'), CONSO.soccode, ressource.rtype, ligne_bip.metier, conso.niveau, ligne_bip.codcamo,ligne_bip.pid )
+, ''),''  ),' '),12, ' ')  PROFIL_FI
+         --KRA 60727		   
+			,rpad(NVL ( TO_CHAR ( CONSO.date_deb_ini , 'DD/MM/YYYY' ) , TO_CHAR (' ') ), 10 , ' ')		DATE_DEB_INI,           
+		     rpad(NVL ( TO_CHAR ( CONSO.date_fin_ini , 'DD/MM/YYYY' ) , TO_CHAR (' ') ), 10 , ' ')		DATE_FIN_INI,            
+			 rpad(NVL ( TO_CHAR ( CONSO.date_deb_rev , 'DD/MM/YYYY' ) , TO_CHAR (' ') ), 10 , ' ')		DATE_DEB_REV,            
+			 rpad(NVL ( TO_CHAR ( CONSO.date_fin_rev , 'DD/MM/YYYY' ) , TO_CHAR (' ') ), 10 , ' ')		DATE_FIN_REV,            
+			rpad(nvl(CONSO.statut_sstache,' '),2,' ')				 STATUT_SSTACHE,            
+			lpad(NVL( TO_CHAR (CONSO.duree_sstache ), ' ' ),5,' ')   DUREE_SSTACHE,			
+			rpad(nvl(CONSO.param_sstache,' '),5,' ')   				 PARAM_SSTACHE,
+			lpad( TO_CHAR(ligne_bip.codsg), 7, '0')                DPG_ligne,
+			--Fin KRA 60727
+			--ZAA 62324
+ --BIP32 CHANGES
+ /*DECODE(:P_param6,'.CSV',PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.pid) , rpad(NVL (pack_arbitre.FIND_REF_DEMANDE(null,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.pid),' '),12, ' ') ) Ref_demande,
+decode(:P_param6,'.CSV', DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.pid) )	AND ROWNUM = 1	), NULL,'???',	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.pid)  )	AND ROWNUM = 1
+	)) , rpad (DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.pid) )	AND ROWNUM = 1	), NULL,'???',	(SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.pid)  )	AND ROWNUM = 1
+	))  , 80 , ' ' ) )  Ref_demandeLib ,*/
+rpad(pack_arbitre.FIND_REF_DEMANDE(null,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.PID),12, ' ') Ref_demande,
+rpad(PACK_ARBITRE.FIND_REF_DEMANDE_LIB(DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,ligne_bip.PID), 80 , ' ') Ref_demande_Lib,			
+ --BIP32 CHANGES
+			
+			
+			decode(:P_param6,'.CSV',
+			(SELECT LIBTYET FROM TYPE_ETAPE WHERE etape.TYPETAP = TYPE_ETAPE.TYPETAP AND ROWNUM = 1)
+			,
+			(rpad(NVL((SELECT LIBTYET FROM TYPE_ETAPE WHERE etape.TYPETAP = TYPE_ETAPE.TYPETAP AND ROWNUM = 1),' ') ,60,' '))
+			) TypeEtapeLib ,
+
+			decode(:P_param6,'.CSV',
+			DPCOPI.DPCOPIAXEMETIER
+			,
+			rpad(NVL(DPCOPI.DPCOPIAXEMETIER,' '),12, ' ')
+			) DpCopiAxeMetierCode ,
+			
+			decode(:P_param6,'.CSV',
+			DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1)) )
+			,
+			(rpad(NVL(DECODE(DPCOPI.DPCOPIAXEMETIER, NULL,NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(DPCOPI.DPCOPIAXEMETIER) AND ROWNUM = 1)) ),' '),80, ' '))
+			) DpCopiAxeMetierLib,
+
+			decode(:P_param6,'.CSV',
+			PI.PROJAXEMETIER
+			,
+			rpad(NVL(PI.PROJAXEMETIER,' '),12, ' ')
+			)ProjAxeMetierCode ,
+
+			decode(:P_param6,'.CSV',
+			DECODE(PI.PROJAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1)) )
+			,
+			rpad(NVL(DECODE(PI.PROJAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(PI.PROJAXEMETIER) AND ROWNUM = 1)) ),' ') , 80 , ' ' )
+			) ProjAxeMetierLib,
+
+			decode(:P_param6,'.CSV',
+			CONSO.TACHEAXEMETIER
+			, 
+			rpad(NVL(CONSO.TACHEAXEMETIER,' '),12, ' ')
+			) TacheAxeMetierCode , 
+
+			decode(:P_param6,'.CSV',
+			DECODE(CONSO.TACHEAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(CONSO.TACHEAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(CONSO.TACHEAXEMETIER) AND ROWNUM = 1)) )
+			,
+			rpad(NVL(DECODE(CONSO.TACHEAXEMETIER, NULL, NULL, DECODE((SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(CONSO.TACHEAXEMETIER) AND ROWNUM = 1), NULL, '???', (SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM(DMPNUM) = TRIM(CONSO.TACHEAXEMETIER) AND ROWNUM = 1)) ),' ') , 80 , ' ' )
+			) TacheAxeMetierLib 
+
+            --Fin ZAA 62324
+			
+FROM
+    (SELECT      DECODE(tache.aistty, 'FF', tache.aistpid, tache.pid) factpid
+        ,tache.pid
+        ,decode (:P_param6,'.CSV',REPLACE(LTRIM(RTRIM(nvl(libetapetache.libsstache,tache.asnom)    )),'"','""'),nvl(libetapetache.libsstache,tache.asnom))  asnom
+        , tache.ecet
+        , tache.acta
+        , tache.acst
+        ,tache.aist
+        ,tache.tacheaxemetier
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 1, cons_sstache_res_mois.cusag, 0))    janvier
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 2, cons_sstache_res_mois.cusag, 0))    fevrier
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 3, cons_sstache_res_mois.cusag, 0))    mars
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 4, cons_sstache_res_mois.cusag, 0))    avril
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 5, cons_sstache_res_mois.cusag, 0))    mai
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 6, cons_sstache_res_mois.cusag, 0))    juin
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 7, cons_sstache_res_mois.cusag, 0))    juillet
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 8, cons_sstache_res_mois.cusag, 0))    aout
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 9, cons_sstache_res_mois.cusag, 0))    septembre
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 10, cons_sstache_res_mois.cusag, 0))    octobre
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 11, cons_sstache_res_mois.cusag, 0))    novembre
+        , SUM(DECODE(TO_NUMBER(TO_CHAR(cons_sstache_res_mois.cdeb, 'MM')), 12, cons_sstache_res_mois.cusag, 0))    decembre
+        ,situ_ress_full.ident
+        ,situ_ress_full.codsg
+        ,situ_ress_full.soccode
+        ,situ_ress_full.niveau
+        ,situ_ress_full.cout
+        ,decode(libetapetache.libetape,'',libetapetachebips.etapelibel,libetapetache.libetape) libetape
+		
+		,decode(libetapetache.libtache,'',libetapetachebips.tachelibel,libetapetache.libtache) libtache
+		
+		--KRA PPM 60727
+        ,libetapetache.date_deb_ini 
+        ,libetapetache.date_fin_ini 
+        ,libetapetache.date_deb_rev
+        ,libetapetache.date_fin_rev
+        ,libetapetache.statut_sstache
+        ,libetapetache.duree_sstache
+		,libetapetache.param_sstache
+         --Fin KRA PPM 60727
+        ,si1.cafi 
+        , ress.RTYPE TYPE_RESSOURCE
+        , situ_ress_full.PRESTATION CODE_PRESTATION
+        , situ_ress_full.MODE_CONTRACTUEL_INDICATIF MCI
+        , MAX(cons_sstache_res_mois.cdeb) cdeb
+		--,ligne_bip.codsg codsg_ligne
+ 
+     FROM situ_ress_full
+        , ligne_bip
+        , tache
+        , cons_sstache_res_mois
+        , datdebex
+        --KRA PPM 60727
+        , (select ie.pid, ie.ecet,  ie.libetape, it.acta,  it.libtache, iss.asnom libsstache, iss.acst
+            ,iss.ADEB date_deb_ini, 
+            iss.AFIN  date_fin_ini, 
+            iss.ANDE date_deb_rev,
+            iss.ANFI date_fin_rev,
+            iss.ASTA statut_sstache,
+            iss.ADUR duree_sstache,
+            iss.PARAM_LOCAL param_sstache from isac_etape ie, isac_tache it, isac_sous_tache iss where ie.etape=it.etape and ie.etape = iss.etape and it.tache = iss.tache ) libetapetache -- TD 712 
+			--Fin KRA PPM 60727
+			
+			,(select lignebipcode, etapenum,  etapelibel, 
+			tachenum,  tachelibel, 
+			stachenum,
+			stachelibel
+            from BIPS_ACTIVITE bips  ) libetapetachebips
+			
+    -- annee courante
+    ,STRUCT_INFO si1
+    , ressource ress
+
+   WHERE cons_sstache_res_mois.cdeb >= datdebex.datdebex
+
+        AND situ_ress_full.CODSG = si1.CODSG
+        
+        AND ress.IDENT = situ_ress_full.IDENT
+        -- jointure cons_sstache_res_mois / tache
+        AND cons_sstache_res_mois.pid=tache.pid
+        AND cons_sstache_res_mois.ecet=tache.ecet
+        AND cons_sstache_res_mois.acta=tache.acta
+        AND cons_sstache_res_mois.acst=tache.acst
+        -- suppression de la ressource 0
+        AND cons_sstache_res_mois.ident!=0
+        -- il existe du consomme
+        AND cons_sstache_res_mois.cusag!=0
+        -- jointure tache / ligne_bip
+        AND DECODE(tache.aistty, 'FF', tache.aistpid, tache.pid)=ligne_bip.pid
+	 
+	 -- SEL 02/07/2014 PPM 58375 QC 1632	
+     --   AND situ_ress_full.codsg IN  (SELECT codsg 
+     --       FROM vue_dpg_perime
+     --     WHERE INSTR(pack_global.lire_perime(:p_global), codbddpg) > 0 
+     --     )
+		 --KRA PPM 59475 04/08/2014
+		 
+		 AND (situ_ress_full.codsg IN  (SELECT codsg FROM vue_dpg_perime   WHERE INSTR(:P_PERIM_ME, codbddpg) > 0 )
+					OR ligne_bip.codsg IN  (SELECT codsg  FROM vue_dpg_perime  WHERE INSTR(:P_PERIM_ME,codbddpg) > 0) )
+	
+        -- jointure cons_sstache_res_mois / situ_ress_full pour avoir la qualif de la ressource
+        AND cons_sstache_res_mois.ident=situ_ress_full.ident
+        AND (cons_sstache_res_mois.cdeb>=situ_ress_full.datsitu OR situ_ress_full.datsitu IS NULL)
+        AND (cons_sstache_res_mois.cdeb<=situ_ress_full.datdep OR situ_ress_full.datdep IS NULL)
+        AND ( situ_ress_full.prestation not in ('GRA', 'MO', 'IFO', 'INT', 'STA') or situ_ress_full.prestation is null)
+        --TD 712 
+        and tache.pid = libetapetache.pid(+)
+        and tache.ecet = libetapetache.ecet(+)
+        and tache.acta = libetapetache.acta(+)
+        and tache.acst = libetapetache.acst(+)
+		
+		and tache.pid = libetapetachebips.lignebipcode(+)
+        and tache.ecet = libetapetachebips.etapenum(+)
+        and tache.acta = libetapetachebips.tachenum(+)
+        and tache.acst = libetapetachebips.stachenum(+)
+
+    GROUP BY
+        tache.pid
+        ,DECODE(tache.aistty, 'FF', tache.aistpid, tache.pid)
+        ,tache.asnom
+        , tache.ecet
+        , tache.acta
+        , tache.acst
+        ,tache.aist
+		,tache.tacheaxemetier
+        ,situ_ress_full.ident,situ_ress_full.codsg,situ_ress_full.soccode, situ_ress_full.niveau, situ_ress_full.cout
+        
+		,libetapetache.libetape -- TD 712 
+        ,libetapetache.libtache -- TD 712 
+        ,libetapetache.libsstache 
+		
+		,libetapetachebips.etapelibel
+		,libetapetachebips.tachelibel
+		,libetapetachebips.stachelibel
+        
+		,si1.cafi 
+        , ress.RTYPE
+        , situ_ress_full.PRESTATION
+        , situ_ress_full.MODE_CONTRACTUEL_INDICATIF
+        --KRA PPM 60727
+        ,libetapetache.date_deb_ini
+        ,libetapetache.date_fin_ini
+        ,libetapetache.date_deb_rev
+        ,libetapetache.date_fin_rev
+        ,libetapetache.statut_sstache
+        ,libetapetache.duree_sstache
+		,libetapetache.param_sstache
+        --Fin KRA PPM 60727
+        
+    ) CONSO
+            ,ligne_bip
+            ,etape
+            , proj_info PI
+            , ressource
+            , struct_info
+            , directions
+            , vue_dpg_perime VDP --F306
+			, datdebex
+		
+			 ,DOSSIER_PROJET_COPI DPCOPI
+			
+WHERE
+    -- jointure tache <-> etape
+        CONSO.ecet = etape.ecet
+        AND CONSO.pid = etape.pid
+    -- jointure tache <-> ligne_bip avec prise en compte de la sous-traitance
+            AND  ligne_bip.pid =CONSO.factpid
+            --
+            -- F306
+            -- Prendre tous les enregistrements dont le DPG de la ligne d'imputation
+            -- est dans le perimetre d'habilitation de l'utilisateur, quels que
+            -- soient les DPG des lignes d'origine et des ressources.
+            --
+            -- ligne d'imputation : CONSO.factpid
+            -- => ligne_bip.pid => ligne_bip.codsg
+            -- 
+		-- SEL 02/07/2014 PPM 58375 QC 1632
+        -- AND   CONSO.codsg=VDP.codsg
+		
+         AND   INSTR(:P_PERIM_ME, VDP.codbddpg) > 0
+					
+    -- jointure ligne_bip <-> PI
+            AND PI.icpi=ligne_bip.icpi
+    -- jointure ligne_bip <-> struct_info <-> directions
+            AND ligne_bip.codsg=struct_info.codsg
+            AND struct_info.coddir=directions.coddir
+    -- jointure ressource/CONSO
+             AND CONSO.ident=ressource.ident
+	--KRA jointure CONSO/ligne_bip
+			AND (CONSO.codsg=VDP.codsg OR ligne_bip.codsg = VDP.codsg)
+--AND   (CONSO.codsg=VDP.codsg or conso.codsg_ligne = VDP.codsg)
+
+and PI.dp_copi = DPCOPI.dp_copi(+)
+
+	&P_WHERE
+ORDER BY ident,code_BIP,etape,tache,ss_tache;]]>
+      </select>
+      <displayInfo x="1.41663" y="0.04175" width="0.69995" height="0.19995"/>
+      <group name="G_libelle_projet">
+        <displayInfo x="1.02478" y="0.48950" width="2.03772" height="6.92480"
+        />
+        <dataItem name="libelle_projet" datatype="vchar2" columnOrder="22"
+         width="114" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libelle Projet" breakOrder="none">
+          <xmlSettings xmlTag="&quot;LibProjet&quot;"/>
+          <dataDescriptor expression="LIBELLE_PROJET"
+           descriptiveExpression="LIBELLE_PROJET" order="1" width="114"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="code_BIP" datatype="vchar2" columnOrder="23"
+         width="68" defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Code Bip" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ligne imputation&quot;"/>
+          <dataDescriptor expression="CODE_BIP"
+           descriptiveExpression="CODE_BIP" order="2" width="68"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_ligne_BIP" datatype="vchar2" columnOrder="24"
+         width="94" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libelle Ligne Bip" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Libellé ligne imputation&quot;"/>
+          <dataDescriptor expression="LIBELLE_LIGNE_BIP"
+           descriptiveExpression="LIBELLE_LIGNE_BIP" order="3" width="94"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ligne_depart_BIP" datatype="vchar2" columnOrder="25"
+         width="68" defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ligne Depart Bip" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ligne de saisie&quot;"/>
+          <dataDescriptor expression="LIGNE_DEPART_BIP"
+           descriptiveExpression="LIGNE_DEPART_BIP" order="4" width="68"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="typetap" datatype="vchar2" columnOrder="26" width="66"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Typetap" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Type étape&quot;"/>
+          <dataDescriptor expression="TYPETAP" descriptiveExpression="TYPETAP"
+           order="5" width="66"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="etape" datatype="vchar2" columnOrder="27" width="66"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Etape" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Etape&quot;"/>
+          <dataDescriptor expression="ETAPE" descriptiveExpression="ETAPE"
+           order="6" width="66"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_etape" datatype="vchar2" columnOrder="54"
+         width="94" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Etape">
+          <xmlSettings xmlTag="&quot;Libellé étape&quot;"/>
+          <dataDescriptor expression="LIBELLE_ETAPE"
+           descriptiveExpression="LIBELLE_ETAPE" order="7" width="94"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tache" datatype="vchar2" columnOrder="28" width="66"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Tache" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Tâche&quot;"/>
+          <dataDescriptor expression="TACHE" descriptiveExpression="TACHE"
+           order="8" width="66"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_tache" datatype="vchar2" columnOrder="55"
+         width="94" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Tache">
+          <xmlSettings xmlTag="&quot;Libellé tâche&quot;"/>
+          <dataDescriptor expression="LIBELLE_TACHE"
+           descriptiveExpression="LIBELLE_TACHE" order="9" width="94"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ss_tache" datatype="vchar2" columnOrder="29"
+         width="66" defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ss Tache" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Sous-tâche&quot;"/>
+          <dataDescriptor expression="SS_TACHE"
+           descriptiveExpression="SS_TACHE" order="10" width="66"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="id_ss_tache" datatype="vchar2" columnOrder="30"
+         width="70" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Id Ss Tache" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Type Sous-tâche&quot;"/>
+          <dataDescriptor expression="ID_SS_TACHE"
+           descriptiveExpression="ID_SS_TACHE" order="11" width="70"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_ss_tache" datatype="vchar2" columnOrder="31"
+         width="94" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libelle Ss Tache" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Libellé sous-tâche&quot;"/>
+          <dataDescriptor expression="LIBELLE_SS_TACHE"
+           descriptiveExpression="LIBELLE_SS_TACHE" order="12" width="94"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sigle_DPG" datatype="vchar2" columnOrder="32"
+         width="71" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sigle Dpg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG imputation&quot;"/>
+          <dataDescriptor expression="SIGLE_DPG"
+           descriptiveExpression="SIGLE_DPG" order="13" width="71"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle_direction" datatype="vchar2" columnOrder="33"
+         width="94" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libelle Direction" breakOrder="none">
+          <xmlSettings xmlTag="&quot;LibDir imputation&quot;"/>
+          <dataDescriptor expression="LIBELLE_DIRECTION"
+           descriptiveExpression="LIBELLE_DIRECTION" order="14" width="94"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom" datatype="vchar2" columnOrder="34" width="94"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nom" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Nom ressource&quot;"/>
+          <dataDescriptor expression="NOM" descriptiveExpression="NOM"
+           order="15" width="94"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="35" width="69"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <xmlSettings xmlTag="&quot;Identifiant de ressource&quot;"/>
+          <dataDescriptor expression="IDENT" descriptiveExpression="IDENT"
+           order="16" width="69"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsg_ress" datatype="vchar2" columnOrder="36"
+         width="72" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg Ress" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG ressource&quot;"/>
+          <dataDescriptor expression="CODSG_RESS"
+           descriptiveExpression="CODSG_RESS" order="17" width="72"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soccode_ress" datatype="vchar2" columnOrder="37"
+         width="68" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Soccode Ress" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Société&quot;"/>
+          <dataDescriptor expression="SOCCODE_RESS"
+           descriptiveExpression="SOCCODE_RESS" order="18" width="68"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="metier" datatype="vchar2" columnOrder="51" width="67"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Métier&quot;"/>
+          <dataDescriptor expression="METIER" descriptiveExpression="METIER"
+           order="19" width="67"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="janvier" datatype="vchar2" columnOrder="38" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Janvier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé janvier&quot;"/>
+          <dataDescriptor expression="JANVIER" descriptiveExpression="JANVIER"
+           order="20" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fevrier" datatype="vchar2" columnOrder="39" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Fevrier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé février&quot;"/>
+          <dataDescriptor expression="FEVRIER" descriptiveExpression="FEVRIER"
+           order="21" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mars" datatype="vchar2" columnOrder="40" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Mars" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé mars&quot;"/>
+          <dataDescriptor expression="MARS" descriptiveExpression="MARS"
+           order="22" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="avril" datatype="vchar2" columnOrder="41" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Avril" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé avril&quot;"/>
+          <dataDescriptor expression="AVRIL" descriptiveExpression="AVRIL"
+           order="23" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mai" datatype="vchar2" columnOrder="42" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Mai" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé mai&quot;"/>
+          <dataDescriptor expression="MAI" descriptiveExpression="MAI"
+           order="24" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="juin" datatype="vchar2" columnOrder="43" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Juin" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé juin&quot;"/>
+          <dataDescriptor expression="JUIN" descriptiveExpression="JUIN"
+           order="25" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="juillet" datatype="vchar2" columnOrder="44" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Juillet" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé juillet&quot;"/>
+          <dataDescriptor expression="JUILLET" descriptiveExpression="JUILLET"
+           order="26" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="aout" datatype="vchar2" columnOrder="45" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Aout" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé août&quot;"/>
+          <dataDescriptor expression="AOUT" descriptiveExpression="AOUT"
+           order="27" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="septembre" datatype="vchar2" columnOrder="46"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Septembre" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé septembre&quot;"/>
+          <dataDescriptor expression="SEPTEMBRE"
+           descriptiveExpression="SEPTEMBRE" order="28" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="octobre" datatype="vchar2" columnOrder="47" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Octobre" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé octobre&quot;"/>
+          <dataDescriptor expression="OCTOBRE" descriptiveExpression="OCTOBRE"
+           order="29" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="novembre" datatype="vchar2" columnOrder="48" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Novembre" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé novembre&quot;"/>
+          <dataDescriptor expression="NOVEMBRE"
+           descriptiveExpression="NOVEMBRE" order="30" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="decembre" datatype="vchar2" columnOrder="49" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Decembre" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Consommé décembre&quot;"/>
+          <dataDescriptor expression="DECEMBRE"
+           descriptiveExpression="DECEMBRE" order="31" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutHTR" datatype="vchar2" columnOrder="53" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Couthtr" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Coût HTR&quot;"/>
+          <dataDescriptor expression="COUTHTR" descriptiveExpression="COUTHTR"
+           order="32" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutenv" datatype="vchar2" columnOrder="52" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pack Utile Cout Getcoutenv Con" breakOrder="none">
+          <xmlSettings xmlTagAttrs="&quot;coût env&quot;"/>
+          <dataDescriptor expression="COUTENV" descriptiveExpression="COUTENV"
+           order="33" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_RESSOURCE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="56" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type Ressource">
+          <xmlSettings xmlTag="Type de ressource"/>
+          <dataDescriptor expression="TYPE_RESSOURCE"
+           descriptiveExpression="TYPE_RESSOURCE" order="35"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_PRESTATION" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="57" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Prestation">
+          <xmlSettings xmlTag="Code prestation"/>
+          <dataDescriptor expression="CODE_PRESTATION"
+           descriptiveExpression="CODE_PRESTATION" order="36"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MCI" datatype="vchar2" columnOrder="58" width="3"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mci">
+          <xmlSettings xmlTag="Mode_contractuel_indicatif"/>
+          <dataDescriptor expression="MCI" descriptiveExpression="MCI"
+           order="37" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROFIL_FI" datatype="vchar2" columnOrder="59"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Profil Fi">
+          <xmlSettings xmlTag="Profil de FI"/>
+          <dataDescriptor expression="PROFIL_FI"
+           descriptiveExpression="PROFIL_FI" order="38" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="date_deb_ini" datatype="vchar2" columnOrder="60"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date de début initiale">
+          <xmlSettings xmlTag="StacheInitDebDate"/>
+          <dataDescriptor expression="DATE_DEB_INI"
+           descriptiveExpression="DATE_DEB_INI" order="39" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="date_fin_ini" datatype="vchar2" columnOrder="61"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date de fin initiale">
+          <xmlSettings xmlTag="StacheInitFinDate"/>
+          <dataDescriptor expression="DATE_FIN_INI"
+           descriptiveExpression="DATE_FIN_INI" order="40" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="date_deb_rev" datatype="vchar2" columnOrder="62"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date de début révisée">
+          <xmlSettings xmlTag="StacheRevDebDate"/>
+          <dataDescriptor expression="DATE_DEB_REV"
+           descriptiveExpression="DATE_DEB_REV" order="41" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="date_fin_rev" datatype="vchar2" columnOrder="63"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date de fin révisée">
+          <xmlSettings xmlTag="StacheRevFinDate"/>
+          <dataDescriptor expression="DATE_FIN_REV"
+           descriptiveExpression="DATE_FIN_REV" order="42" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="statut_sstache" datatype="vchar2" columnOrder="64"
+         width="2" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Statut libre de la sous-tâche">
+          <xmlSettings xmlTag="StacheStatut"/>
+          <dataDescriptor expression="STATUT_SSTACHE"
+           descriptiveExpression="STATUT_SSTACHE" order="43" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="duree_sstache" datatype="vchar2" columnOrder="65"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Durée de la sous-tâche">
+          <xmlSettings xmlTag="StacheDuree"/>
+          <dataDescriptor expression="DUREE_SSTACHE"
+           descriptiveExpression="DUREE_SSTACHE" order="44" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="param_sstache" datatype="vchar2" columnOrder="66"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Paramètre local de la sous-tâche">
+          <xmlSettings xmlTag="StacheParamLocal"/>
+          <dataDescriptor expression="PARAM_SSTACHE"
+           descriptiveExpression="PARAM_SSTACHE" order="45" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_ligne" datatype="vchar2" columnOrder="67"
+         width="7" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DPG_ligne" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG_ligne&quot;"/>
+          <dataDescriptor expression="DPG_LIGNE"
+           descriptiveExpression="DPG_LIGNE" order="46" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande" datatype="vchar2" columnOrder="68"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ref_demande" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande&quot;"/>
+          <dataDescriptor expression="REF_DEMANDE"
+           descriptiveExpression="REF_DEMANDE" order="47" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REF_DEMANDE_LIB" datatype="vchar2" columnOrder="75"
+         width="80" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ref Demande Lib">
+          <xmlSettings xmlTag="&quot;Ref_demandeLib&quot;"/>
+          <dataDescriptor expression="REF_DEMANDE_LIB"
+           descriptiveExpression="REF_DEMANDE_LIB" order="48" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPEETAPELIB" datatype="vchar2" columnOrder="76"
+         width="60" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Typeetapelib">
+          <xmlSettings xmlTag="&quot;TypeEtapeLib&quot;"/>
+          <dataDescriptor expression="TYPEETAPELIB"
+           descriptiveExpression="TYPEETAPELIB" order="49" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierCode" datatype="vchar2"
+         columnOrder="69" width="12" defaultWidth="10000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierCode&quot;"/>
+          <dataDescriptor expression="DPCOPIAXEMETIERCODE"
+           descriptiveExpression="DPCOPIAXEMETIERCODE" order="50" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierLib" datatype="vchar2" columnOrder="70"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierLib&quot;"/>
+          <dataDescriptor expression="DPCOPIAXEMETIERLIB"
+           descriptiveExpression="DPCOPIAXEMETIERLIB" order="51" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierCode" datatype="vchar2" columnOrder="71"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierCode&quot;"/>
+          <dataDescriptor expression="PROJAXEMETIERCODE"
+           descriptiveExpression="PROJAXEMETIERCODE" order="52" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierLib" datatype="vchar2" columnOrder="72"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierLib&quot;"/>
+          <dataDescriptor expression="PROJAXEMETIERLIB"
+           descriptiveExpression="PROJAXEMETIERLIB" order="53" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TacheAxeMetierCode" datatype="vchar2" columnOrder="73"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TacheAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TacheAxeMetierCode&quot;"/>
+          <dataDescriptor expression="TACHEAXEMETIERCODE"
+           descriptiveExpression="TACHEAXEMETIERCODE" order="54" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TacheAxeMetierLib" datatype="vchar2" columnOrder="74"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="TacheAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TacheAxeMetierLib&quot;"/>
+          <dataDescriptor expression="TACHEAXEMETIERLIB"
+           descriptiveExpression="TACHEAXEMETIERLIB" order="55" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="retour" datatype="vchar2" columnOrder="50" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Retour" breakOrder="none">
+          <xmlSettings xmlTag=""/>
+          <dataDescriptor expression="RETOUR" descriptiveExpression="RETOUR"
+           order="34" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_libelle_projet_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.37500" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_libelle_projet" source="G_libelle_projet"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.37500"
+           height="0.25000"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_libelle_projet" source="libelle_projet"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_mai" source="mai" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.43750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_code_BIP" source="code_BIP" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.37500" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_juin" source="juin" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.25000" y="0.43750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_libelle_ligne_BIP" source="libelle_ligne_BIP"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.68750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_juillet" source="juillet" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.56250" y="0.43750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_aout" source="aout" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.93750" y="0.43750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ligne_depart_BIP" source="ligne_depart_BIP"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.12500" y="0.31250" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_septembre" source="septembre" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.25000" y="0.43750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_typetap" source="typetap" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.62500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_octobre" source="octobre" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.68750" y="0.43750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_etape" source="etape" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.00000" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_novembre" source="novembre" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.06250" y="0.43750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_tache" source="tache" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.31250" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ss_tache" source="ss_tache" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.62500" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_decembre" source="decembre" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.50000" y="0.43750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_id_ss_tache" source="id_ss_tache" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_coutHTR" source="coutHTR" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.43750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_libelle_ss_tache" source="libelle_ss_tache"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.25000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_coutenv" source="coutenv" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.37500" y="0.43750" width="1.06250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_sigle_DPG" source="sigle_DPG" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.68750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_libelle_direction" source="libelle_direction"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.00000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nom" source="nom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.43750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_retour" source="retour" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.56250" y="0.43750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ident" source="ident" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.75000" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codsg_ress" source="codsg_ress" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.06250" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_soccode_ress" source="soccode_ress" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.37500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_metier" source="metier" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.75000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_janvier" source="janvier" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.12500" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_fevrier" source="fevrier" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.50000" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_mars" source="mars" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.87500" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_avril" source="avril" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.18750" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_libelle_projet_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.37500"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_libelle_projet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Projet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_code_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.37500" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Code]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Bip]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libelle_ligne_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.68750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne Bip]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ligne_depart_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.12500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Depart Bip]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_typetap" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.62500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Typetap]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_etape" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Etape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.31250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ss_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.62500" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ss]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_id_ss_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Id Ss]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libelle_ss_tache" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.25000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ss Tache]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_sigle_DPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.68750" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Sigle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libelle_direction" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.00000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Direction]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.43750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ident" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.75000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codsg_ress" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.06250" y="0.00000" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_soccode_ress" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.37500" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Soccode]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_metier" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.75000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_janvier" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.12500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Janvier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_fevrier" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Fevrier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_mars" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.87500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mars]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_avril" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.18750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Avril]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_mai" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mai]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_juin" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.25000" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Juin]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_juillet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Juillet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_aout" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.93750" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Aout]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_septembre" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.25000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Septembre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_octobre" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.68750" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Octobre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_novembre" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Novembre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_decembre" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.50000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decembre]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_coutHTR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Couthtr]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_coutenv" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.37500" y="0.18750" width="1.06250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pack Utile Cout Getcoutenv Con]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_retour" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.56250" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Retour]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="0.96875" y="1.46875" width="3.03125" height="0.27087"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM16" source="P_PARAM16" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.32410" y="1.92615" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.32410" y="2.23865" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.33337" y="0.97913" width="1.00000" height="0.16663"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[.TXT ou .CSV]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.26038" y="1.55212" width="0.75000" height="0.16663"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes"/>
+      <string>
+      <![CDATA[P_Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM16" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.34741" y="2.03040" width="0.87134" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param16]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.35828" y="2.35413" width="0.87134" height="0.12695"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param7]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+	l_ssoumenu			VARCHAR2(100);
+	p_dpg VARCHAR2(10) := '';
+  p_axe VARCHAR2(40) := '';
+	
+begin
+ 
+	:P_WHERE := '';
+  :P_PERIM_ME:=pack_global.lire_perime(:P_GLOBAL);
+	:P_PERIM_CAFI := pack_global.lire_ca_fi(:P_GLOBAL);
+	
+	-- utilise pour l affichage des colonnes
+	l_ssoumenu := Pack_Global.lire_globaldata(:P_GLOBAL).sousmenus;
+	IF ( INSTR(UPPER(l_ssoumenu),'GES') > 0 ) THEN
+		:P_SMENUS_GES := 'O';
+	ELSE
+		:P_SMENUS_GES := 'N';
+	END IF;
+	
+	
+    SELECT to_number(to_char(DATDEBEX.DATDEBEX,'YYYY' )) INTO :P_ANNEE FROM DATDEBEX;
+  
+  	if (:P_param6='.CSV') then
+  		:P_separateur :='"';
+  	else
+  		:P_separateur:='';
+  	end if;
+ 
+	-- SEL 17/09/2014 PPM 58375 QC 1647 Gerer le cas de ******* avec la prise en compte du perim_me
+  	    p_dpg := RTRIM(LTRIM(:P_PARAM7));
+		p_axe := RTRIM(LTRIM(:P_PARAM16));
+		
+		IF LPAD(p_dpg, 7, '*') != '*******' OR p_dpg IS NULL THEN
+		p_dpg := REPLACE(p_dpg,'*','%');
+			
+			    IF p_axe = 'DPG de ressource' THEN
+				
+				:P_WHERE := :P_WHERE || ' AND  TO_CHAR(CONSO.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+				
+				ELSIF p_axe = 'DPG de ligne' THEN				
+					
+				:P_WHERE := :P_WHERE || ' AND TO_CHAR(ligne_bip.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+									
+				ELSE
+				
+				:P_WHERE := :P_WHERE || ' AND  (TO_CHAR(CONSO.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+				:P_WHERE := :P_WHERE || ' OR TO_CHAR(ligne_bip.codsg, ''FM0000000'') like ''' || p_dpg || ''')';
+					
+				--:P_WHERE := :P_WHERE || ' AND TO_CHAR(VDP.codsg, ''FM0000000'') like ''' || p_dpg || '%''';	
+					
+				END IF;		
+				
+		ELSIF p_dpg = '*******' THEN
+			
+			    IF p_axe = 'DPG de ressource' THEN
+				
+				:P_WHERE := :P_WHERE || ' AND ((CONSO.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0)))'; 
+				
+				ELSIF p_axe = 'DPG de ligne' THEN				
+					
+				:P_WHERE := :P_WHERE || ' AND ( ligne_bip.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0 ))'; 
+									
+				ELSE
+				
+				:P_WHERE := :P_WHERE || ' AND ((CONSO.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0))';	
+				:P_WHERE := :P_WHERE || ' OR ( ligne_bip.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIM_ME||''', codbddpg) > 0 )))'; 				
+					
+				END IF;		
+				
+		END IF;
+	
+  		
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,1498 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eDPCOPIClient" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="EDPCOPICLIENT" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" precision="10"
+     label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" precision="10"
+     label="P Param7" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     label="P Param8" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT  
+
+
+
+tcs.ANNEE                                                              ANNEE, 
+tcs.CLISIGLE                                                           CLISIGLE, 
+tcs.DP_COPI                                                           DP_COPI, 
+tcs.LIB_DP_COPI                                                          LIBELLE, 
+sum(nvl(round(tcs.JH_ARBDECIDES),0))                                             JH_ARBDECIDES,
+sum(nvl(round(tcs.EU_ARBDECIDES),0))                                            EU_ARBDECIDES,
+sum(nvl(round(tcs.JH_CANTDECIDES),0))                                          JH_CANTDECIDES,
+sum(nvl(round(tcs.EU_CANTDECIDES),0))                                         EU_CANTDECIDES,
+sum(nvl(round(tcs.JH_REALISES),0))                                                 JH_REALISES, 
+sum(nvl(round(tcs.EU_REALISES),0))                                                EU_REALISES,
+sum(nvl(round(tcs.JH_EXTRAPOLES),0))                                          JH_EXTRAPOLES, 
+sum(nvl(round(tcs.EU_EXTRAPOLES),0))                                        EU_EXTRAPOLES,
+sum(nvl(round(tcs.JH_REESTIMES),0))                                            JH_REESTIMES,
+sum(nvl(round(tcs.EU_REESTIMES),0))                                           EU_REESTIMES
+
+FROM TMP_COPI_SYNTHESE_ETATS  tcs
+where 
+tcs.numseq = :p_numseq
+group by tcs.annee, tcs.CLISIGLE  , tcs.DP_COPI     , tcs.LIB_DP_COPI         
+]]>
+      </select>
+      <displayInfo x="3.69800" y="0.67700" width="0.69995" height="0.22083"/>
+      <group name="G_1">
+        <displayInfo x="2.67993" y="1.47913" width="2.78882" height="2.65234"
+        />
+        <summary name="SumJH_ARBDECIDESPerANNEE" source="JH_ARBDECIDES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumEU_ARBDECIDESPerANNEE" source="EU_ARBDECIDES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumJH_CANTDECIDESPerANNEE" source="JH_CANTDECIDES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumEU_CANTDECIDESPerANNEE" source="EU_CANTDECIDES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumJH_REALISESPerANNEE" source="JH_REALISES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumEU_REALISESPerANNEE" source="EU_REALISES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumJH_EXTRAPOLESPerANNEE" source="JH_EXTRAPOLES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumEU_EXTRAPOLESPerANNEE" source="EU_EXTRAPOLES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumJH_REESTIMESPerANNEE" source="JH_REESTIMES"
+         function="sum" width="14" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumEU_REESTIMESPerANNEE" source="EU_REESTIMES"
+         function="sum" width="22" precision="12" scale="2" reset="G_1"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <dataItem name="ANNEE" oracleDatatype="number" columnOrder="34"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Annee">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_ANNEE_"/>
+          <dataDescriptor expression="tcs.ANNEE" descriptiveExpression="ANNEE"
+           order="1" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLISIGLE" datatype="vchar2" columnOrder="35" width="8"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Clisig">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_CLISIG"/>
+          <dataDescriptor expression="tcs.CLISIGLE"
+           descriptiveExpression="CLISIGLE" order="2" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_SUMREAL_SUMARB" source="cf_sumreal_sumarbformula"
+         datatype="number" width="20" precision="10" defaultWidth="120000"
+         defaultHeight="10000" columnFlags="16"
+         defaultLabel="Cf Sumreal Sumarb" valueIfNull="0" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_SUMREAL_SUMARB_SUMCANT"
+         source="cf_sumreal_sumarb_sumcantformu" datatype="number" width="20"
+         precision="10" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="16" defaultLabel="Cf Sumreal Sumarb Sumcant"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+      <group name="G_ANNEE">
+        <displayInfo x="2.73730" y="4.76428" width="2.66895" height="4.53223"
+        />
+        <dataItem name="DP_COPI" datatype="vchar2" columnOrder="36" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Dp Cop">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_DP_COP"/>
+          <dataDescriptor expression="tcs.DP_COPI"
+           descriptiveExpression="DP_COPI" order="3" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="37" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Libell">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_LIBELL"/>
+          <dataDescriptor expression="tcs.LIB_DP_COPI"
+           descriptiveExpression="LIBELLE" order="4" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_ARBDECIDES" oracleDatatype="number"
+         columnOrder="38" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Jh Arb">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_JH_ARB"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.JH_ARBDECIDES ) , 0 ) )"
+           descriptiveExpression="JH_ARBDECIDES" order="5"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_ARBDECIDES" oracleDatatype="number"
+         columnOrder="26" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Eu Arb">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_EU_ARB"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.EU_ARBDECIDES ) , 0 ) )"
+           descriptiveExpression="EU_ARBDECIDES" order="6"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_CANTDECIDES" oracleDatatype="number"
+         columnOrder="27" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Jh Can">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_JH_CAN"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.JH_CANTDECIDES ) , 0 ) )"
+           descriptiveExpression="JH_CANTDECIDES" order="7"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_CANTDECIDES" oracleDatatype="number"
+         columnOrder="28" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Eu Can">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_EU_CAN"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.EU_CANTDECIDES ) , 0 ) )"
+           descriptiveExpression="EU_CANTDECIDES" order="8"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_REALISES" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Jh Rea">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_JH_REA"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.JH_REALISES ) , 0 ) )"
+           descriptiveExpression="JH_REALISES" order="9"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_REALISES" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Eu Rea">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_EU_REA"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.EU_REALISES ) , 0 ) )"
+           descriptiveExpression="EU_REALISES" order="10"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_EXTRAPOLES" oracleDatatype="number"
+         columnOrder="31" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Jh Ext">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_JH_EXT"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.JH_EXTRAPOLES ) , 0 ) )"
+           descriptiveExpression="JH_EXTRAPOLES" order="11"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_EXTRAPOLES" oracleDatatype="number"
+         columnOrder="32" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Eu Ext">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_EU_EXT"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.EU_EXTRAPOLES ) , 0 ) )"
+           descriptiveExpression="EU_EXTRAPOLES" order="12"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_REESTIMES" oracleDatatype="number" columnOrder="33"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Jh Ree">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_JH_REE"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.JH_REESTIMES ) , 0 ) )"
+           descriptiveExpression="JH_REESTIMES" order="13"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_REESTIMES" oracleDatatype="number" columnOrder="39"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode P Param8 Pdf Tps Eu Ree">
+          <xmlSettings xmlTag="DECODE_P_PARAM8_PDF_TPS_EU_REE"/>
+          <dataDescriptor
+           expression="sum ( nvl ( round ( tcs.EU_REESTIMES ) , 0 ) )"
+           descriptiveExpression="EU_REESTIMES" order="14"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_compteur" source="CP_indice" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <placeholder name="CP_indice" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         valueIfNull="1">
+          <xmlSettings excludeFromXmlOutput="yes"/>
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </placeholder>
+        <formula name="CF_REAL_ARB" source="cf_real_arbformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" valueIfNull="0" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_REAL_ARB_CANT" source="cf_real_arb_cantformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" valueIfNull="0" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+    </dataSource>
+    <dataSource name="Q_2">
+      <select>
+      <![CDATA[select cmensuelle from calendrier where add_months(trunc(sysdate,'MM'),-1) = calanmois]]>
+      </select>
+      <displayInfo x="0.75012" y="0.53137" width="0.69995" height="0.28125"/>
+      <group name="G_pre1">
+        <displayInfo x="0.66443" y="1.30225" width="1.09998" height="0.43066"
+        />
+        <dataItem name="cmensuelle" datatype="date" oracleDatatype="date"
+         columnOrder="45" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cmensuelle">
+          <dataDescriptor expression="cmensuelle"
+           descriptiveExpression="CMENSUELLE" order="1" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="10.75000" height="7.18750">
+      <location x="0.12500" y="1.25000"/>
+      <repeatingFrame name="R_G_1" source="G_1" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <webSettings>
+        <![CDATA[#NULL#]]>
+        </webSettings>
+        <geometryInfo x="0.00000" y="0.00000" width="10.75000"
+         height="2.56250"/>
+        <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="Background2"/>
+        <rectangle name="B_23">
+          <geometryInfo x="0.00000" y="0.50000" width="3.25000"
+           height="0.50000"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject" keepWithAnchoringObject="yes"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="r88g100b100" linePattern="transparent"
+           lineBackgroundColor="black"/>
+          <points>
+            <point x="0.00000" y="0.50000"/>
+            <point x="3.25000" y="0.50000"/>
+          </points>
+        </rectangle>
+        <field name="F_ANNEE" source="ANNEE" minWidowLines="1" spacing="0"
+         alignment="end">
+          <font face="Arial" size="10" bold="yes" textColor="red"/>
+          <geometryInfo x="2.25000" y="0.56250" width="0.93750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_CLISIGLE" source="CLISIGLE" minWidowLines="1"
+         spacing="0" alignment="end">
+          <font face="Arial" size="10" bold="yes" textColor="red"/>
+          <geometryInfo x="2.00000" y="0.75000" width="1.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject" keepWithAnchoringObject="yes"/>
+        </field>
+        <frame name="M_G_ANNEE_GRPFR">
+          <webSettings>
+          <![CDATA[#NULL#]]>
+          </webSettings>
+          <geometryInfo x="0.00000" y="1.06250" width="10.75000"
+           height="1.25000"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout keepWithAnchoringObject="yes"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="r100g100b100" linePattern="solid"/>
+          <repeatingFrame name="R_G_ANNEE" source="G_ANNEE"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="1.81250" width="10.75000"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout formatTrigger="r_g_codbrformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="custom1" linePattern="solid"
+             hideTopBorder="yes" hideBottomBorder="yes"/>
+            <field name="F_DP_COPI" source="DP_COPI" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="0.00000" y="1.87500" width="0.62500"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+            </field>
+            <field name="F_LIBELLE" source="LIBELLE" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="0.62500" y="1.87500" width="2.06250"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_JH_ARBDECIDES" source="JH_ARBDECIDES"
+             minWidowLines="1" formatMask="NNNNNNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="2.62500" y="1.87500" width="0.62500"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_EU_ARBDECIDES" source="EU_ARBDECIDES"
+             minWidowLines="1" formatMask="NNNGNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="3.25000" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_JH_CANTDECIDES" source="JH_CANTDECIDES"
+             minWidowLines="1" formatMask="NNNNNNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="3.93750" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_EU_CANTDECIDES" source="EU_CANTDECIDES"
+             minWidowLines="1" formatMask="NNNGNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="4.62500" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_JH_REALISES" source="JH_REALISES" minWidowLines="1"
+             formatMask="NNNNNNN0" spacing="0" alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="5.31250" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_EU_REALISES" source="EU_REALISES" minWidowLines="1"
+             formatMask="NNNGNN0" spacing="0" alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="6.00000" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_JH_EXTRAPOLES" source="JH_EXTRAPOLES"
+             minWidowLines="1" formatMask="NNNNNNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="6.68750" y="1.87500" width="0.62500"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_EU_EXTRAPOLES" source="EU_EXTRAPOLES"
+             minWidowLines="1" formatMask="NNNGNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="7.31250" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_JH_REESTIMES" source="JH_REESTIMES"
+             minWidowLines="1" formatMask="NNNNNNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="8.00000" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_EU_REESTIMES" source="EU_REESTIMES"
+             minWidowLines="1" formatMask="NNNGNN0" spacing="0"
+             alignment="end">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="8.68750" y="1.87500" width="0.68750"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <line name="B_9" arrow="none">
+              <geometryInfo x="0.00000" y="1.87500" width="10.75000"
+               height="0.00000"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="black"/>
+              <points>
+                <point x="0.00000" y="1.87500"/>
+                <point x="10.75000" y="1.87500"/>
+              </points>
+            </line>
+            <field name="F_4" source="CF_REAL_ARB" minWidowLines="1"
+             formatMask="NN0D00%" spacing="0" alignment="center">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="9.43750" y="1.87500" width="0.56250"
+               height="0.12500"/>
+            </field>
+            <field name="F_5" source="CF_REAL_ARB_CANT" minWidowLines="1"
+             formatMask="NN0D00%" spacing="0" alignment="center">
+              <font face="Arial" size="8" bold="yes"/>
+              <geometryInfo x="10.00000" y="1.87500" width="0.75000"
+               height="0.12500"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_G_ANNEE_FTR">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="2.06250" width="10.75000"
+             height="0.25000"/>
+            <generalLayout pageProtect="yes"/>
+            <advancedLayout printObjectOnPage="lastPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r75g100b75" linePattern="solid"/>
+            <field name="F_SumJH_ARBDECIDESPerANNEE"
+             source="SumJH_ARBDECIDESPerANNEE" minWidowLines="1"
+             formatMask="NNNNNNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="2.62500" y="2.12500" width="0.62500"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumEU_ARBDECIDESPerANNEE"
+             source="SumEU_ARBDECIDESPerANNEE" minWidowLines="1"
+             formatMask="NNNGNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="3.25000" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumJH_CANTDECIDESPerANNEE"
+             source="SumJH_CANTDECIDESPerANNEE" minWidowLines="1"
+             formatMask="NNNNNNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="3.93750" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumEU_CANTDECIDESPerANNEE"
+             source="SumEU_CANTDECIDESPerANNEE" minWidowLines="1"
+             formatMask="NNNGNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="4.62500" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumJH_REALISESPerANNEE"
+             source="SumJH_REALISESPerANNEE" minWidowLines="1"
+             formatMask="NNNNNNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="5.31250" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumEU_REALISESPerANNEE"
+             source="SumEU_REALISESPerANNEE" minWidowLines="1"
+             formatMask="NNNGNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="6.00000" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumJH_EXTRAPOLESPerANNEE"
+             source="SumJH_EXTRAPOLESPerANNEE" minWidowLines="1"
+             formatMask="NNNNNNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="6.68750" y="2.12500" width="0.62500"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumEU_EXTRAPOLESPerANNEE"
+             source="SumEU_EXTRAPOLESPerANNEE" minWidowLines="1"
+             formatMask="NNNGNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="7.31250" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumJH_REESTIMESPerANNEE"
+             source="SumJH_REESTIMESPerANNEE" minWidowLines="1"
+             formatMask="NNNNNNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="8.00000" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumEU_REESTIMESPerANNEE"
+             source="SumEU_REESTIMESPerANNEE" minWidowLines="1"
+             formatMask="NNNGNN0" spacing="0" alignment="end">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="8.68750" y="2.12500" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <text name="B_Total_" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.06250" y="2.12500" width="1.37500"
+               height="0.14600"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes"/>
+                <string>
+                <![CDATA[Total :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_SumEU_REESTIMESPerANNEE1"
+             source="CF_SUMREAL_SUMARB" minWidowLines="1" formatMask="NN0D00%"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="9.43750" y="2.12500" width="0.56250"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_SumEU_REESTIMESPerANNEE2"
+             source="CF_SUMREAL_SUMARB_SUMCANT" minWidowLines="1"
+             formatMask="NN0D00%" spacing="0" alignment="center">
+              <font face="Arial" size="9" bold="yes"/>
+              <geometryInfo x="10.00000" y="2.12500" width="0.75000"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+          </frame>
+          <frame name="M_G_ANNEE_HDR">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="1.06250" width="10.75000"
+             height="0.75000"/>
+            <generalLayout pageProtect="yes"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="custom6"/>
+            <text name="B_DP_COPI" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.00000" y="1.18750" width="0.62500"
+               height="0.31250"/>
+              <visualSettings fillBackgroundColor="r25g50b75"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[CODE DP COPI]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_LIBELLE" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.62500" y="1.25000" width="2.00000"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r25g50b75"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[LIBELLE DP COPI]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_EU_ARBDECIDES" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="2.62500" y="1.25000" width="1.37500"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[DECIDE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_JH_CANTDECIDES" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="4.00000" y="1.25000" width="1.37500"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[CANTONNE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_EU_CANTDECIDES" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="5.37500" y="1.25000" width="1.37500"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[REALISE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_JH_REESTIMES" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="6.75000" y="1.25000" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[EXTRAPOLE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_EU_REESTIMES" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="8.06250" y="1.25000" width="1.37500"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[REESTIME]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_KREAL_ARBITRE" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="9.43750" y="1.12500" width="0.56250"
+               height="0.50000"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[% KEUR REAL/ ARB]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_KREAL_CANTONNE" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="10.00000" y="1.12500" width="0.75000"
+               height="0.50000"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="9" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[% KEUR REAL/ ARB+CANT]]>
+                </string>
+              </textSegment>
+            </text>
+            <rectangle name="B_1">
+              <geometryInfo x="0.00000" y="1.68750" width="10.75000"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32"/>
+              <points>
+                <point x="0.00000" y="1.68750"/>
+                <point x="10.75000" y="0.12500"/>
+              </points>
+            </rectangle>
+            <text name="B_2" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="2.62500" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[JH]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_3" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="3.31250" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[KE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_4" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="4.00000" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[JH]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_5" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="4.68750" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[KE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_6" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="5.37500" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[JH]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_7" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="6.06250" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray32" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[KE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_8" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="6.75000" y="1.68750" width="0.62500"
+               height="0.12500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="custom1" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[JH]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_13" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="8.75000" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="custom1" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[KE]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_14" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="8.06250" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="custom1" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[JH]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_15" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="7.37500" y="1.68750" width="0.68750"
+               height="0.12500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="custom1" linePattern="solid"/>
+              <textSegment>
+                <font face="Arial" size="8" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[KE]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_10" arrow="none">
+              <geometryInfo x="0.62500" y="1.06250" width="0.00000"
+               height="0.62500"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="0.62500" y="1.06250"/>
+                <point x="0.62500" y="1.68750"/>
+              </points>
+            </line>
+            <line name="B_11" arrow="none">
+              <geometryInfo x="2.62500" y="1.06250" width="0.00000"
+               height="0.62500"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="2.62500" y="1.06250"/>
+                <point x="2.62500" y="1.68750"/>
+              </points>
+            </line>
+            <line name="B_12" arrow="none">
+              <geometryInfo x="4.00000" y="1.06250" width="0.00000"
+               height="0.62500"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="4.00000" y="1.06250"/>
+                <point x="4.00000" y="1.68750"/>
+              </points>
+            </line>
+            <line name="B_16" arrow="none">
+              <geometryInfo x="5.37500" y="1.06250" width="0.00000"
+               height="0.62500"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="5.37500" y="1.06250"/>
+                <point x="5.37500" y="1.68750"/>
+              </points>
+            </line>
+            <line name="B_17" arrow="none">
+              <geometryInfo x="6.75000" y="1.06250" width="0.00000"
+               height="0.62500"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="6.75000" y="1.06250"/>
+                <point x="6.75000" y="1.68750"/>
+              </points>
+            </line>
+            <line name="B_19" arrow="none">
+              <geometryInfo x="9.43750" y="1.06250" width="0.00000"
+               height="0.75000"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="9.43750" y="1.06250"/>
+                <point x="9.43750" y="1.81250"/>
+              </points>
+            </line>
+            <line name="B_18" arrow="none">
+              <geometryInfo x="8.06250" y="1.06250" width="0.00000"
+               height="0.75000"/>
+              <visualSettings fillBackgroundColor="r25g50b75"
+               linePattern="solid"/>
+              <points>
+                <point x="8.06250" y="1.06250"/>
+                <point x="8.06250" y="1.81250"/>
+              </points>
+            </line>
+            <rectangle name="B_20">
+              <geometryInfo x="0.00000" y="1.68750" width="2.62500"
+               height="0.12500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray20" linePattern="solid"/>
+              <points>
+                <point x="0.00000" y="1.68750"/>
+                <point x="2.62500" y="0.12500"/>
+              </points>
+            </rectangle>
+            <line name="B_21" arrow="none">
+              <geometryInfo x="10.00000" y="1.06250" width="0.00000"
+               height="0.62500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray20" linePattern="solid"/>
+              <points>
+                <point x="10.00000" y="1.06250"/>
+                <point x="10.00000" y="1.68750"/>
+              </points>
+            </line>
+            <rectangle name="B_22">
+              <geometryInfo x="9.43750" y="1.68750" width="1.31250"
+               height="0.12500"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray20" linePattern="solid"/>
+              <points>
+                <point x="9.43750" y="1.68750"/>
+                <point x="1.31250" y="0.12500"/>
+              </points>
+            </rectangle>
+          </frame>
+        </frame>
+        <text name="B_ANNEE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.12500" y="0.56250" width="0.87500"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="custom6"/>
+          <textSegment>
+            <font face="Arial" size="10" bold="yes"/>
+            <string>
+            <![CDATA[Annee :]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_CLISIGLE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.12500" y="0.75000" width="1.25000"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="r25g50b75"/>
+          <textSegment>
+            <font face="Arial" size="10" bold="yes"/>
+            <string>
+            <![CDATA[Direction Cliente :]]>
+            </string>
+          </textSegment>
+        </text>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <text name="B_24" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.12500" y="0.12500" width="0.33850" height="0.15625"
+        />
+        <textSegment>
+          <font face="Arial" size="9" textColor="r0g0b75"/>
+          <string>
+          <![CDATA[Date :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/RRRR HH24:MI:SS" spacing="0" alignment="start">
+        <font face="Arial" size="9" textColor="r0g0b75"/>
+        <geometryInfo x="0.56250" y="0.12500" width="1.31250" height="0.18750"
+        />
+      </field>
+      <text name="B_25" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="9.31250" y="0.18750" width="0.77600" height="0.18750"
+        />
+        <textSegment>
+          <font face="Arial" size="9" textColor="r0g0b75"/>
+          <string>
+          <![CDATA[Page :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_2" source="PageNumber" minWidowLines="1" spacing="0"
+       alignment="end">
+        <font face="Arial" size="9" textColor="r0g0b75"/>
+        <geometryInfo x="9.75000" y="0.18750" width="0.37500" height="0.18750"
+        />
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_3" source="TotalPhysicalPages" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="9" textColor="r0g0b75"/>
+        <geometryInfo x="10.31250" y="0.18750" width="0.56250"
+         height="0.18750"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_26" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="10.12500" y="0.18750" width="0.18750"
+         height="0.18750"/>
+        <textSegment>
+          <font face="Arial" size="9" textColor="r0g0b75"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_27" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.75000" y="0.37500" width="3.50000" height="0.62500"
+        />
+        <textSegment>
+          <font face="Arial" size="16" bold="yes" textColor="r0g0b75"/>
+          <string>
+          <![CDATA[ETAT POUR UN CLIENT
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Arial" size="16" bold="yes" textColor="r0g0b75"/>
+          <string>
+          <![CDATA[TOUS SES DP COPI]]>
+          </string>
+        </textSegment>
+      </text>
+      <rectangle name="B_28">
+        <geometryInfo x="3.68750" y="0.31250" width="3.75000" height="0.62500"
+        />
+        <visualSettings linePattern="solid"/>
+        <points>
+          <point x="3.68750" y="0.31250"/>
+          <point x="3.75000" y="0.62500"/>
+        </points>
+      </rectangle>
+      <text name="B_29" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.12500" y="0.37500" width="1.18750" height="0.15625"
+        />
+        <textSegment>
+          <font face="Arial" size="9" textColor="r0g0b75"/>
+          <string>
+          <![CDATA[Dernier Traitement :]]>
+          </string>
+        </textSegment>
+      </text>
+      <repeatingFrame name="R_1" source="G_pre1" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <webSettings>
+        <![CDATA[#NULL#]]>
+        </webSettings>
+        <geometryInfo x="0.06250" y="0.31250" width="2.50000" height="0.31250"
+        />
+        <field name="F_6" source="cmensuelle" minWidowLines="1"
+         formatMask="DD/MM/RRRR" spacing="0" alignment="start">
+          <font face="Arial" size="9" textColor="r0g0b75"/>
+          <geometryInfo x="1.31250" y="0.37500" width="1.12500"
+           height="0.18750"/>
+        </field>
+      </repeatingFrame>
+      <text name="B_30" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="8.31250" y="0.68750" width="2.50000" height="0.50000"
+        />
+        <textSegment>
+          <font face="Arial" size="16" italic="yes"/>
+          <string>
+          <![CDATA[Tous financements
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Arial" size="16" italic="yes"/>
+          <string>
+          <![CDATA[Prestations uniquement]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.18579" y="0.15979" width="1.65601" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres rapport]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.57971" height="0.29871"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[ANNEE]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.19104" y="1.13867" width="1.14233" height="0.38220"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param7
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[Client (CLISIGLE)]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM2" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+
+begin
+  
+  if :p_param7 = '---'
+  	then
+  	:p_param7 := null; 
+  end if;
+  
+  :P_NUMSEQ := pack_cout_standard_ke.INSERT_TMP_COPI_SYNTHESE(null,:P_PARAM6 , :P_PARAM7,1); 
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_codbrformattrigger">
+      <textSource>
+      <![CDATA[function R_G_CODBRFormatTrigger return boolean is
+begin
+ IF (:CS_compteur mod 2 = 0)
+   THEN
+      srw.set_background_fill_color('r88g75b88');
+ else
+ 	 srw.set_background_fill_color('white');
+       END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_real_arbformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_REAL_ARBFormula return Number is
+begin
+	if (:EU_ARBDECIDES <> 0)
+	then
+  	return((round(:EU_REALISES)/round(:EU_ARBDECIDES))*100);
+	else
+		return 0;
+	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_real_arb_cantformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_REAL_ARB_CANTFormula return Number is
+begin
+	if ((:EU_ARBDECIDES+:EU_CANTDECIDES) <> 0)
+	then
+  	return((round(:EU_REALISES)/(round(:EU_ARBDECIDES)+round(:EU_CANTDECIDES)))*100);
+	else
+		return 0;
+	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_sumreal_sumarbformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_SUMREAL_SUMARBFormula return Number is
+begin
+	if (:SumEU_ARBDECIDESPerANNEE <> 0)
+	then
+  	return((round(:SumEU_REALISESPerANNEE)/round(:SumEU_ARBDECIDESPerANNEE))*100);
+	else
+		return 0;
+	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_sumreal_sumarb_sumcantformu" returnType="number">
+      <textSource>
+      <![CDATA[function CF_SUMREAL_SUMARB_SUMCANTFormu return Number is
+begin
+	if ((:SumEU_ARBDECIDESPerANNEE+:SumEU_CANTDECIDESPerANNEE) <> 0)
+	then
+  	return((round(:SumEU_REALISESPerANNEE)/(round(:SumEU_ARBDECIDESPerANNEE)+round(:SumEU_CANTDECIDESPerANNEE)))*100);
+	else
+		return 0;
+	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  
+  DELETE FROM TMP_COPI_SYNTHESE_ETATS WHERE NUMSEQ = :P_NUMSEQ ; 
+  
+  COMMIT ; 
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#ffffff"/>
+    <color index="191" displayName="custom6" value="#93065d"/>
+    <color index="192" displayName="Background2" value="#e4c1d6"/>
+    <color index="193" displayName="Background3" value="#c982ae"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName="rwwine"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

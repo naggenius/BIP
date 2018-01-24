@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_acces_menu" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_ACCES_MENU" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="2000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+    '20'  || SUBSTR(TRUNC(n.DATE_CREATION, 'IW'),7,2) || '-' || SUBSTR(TRUNC(n.DATE_CREATION, 'IW'),4,2)  ||'-S'||TO_CHAR(n.DATE_CREATION,'IW') Date_acces,
+    TO_CHAR(n.DATE_CREATION,'DD/MM/YYYY HH24:MI') Heure_prem_acces_menu,
+    TO_CHAR(n.DATE_MODIFICATION ,'DD/MM/YYYY HH24:MI') Heure_dern_acces_menu,
+    n.USER_RTFE Identifiant_connex_RTFE,
+    n.CODE_MENU,
+    n.NOM Nom_RTFE,
+    n.PRENOM Prenom_RTFE,
+    TO_CHAR(n.IDENT,'FM00000') CodeRess_Bip,
+    n.COMPTEUR_MENU CompteurAcces,  
+    DECODE(n.SOUS_MENU_1 || '_' ||n.DROIT_SOUS_MENU_1,'_','',n.SOUS_MENU_1 || '_' ||n.DROIT_SOUS_MENU_1) Smenu1,
+    DECODE(n.SOUS_MENU_2 || '_' ||n.DROIT_SOUS_MENU_2,'_','',n.SOUS_MENU_2 || '_' ||n.DROIT_SOUS_MENU_2) Smenu2,
+    DECODE(n.SOUS_MENU_3 || '_' ||n.DROIT_SOUS_MENU_3,'_','',n.SOUS_MENU_3 || '_' ||n.DROIT_SOUS_MENU_3) Smenu3,
+    DECODE(n.SOUS_MENU_4 || '_' ||n.DROIT_SOUS_MENU_4,'_','',n.SOUS_MENU_4 || '_' ||n.DROIT_SOUS_MENU_4) Smenu4,
+    DECODE(n.SOUS_MENU_5 || '_' ||n.DROIT_SOUS_MENU_5,'_','',n.SOUS_MENU_5 || '_' ||n.DROIT_SOUS_MENU_5) Smenu5,
+    DECODE(n.SOUS_MENU_6 || '_' ||n.DROIT_SOUS_MENU_6,'_','',n.SOUS_MENU_6 || '_' ||n.DROIT_SOUS_MENU_6) Smenu6,
+    DECODE(n.SOUS_MENU_7 || '_' ||n.DROIT_SOUS_MENU_7,'_','',n.SOUS_MENU_7 || '_' ||n.DROIT_SOUS_MENU_7) Smenu7,
+    DECODE(n.SOUS_MENU_8 || '_' ||n.DROIT_SOUS_MENU_8,'_','',n.SOUS_MENU_8 || '_' ||n.DROIT_SOUS_MENU_8) Smenu8,
+    DECODE(n.SOUS_MENU_9 || '_' ||n.DROIT_SOUS_MENU_9,'_','',n.SOUS_MENU_9 || '_' ||n.DROIT_SOUS_MENU_9) Smenu9,
+    DECODE(n.SOUS_MENU_10 || '_' ||n.DROIT_SOUS_MENU_10,'_','',n.SOUS_MENU_10 || '_' ||n.DROIT_SOUS_MENU_10) Smenu10  
+FROM NAVIGATION_USER n 
+WHERE 1=1
+&P_WHERE
+ORDER by Date_acces, Identifiant_connex_RTFE, CODE_MENU]]>
+      </select>
+      <displayInfo x="1.73303" y="0.94812" width="0.69995" height="0.19995"/>
+      <group name="G_user_rtfe">
+        <displayInfo x="1.22046" y="1.68958" width="1.70667" height="3.33594"
+        />
+        <dataItem name="Date_acces" datatype="vchar2" columnOrder="17"
+         width="11" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date Creation">
+          <xmlSettings xmlTag="Date_acces"/>
+          <dataDescriptor
+           expression="&apos;20&apos; || SUBSTR ( TRUNC ( n.DATE_CREATION , &apos;IW&apos; ) , 7 , 2 ) || &apos;-&apos; || SUBSTR ( TRUNC ( n.DATE_CREATION , &apos;IW&apos; ) , 4 , 2 ) || &apos;-S&apos; || TO_CHAR ( n.DATE_CREATION , &apos;IW&apos; )"
+           descriptiveExpression="DATE_ACCES" order="1" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Identifiant_connex_RTFE" datatype="vchar2"
+         columnOrder="13" width="60" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="User Rtfe">
+          <xmlSettings xmlTag="Identifiant_connex_RTFE"/>
+          <dataDescriptor expression="n.USER_RTFE"
+           descriptiveExpression="IDENTIFIANT_CONNEX_RTFE" order="4"
+           width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_MENU" datatype="vchar2" columnOrder="18"
+         width="20" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Code Menu">
+          <xmlSettings xmlTag="Code_menu"/>
+          <dataDescriptor expression="n.CODE_MENU"
+           descriptiveExpression="CODE_MENU" order="5" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Nom_RTFE" datatype="vchar2" columnOrder="11"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Rnom">
+          <xmlSettings xmlTag="Nom_RTFE"/>
+          <dataDescriptor expression="n.NOM" descriptiveExpression="NOM_RTFE"
+           order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Prenom_RTFE" datatype="vchar2" columnOrder="12"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Rprenom">
+          <xmlSettings xmlTag="Prenom_RTFE"/>
+          <dataDescriptor expression="n.PRENOM"
+           descriptiveExpression="PRENOM_RTFE" order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CodeRess_Bip" datatype="vchar2" columnOrder="19"
+         width="6" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <xmlSettings xmlTag="CodeRess_Bip"/>
+          <dataDescriptor
+           expression="TO_CHAR ( n.IDENT , &apos;FM00000&apos; )"
+           descriptiveExpression="CODERESS_BIP" order="8" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CompteurAcces" oracleDatatype="number"
+         columnOrder="20" width="22" defaultWidth="70000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Compteur Menu">
+          <xmlSettings xmlTag="CompteurAcces"/>
+          <dataDescriptor expression="n.COMPTEUR_MENU"
+           descriptiveExpression="COMPTEURACCES" order="9"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Heure_prem_acces_menu" datatype="vchar2"
+         columnOrder="31" width="16" defaultWidth="50000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Heure Prem Acces Menu">
+          <xmlSettings xmlTag="Heure_prem_acces_menu"/>
+          <dataDescriptor
+           expression="TO_CHAR ( n.DATE_CREATION , &apos;DD/MM/YYYY HH24:MI&apos; )"
+           descriptiveExpression="HEURE_PREM_ACCES_MENU" order="2" width="16"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Heure_dern_acces_menu" datatype="vchar2"
+         columnOrder="32" width="16" defaultWidth="50000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Heure Dern Acces Menu">
+          <xmlSettings xmlTag="Heure_dern_acces_menu"/>
+          <dataDescriptor
+           expression="TO_CHAR ( n.DATE_MODIFICATION , &apos;DD/MM/YYYY HH24:MI&apos; )"
+           descriptiveExpression="HEURE_DERN_ACCES_MENU" order="3" width="16"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu1" datatype="vchar2" columnOrder="21" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu1">
+          <xmlSettings xmlTag="Smenu1"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_1 || &apos;_&apos; || n.DROIT_SOUS_MENU_1 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_1 || &apos;_&apos; || n.DROIT_SOUS_MENU_1 )"
+           descriptiveExpression="SMENU1" order="10" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu2" datatype="vchar2" columnOrder="22" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu2">
+          <xmlSettings xmlTag="Smenu2"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_2 || &apos;_&apos; || n.DROIT_SOUS_MENU_2 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_2 || &apos;_&apos; || n.DROIT_SOUS_MENU_2 )"
+           descriptiveExpression="SMENU2" order="11" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu3" datatype="vchar2" columnOrder="23" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu3">
+          <xmlSettings xmlTag="Smenu3"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_3 || &apos;_&apos; || n.DROIT_SOUS_MENU_3 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_3 || &apos;_&apos; || n.DROIT_SOUS_MENU_3 )"
+           descriptiveExpression="SMENU3" order="12" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu4" datatype="vchar2" columnOrder="24" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu4">
+          <xmlSettings xmlTag="Smenu4"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_4 || &apos;_&apos; || n.DROIT_SOUS_MENU_4 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_4 || &apos;_&apos; || n.DROIT_SOUS_MENU_4 )"
+           descriptiveExpression="SMENU4" order="13" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu5" datatype="vchar2" columnOrder="25" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu5">
+          <xmlSettings xmlTag="Smenu5"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_5 || &apos;_&apos; || n.DROIT_SOUS_MENU_5 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_5 || &apos;_&apos; || n.DROIT_SOUS_MENU_5 )"
+           descriptiveExpression="SMENU5" order="14" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu6" datatype="vchar2" columnOrder="26" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu6">
+          <xmlSettings xmlTag="Smenu6"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_6 || &apos;_&apos; || n.DROIT_SOUS_MENU_6 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_6 || &apos;_&apos; || n.DROIT_SOUS_MENU_6 )"
+           descriptiveExpression="SMENU6" order="15" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu7" datatype="vchar2" columnOrder="27" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu7">
+          <xmlSettings xmlTag="Smenu7"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_7 || &apos;_&apos; || n.DROIT_SOUS_MENU_7 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_7 || &apos;_&apos; || n.DROIT_SOUS_MENU_7 )"
+           descriptiveExpression="SMENU7" order="16" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu8" datatype="vchar2" columnOrder="28" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu8">
+          <xmlSettings xmlTag="Smenu8"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_8 || &apos;_&apos; || n.DROIT_SOUS_MENU_8 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_8 || &apos;_&apos; || n.DROIT_SOUS_MENU_8 )"
+           descriptiveExpression="SMENU8" order="17" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu9" datatype="vchar2" columnOrder="29" width="241"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Smenu9">
+          <xmlSettings xmlTag="Smenu9"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_9 || &apos;_&apos; || n.DROIT_SOUS_MENU_9 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_9 || &apos;_&apos; || n.DROIT_SOUS_MENU_9 )"
+           descriptiveExpression="SMENU9" order="18" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Smenu10" datatype="vchar2" columnOrder="30"
+         width="241" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Smenu10">
+          <xmlSettings xmlTag="Smenu10"/>
+          <dataDescriptor
+           expression="DECODE ( n.SOUS_MENU_10 || &apos;_&apos; || n.DROIT_SOUS_MENU_10 , &apos;_&apos; , &apos;&apos; , n.SOUS_MENU_10 || &apos;_&apos; || n.DROIT_SOUS_MENU_10 )"
+           descriptiveExpression="SMENU10" order="19" width="241"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_user_rtfe_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.50000" height="0.31250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_user_rtfe" source="G_user_rtfe"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="7.50000"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_Date_acces" source="Date_acces" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.68750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Identifiant_connex_RTFE"
+           source="Identifiant_connex_RTFE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.68750" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CODE_MENU" source="CODE_MENU" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="0.93750" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Nom_RTFE" source="Nom_RTFE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="1.18750" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Prenom_RTFE" source="Prenom_RTFE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="1.43750" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CodeRess_Bip" source="CodeRess_Bip" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="1.81250" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CompteurAcces" source="CompteurAcces"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="2.18750" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Heure_prem_acces_menu" source="Heure_prem_acces_menu"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="2.62500" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Heure_dern_acces_menu" source="Heure_dern_acces_menu"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="3.18750" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu1" source="Smenu1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="3.75000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu2" source="Smenu2" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="4.12500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu3" source="Smenu3" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="4.50000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu4" source="Smenu4" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="4.87500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu5" source="Smenu5" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="5.25000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu6" source="Smenu6" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="5.62500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu7" source="Smenu7" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="6.00000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu8" source="Smenu8" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="6.37500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu9" source="Smenu9" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="6.75000" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_Smenu10" source="Smenu10" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="6"/>
+            <geometryInfo x="7.12500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_user_rtfe_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.50000"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_Date_acces" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.68750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Date_acces]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Identifiant_connex_RTFE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.68750" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[User
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Rtfe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_MENU" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.93750" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Code
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Menu]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Nom_RTFE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Prenom_RTFE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.43750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Rprenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CodeRess_Bip" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.81250" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Ident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CompteurAcces" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.18750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Compteur
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Menu]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Heure_prem_acces_menu" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.62500" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Heure Prem
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Acces Menu]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Heure_dern_acces_menu" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.18750" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Heure Dern
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Acces Menu]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.75000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.12500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu2]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.50000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu3]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu4" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.87500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu4]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu5" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.25000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu5]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu6" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.62500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu6]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu7" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.00000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu7]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu8" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.37500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu8]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu9" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.75000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu9]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Smenu10" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.12500" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="6"/>
+              <string>
+              <![CDATA[Smenu10]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.87476" y="0.25000" width="0.75037" height="0.16675"
+        />
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[x_Resserr]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.05054" y="0.23962" width="2.02075" height="0.21875"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes" underline="yes"/>
+      <string>
+      <![CDATA[Paramètres de lancement]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.42712" y="0.81250" width="2.10413" height="0.37500"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de début:
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.41675" y="1.44800" width="2.10413" height="0.38538"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de fin:
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_2" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.55212" y="0.86462" width="1.17700" height="0.25000"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_1" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.55261" y="1.43579" width="1.17700" height="0.25000"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+begin
+ 
+ 	-- Filtre sur les dates de debut et fin
+ 	-- :P_PARAM6 : date de debut
+ 	-- :P_PARAM7 : date de fin
+  IF (:P_PARAM6 is not null or :P_PARAM6<>'') THEN
+     :P_WHERE := ' AND to_char(n.DATE_CREATION,''YYYYMM'') >= (SUBSTR(:P_PARAM6,4) || SUBSTR(:P_PARAM6,1,2)) '; 
+  END IF; 
+ 
+  IF (:P_PARAM7 is not null or :P_PARAM7<>'') THEN 
+    :P_WHERE:= :P_WHERE || ' AND to_char(n.DATE_CREATION,''YYYYMM'') <= (SUBSTR(:P_PARAM7,4) || SUBSTR(:P_PARAM7,1,2)) ';
+  END IF;
+ 
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+
+
+</head>
+
+
+<body>
+
+<!-- Data Area Generated by Reports Developer -->
+<rw:dataArea id="MGuserrtfeGRPFR80">
+<table>
+<caption> x_Resserr </caption>
+ <!-- Header -->
+ <thead>
+  <tr>
+   <th <rw:id id="HBDateacces80" asArray="no"/>> Date Creation </th>
+   <th <rw:id id="HBIdentifiantconnexRTFE80" asArray="no"/>> User Rtfe </th>
+   <th <rw:id id="HBCODEMENU80" asArray="no"/>> Code Menu </th>
+   <th <rw:id id="HBNomRTFE80" asArray="no"/>> Rnom </th>
+   <th <rw:id id="HBPrenomRTFE80" asArray="no"/>> Rprenom </th>
+   <th <rw:id id="HBCodeRessBip80" asArray="no"/>> Ident </th>
+   <th <rw:id id="HBCompteurAcces80" asArray="no"/>> Compteur
+ </th>
+   <th <rw:id id="HBHeurepremaccesmenu80" asArray="no"/>> Heure Prem
+Acces Menu </th>
+   <th <rw:id id="HBHeuredernaccesmenu80" asArray="no"/>> Heure Dern
+Acces Menu </th>
+   <th <rw:id id="HBSmenu180" asArray="no"/>> Smenu1 </th>
+   <th <rw:id id="HBSmenu280" asArray="no"/>> Smenu2 </th>
+   <th <rw:id id="HBSmenu380" asArray="no"/>> Smenu3 </th>
+   <th <rw:id id="HBSmenu480" asArray="no"/>> Smenu4 </th>
+   <th <rw:id id="HBSmenu580" asArray="no"/>> Smenu5 </th>
+   <th <rw:id id="HBSmenu680" asArray="no"/>> Smenu6 </th>
+   <th <rw:id id="HBSmenu780" asArray="no"/>> Smenu7 </th>
+   <th <rw:id id="HBSmenu880" asArray="no"/>> Smenu8 </th>
+   <th <rw:id id="HBSmenu980" asArray="no"/>> Smenu9 </th>
+   <th <rw:id id="HBSmenu1080" asArray="no"/>> Smenu10 </th>
+  </tr>
+ </thead>
+ <!-- Body -->
+ <tbody>
+  <rw:foreach id="RGuserrtfe801" src="G_user_rtfe">
+   <tr>
+    <td <rw:headers id="HFDateacces80" src="HBDateacces80"/>><rw:field id="FDateacces80" src="Date_acces" nullValue="&nbsp;"> F_Date_acces </rw:field></td>
+    <td <rw:headers id="HFIdentifiantconnexRTFE80" src="HBIdentifiantconnexRTFE80"/>><rw:field id="FIdentifiantconnexRTFE80" src="Identifiant_connex_RTFE" nullValue="&nbsp;"> F_Identifiant_connex_RTFE </rw:field></td>
+    <td <rw:headers id="HFCODEMENU80" src="HBCODEMENU80"/>><rw:field id="FCODEMENU80" src="CODE_MENU" nullValue="&nbsp;"> F_CODE_MENU </rw:field></td>
+    <td <rw:headers id="HFNomRTFE80" src="HBNomRTFE80"/>><rw:field id="FNomRTFE80" src="Nom_RTFE" nullValue="&nbsp;"> F_Nom_RTFE </rw:field></td>
+    <td <rw:headers id="HFPrenomRTFE80" src="HBPrenomRTFE80"/>><rw:field id="FPrenomRTFE80" src="Prenom_RTFE" nullValue="&nbsp;"> F_Prenom_RTFE </rw:field></td>
+    <td <rw:headers id="HFCodeRessBip80" src="HBCodeRessBip80"/>><rw:field id="FCodeRessBip80" src="CodeRess_Bip" nullValue="&nbsp;"> F_CodeRess_Bip </rw:field></td>
+    <td <rw:headers id="HFCompteurAcces80" src="HBCompteurAcces80"/>><rw:field id="FCompteurAcces80" src="CompteurAcces" nullValue="&nbsp;"> F_CompteurAcces </rw:field></td>
+    <td <rw:headers id="HFHeurepremaccesmenu80" src="HBHeurepremaccesmenu80"/>><rw:field id="FHeurepremaccesmenu80" src="Heure_prem_acces_menu" nullValue="&nbsp;"> F_Heure_prem_acces_menu </rw:field></td>
+    <td <rw:headers id="HFHeuredernaccesmenu80" src="HBHeuredernaccesmenu80"/>><rw:field id="FHeuredernaccesmenu80" src="Heure_dern_acces_menu" nullValue="&nbsp;"> F_Heure_dern_acces_menu </rw:field></td>
+    <td <rw:headers id="HFSmenu180" src="HBSmenu180"/>><rw:field id="FSmenu180" src="Smenu1" nullValue="&nbsp;"> F_Smenu1 </rw:field></td>
+    <td <rw:headers id="HFSmenu280" src="HBSmenu280"/>><rw:field id="FSmenu280" src="Smenu2" nullValue="&nbsp;"> F_Smenu2 </rw:field></td>
+    <td <rw:headers id="HFSmenu380" src="HBSmenu380"/>><rw:field id="FSmenu380" src="Smenu3" nullValue="&nbsp;"> F_Smenu3 </rw:field></td>
+    <td <rw:headers id="HFSmenu480" src="HBSmenu480"/>><rw:field id="FSmenu480" src="Smenu4" nullValue="&nbsp;"> F_Smenu4 </rw:field></td>
+    <td <rw:headers id="HFSmenu580" src="HBSmenu580"/>><rw:field id="FSmenu580" src="Smenu5" nullValue="&nbsp;"> F_Smenu5 </rw:field></td>
+    <td <rw:headers id="HFSmenu680" src="HBSmenu680"/>><rw:field id="FSmenu680" src="Smenu6" nullValue="&nbsp;"> F_Smenu6 </rw:field></td>
+    <td <rw:headers id="HFSmenu780" src="HBSmenu780"/>><rw:field id="FSmenu780" src="Smenu7" nullValue="&nbsp;"> F_Smenu7 </rw:field></td>
+    <td <rw:headers id="HFSmenu880" src="HBSmenu880"/>><rw:field id="FSmenu880" src="Smenu8" nullValue="&nbsp;"> F_Smenu8 </rw:field></td>
+    <td <rw:headers id="HFSmenu980" src="HBSmenu980"/>><rw:field id="FSmenu980" src="Smenu9" nullValue="&nbsp;"> F_Smenu9 </rw:field></td>
+    <td <rw:headers id="HFSmenu1080" src="HBSmenu1080"/>><rw:field id="FSmenu1080" src="Smenu10" nullValue="&nbsp;"> F_Smenu10 </rw:field></td>
+   </tr>
+  </rw:foreach>
+ </tbody>
+</table>
+</rw:dataArea> <!-- id="MGuserrtfeGRPFR80" -->
+<!-- End of Data Area Generated by Reports Developer -->
+
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="x_Resserr"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

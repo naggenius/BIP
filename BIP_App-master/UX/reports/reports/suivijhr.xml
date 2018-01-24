@@ -1,0 +1,1834 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="suivijhr" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes"/>
+  <xmlSettings xmlTag="SUIVIJHR" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="1024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Landscape"/>
+    <systemParameter name="THOUSANDS" display="yes"/>
+    <systemParameter name="CURRENCY" display="yes"/>
+    <systemParameter name="COPIES" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="PREVIEW" display="yes"/>
+    <dataSource name="Q_requete">
+      <select>
+      <![CDATA[SELECT  	dir.coddir,
+	dir.libdir,
+	MAX(SUBSTR(to_char(s.dpg, 'FM0000000'),1,3)) departement,
+                MAX(sti.sigdep) sigdep,
+	MAX(sti.sigpole) sigpole,
+	SUBSTR(to_char(s.dpg, 'FM0000000'),1,5) pole,
+	SUM(s.prodm2) prodm2,
+	SUM(s.prodm1) prodm1,
+	SUM(s.prod) prod,
+	SUM(s.absm1) absm1,
+	SUM(s.abs) abscence,
+	d.moismens moismens,
+	add_months(d.moismens,-1) mois1,
+	cal.cjours cjours,
+	jm1.cj1,
+	jm2.cj2
+FROM	suivijhr s,
+	struct_info sti,
+	datdebex d,
+	calendrier cal,
+	(select cjours cj1 from calendrier , datdebex
+	where calanmois = add_months(moismens,-1)) jm1,
+	(select cjours cj2 from calendrier , datdebex
+	where calanmois = add_months(moismens,-2)) jm2,
+	directions dir
+WHERE 	d.moismens = cal.calanmois 
+	and s.dpg = sti.codsg
+	and sti.coddir = dir.coddir
+	-- Condition sur les pôles et non pas sur les groupes
+	-- Si c'est un groupe, on étend au pôle  + conditions sur les périmetres
+	and  SUBSTR(TO_CHAR(sti.codsg, 'FM0000000'), 1, 5) IN 
+		(SELECT DISTINCT SUBSTR(TO_CHAR(codsg, 'FM0000000'), 1, 5) pole FROM vue_dpg_perime WHERE INSTR(:P_PERIME, codbddpg) > 0)
+	-- Condition éventuelle sur la direction
+	&P_WHERE
+GROUP BY dir.coddir,
+	dir.libdir,
+	SUBSTR(to_char(s.dpg, 'FM0000000'),1,5),
+	d.moismens,
+	add_months(d.moismens,-1) ,
+	cal.cjours,
+	jm1.cj1,
+	jm2.cj2 ;]]>
+      </select>
+      <displayInfo x="1.90500" y="0.00000" width="4.12750" height="0.74073"/>
+      <group name="G_depart">
+        <displayInfo x="2.57287" y="1.37976" width="2.79394" height="4.56654"
+        />
+        <dataItem name="coddir" oracleDatatype="number" columnOrder="52"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Coddir">
+          <dataDescriptor expression="dir.coddir"
+           descriptiveExpression="CODDIR" order="1" oracleDatatype="number"
+           width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdir" datatype="vchar2" columnOrder="53" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdir" breakOrder="none">
+          <dataDescriptor expression="dir.libdir"
+           descriptiveExpression="LIBDIR" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="departement" datatype="vchar2" columnOrder="43"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Departement">
+          <dataDescriptor
+           expression="MAX ( SUBSTR ( to_char ( s.dpg , &apos;FM0000000&apos; ) , 1 , 3 ) )"
+           descriptiveExpression="DEPARTEMENT" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sigdep" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="48" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sigdep" breakOrder="none">
+          <dataDescriptor expression="MAX ( sti.sigdep )"
+           descriptiveExpression="SIGDEP" order="4"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_totcalm" source="CF_3" function="sum" width="12"
+         precision="10" reset="G_depart" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Totcalm">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_totdepm" source="CF_m" function="sum" width="12"
+         precision="10" reset="G_depart" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Totdepm">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_vol" source="CF_6" function="sum" width="12"
+         precision="10" reset="G_depart" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Vol">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_totdepm1" source="CF_m1" function="sum" width="12"
+         precision="10" reset="G_depart" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Totdepm1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="CF_10" source="cf_10formula" datatype="number"
+         width="12" precision="10" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="16" defaultLabel="Cf 10" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+      <group name="G_pole">
+        <displayInfo x="2.06933" y="6.57169" width="3.77837" height="10.64369"
+        />
+        <dataItem name="prodm2" oracleDatatype="number" columnOrder="22"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="SUM ( s.prodm2 )"
+           descriptiveExpression="PRODM2" order="7" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prodm1" oracleDatatype="number" columnOrder="23"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="SUM ( s.prodm1 )"
+           descriptiveExpression="PRODM1" order="8" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prod" oracleDatatype="number" columnOrder="24"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="SUM ( s.prod )"
+           descriptiveExpression="PROD" order="9" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="absm1" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="SUM ( s.absm1 )"
+           descriptiveExpression="ABSM1" order="10" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="abscence" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="SUM ( s.abs )"
+           descriptiveExpression="ABSCENCE" order="11" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_m1" source="cf_m1formula" datatype="number"
+         width="12" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="48" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_1" source="cf_1formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <dataItem name="moismens" datatype="date" oracleDatatype="date"
+         columnOrder="29" width="9" defaultWidth="0" defaultHeight="0"
+         columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="d.moismens"
+           descriptiveExpression="MOISMENS" order="12" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mois1" datatype="date" oracleDatatype="date"
+         columnOrder="30" width="9" defaultWidth="0" defaultHeight="0"
+         columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="add_months ( d.moismens , - 1 )"
+           descriptiveExpression="MOIS1" order="13" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cjours" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="cal.cjours"
+           descriptiveExpression="CJOURS" order="14" oracleDatatype="number"
+           width="22" scale="1" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cj1" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="jm1.cj1" descriptiveExpression="CJ1"
+           order="15" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cj2" oracleDatatype="number" columnOrder="33"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="jm2.cj2" descriptiveExpression="CJ2"
+           order="16" oracleDatatype="number" width="22" scale="1"
+           precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_2" source="cf_2formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_3" source="cf_3formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_4" source="cf_4formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_5" source="cf_5formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_6" source="cf_6formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_7" source="cf_7formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_8" source="cf_8formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_9" source="cf_9formula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <dataItem name="sigpole" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="49" width="3"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="MAX ( sti.sigpole )"
+           descriptiveExpression="SIGPOLE" order="5"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_m" source="cf_mformula" datatype="number" width="12"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="48"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <dataItem name="pole" datatype="vchar2" columnOrder="42" width="5"
+         defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor
+           expression="SUBSTR ( to_char ( s.dpg , &apos;FM0000000&apos; ) , 1 , 5 )"
+           descriptiveExpression="POLE" order="6" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="20.99996" height="29.69989" widthInChar="172"
+   heightInChar="60">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="20.99996" height="29.69989" widthInChar="172"
+   heightInChar="60">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" widthInChar="172"
+   heightInChar="60">
+    <body width="20.99996" height="24.80004">
+      <location x="0.00000" y="2.77968"/>
+      <repeatingFrame name="R_1" source="G_depart" printDirection="down"
+       maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.00062" y="0.00186" width="20.86601"
+         height="16.46163"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_2" source="G_pole" printDirection="down"
+         maxRecordsPerPage="6" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.38974" y="1.87554" width="19.13620"
+           height="4.06208"/>
+          <generalLayout verticalElasticity="variable"/>
+          <text name="B_3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.54415" y="1.99461" width="1.87833"
+             height="0.51873"/>
+            <visualSettings fillBackgroundColor="gray28"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[  POLE : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_2" source="pole" minWidowLines="1" spacing="0"
+           alignment="center">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="2.37381" y="1.99461" width="0.88522"
+             height="0.53268"/>
+            <visualSettings fillBackgroundColor="gray28"/>
+          </field>
+          <field name="F_sigpole" source="sigpole" minWidowLines="1"
+           spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="3.48444" y="1.99461" width="1.40333"
+             height="0.53268"/>
+            <visualSettings fillBackgroundColor="gray28"/>
+          </field>
+          <frame name="cadre1">
+            <geometryInfo x="0.52865" y="2.43458" width="18.80319"
+             height="3.38646"/>
+            <visualSettings linePattern="solid"/>
+            <text name="B_30" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.67159" y="2.68604" width="2.67115"
+               height="0.45796"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[LIBELLES]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_29" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="15.22326" y="2.63953" width="2.61162"
+               height="0.48648"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[ECART]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_28" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.70755" y="3.31546" width="2.63519"
+               height="0.43656"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[JOURS OUVRES]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_27" arrow="none">
+              <geometryInfo x="0.60802" y="3.10648" width="18.70615"
+               height="0.00000"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="0.60802" y="3.10648"/>
+                <point x="19.31417" y="3.10648"/>
+              </points>
+            </line>
+            <line name="B_26" arrow="none">
+              <geometryInfo x="0.60802" y="3.77124" width="18.68847"
+               height="0.00000"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="0.60802" y="3.77124"/>
+                <point x="19.29650" y="3.77124"/>
+              </points>
+            </line>
+            <text name="B_25" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="3.43762" y="3.20508" width="2.47148"
+               height="0.66167"/>
+              <visualSettings fillBackgroundColor="r0g75b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"
+                 textColor="r0g0b50"/>
+                <string>
+                <![CDATA[calculé]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_14" source="cj1" minWidowLines="1" spacing="0"
+             alignment="center">
+              <font face="Courier New" size="8" italic="yes"
+               textColor="r0g0b50"/>
+              <geometryInfo x="4.32625" y="3.46242" width="0.65453"
+               height="0.29735"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <text name="B_24" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="11.36272" y="3.20508" width="2.38683"
+               height="0.53795"/>
+              <visualSettings fillBackgroundColor="r100g100b50"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"
+                 textColor="r0g0b50"/>
+                <string>
+                <![CDATA[réalisé]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_23" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="8.80442" y="3.19639" width="2.39272"
+               height="0.68771"/>
+              <visualSettings fillBackgroundColor="r25g75b75"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"
+                 textColor="r0g0b50"/>
+                <string>
+                <![CDATA[calculé]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_13" source="cjours" minWidowLines="1" spacing="0"
+             alignment="center">
+              <font face="Courier New" size="8" italic="yes"
+               textColor="r0g0b50"/>
+              <geometryInfo x="9.70979" y="3.46242" width="0.53454"
+               height="0.29735"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <text name="B_22" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="16.71340" y="3.20570" width="2.54775"
+               height="0.54632"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"
+                 textColor="r0g0b50"/>
+                <string>
+                <![CDATA[pourcentage]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_21" arrow="none">
+              <geometryInfo x="0.59345" y="5.14139" width="18.73839"
+               height="0.00000"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="0.59345" y="5.14139"/>
+                <point x="19.33184" y="5.14139"/>
+              </points>
+            </line>
+            <line name="B_20" arrow="none">
+              <geometryInfo x="0.52865" y="4.45740" width="18.71483"
+               height="0.00000"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="0.52865" y="4.45740"/>
+                <point x="19.24348" y="4.45740"/>
+              </points>
+            </line>
+            <text name="B_19" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.66508" y="4.00658" width="2.64263"
+               height="0.57330"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[PRODUCTIF]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_18" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.73298" y="4.65801" width="2.60976"
+               height="0.48710"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[ABSENCES]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_17" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.67934" y="5.32805" width="2.61317"
+               height="0.49299"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[GLOBAL]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_12" source="prodm1" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.06909" y="3.99914" width="2.43458"
+               height="0.38323"/>
+            </field>
+            <field name="F_11" source="prod" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.34256" y="3.99138" width="2.42838"
+               height="0.39098"/>
+            </field>
+            <field name="F_10" source="absm1" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.11839" y="4.62328" width="2.34001"
+               height="0.38540"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <field name="F_9" source="abscence" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.37016" y="4.64995" width="2.37691"
+               height="0.42044"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <text name="B_16" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="6.10784" y="3.20508" width="2.42125"
+               height="0.55563"/>
+              <visualSettings fillBackgroundColor="r100g100b50"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"
+                 textColor="r0g0b50"/>
+                <string>
+                <![CDATA[réalisé]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_15" arrow="none">
+              <geometryInfo x="3.47018" y="2.48729" width="0.00000"
+               height="3.29778"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="3.47018" y="2.48729"/>
+                <point x="3.47018" y="5.78507"/>
+              </points>
+            </line>
+            <line name="B_14" arrow="none">
+              <geometryInfo x="6.00304" y="3.14399" width="0.00000"
+               height="2.64108"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="6.00304" y="3.14399"/>
+                <point x="6.00304" y="5.78507"/>
+              </points>
+            </line>
+            <text name="B_13" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="3.55730" y="4.51042" width="2.32172"
+               height="0.45548"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[__]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_12" arrow="none">
+              <geometryInfo x="13.91791" y="2.43458" width="0.00000"
+               height="3.35142"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="13.91791" y="2.43458"/>
+                <point x="13.91791" y="5.78600"/>
+              </points>
+            </line>
+            <line name="B_11" arrow="none">
+              <geometryInfo x="11.24707" y="3.17531" width="0.00000"
+               height="2.61069"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="11.24707" y="3.17531"/>
+                <point x="11.24707" y="5.78600"/>
+              </points>
+            </line>
+            <text name="B_10" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="8.80008" y="4.55414" width="2.33567"
+               height="0.45548"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[__]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_globm1" source="CF_m1" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.11405" y="5.29487" width="2.31862"
+               height="0.45424"/>
+            </field>
+            <field name="F_globalm1" source="CF_m" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.37915" y="5.29487" width="2.33381"
+               height="0.45424"/>
+            </field>
+            <field name="F_prodm2" source="CF_1" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="3.47762" y="3.99045" width="2.42094"
+               height="0.39191"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <field name="F_prodm1" source="CF_2" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="8.74644" y="3.99914" width="2.43117"
+               height="0.38323"/>
+              <visualSettings fillBackgroundColor="r100g100b50"/>
+            </field>
+            <field name="F_moism1" source="mois1" minWidowLines="1"
+             formatMask="MONTH RRRR" spacing="0" alignment="center">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="4.26796" y="2.64976" width="3.58304"
+               height="0.47625"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <field name="F_mois1" source="moismens" minWidowLines="1"
+             formatMask="MONTH RRRR" spacing="0" alignment="center">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="9.65926" y="2.65007" width="3.23763"
+               height="0.49392"/>
+              <visualSettings fillBackgroundColor="black"/>
+            </field>
+            <field name="F_globmens1" source="CF_3" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="8.70272" y="5.30169" width="2.33691"
+               height="0.44741"/>
+              <visualSettings fillBackgroundColor="r100g100b50"/>
+            </field>
+            <text name="B_9" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="14.09960" y="3.20601" width="2.37536"
+               height="0.46726"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"
+                 textColor="r0g0b50"/>
+                <string>
+                <![CDATA[volume]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_8" arrow="none">
+              <geometryInfo x="16.53077" y="3.12632" width="0.00000"
+               height="2.65875"/>
+              <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+              <points>
+                <point x="16.53077" y="3.12632"/>
+                <point x="16.53077" y="5.78507"/>
+              </points>
+            </line>
+            <field name="F_8" source="CF_4" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.02488" y="3.97247" width="2.38094"
+               height="0.41889"/>
+            </field>
+            <field name="F_7" source="CF_5" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.07697" y="4.64995" width="2.33040"
+               height="0.42044"/>
+            </field>
+            <field name="F_6" source="CF_6" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.06891" y="5.29487" width="2.33040"
+               height="0.45424"/>
+            </field>
+            <field name="F_5" source="CF_7" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.64705" y="3.98983" width="2.05135"
+               height="0.39253"/>
+              <advancedLayout formatTrigger="f_5formattrigger"/>
+            </field>
+            <field name="F_4" source="CF_8" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.77169" y="4.64995" width="1.90593"
+               height="0.42044"/>
+              <advancedLayout formatTrigger="f_4formattrigger"/>
+            </field>
+            <field name="F_3" source="CF_9" minWidowLines="1"
+             formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.67433" y="5.29487" width="2.00360"
+               height="0.43718"/>
+            </field>
+            <text name="B_7" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="18.58429" y="3.61838" width="0.53392"
+               height="0.86258"/>
+              <advancedLayout formatTrigger="b_7formattrigger"/>
+              <visualSettings fillBackgroundColor="gray12"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[%]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_6" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="18.61933" y="4.28253" width="0.42819"
+               height="0.79902"/>
+              <advancedLayout formatTrigger="b_6formattrigger"/>
+              <visualSettings fillBackgroundColor="gray12"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[%]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_5" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="18.55515" y="4.92838" width="0.45765"
+               height="0.77763"/>
+              <advancedLayout formatTrigger="b_5formattrigger"/>
+              <visualSettings fillBackgroundColor="gray12"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[%]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_4" arrow="none">
+              <geometryInfo x="8.65715" y="2.43458" width="0.00000"
+               height="3.35049"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="8.65715" y="2.43458"/>
+                <point x="8.65715" y="5.78507"/>
+              </points>
+            </line>
+            <text name="B_47" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="17.64264" y="4.02983" width="0.54911"
+               height="0.43346"/>
+              <advancedLayout formatTrigger="b_47formattrigger"/>
+              <visualSettings fillBackgroundColor="gray12"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[ns]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_48" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="17.64140" y="4.68840" width="0.54911"
+               height="0.43346"/>
+              <advancedLayout formatTrigger="b_48formattrigger"/>
+              <visualSettings fillBackgroundColor="gray12"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[ns]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_49" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="17.64109" y="5.32743" width="0.54911"
+               height="0.43346"/>
+              <advancedLayout formatTrigger="b_49formattrigger"/>
+              <visualSettings fillBackgroundColor="gray12"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[ns]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_46" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="3.55730" y="5.25084" width="2.32172"
+               height="0.45548"/>
+              <visualSettings fillBackgroundColor="black"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[__]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </repeatingFrame>
+        <frame name="cadre">
+          <geometryInfo x="0.51036" y="6.29822" width="18.78366"
+           height="1.13047"/>
+          <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+          <text name="B_40" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.58663" y="6.36922" width="2.69224"
+             height="0.84708"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"
+              />
+              <string>
+              <![CDATA[TOTAL DEPARTEMENT  ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_20" source="CS_totdepm1" minWidowLines="1"
+           formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"/>
+            <geometryInfo x="6.06041" y="6.69323" width="2.38900"
+             height="0.57020"/>
+            <visualSettings fillBackgroundColor="gray12"
+             lineForegroundColor="r25g88b0"/>
+          </field>
+          <field name="F_19" source="CS_totcalm" minWidowLines="1"
+           formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"/>
+            <geometryInfo x="8.74458" y="6.66750" width="2.38900"
+             height="0.57020"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+          </field>
+          <field name="F_18" source="CS_totdepm" minWidowLines="1"
+           formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"/>
+            <geometryInfo x="11.28117" y="6.67618" width="2.38900"
+             height="0.57020"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+          </field>
+          <field name="F_17" source="CS_vol" minWidowLines="1"
+           formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"/>
+            <geometryInfo x="14.01744" y="6.66657" width="2.38900"
+             height="0.57020"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+          </field>
+          <field name="F_1" source="CF_10" minWidowLines="1"
+           formatMask="NNNGNN0DNN" spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"/>
+            <geometryInfo x="16.64860" y="6.66688" width="2.38900"
+             height="0.57020"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+          </field>
+          <line name="B_41" arrow="none">
+            <geometryInfo x="11.21947" y="6.30318" width="0.00000"
+             height="1.09358"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4" linePattern="solid"/>
+            <points>
+              <point x="11.21947" y="6.30318"/>
+              <point x="11.21947" y="7.39676"/>
+            </points>
+          </line>
+          <text name="B_45" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="18.58863" y="6.67587" width="0.45889"
+             height="0.60151"/>
+            <advancedLayout formatTrigger="b_45formattrigger"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes" textColor="r75g0b0"
+              />
+              <string>
+              <![CDATA[%]]>
+              </string>
+            </textSegment>
+          </text>
+          <line name="B_37" arrow="none">
+            <geometryInfo x="8.64381" y="6.30876" width="0.00000"
+             height="1.08303"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4" linePattern="solid"/>
+            <points>
+              <point x="8.64381" y="6.30876"/>
+              <point x="8.64381" y="7.39180"/>
+            </points>
+          </line>
+          <line name="B_39" arrow="none">
+            <geometryInfo x="16.52829" y="6.30876" width="0.00000"
+             height="1.11001"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4" linePattern="solid"/>
+            <points>
+              <point x="16.52829" y="6.30876"/>
+              <point x="16.52829" y="7.41877"/>
+            </points>
+          </line>
+          <line name="B_38" arrow="none">
+            <geometryInfo x="13.90024" y="6.30876" width="0.00000"
+             height="1.08303"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4" linePattern="solid"/>
+            <points>
+              <point x="13.90024" y="6.30876"/>
+              <point x="13.90024" y="7.39180"/>
+            </points>
+          </line>
+          <line name="B_36" arrow="none">
+            <geometryInfo x="5.98041" y="6.32054" width="0.00000"
+             height="1.08024"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4" linePattern="solid"/>
+            <points>
+              <point x="5.98041" y="6.32054"/>
+              <point x="5.98041" y="7.40079"/>
+            </points>
+          </line>
+          <field name="F_23" source="departement" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes" italic="yes"
+             textColor="r75g0b0"/>
+            <geometryInfo x="0.61020" y="6.99554" width="0.65608"
+             height="0.43191"/>
+          </field>
+          <field name="F_24" source="sigdep" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="8" bold="yes" italic="yes"
+             textColor="r75g0b0"/>
+            <geometryInfo x="1.40891" y="6.99554" width="1.76392"
+             height="0.42354"/>
+          </field>
+          <line name="B_35" arrow="none">
+            <geometryInfo x="3.47142" y="6.32054" width="0.00000"
+             height="1.08024"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4" linePattern="solid"/>
+            <points>
+              <point x="3.47142" y="6.32054"/>
+              <point x="3.47142" y="7.40079"/>
+            </points>
+          </line>
+          <text name="B_43" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="17.57970" y="6.70192" width="0.62601"
+             height="0.37052"/>
+            <advancedLayout formatTrigger="b_43formattrigger"/>
+            <visualSettings fillBackgroundColor="gray12"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[ns]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_50" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="3.55730" y="6.54658" width="2.32172"
+             height="0.45548"/>
+            <visualSettings fillBackgroundColor="black"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[__]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <text name="B_31" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.11658" y="0.86382" width="3.08663"
+           height="0.86630"/>
+          <visualSettings fillBackgroundColor="gray28"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes" italic="yes"
+             textColor="r75g0b0"/>
+            <string>
+            <![CDATA[
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes" italic="yes"
+             textColor="r75g0b0"/>
+            <string>
+            <![CDATA[  DEPARTEMENT :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_16" source="departement" minWidowLines="1" spacing="0"
+         alignment="center">
+          <font face="Courier New" size="8" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <geometryInfo x="2.91486" y="1.25171" width="0.89266"
+           height="0.46230"/>
+          <visualSettings fillBackgroundColor="gray28"/>
+        </field>
+        <field name="F_sigdep" source="sigdep" minWidowLines="1" spacing="0"
+         alignment="center">
+          <font face="Courier New" size="8" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <geometryInfo x="3.86457" y="1.25171" width="1.88547"
+           height="0.46230"/>
+          <visualSettings fillBackgroundColor="gray28"/>
+        </field>
+        <field name="F_dir1" source="coddir" minWidowLines="1" spacing="0"
+         alignment="center">
+          <font face="Courier New" size="9" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <geometryInfo x="10.67470" y="0.32711" width="1.32705"
+           height="0.48586"/>
+          <visualSettings fillBackgroundColor="gray12"/>
+        </field>
+        <field name="F_libdir1" source="libdir" minWidowLines="1" spacing="0"
+         alignment="center">
+          <font face="Courier New" size="9" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <geometryInfo x="12.09322" y="0.34541" width="1.45883"
+           height="0.48617"/>
+          <visualSettings fillBackgroundColor="gray12"/>
+        </field>
+        <rectangle name="B_44">
+          <geometryInfo x="7.83797" y="0.04496" width="5.49920"
+           height="0.63500"/>
+          <visualSettings fillBackgroundColor="gray12"/>
+          <points>
+            <point x="7.83797" y="0.04496"/>
+            <point x="5.49920" y="0.63500"/>
+          </points>
+        </rectangle>
+        <text name="B_1" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="8.18803" y="0.29146" width="2.38249"
+           height="0.63965"/>
+          <visualSettings fillBackgroundColor="gray12"/>
+          <textSegment>
+            <font face="Courier New" size="9" bold="yes" italic="yes"
+             textColor="r75g0b0"/>
+            <string>
+            <![CDATA[DIRECTION : 
+]]>
+            </string>
+          </textSegment>
+        </text>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <text name="B_32" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="6.88299" y="0.45455" width="9.70638" height="1.16954"
+        />
+        <visualSettings fillPattern="transparent" fillBackgroundColor="gray12"
+         linePattern="solid" lineForegroundColor="r75g0b0"/>
+        <textSegment>
+          <font face="Courier New" size="10" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <string>
+          <![CDATA[
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="10" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <string>
+          <![CDATA[SURVEILLANCE DES JOURS HOMMES TRAITES
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="10" bold="yes" italic="yes"
+           textColor="r75g0b0"/>
+          <string>
+          <![CDATA[     ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.36556" y="0.42013" width="2.77347" height="0.45889"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[TRAITEMENT DU :  ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_15" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="3.17593" y="0.42013" width="3.56102" height="0.45765"
+        />
+      </field>
+      <text name="B_33" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="16.76828" y="0.41951" width="1.11993"
+         height="0.37331"/>
+        <visualSettings fillBackgroundColor="gray12"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[page :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_21" source="PageNumber" minWidowLines="1" spacing="0"
+       alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="17.88790" y="0.41951" width="0.71996"
+         height="0.37393"/>
+        <visualSettings fillBackgroundColor="gray12"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_34" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="18.66522" y="0.41951" width="0.18666"
+         height="0.37331"/>
+        <visualSettings fillBackgroundColor="gray12"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_22" source="TotalPages" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="18.89466" y="0.41951" width="0.73949"
+         height="0.37393"/>
+        <visualSettings fillBackgroundColor="gray12"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_42" minWidowLines="1">
+        <textSettings justify="left" spacing="0"/>
+        <geometryInfo x="0.46137" y="1.09513" width="6.35899" height="0.49454"
+        />
+        <visualSettings fillBackgroundColor="gray12"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[NOM DU REPORT : SUIVIJHR ]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="4.08347" y="0.40587" width="2.06313" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Parametres etat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.99889" y="1.25233" width="4.23261" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Entrer les valeurs des parametres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_COPIES" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.95188" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Copies]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_CURRENCY" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="5.48463" width="1.21636" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Currency]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_THOUSANDS" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="6.33109" width="1.50750" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Thousands]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_COPIES" source="COPIES" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_CURRENCY" source="CURRENCY" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="5.37797" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_THOUSANDS" source="THOUSANDS" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="6.22443" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_direction" source="P_PARAM6" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.03231" y="8.36073" width="4.76250" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.57144" y="8.46677" width="2.76231" height="0.74073"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="Terminal" size="9"/>
+      <string>
+      <![CDATA[code direction]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.83760" y="7.29041" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61888" y="7.44978" width="3.06834" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="cf_m1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_m1Formula return Number is
+begin
+  IF ((:prodm1 is not null) OR (:absm1 IS NOT NULL)) then
+  	return (nvl(:prodm1,0) + nvl(:absm1,0));
+  else
+  	return '';
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_1Formula return Number is
+begin
+  return ((:prodm2 * :cj1) / :cj2);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_2formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_2Formula return Number is
+begin
+  return((:prodm1 * :cjours) / :cj1);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_3formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_3Formula return Number is
+begin
+  return ((:CF_m1 * :cjours) / :cj1);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_4formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_4Formula return Number is
+begin
+  IF ((:prod is not null) OR (:CF_2 is not null)) then
+  	return (nvl(:prod,0) - nvl(:CF_2,0));
+  ELSE
+	return '';
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_5formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_5Formula return Number is
+begin
+  IF ((:abscence is not null) OR (:absm1 is not null)) then
+  	return (nvl(:abscence,0) - nvl(:absm1,0));
+  ELSE
+	return '';
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_6formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_6Formula return Number is
+begin
+  IF ((:CF_m is not null) OR (:CF_3 is not null)) then
+  	return (nvl(:CF_m,0) - nvl(:CF_3,0));
+  ELSE
+	return '';
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_7formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_7Formula return Number is
+begin
+ IF ((:prod = 0) OR (:prod is null)) then
+	return (null);
+ else
+  return (:CF_4 / :prod *100);
+ end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_8formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_8Formula return Number is
+begin
+ IF ((:abscence = 0) OR (:abscence is null)) then 
+	return(null);
+ else
+  return (:CF_5 /:abscence *100);
+ end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_9formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_9Formula return Number is
+begin
+  IF (:CF_3 = 0 OR :CF_3 is null) then
+	return (null);
+  else
+       return (:CF_6 /:CF_3 *100);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_10formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_10Formula return Number is
+begin
+	if (:CS_totcalm = 0 OR :CS_totcalm is null) then 
+		return (null);
+	else
+  		return (:CS_vol/:CS_totcalm*100);
+	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_43formattrigger">
+      <textSource>
+      <![CDATA[function B_43FormatTrigger return boolean is
+begin
+  if (:CF_10 is null) then
+  	return (TRUE);
+  else 
+	return false;
+ end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_47formattrigger">
+      <textSource>
+      <![CDATA[function B_47FormatTrigger return boolean is
+begin
+  if (:CF_7 is null OR :CF_7 = 100) then
+  	return (TRUE);
+  else
+  	return false;
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_48formattrigger">
+      <textSource>
+      <![CDATA[function B_48FormatTrigger return boolean is
+begin
+  if (:CF_8 is null OR :CF_8 = 100) then
+  	return (TRUE);
+  else
+	return false;
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_49formattrigger">
+      <textSource>
+      <![CDATA[function B_49FormatTrigger return boolean is
+begin
+  if (:CF_9 is null) then
+  	return (TRUE);
+  else
+	return false;
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_mformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_mFormula return Number is
+begin
+  IF((:prod is not null) OR (:abscence is not null)) then
+  	return(nvl(:prod,0)+nvl(:abscence,0));
+  ELSE
+	return '';
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_7formattrigger">
+      <textSource>
+      <![CDATA[function B_7FormatTrigger return boolean is
+begin
+  IF(:CF_7 is null or :CF_7 = 100) then
+	return false;
+  else
+  	return (TRUE);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_6formattrigger">
+      <textSource>
+      <![CDATA[function B_6FormatTrigger return boolean is
+begin
+  IF (:CF_8 is null OR :CF_8 = 100) then
+	return false;
+  else
+  	return (TRUE);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_5formattrigger">
+      <textSource>
+      <![CDATA[function B_5FormatTrigger return boolean is
+begin
+  IF (:CF_9  is null) then
+	return false;
+  else
+  	return (TRUE);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_45formattrigger">
+      <textSource>
+      <![CDATA[function B_45FormatTrigger return boolean is
+begin
+  IF (:CF_10 is null) then
+	return false;
+  else
+  	return (TRUE);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_5formattrigger">
+      <textSource>
+      <![CDATA[function F_5FormatTrigger return boolean is
+begin
+  IF(:CF_7 = 100) then
+	return false;
+ ELSE
+  return (TRUE);
+END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_4formattrigger">
+      <textSource>
+      <![CDATA[function F_4FormatTrigger return boolean is
+begin
+  IF (:CF_8 = 100) then
+	return false;
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+	 :P_WHERE := '';
+	 IF :P_PARAM6 IS NOT NULL THEN
+	   :P_WHERE := 'and sti.coddir = TO_NUMBER(:P_PARAM6)';
+	 END IF;
+
+   :P_PERIME:=PACK_GLOBAL.LIRE_PERIME(:P_GLOBAL);
+   return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

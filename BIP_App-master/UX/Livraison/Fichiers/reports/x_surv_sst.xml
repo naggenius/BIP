@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_surv_sst" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_SURV_SST" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_global" datatype="character" width="5024"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param7" datatype="character" width="7"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Code DPG]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_perime" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param4" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_A" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_DP" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_P" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HABILI_CAFI" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HAB" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT RPAD( NVL( pid, ' '),  4,  ' ') 					PID,
+	SUBSTR( NVL( ptype, ' '), 1, 1)  					PTYPE,
+	RPAD( NVL( pnom, ' '), 30, ' ')					PNOM,
+	RPAD( NVL( aist, ' '), 6, ' ')					AIST,
+	LPAD( NVL( TO_CHAR(pdsg), ' '), 7, '0')				PDSG,
+	RPAD( NVL( pcmouvra, ' '), 5, ' ')				PCMOUVRA,
+	RPAD( NVL( TO_CHAR(cdeb, 'MMYYYY'), '0'), 6, '0') 		CDEB,
+	LPAD( NVL( TO_CHAR(tires), '0'), 5, '0')				TIRES,
+	SUBSTR( RPAD( NVL( rnom, ' '), 30, ' '), 1, 10)			RNOM,
+	RPAD( NVL( soccode, ' '), 4, ' ')					SOCCODE,
+	NVL( qualif, '   ')						QUALIF,
+	LPAD( NVL( TO_CHAR(rcodsg), ' '), 7, '0')				RCODSG,
+	LPAD( NVL( TO_CHAR(cusag,  'FM9999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0'), 8, ' ') CUSAG,
+	LPAD( NVL( TO_CHAR(couttc,  'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0'), 13, ' ') COUTTC ,
+	RPAD(NVL (verifsitu, ' '),3,' ')			VERIFSITU,
+	RPAD( NVL( factpid, ' '),  4,  ' ')			FACTPID,
+	RPAD( NVL( pnom_imp, ' '), 30, ' ')					PNOM_IMP,
+	RPAD(NVL(TO_CHAR(ca_dpg_ligne), ' '), 6, ' ')	CA_DPG_LIGNE,
+	RPAD(NVL(TO_CHAR(ca_dpg_ress), ' '), 6, ' ')	CA_DPG_RESS,
+	RPAD(NVL(METIER, ' '), 3, ' ')			METIER
+FROM (SELECT DISTINCT
+		p.pid,
+		p.factpty		ptype,
+		p.factpno		pnom,
+		p.aist		aist,
+		p.factpdsg	pdsg,
+		p.factpcm		pcmouvra, 
+		p.cdeb,
+		p.tires		tires, 
+		p.rnom		rnom,
+		s.soccode		soccode,
+		s.PRESTATION	qualif,
+       s.codsg		rcodsg,
+		p.cusag		cusag,
+		pack_x_ressmoi.getCoutTTC ( s.soccode, r.rtype, l.metier, s.niveau, s.codsg, si1.CAFI, s.cout, s.PRESTATION, r.ident, TO_CHAR(p.cdeb,'DDMMYYYY') , l.CODCAMO)  couttc,
+		DECODE(s.type_situ,'N','   ','ERR') verifsitu,               -- permet de différencier les réalisés par ressource sans situation
+		p.factpid  		factpid,
+		l.pnom 		pnom_imp,
+	    si2.centractiv	ca_dpg_ligne,
+		si1.centractiv	ca_dpg_ress,
+		l.METIER		METIER
+	FROM		PROPLUS	p,
+			LIGNE_BIP 	l,
+			SITU_RESS_FULL s, 
+			RESSOURCE 	r,
+			STRUCT_INFO	si1,
+			STRUCT_INFO	si2,
+            APPLICATION         ap,
+            PROJ_INFO             pi,
+			DATDEBEX 	d
+	WHERE 
+		p.cusag     > 0
+		AND p.factpid = l.pid	
+		AND TO_CHAR(p.cdeb,'YYYY')=TO_CHAR(d.DATDEBEX,'YYYY')
+		AND p.cdeb<=d.moismens
+		AND r.ident=s.ident
+		AND s.ident = p.tires
+		AND (s.datdep >= p.cdeb OR s.datdep IS NULL)
+		AND (    ( (s.datsitu <= p.cdeb OR s.datsitu IS NULL )  AND  s.type_situ <> 'N' )
+			  OR (s.datsitu <= p.cdeb AND  s.type_situ =  'N' ) )
+  	                AND l.icpi = pi.icpi
+  	                AND l.airt = ap.airt
+		AND s.codsg = si1.codsg
+		AND l.codsg = si2.codsg
+		AND NOT EXISTS  (SELECT 1
+				   		   	   		FROM RUBRIQUE_METIER rm
+    								WHERE (rm.CODEP, rm.CODFEI) IN (SELECT r.CODEP, r.CODFEI 
+	  		  		  	 		 			   				                   				   	   			  FROM RUBRIQUE r
+															                     							  WHERE r.CAFI=si1.centractiv
+																		    								   )	
+									AND  RPAD(rm.METIER,3,' ')=l.METIER																		   
+									)	
+) 
+ORDER BY
+		7  	ASC,
+		1	ASC,
+		2 	ASC,
+		3  	ASC,
+		4	ASC,
+		8  	ASC
+;]]>
+      </select>
+      <displayInfo x="1.05212" y="0.43750" width="0.69995" height="0.19995"/>
+      <group name="G_PID">
+        <displayInfo x="0.69714" y="1.09570" width="1.41797" height="4.36133"
+        />
+        <dataItem name="PID" datatype="vchar2" columnOrder="11" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Pid">
+          <xmlSettings xmlTag="&quot;ligne_origine&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( pid , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="PID" order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PTYPE" datatype="vchar2" columnOrder="12" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="type">
+          <xmlSettings xmlTag="&quot;type&quot;"/>
+          <dataDescriptor
+           expression="SUBSTR ( NVL ( ptype , &apos; &apos; ) , 1 , 1 )"
+           descriptiveExpression="PTYPE" order="2" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PNOM" datatype="vchar2" columnOrder="13" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="libellé">
+          <xmlSettings xmlTag="&quot;libellé&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( pnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="PNOM" order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AIST" datatype="vchar2" columnOrder="18" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Aist">
+          <xmlSettings xmlTag="&quot;Type sous-tache&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( aist , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="AIST" order="4" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PDSG" datatype="vchar2" columnOrder="14" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Pdsg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Dpg ligne_origine&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( pdsg ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="PDSG" order="5" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PCMOUVRA" datatype="vchar2" columnOrder="15" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Pcmouvra" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CodMo&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( pcmouvra , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="PCMOUVRA" order="6" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDEB" datatype="vchar2" columnOrder="16" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cdeb">
+          <xmlSettings xmlTag="&quot;date&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( cdeb , &apos;MMYYYY&apos; ) , &apos;0&apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CDEB" order="7" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TIRES" datatype="vchar2" columnOrder="17" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Tires">
+          <xmlSettings xmlTag="id_ress"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( tires ) , &apos;0&apos; ) , 5 , &apos;0&apos; )"
+           descriptiveExpression="TIRES" order="8" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RNOM" datatype="vchar2" columnOrder="19"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Rnom" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Nom_ress&quot;"/>
+          <dataDescriptor
+           expression="SUBSTR ( RPAD ( NVL ( rnom , &apos; &apos; ) , 30 , &apos; &apos; ) , 1 , 10 )"
+           descriptiveExpression="RNOM" order="9" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCCODE" datatype="vchar2" columnOrder="20" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Soccode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Société&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( soccode , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCODE" order="10" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="QUALIF" datatype="vchar2" columnOrder="23" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Qualif" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Qualif&quot;"/>
+          <dataDescriptor expression="NVL ( qualif , &apos;   &apos; )"
+           descriptiveExpression="QUALIF" order="11" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RCODSG" datatype="vchar2" columnOrder="24" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Rcodsg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DPG_ress&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( rcodsg ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="RCODSG" order="12" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CUSAG" datatype="vchar2" columnOrder="22" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Cusag" breakOrder="none">
+          <xmlSettings xmlTag="&quot;nb_jh&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( cusag , &apos;FM9999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0&apos; ) , 8 , &apos; &apos; )"
+           descriptiveExpression="CUSAG" order="13" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUTTC" datatype="vchar2" columnOrder="21" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Couttc" breakOrder="none">
+          <xmlSettings xmlTag="&quot;cout_ttc&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( couttc , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTTC" order="14" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VERIFSITU" datatype="vchar2" columnOrder="25"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Verifsitu" breakOrder="none">
+          <xmlSettings xmlTag="&quot;VerifSitu&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( verifsitu , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="VERIFSITU" order="15" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FACTPID" datatype="vchar2" columnOrder="26" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Factpid" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ligne_imputation&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( factpid , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="FACTPID" order="16" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PNOM_IMP" datatype="vchar2" columnOrder="45"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Pnom Imp">
+          <xmlSettings xmlTag="&quot;Libellé ligne imp&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( pnom_imp , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="PNOM_IMP" order="17" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_DPG_LIGNE" datatype="vchar2" columnOrder="35"
+         width="6" defaultWidth="10000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Ca Dpg Ligne" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CA_DPG_LIGNE&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( ca_dpg_ligne ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CA_DPG_LIGNE" order="18" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_DPG_RESS" datatype="vchar2" columnOrder="36"
+         width="6" defaultWidth="10000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Ca Dpg Ress" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CA_DPG_RESS&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( ca_dpg_ress ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CA_DPG_RESS" order="19" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="37" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Métier&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( METIER , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="METIER" order="20" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_PID_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.31250" height="0.31250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_PID" source="G_PID" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="7.31250"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_PID" source="PID" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.12500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PTYPE" source="PTYPE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.25000" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PNOM" source="PNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.56250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AIST" source="AIST" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.00000" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PDSG" source="PDSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.31250" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PCMOUVRA" source="PCMOUVRA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.62500" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CDEB" source="CDEB" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.06250" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TIRES" source="TIRES" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.37500" y="0.18750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_RNOM" source="RNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.68750" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SOCCODE" source="SOCCODE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.12500" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_QUALIF" source="QUALIF" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.50000" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_RCODSG" source="RCODSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.87500" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CUSAG" source="CUSAG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.25000" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_COUTTC" source="COUTTC" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.62500" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_VERIFSITU" source="VERIFSITU" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.06250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_FACTPID" source="FACTPID" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.50000" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PNOM_IMP" source="PNOM_IMP" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.87500" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CA_DPG_LIGNE" source="CA_DPG_LIGNE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.31250" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CA_DPG_RESS" source="CA_DPG_RESS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.68750" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.06250" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_PID_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.31250"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_PID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.12500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PTYPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.25000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[type]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[libellé]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AIST" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Aist]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PDSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pdsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PCMOUVRA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.62500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pcmouvra]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CDEB" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cdeb]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TIRES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.37500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Tires]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SOCCODE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.12500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Soccode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_QUALIF" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Qualif]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RCODSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rcodsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CUSAG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.25000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cusag]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUTTC" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.62500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Couttc]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_VERIFSITU" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.06250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Verifsitu]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_FACTPID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.50000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Factpid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PNOM_IMP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pnom Imp]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CA_DPG_LIGNE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.31250" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ca Dpg
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ligne]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CA_DPG_RESS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.68750" y="0.00000" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ca Dpg
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.06250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

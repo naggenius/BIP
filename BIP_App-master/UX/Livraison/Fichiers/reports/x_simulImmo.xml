@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_simulImmo" DTDVersion="9.0.2.0.10"
+	afterParameterFormTrigger="afterpform">
+	<xmlSettings xmlTag="X_SIMULIMMO" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+	</xmlSettings>
+	<reportHtmlEscapes>
+		<beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+		</beforePageHtmlEscape>
+	</reportHtmlEscapes>
+	<data>
+		<userParameter name="P_WHERE" datatype="character"
+			width="5000" precision="10" label="P Where" defaultWidth="0"
+			defaultHeight="0" display="no" />
+		<userParameter name="P_HABILI_DP" datatype="character"
+			width="5000" precision="10" label="P Habili Dp" defaultWidth="0"
+			defaultHeight="0" display="no" />
+		<userParameter name="P_HABILI_P" datatype="character"
+			width="5000" precision="10" label="P Habili P" defaultWidth="0"
+			defaultHeight="0" display="no" />
+		<userParameter name="P_PARAM6" datatype="character"
+			width="5000" precision="10" label="P Param6" defaultWidth="0"
+			defaultHeight="0" />
+		<userParameter name="P_PARAM7" datatype="character"
+			width="5000" precision="10" label="P Param7" defaultWidth="0"
+			defaultHeight="0" />
+		<userParameter name="P_PARAM8" datatype="character"
+			width="5000" precision="10" label="P Param8" defaultWidth="0"
+			defaultHeight="0" />
+		<userParameter name="P_GLOBAL" datatype="character"
+			width="5000" precision="10" label="P Global" defaultWidth="0"
+			defaultHeight="0" />
+		<userParameter name="P_PARAM9" datatype="character"
+			width="5000" precision="10" label="P Param9" defaultWidth="0"
+			defaultHeight="0" />
+		<userParameter name="P_PARAM10" datatype="character"
+			width="5000" precision="10" label="P Param10" defaultWidth="0"
+			defaultHeight="0" />
+		<userParameter name="P_PARAM0" datatype="character"
+			width="40" defaultWidth="0" defaultHeight="0" />
+		<userParameter name="P_PERIME" datatype="character"
+			width="5000" defaultWidth="0" defaultHeight="0" />
+		<userParameter name="P_PERIM_CAFI" datatype="character"
+			width="5000" defaultWidth="0" defaultHeight="0" />
+		<userParameter name="p_from" datatype="character" width="5000"
+			defaultWidth="0" defaultHeight="0" />
+		<systemParameter name="MODE" initialValue="Default" />
+		<systemParameter name="ORIENTATION" initialValue="Default" />
+		<dataSource name="Q_1">
+			<select>
+      <![CDATA[SELECT 
+decode(:p_param6,'.TXT',rpad(s.pid,4,' '),s.pid)  as Ligne_Imputee, 
+decode(:p_param6,'.TXT',rpad(s.metier,3,' '),s.metier) metier, 
+decode(:p_param6,'.TXT',lpad(s.codsg,7,0), s.codsg) dpg_ligne_code,
+decode(:p_param6,'.TXT',rpad(si.libdsg,30,' '),si.libdsg) dpg_ligne_libelle, 
+decode(:p_param6,'.TXT',lpad(s.dpcode,5,0),s.dpcode) dp_code, 
+decode(:p_param6,'.TXT',rpad(dp.dplib,50,' '),dp.dplib) dp_libelle, 
+decode(:p_param6,'.TXT',lpad(nvl(dp.typdp,' '),2,' '),dp.typdp) dp_categorie, 
+decode(:p_param6,'.TXT',lpad(nvl(to_char(dp.datimmo,'DD/MM/YYYY'),' '),10,' '),dp.datimmo) dp_date_immo, 
+decode(:p_param6,'.TXT',lpad(nvl(dpc.dp_copi,' '),6,0),dpc.dp_copi) dpcopi_code,
+decode(:p_param6,'.TXT',rpad(nvl(axe.libelle,' '),50,' '),axe.libelle) axe_strategique , 
+decode(:p_param6,'.TXT',rpad(nvl(fin.libelle,' '),50,' '),fin.libelle) type_financement,
+decode(:p_param6,'.TXT',rpad(pi.icpi,5,' '),pi.icpi) proj_code, 
+decode(:p_param6,'.TXT',rpad(pi.ilibel,50,' '),pi.ilibel) proj_libelle, 
+decode(:p_param6,'.TXT',lpad(s.codcamo,6,0),s.codcamo) ca_payeur_code, 
+decode(:p_param6,'.TXT',rpad(ca.clibrca,16,' '),ca.clibrca) ca_payeur_libelle, 
+decode(:p_param6,'.TXT',lpad(s.codsgress,7,0),s.codsgress)  dpg_ress_code, 
+decode(:p_param6,'.TXT',rpad(si_ress.libdsg,30,' '),si_ress.libdsg) dpg_ress_libelle, 
+decode(:p_param6,'.TXT',lpad(si_ress.cafi,6,0), si_ress.cafi) cafi,
+-- FAD PPM 65049 : Non réstitution des données RESSOURCES
+--decode(:p_param6,'.TXT',lpad(s.ident,6,0),s.ident) ress_code, 
+DECODE(
+	:P_PARAM0,
+	'fournisseur',
+	DECODE(
+		pack_habilitation.isDpgMe(s.codsgress,:P_PERIME),
+		'O',
+		decode(
+			:p_param6,
+			'.TXT',
+			rpad(s.ident,6,' '),
+			s.ident
+		),
+		DECODE(
+			pack_habilitation.isPerimCafi(si_ress.cafi,:P_PERIM_CAFI),
+			'N',
+			'',
+			decode(
+				:p_param6,
+				'.TXT',
+				rpad(s.ident,6,' '),
+				s.ident
+			)
+		)
+	),
+	''
+) ress_code,
+DECODE(
+	:P_PARAM0,
+	'fournisseur',
+	DECODE(
+		pack_habilitation.isDpgMe(s.codsgress,:P_PERIME),
+		'O',
+		decode(
+			:p_param6,
+			'.TXT',
+			rpad(r.rnom,30,' '),
+			r.rnom
+		),
+		DECODE(
+			pack_habilitation.isPerimCafi(si_ress.cafi,:P_PERIM_CAFI),
+			'N',
+			'',
+			decode(
+				:p_param6,
+				'.TXT',
+				rpad(r.rnom,30,' '),
+				r.rnom
+			)
+		)
+	),
+	''
+) ress_nom,
+--s.rtype ress_type, 
+DECODE(
+	:P_PARAM0,
+	'fournisseur',
+	DECODE(
+		pack_habilitation.isDpgMe(s.codsgress,:P_PERIME),
+		'O',
+		s.rtype,
+		DECODE(
+			pack_habilitation.isPerimCafi(si_ress.cafi,:P_PERIM_CAFI),
+			'N',
+			'',
+			s.rtype
+		)
+	),
+	''
+) ress_type,
+decode(:p_param6,'TXT',rpad(s.prestation,3,' '),s.prestation) ress_qualif, 
+DECODE(
+	:P_PARAM0,
+	'fournisseur',
+	DECODE(
+		pack_habilitation.isDpgMe(s.codsgress,:P_PERIME),
+		'O',
+		nvl(s.niveau,' '),
+		DECODE(
+			pack_habilitation.isPerimCafi(si_ress.cafi,:P_PERIM_CAFI),
+			'N',
+			'',
+			nvl(s.niveau,' ')
+		)
+	),
+	''
+) ress_niveau,
+--decode(:p_param6,'.TXT',rpad(s.soccode,4,' '),s.soccode) ress_sts_code, 
+DECODE(
+	:P_PARAM0,
+	'fournisseur',
+	DECODE(
+		pack_habilitation.isDpgMe(s.codsgress,:P_PERIME),
+		'O',
+		decode(
+			:p_param6,
+			'.TXT',
+			rpad(s.soccode,4,' '),
+			s.soccode
+		),
+		DECODE(
+			pack_habilitation.isPerimCafi(si_ress.cafi,:P_PERIM_CAFI),
+			'N',
+			'',
+			decode(
+				:p_param6,
+				'.TXT',
+				rpad(s.soccode,4,' '),
+				s.soccode
+			)
+		)
+	),
+	''
+) ress_sts_code,
+decode(s.soccode,'SG..',decode(:p_param6,'.TXT',lpad(0,12,' '),0),decode(:p_param6,'.TXT',lpad(s.coutftht,12,' '),s.coutftht)) ress_cout_HT, 
+decode(:p_param6,'.TXT',lpad(s.coutfthtr,12,' '),s.coutfthtr)ress_cout_htr, 
+decode(:p_param6,'.TXT',lpad(nvl(s.coutenv,0),12,' '),nvl(s.coutenv,0) )ress_cout_env, 
+to_char(s.cdeb,'YYYYMM') mois, 
+decode(:p_param6,'.TXT',rpad(s.typetap,2,' '),s.typetap) etape_type_code, 
+decode(:p_param6,'.TXT',lpad(s.consojh,12,' '),s.consojh) conso_mois_immo_jh, 
+decode(:p_param6,'.TXT',lpad(s.consoft,12,' '),s.consoft )conso_mois_immo_eur_ft, 
+decode(:p_param6,'.TXT',lpad(nvl(s.consoenv,0),12,' '),nvl(s.consoenv,0) )conso_mois_immo_eur_env
+  FROM stock_ra s,
+&p_from
+       ligne_bip l,
+       dossier_projet_copi dpc,
+       proj_info pi,
+       struct_info si,
+       struct_info si_ress,
+       dossier_projet dp,
+       centre_activite ca,
+       ressource r,
+       type_etape te,
+       copi_axe_strategique axe,
+       copi_type_financement fin
+ WHERE s.pid = l.pid
+   AND l.icpi = pi.icpi
+   AND pi.dp_copi = dpc.dp_copi (+)
+   AND l.dpcode = dp.dpcode
+   AND l.arctype = 'T1' 
+   AND l.typproj = '1'
+   AND si.codsg = s.codsg
+   AND s.codcamo = ca.codcamo
+   AND si_ress.codsg = s.codsgress
+   AND s.typetap = te.typetap
+   AND te.top_immo = 'O'
+   AND r.ident = s.ident
+   AND dpc.axe_strategique = axe.numero (+)
+   AND dpc.type_financement = fin.numero (+)
+
+
+&p_where]]>
+			</select>
+			<displayInfo x="1.96875" y="1.12500" width="0.69995"
+				height="0.19995" />
+			<group name="G_LigneImputee">
+				<displayInfo x="1.55615" y="1.53333" width="3.29810"
+					height="5.72852" />
+				<dataItem name="Ligne_Imputee" datatype="vchar2"
+					columnOrder="11" width="4" defaultWidth="40000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Ligneimputee">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( s.pid , 4 , &apos; &apos; ) , s.pid )"
+						descriptiveExpression="LIGNE_IMPUTEE" order="1" width="4" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="metier" datatype="vchar2" columnOrder="12"
+					width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Metier">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( s.metier , 3 , &apos; &apos; ) , s.metier )"
+						descriptiveExpression="METIER" order="2" width="3" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dpg_ligne_code" datatype="vchar2"
+					columnOrder="13" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Codsg">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.codsg , 7 , 0 ) , s.codsg )"
+						descriptiveExpression="DPG_LIGNE_CODE" order="3" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dpg_ligne_libelle" datatype="vchar2"
+					columnOrder="14" width="30" defaultWidth="100000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Libdsg">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( si.libdsg , 30 , &apos; &apos; ) , si.libdsg )"
+						descriptiveExpression="DPG_LIGNE_LIBELLE" order="4" width="30" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dp_code" datatype="vchar2" columnOrder="15"
+					width="40" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Dpcode">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.dpcode , 5 , 0 ) , s.dpcode )"
+						descriptiveExpression="DP_CODE" order="5" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dp_libelle" datatype="vchar2" columnOrder="16"
+					width="50" defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Dplib">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( dp.dplib , 50 , &apos; &apos; ) , dp.dplib )"
+						descriptiveExpression="DP_LIBELLE" order="6" width="50" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dp_categorie" datatype="vchar2"
+					columnOrder="17" width="2" defaultWidth="20000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Typdp">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( nvl ( dp.typdp , &apos; &apos; ) , 2 , &apos; &apos; ) , dp.typdp )"
+						descriptiveExpression="DP_CATEGORIE" order="7" width="2" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dp_date_immo" datatype="vchar2"
+					columnOrder="18" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Datimmo">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( nvl ( to_char ( dp.datimmo , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; ) , dp.datimmo )"
+						descriptiveExpression="DP_DATE_IMMO" order="8" width="10" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dpcopi_code" datatype="vchar2" columnOrder="19"
+					width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Dp Copi">
+					<xmlSettings xmlTag="DP_COPI_CODE" />
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( nvl ( dpc.dp_copi , &apos; &apos; ) , 6 , 0 ) , dpc.dp_copi )"
+						descriptiveExpression="DPCOPI_CODE" order="9" width="6" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="enveloppe_budgetaire" datatype="vchar2"
+					columnOrder="20" width="50" defaultWidth="100000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Libelle">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( nvl ( axe.libelle , &apos; &apos; ) , 50 , &apos; &apos; ) , axe.libelle )"
+						descriptiveExpression="AXE_STRATEGIQUE" order="10" width="50" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="type_financement" datatype="vchar2"
+					columnOrder="21" width="50" defaultWidth="100000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Libelle1">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( nvl ( fin.libelle , &apos; &apos; ) , 50 , &apos; &apos; ) , fin.libelle )"
+						descriptiveExpression="TYPE_FINANCEMENT" order="11" width="50" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="proj_code" datatype="vchar2" columnOrder="22"
+					width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Icpi">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( pi.icpi , 5 , &apos; &apos; ) , pi.icpi )"
+						descriptiveExpression="PROJ_CODE" order="12" width="5" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="proj_libelle" datatype="vchar2"
+					columnOrder="23" width="50" defaultWidth="100000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Ilibel">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( pi.ilibel , 50 , &apos; &apos; ) , pi.ilibel )"
+						descriptiveExpression="PROJ_LIBELLE" order="13" width="50" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ca_payeur_code" datatype="vchar2"
+					columnOrder="24" width="40" defaultWidth="80000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Codcamo">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.codcamo , 6 , 0 ) , s.codcamo )"
+						descriptiveExpression="CA_PAYEUR_CODE" order="14" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ca_payeur_libelle" datatype="vchar2"
+					columnOrder="25" width="16" defaultWidth="100000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Clibrca">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( ca.clibrca , 16 , &apos; &apos; ) , ca.clibrca )"
+						descriptiveExpression="CA_PAYEUR_LIBELLE" order="15" width="16" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dpg_ress_code" datatype="vchar2"
+					columnOrder="26" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Codsgress">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.codsgress , 7 , 0 ) , s.codsgress )"
+						descriptiveExpression="DPG_RESS_CODE" order="16" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="dpg_ress_libelle" datatype="vchar2"
+					columnOrder="27" width="30" defaultWidth="100000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Libdsg1">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( si_ress.libdsg , 30 , &apos; &apos; ) , si_ress.libdsg )"
+						descriptiveExpression="DPG_RESS_LIBELLE" order="17" width="30" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="cafi" datatype="vchar2" columnOrder="28"
+					width="40" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Cafi">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( si_ress.cafi , 6 , 0 ) , si_ress.cafi )"
+						descriptiveExpression="CAFI" order="18" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_code" datatype="vchar2" columnOrder="29"
+					width="40" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Ident">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.ident , 6 , 0 ) , s.ident )"
+						descriptiveExpression="RESS_CODE" order="19" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_nom" datatype="vchar2" columnOrder="30"
+					width="30" defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Rnom">
+					<dataDescriptor
+						expression="DECODE ( : P_PARAM0 , &apos;fournisseur&apos; , DECODE ( pack_habilitation.isDpgMe ( s.codsgress , : P_PERIME ) , &apos;O&apos; , decode ( : p_param6 , &apos;.TXT&apos; , rpad ( r.rnom , 30 , &apos; &apos; ) , r.rnom ) , DECODE ( pack_habilitation.isPerimCafi ( si_ress.cafi , : P_PERIM_CAFI ) , &apos;N&apos; , &apos;&apos; , decode ( : p_param6 , &apos;.TXT&apos; , rpad ( r.rnom , 30 , &apos; &apos; ) , r.rnom ) ) ) , &apos;&apos; )"
+						descriptiveExpression="RESS_NOM" order="20" width="30" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_type" datatype="character"
+					oracleDatatype="aFixedChar" columnOrder="31" width="1"
+					defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Rtype">
+					<dataDescriptor expression="s.rtype"
+						descriptiveExpression="RESS_TYPE" order="21" oracleDatatype="aFixedChar"
+						width="1" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_qualif" datatype="vchar2" columnOrder="32"
+					width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Prestation">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;TXT&apos; , rpad ( s.prestation , 3 , &apos; &apos; ) , s.prestation )"
+						descriptiveExpression="RESS_QUALIF" order="22" width="3" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_niveau" datatype="vchar2" columnOrder="33"
+					width="2" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Niveau">
+					<dataDescriptor
+						expression="DECODE ( : P_PARAM0 , &apos;fournisseur&apos; , DECODE ( pack_habilitation.isDpgMe ( s.codsgress , : P_PERIME ) , &apos;O&apos; , nvl ( s.niveau , &apos; &apos; ) , DECODE ( pack_habilitation.isPerimCafi ( si_ress.cafi , : P_PERIM_CAFI ) , &apos;N&apos; , &apos;&apos; , nvl ( s.niveau , &apos; &apos; ) ) ) , &apos;&apos; )"
+						descriptiveExpression="RESS_NIVEAU" order="23" width="2" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_sts_code" datatype="vchar2"
+					columnOrder="34" width="4" defaultWidth="40000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Soccode">
+					<xmlSettings xmlTag="RESS_STE_CODE" />
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( s.soccode , 4 , &apos; &apos; ) , s.soccode )"
+						descriptiveExpression="RESS_STS_CODE" order="24" width="4" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_cout_HT" datatype="vchar2"
+					columnOrder="35" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Coutftht">
+					<dataDescriptor
+						expression="decode ( s.soccode , &apos;SG..&apos; , decode ( : p_param6 , &apos;.TXT&apos; , lpad ( 0 , 12 , &apos; &apos; ) , 0 ) , decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.coutftht , 12 , &apos; &apos; ) , s.coutftht ) )"
+						descriptiveExpression="RESS_COUT_HT" order="25" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_cout_htr" datatype="vchar2"
+					columnOrder="36" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Coutfthtr">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.coutfthtr , 12 , &apos; &apos; ) , s.coutfthtr )"
+						descriptiveExpression="RESS_COUT_HTR" order="26" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="ress_cout_env" datatype="vchar2"
+					columnOrder="37" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Coutenv">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( nvl ( s.coutenv , 0 ) , 12 , &apos; &apos; ) , nvl ( s.coutenv , 0 ) )"
+						descriptiveExpression="RESS_COUT_ENV" order="27" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="mois" datatype="vchar2" columnOrder="42"
+					width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+					defaultLabel="Mois">
+					<dataDescriptor expression="to_char ( s.cdeb , &apos;YYYYMM&apos; )"
+						descriptiveExpression="MOIS" order="28" width="6" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="etape_type_code" datatype="vchar2"
+					columnOrder="38" width="2" defaultWidth="20000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Typetap">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , rpad ( s.typetap , 2 , &apos; &apos; ) , s.typetap )"
+						descriptiveExpression="ETAPE_TYPE_CODE" order="29" width="2" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="conso_mois_immo_jh" datatype="vchar2"
+					columnOrder="39" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Consojh">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.consojh , 12 , &apos; &apos; ) , s.consojh )"
+						descriptiveExpression="CONSO_MOIS_IMMO_JH" order="30" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="conso_mois_immo_eur_ft" datatype="vchar2"
+					columnOrder="40" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Consoft">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( s.consoft , 12 , &apos; &apos; ) , s.consoft )"
+						descriptiveExpression="CONSO_MOIS_IMMO_EUR_FT" order="31" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+				<dataItem name="conso_mois_immo_eur_env" datatype="vchar2"
+					columnOrder="41" width="40" defaultWidth="90000" defaultHeight="10000"
+					columnFlags="1" defaultLabel="Consoenv">
+					<dataDescriptor
+						expression="decode ( : p_param6 , &apos;.TXT&apos; , lpad ( nvl ( s.consoenv , 0 ) , 12 , &apos; &apos; ) , nvl ( s.consoenv , 0 ) )"
+						descriptiveExpression="CONSO_MOIS_IMMO_EUR_ENV" order="32" width="40" />
+					<dataItemPrivate adtName="" schemaName="" />
+				</dataItem>
+			</group>
+		</dataSource>
+	</data>
+	<layout>
+		<section name="main">
+			<body>
+				<frame name="M_G_LigneImputee_GRPFR">
+					<geometryInfo x="0.00000" y="0.00000" width="6.31250"
+						height="0.37500" />
+					<generalLayout verticalElasticity="variable" />
+					<repeatingFrame name="R_G_LigneImputee" source="G_LigneImputee"
+						printDirection="down" minWidowRecords="1" columnMode="no">
+						<geometryInfo x="0.00000" y="0.18750" width="6.31250"
+							height="0.18750" />
+						<generalLayout verticalElasticity="expand" />
+						<field name="F_Ligne_Imputee" source="Ligne_Imputee"
+							minWidowLines="1" spacing="0" alignment="start">
+							<font face="Courier New" size="10" />
+							<geometryInfo x="0.00000" y="0.18750" width="1.06250"
+								height="0.18750" />
+							<generalLayout verticalElasticity="expand" />
+						</field>
+						<field name="F_mois" source="mois" minWidowLines="1"
+							spacing="0" alignment="start">
+							<font face="Courier New" size="10" />
+							<geometryInfo x="1.06250" y="0.18750" width="0.56250"
+								height="0.18750" />
+							<generalLayout verticalElasticity="expand" />
+						</field>
+						<field name="F_dp_code" source="dp_code" minWidowLines="1"
+							spacing="0" alignment="start">
+							<font face="Courier New" size="10" />
+							<geometryInfo x="1.62500" y="0.18750" width="0.62500"
+								height="0.18750" />
+							<generalLayout verticalElasticity="expand" />
+						</field>
+						<field name="F_proj_code" source="proj_code" minWidowLines="1"
+							spacing="0" alignment="start">
+							<font face="Courier New" size="10" />
+							<geometryInfo x="2.25000" y="0.18750" width="0.43750"
+								height="0.18750" />
+							<generalLayout verticalElasticity="expand" />
+						</field>
+						<field name="F_axe_strategique" source="enveloppe_budgetaire"
+							minWidowLines="1" spacing="0" alignment="start">
+							<font face="Courier New" size="10" />
+							<geometryInfo x="2.68750" y="0.18750" width="1.87500"
+								height="0.18750" />
+							<generalLayout verticalElasticity="expand" />
+						</field>
+						<field name="F_type_financement" source="type_financement"
+							minWidowLines="1" spacing="0" alignment="start">
+							<font face="Courier New" size="10" />
+							<geometryInfo x="4.93750" y="0.18750" width="1.37500"
+								height="0.18750" />
+							<generalLayout verticalElasticity="expand" />
+						</field>
+					</repeatingFrame>
+					<frame name="M_G_LigneImputee_HDR">
+						<geometryInfo x="0.00000" y="0.00000" width="6.31250"
+							height="0.18750" />
+						<advancedLayout printObjectOnPage="allPage"
+							basePrintingOn="anchoringObject" />
+						<text name="B_Ligne_Imputee" minWidowLines="1">
+							<textSettings spacing="0" />
+							<geometryInfo x="0.00000" y="0.00000" width="1.06250"
+								height="0.18750" />
+							<textSegment>
+								<font face="Courier New" size="10" />
+								<string>
+              <![CDATA[Ligneimputee]]>
+								</string>
+							</textSegment>
+						</text>
+						<text name="B_mois" minWidowLines="1">
+							<textSettings spacing="0" />
+							<geometryInfo x="1.06250" y="0.00000" width="0.56250"
+								height="0.18750" />
+							<textSegment>
+								<font face="Courier New" size="10" />
+								<string>
+              <![CDATA[Mois]]>
+								</string>
+							</textSegment>
+						</text>
+						<text name="B_dp_code" minWidowLines="1">
+							<textSettings spacing="0" />
+							<geometryInfo x="1.62500" y="0.00000" width="0.62500"
+								height="0.18750" />
+							<textSegment>
+								<font face="Courier New" size="10" />
+								<string>
+              <![CDATA[Dpcode]]>
+								</string>
+							</textSegment>
+						</text>
+						<text name="B_proj_code" minWidowLines="1">
+							<textSettings spacing="0" />
+							<geometryInfo x="2.25000" y="0.00000" width="0.43750"
+								height="0.18750" />
+							<textSegment>
+								<font face="Courier New" size="10" />
+								<string>
+              <![CDATA[Icpi]]>
+								</string>
+							</textSegment>
+						</text>
+						<text name="B_axe_strategique" minWidowLines="1">
+							<textSettings spacing="0" />
+							<geometryInfo x="2.68750" y="0.00000" width="1.87500"
+								height="0.18750" />
+							<textSegment>
+								<font face="Courier New" size="10" />
+								<string>
+              <![CDATA[Libelle]]>
+								</string>
+							</textSegment>
+						</text>
+						<text name="B_type_financement" minWidowLines="1">
+							<textSettings spacing="0" />
+							<geometryInfo x="4.93750" y="0.00000" width="1.37500"
+								height="0.18750" />
+							<textSegment>
+								<font face="Courier New" size="10" />
+								<string>
+              <![CDATA[Libelle1]]>
+								</string>
+							</textSegment>
+						</text>
+					</frame>
+				</frame>
+			</body>
+		</section>
+	</layout>
+	<parameterForm>
+		<text name="PB_1" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="1.18579" y="0.15979" width="1.65601"
+				height="0.22205" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="12" bold="yes" />
+				<string>
+      <![CDATA[Paramètres rapport]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_2" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.77441" y="0.49304" width="2.47888"
+				height="0.18042" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="10" bold="yes" />
+				<string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.24316" y="0.82629" width="0.60388"
+				height="0.14929" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="8" bold="yes" />
+				<string>
+      <![CDATA[P Param6]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.24316" y="1.15955" width="0.60388"
+				height="0.14929" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="8" bold="yes" />
+				<string>
+      <![CDATA[P Param7]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_P_PARAM8" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.24316" y="1.49280" width="0.60388"
+				height="0.14929" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="8" bold="yes" />
+				<string>
+      <![CDATA[P Param8]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_P_GLOBAL" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.24316" y="1.82605" width="0.54138"
+				height="0.14929" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="8" bold="yes" />
+				<string>
+      <![CDATA[P Global]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_P_PARAM9" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.24316" y="2.15930" width="0.60388"
+				height="0.14929" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="8" bold="yes" />
+				<string>
+      <![CDATA[P Param9]]>
+				</string>
+			</textSegment>
+		</text>
+		<text name="PB_P_PARAM10" pageNumber="1" minWidowLines="1">
+			<textSettings spacing="single" />
+			<geometryInfo x="0.24316" y="2.49255" width="0.67676"
+				height="0.14929" />
+			<visualSettings lineWidth="1" />
+			<textSegment>
+				<font face="MS Sans Serif" size="8" bold="yes" />
+				<string>
+      <![CDATA[P Param10]]>
+				</string>
+			</textSegment>
+		</text>
+		<field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1"
+			minWidowLines="1" spacing="0">
+			<font size="0" />
+			<geometryInfo x="1.50000" y="0.78430" width="2.00000"
+				height="0.26428" />
+			<visualSettings lineWidth="1" linePattern="solid" />
+		</field>
+		<field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1"
+			minWidowLines="1" spacing="0">
+			<font size="0" />
+			<geometryInfo x="1.50000" y="1.11755" width="2.00000"
+				height="0.26428" />
+			<visualSettings lineWidth="1" linePattern="solid" />
+		</field>
+		<field name="PF_P_PARAM8" source="P_PARAM8" pageNumber="1"
+			minWidowLines="1" spacing="0">
+			<font size="0" />
+			<geometryInfo x="1.50000" y="1.45081" width="2.00000"
+				height="0.26428" />
+			<visualSettings lineWidth="1" linePattern="solid" />
+		</field>
+		<field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1"
+			minWidowLines="1" spacing="0">
+			<font size="0" />
+			<geometryInfo x="1.50000" y="1.78406" width="2.00000"
+				height="0.26428" />
+			<visualSettings lineWidth="1" linePattern="solid" />
+		</field>
+		<field name="PF_P_PARAM9" source="P_PARAM9" pageNumber="1"
+			minWidowLines="1" spacing="0">
+			<font size="0" />
+			<geometryInfo x="1.50000" y="2.11731" width="2.00000"
+				height="0.26428" />
+			<visualSettings lineWidth="1" linePattern="solid" />
+		</field>
+		<field name="PF_P_PARAM10" source="P_PARAM10" pageNumber="1"
+			minWidowLines="1" spacing="0">
+			<font size="0" />
+			<geometryInfo x="1.50000" y="2.45056" width="2.00000"
+				height="0.26428" />
+			<visualSettings lineWidth="1" linePattern="solid" />
+		</field>
+	</parameterForm>
+	<programUnits>
+		<function name="afterpform">
+			<textSource>
+      <![CDATA[function AfterPForm return boolean is
+     l_global pack_global.GlobalData;
+   chaine_doss_proj 	VARCHAR2(5000);
+   chaine_projet 			VARCHAR2(5000);	
+   chaine_axe					VARCHAR2(5000);
+   chaine_fin 				VARCHAR2(5000);
+ 
+   l_doss_proj 				VARCHAR2(5000);
+   l_projet	 					VARCHAR2(5000);
+   l_axe							VARCHAR2(5000);
+   l_fin	 						VARCHAR2(5000);
+ 
+    PAS_LIMIT         VARCHAR2(40);
+    l_user				  	VARCHAR2(30);
+BEGIN
+	
+	-- P_PARAM0  : Role utilissateur : fournisseur ou client
+	-- P_PARAM10 : type financement
+	-- P_PARAM9  : axe strategique
+	-- P_PARAM8  : projet
+	-- P_PARAM7  : dossier projet
+	-- P_PARAM6  : type de fichier de sortie ".CSV  ...."
+	
+	l_doss_proj 	:= '-1';
+	l_projet 			:= '-1';
+	l_axe					:= '-1';
+	l_fin 				:= '-1';
+   	
+  PAS_LIMIT := 'Pas de limitation';
+	-- Initialisation des paramètres	  
+  :P_habili_DP := '';
+  :P_habili_P  := '';
+ 
+	:P_WHERE := '';   	
+	:P_FROM  := '';  
+	
+	  --srw.message(1,'1');
+	
+	l_user := SUBSTR(Pack_Global.lire_globaldata(:P_GLOBAL).idarpege, 1, 30);
+	
+		:P_PERIME := pack_global.lire_perime(:P_GLOBAL);
+	
+			:P_PERIM_CAFI := pack_global.lire_ca_fi(:P_GLOBAL);
+
+		 -- Informations pour l'habilitation par référentiels
+		:P_habili_DP := pack_global.lire_doss_proj(:P_GLOBAL);
+	  :P_habili_P  := pack_global.lire_projet(:P_GLOBAL);
+		  	  
+	  :P_habili_P := REPLACE(:P_habili_P,',',''',''');
+	  
+	  IF (:P_habili_DP is null or :P_habili_DP='') THEN
+			  :P_habili_DP := 'VIDE';
+	  END IF;	
+	  IF (:P_habili_P is null or :P_habili_P='') THEN
+			  :P_habili_P := 'VIDE';
+	  END IF;	
+
+	-- Dossier Projet :
+	if(trim(:P_PARAM7) = 'Pas de limitation') then
+		chaine_doss_proj := 'VIDE';
+	elsif(trim(upper(:P_PARAM7)) = 'TOUS')	then
+		if(:P_habili_DP IS NOT NULL AND :P_habili_DP <> 'TOUS' ) then
+  		chaine_doss_proj := :P_habili_DP; -- seulement les dossiers projets actifs
+		else
+			chaine_doss_proj := 'VIDE';
+		end if;	
+	else
+		chaine_doss_proj := :P_PARAM7;
+	end if;	
+  
+  --srw.message(1,'chaine_doss_proj : '||chaine_doss_proj);
+  
+  -- Projet :
+	if(trim(:P_PARAM8) = 'Pas de limitation') then
+		chaine_projet := 'VIDE';
+	elsif(trim(upper(:P_PARAM8)) = 'TOUS')	then
+		if(:P_habili_P IS NOT NULL AND :P_habili_P <> 'TOUS' ) then
+  		chaine_projet := :P_habili_P; -- seulement les projets actifs
+		else
+			chaine_projet := 'VIDE';	
+		end if;	
+	else
+		chaine_projet := :P_PARAM8;
+	end if;	
+
+	--srw.message(1,'chaine_projet : '||chaine_projet);
+
+	-- axe stratégique :
+	if(:P_PARAM9 = 'Pas de limitation') then
+		chaine_axe := 'VIDE';
+	elsif(:P_PARAM9 = 'TOUS')	then
+			chaine_axe := 'TOUS'; -- seulement les applications actifs
+	else
+		chaine_axe := :P_PARAM9;
+	end if;	
+
+	--srw.message(1,'chaine_axe : '||chaine_axe);
+	
+  -- type financement :
+	if(:P_PARAM10 = 'Pas de limitation') then
+		chaine_fin := 'VIDE';
+	elsif(:P_PARAM10 = 'TOUS')	then
+			chaine_fin := 'TOUS'; -- seulement les applications actifs
+	else
+		chaine_fin := :P_PARAM10;
+	end if;	
+
+	--srw.message(1,'chaine_fin : '||chaine_fin);
+
+-- Utilisation des filtres de l ihm
+
+	-- Dossier projet
+	if(chaine_doss_proj <> 'VIDE') then
+		l_doss_proj := ' and l.DPCODE IN (' || chaine_doss_proj ||') ';
+	-- cas où on a rien dans le perimètre RTFE alors on considère AUCUN DP habilité
+	elsif (:P_param7  != PAS_LIMIT  AND trim(upper(:P_habili_DP)) <> 'TOUS') then
+		l_doss_proj := ' and l.DPCODE = NULL ';
+	end if;
+	
+	-- projet
+	if(chaine_projet <> 'VIDE') then 	
+		l_projet := ' and l.ICPI IN ('''||chaine_projet||''') ';
+	-- cas où on a rien dans le perimètre RTFE alors on considère AUCUN Projet habilité
+	elsif (:P_param8 != PAS_LIMIT AND trim(upper(:P_habili_P)) <> 'TOUS') then
+		l_projet := ' and l.ICPI = NULL ';
+	end if;
+
+	-- axe stratégique
+	if( chaine_axe = 'TOUS') then 
+
+  		l_axe := ' AND dpc.axe_strategique = filtre_axe.id ';
+                                         
+		:p_from := ' ( SELECT f.id FROM filtre_simul_immo f
+                                         WHERE f.type = ''AXE'' 
+                                         and f.user_rtfe = ''' || l_user || ''') filtre_axe, ';                                         
+ 	elsif (chaine_axe <> 'VIDE') then
+			l_axe := ' and dpc.axe_strategique = ' || :P_param9 ;
+	end if;
+	
+	-- type financement
+	if( chaine_fin = 'TOUS') then 
+
+  		l_fin := ' AND dpc.type_financement =  filtre_fin.id ';
+                                          
+	:p_from := :p_from || ' ( SELECT f.id FROM filtre_simul_immo f
+                                         WHERE f.type = ''FIN'' 
+                                         and f.user_rtfe = ''' || l_user || ''') filtre_fin, ';                                                 
+ 	elsif (chaine_fin <> 'VIDE') then
+			l_fin := ' and dpc.type_financement = ' || :P_param10 ;
+	end if;
+  
+	-- creation du where	
+		IF (l_doss_proj <> '-1') then
+			:p_where := :p_where || l_doss_proj;
+		end if;
+		
+		IF (l_projet <> '-1') then
+			:p_where := :p_where || l_projet;
+		end if;
+		
+		IF (l_axe <> '-1') then
+			:p_where := :p_where || l_axe;
+		end if;
+
+		IF (l_fin <> '-1') then
+			:p_where := :p_where || l_fin;
+		end if;					
+
+	--	  --srw.message(1,:P_WHERE);
+
+
+	--	  --srw.message(1,:P_FROM);
+
+  return (TRUE);
+end;]]>
+			</textSource>
+		</function>
+	</programUnits>
+	<webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+	</webSource>
+	<reportPrivate defaultReportType="tabular" versionFlags2="0"
+		templateName="" />
+	<reportWebSettings>
+  <![CDATA[#NULL#]]>
+	</reportWebSettings>
+</report>

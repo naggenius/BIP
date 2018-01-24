@@ -1,0 +1,6 @@
+--altering the ligne axemetier1 and ligne axemetier2  columns size 
+ALTER TABLE LIGNE_BIP MODIFY LINEAXISBUSINESS2 VARCHAR2(12);
+
+ALTER TABLE LIGNE_BIP_MAJ_MASSE MODIFY LINEAXISBUSINESS1 VARCHAR2(40);
+
+commit;

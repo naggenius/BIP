@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ress_err" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T06200284" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+  '"'|| user_rtfe ||'"',
+  '"'|| nom ||'"',     	
+  '"'|| prenom ||'"',
+  '"'|| role ||'"',
+  '"'|| menus ||'"',
+  '"'|| ss_menus ||'"', 
+  '"'|| bddpg_defaut ||'"', 
+  '"'|| perim_me ||'"',
+  '"'|| chef_projet ||'"',
+  '"'|| mo_defaut ||'"',
+  '"'|| perim_mo ||'"',
+  '"'|| centre_frais ||'"',
+  '"'|| ca_suivi ||'"',
+  '"'|| projet ||'"',
+  '"'|| appli ||'"', 
+  '"'|| ca_fi ||'"',
+  '"'|| ca_payeur ||'"',
+  '"'|| doss_proj ||'"'
+from rtfe_error
+order by nom,prenom,role;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_id">
+        <displayInfo x="1.22046" y="1.68958" width="1.53845" height="3.33594"
+        />
+        <dataItem name="user_rtfe" datatype="vchar2" columnOrder="28"
+         width="62" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="User Rtfe">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || user_rtfe || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||USER_RTFE||&apos;&quot;&apos;"
+           order="1" width="62"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom" datatype="vchar2" columnOrder="23" width="32"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nom">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || nom || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||NOM||&apos;&quot;&apos;"
+           order="2" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom" datatype="vchar2" columnOrder="24" width="32"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Prenom">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || prenom || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||PRENOM||&apos;&quot;&apos;"
+           order="3" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="role" datatype="vchar2" columnOrder="25" width="22"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Role">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || role || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||ROLE||&apos;&quot;&apos;"
+           order="4" width="22"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="menus" datatype="vchar2" columnOrder="26" width="202"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Menus">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || menus || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||MENUS||&apos;&quot;&apos;"
+           order="5" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ss_menus" datatype="vchar2" columnOrder="27"
+         width="202" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ss Menus">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || ss_menus || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||SS_MENUS||&apos;&quot;&apos;"
+           order="6" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bddpg_defaut1" datatype="vchar2" columnOrder="11"
+         width="32" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Bddpg Defaut">
+          <xmlSettings xmlTag="BDDPG_DEFAUT"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || bddpg_defaut || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||BDDPG_DEFAUT||&apos;&quot;&apos;"
+           order="7" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perim_me1" datatype="vchar2" columnOrder="12"
+         width="502" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Perim Me">
+          <xmlSettings xmlTag="PERIM_ME"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || perim_me || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||PERIM_ME||&apos;&quot;&apos;"
+           order="8" width="502"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="chef_projet1" datatype="vchar2" columnOrder="13"
+         width="502" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Chef Projet">
+          <xmlSettings xmlTag="CHEF_PROJET"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || chef_projet || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||CHEF_PROJET||&apos;&quot;&apos;"
+           order="9" width="502"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="mo_defaut1" datatype="vchar2" columnOrder="14"
+         width="32" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Mo Defaut">
+          <xmlSettings xmlTag="MO_DEFAUT"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || mo_defaut || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||MO_DEFAUT||&apos;&quot;&apos;"
+           order="10" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perim_mo1" datatype="vchar2" columnOrder="15"
+         width="502" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Perim Mo">
+          <xmlSettings xmlTag="PERIM_MO"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || perim_mo || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||PERIM_MO||&apos;&quot;&apos;"
+           order="11" width="502"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="centre_frais1" datatype="vchar2" columnOrder="16"
+         width="52" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Centre Frais">
+          <xmlSettings xmlTag="CENTRE_FRAIS"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || centre_frais || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||CENTRE_FRAIS||&apos;&quot;&apos;"
+           order="12" width="52"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_suivi1" datatype="vchar2" columnOrder="17"
+         width="202" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Suivi">
+          <xmlSettings xmlTag="CA_SUIVI"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || ca_suivi || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||CA_SUIVI||&apos;&quot;&apos;"
+           order="13" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="projet1" datatype="vchar2" columnOrder="18"
+         width="202" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Projet">
+          <xmlSettings xmlTag="PROJET"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || projet || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||PROJET||&apos;&quot;&apos;"
+           order="14" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="appli1" datatype="vchar2" columnOrder="19" width="202"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Appli">
+          <xmlSettings xmlTag="APPLI"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || appli || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||APPLI||&apos;&quot;&apos;"
+           order="15" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_fi1" datatype="vchar2" columnOrder="20" width="202"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Fi">
+          <xmlSettings xmlTag="CA_FI"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || ca_fi || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||CA_FI||&apos;&quot;&apos;"
+           order="16" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_payeur1" datatype="vchar2" columnOrder="21"
+         width="202" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Payeur">
+          <xmlSettings xmlTag="CA_PAYEUR"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || ca_payeur || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||CA_PAYEUR||&apos;&quot;&apos;"
+           order="17" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="doss_proj1" datatype="vchar2" columnOrder="22"
+         width="202" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Doss Proj">
+          <xmlSettings xmlTag="DOSS_PROJ"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || doss_proj || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||DOSS_PROJ||&apos;&quot;&apos;"
+           order="18" width="202"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_id_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.37500" height="0.37500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_id" source="G_id" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.25000" width="7.37500"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_id" source="user_rtfe" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.00000" y="0.25000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nom" source="nom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.31250" y="0.25000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_prenom" source="prenom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.62500" y="0.25000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_role" source="role" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.00000" y="0.25000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_menus" source="menus" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.37500" y="0.25000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ss_menus" source="ss_menus" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.75000" y="0.25000" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_bddpg_defaut" source="bddpg_defaut1"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="2.25000" y="0.25000" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_perim_me" source="perim_me1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="2.93750" y="0.25000" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_chef_projet" source="chef_projet1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.43750" y="0.25000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_mo_defaut" source="mo_defaut1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.87500" y="0.25000" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_perim_mo" source="perim_mo1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="4.43750" y="0.25000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_centre_frais" source="centre_frais1"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="4.81250" y="0.25000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ca_suivi" source="ca_suivi1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.25000" y="0.25000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_projet" source="projet1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.62500" y="0.25000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_appli" source="appli1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.06250" y="0.25000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ca_fi" source="ca_fi1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.43750" y="0.25000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ca_payeur" source="ca_payeur1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.75000" y="0.25000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_doss_proj" source="doss_proj1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="7.18750" y="0.25000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_id_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.37500"
+           height="0.25000"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_id" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[User_rtfe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.31250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Nom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_prenom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.62500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Prenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_role" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Role]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_menus" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.37500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Menus]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ss_menus" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.75000" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Ss Menus]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_bddpg_defaut" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.25000" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Bddpg Defaut]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_perim_me" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Perim Me]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_chef_projet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.06250" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Chef
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Projet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_mo_defaut" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.87500" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Mo Defaut]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_perim_mo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.43750" y="0.06250" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Perim
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Mo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_centre_frais" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.81250" y="0.06250" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Centre
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Frais]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ca_suivi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.25000" y="0.06250" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Ca
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Suivi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_projet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.62500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Projet]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_appli" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.06250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Appli]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ca_fi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.43750" y="0.06250" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Ca
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Fi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ca_payeur" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.75000" y="0.06250" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Ca
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Payeur]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_doss_proj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.18750" y="0.06250" width="0.18750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Doss
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Proj]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="x_Resserr"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

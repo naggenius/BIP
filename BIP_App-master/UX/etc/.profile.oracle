@@ -1,0 +1,145 @@
+#!/bin/ksh
+#_______________________________________________________________________________
+# Application Base d'Informations Projets
+# Nom du fichier : .profile.oracle
+# Objet : initialisation des parametres generaux par defaut d'ORACLE
+#
+#_______________________________________________________________________________
+# Creation : EGR     22/10/2002
+# Modification :
+# --------------
+# Auteur  Date       Objet
+# EGR     28/10/02   Passage a ORACLE_HOME dev6i et pas 8174
+# EGR	  06/11/02   Parametrage pour passage de dev6i/8174
+# EGR	  12/11/02   amelioration et ajout de variable specifiques a reports
+#
+################################################################################
+#echo 'Execution de .profile.oracle'
+
+TYPE_ENV="UTILITIES"
+if [ $# -gt 0 ]
+then
+	TYPE_ENV=$1
+fi
+
+# variables valables quelque soit l'environnement oracle
+
+# sqlplus editor
+export EDITOR=vi
+# ORACLE_TERM
+#export ORACLE_TERM=vt100
+export ORACLE_TERM=vt340
+# ORACLE_SID (default value)
+export ORACLE_SID=bipdev
+# ORA_CSM_MODE
+export ORA_CSM_MODE=line
+# NLS_LANG
+export NLS_LANG=FRENCH_FRANCE.WE8ISO8859P1
+# TNS_ADMIN
+export TNS_ADMIN=/produits/oracle/admin/tns_admin
+
+# ORACLE_BASE
+export ORACLE_BASE=/produits/oracle/products
+# ORACLE_VERSION
+export ORACLE_VERSION=8174
+# ORACLE_HOME_DEV6I
+ORACLE_HOME_DEV6I=$ORACLE_BASE/dev6i
+# ORACLE_HOME_UTILITIES
+ORACLE_HOME_UTILITIES=$ORACLE_BASE/$ORACLE_VERSION
+
+if [ $TYPE_ENV = "DEV6I" ]
+then
+	echo "env oracle dev6i"
+	# ORACLE_HOME
+	export ORACLE_HOME=$ORACLE_HOME_DEV6I
+
+	# variables specifiques a dev6i
+	#export REPORTS60_PATH=$ORACLE_HOME/tools/devdem60/demo/reports
+	export REPORTS60_PATH=$ORACLE_HOME/reports60
+	export REPORTS60_TERMINAL=$ORACLE_HOME/reports60/admin/terminal/US
+	export REPORTS60_TMP=/tmp
+	export REPORTS60_CLASSPATH=$ORACLE_HOME/network/jre11/lib/rt.jar:$ORACLE_HOME/reports60/java/myreports60.jar:$ORACLE_HOME/reports60/java/xmlparser.jar
+	export REPORTS60_JNI_LIB=$ORACLE_HOME/network/jre11/lib/sparc/native_threads/libjava.so
+	export REPORTS60_DEV2K=FALSE
+	## If REPORTS60_NO_DUMMY_PRINTER is set, no printer needs to be set up for Reports Server.
+	#export REPORTS60_NO_DUMMY_PRINTER=
+	export TK_PRINTER=bip
+	export TK_PRINT_STATUS="echo '%n' is valid"
+	export TK_PRINT="lp -d bip"
+
+	# binaires ...
+	export REPORTS=rwrun60
+else
+	echo "env oracle Utilities"
+	# unset des variables specifiques a dev6i
+	unset REPORTS60_PATH
+	unset REPORTS60_TERMINAL
+	unset REPORTS60_TMP
+	unset REPORTS60_CLASSPATH
+	unset REPORTS60_JNI_LIB
+	unset REPORTS60_DEV2K
+	unset REPORTS60_NO_DUMMY_PRINTER
+	unset TK_PRINTER
+	unset TK_PRINT_STATUS
+	unset TK_PRINT
+
+	# ORACLE_HOME
+	export ORACLE_HOME=$ORACLE_HOME_UTILITIES
+
+	# binaires ...
+	export SQLLDR=sqlldr
+	export EXP=exp
+fi
+################################
+# variables dependantes du ORACLE_HOME
+################################
+
+# ORATERMPATH
+export ORATERMPATH=.:$ORACLE_HOME/guicommon/tk2/admin/terminal
+# ORA_NLS33
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+# ORACLE_DOC
+export ORACLE_DOC=$ORACLE_HOME/doc
+
+# ORACLE_PATH
+ORACLE_PATH=$ORACLE_HOME/bin:$ORACLE_HOME/obackup/bin
+#.:/opt/bin:/usr/bin:/usr/ccs/bin
+export ORACLE_PATH
+
+# LIBPATH
+export LIBPATH=$ORACLE_HOME/lib:/usr/lib:/lib:.
+
+# il faut d'abord retirer de PATH et de LD_LIBRARY_PATH les anciennes valeurs liees a oracle
+# (contiennent soit ORACLE_HOME_DEV6I, soit ORACLE_HOME_UTILITIES)
+	# PATH
+	SHORT_PATH=`echo $PATH | awk \
+		'BEGIN { RS=":"; res ="" } \
+		{if ( (index($0,home1)>0) || (index($0,home2)>0) ) next;else res=res $0 RS } \
+		END { print substr(res,1,length(res)-1) }' \
+		home1=$ORACLE_HOME_DEV6I home2=$ORACLE_HOME_UTILITIES`
+	export PATH=$SHORT_PATH:$ORACLE_PATH
+
+	# LD_LIBRARY_PATH
+	SHORT_LD_LIB_PATH=`echo $LD_LIBRARY_PATH | awk \
+		'BEGIN { RS=":"; res = "" } \
+		{if ( (index($0,home1)>0) || (index($0,home2)>0) ) next;else res=res $0 RS } \
+		END { print substr(res,1,length(res)-1) }' \
+		home1=$ORACLE_HOME_DEV6I home2=$ORACLE_HOME_UTILITIES`
+	export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$ORACLE_HOME/network/lib:$SHORT_LD_LIB_PATH
+	#export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$ORACLE_HOME/network/lib:$SHORT_LD_LIB_PATH:/produits/oracle/products/dev6i/network/jre11/lib/sparc/native_threads
+
+# COBDIR
+# export COBDIR=/usr/lib/cmplrs/cobol
+# EPC_DISABLED
+export EPC_DISABLED=TRUE
+# LINK_CNTRL
+# export LINK_CNTRL=L_PTHREADS_D7
+# OBK_HOME
+export OBK_HOME=$ORACLE_HOME/obackup
+
+
+## explication des awk
+# RS=":", les enregistrements sont separes par :
+# si on trouve le HOME_DEV6I ou le HOME_UTILITIES dans l'enregistrement, on le saute
+# on recupere ensuite la concatenation des enregistrements retenus : de la forme ":chemin1:chemin2:."
+# on retire en passant le ':' de trop (le premier caractere)

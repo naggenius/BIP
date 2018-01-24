@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_extrdpg" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T03600432" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[   SELECT lpad(nvl(stinf.codsg, '0'),7 , '0')       codsg,
+          rpad(nvl(stinf.libdsg, ' '), 30, ' ')     libdsg, 
+          rpad(nvl(stinf.sigdep, ' '), 3, ' ')      sigdep,
+          rpad(nvl(stinf.sigpole, ' '), 3, ' ')     sigpole
+   FROM   struct_info stinf
+   WHERE stinf.codsg > 1
+   ORDER BY codsg ASC;
+]]>
+      </select>
+      <displayInfo x="0.98962" y="0.66663" width="0.69995" height="0.35425"/>
+      <group name="G_codsg">
+        <displayInfo x="0.78967" y="1.52087" width="1.09998" height="1.62695"
+        />
+        <dataItem name="codsg" datatype="vchar2" columnOrder="11" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codsg">
+          <dataDescriptor
+           expression="lpad ( nvl ( stinf.codsg , &apos;0&apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSG" order="1" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdsg" datatype="vchar2" columnOrder="12" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdsg">
+          <dataDescriptor
+           expression="rpad ( nvl ( stinf.libdsg , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBDSG" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sigdep" datatype="vchar2" columnOrder="13" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sigdep">
+          <dataDescriptor
+           expression="rpad ( nvl ( stinf.sigdep , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="SIGDEP" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sigpole" datatype="vchar2" columnOrder="14" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sigpole">
+          <dataDescriptor
+           expression="rpad ( nvl ( stinf.sigpole , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="SIGPOLE" order="4" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_codsg" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.06250" width="7.37500" height="0.56250"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_codsg" source="codsg" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.12500" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_libdsg" source="libdsg" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.62500" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_sigdep" source="sigdep" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.12500" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_sigpole" source="sigpole" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.68750" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

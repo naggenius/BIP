@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_reshist" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterform">
+  <xmlSettings xmlTag="T02602300" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM12" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM13" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM14" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_1" datatype="character" width="1024"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+rpad(s.ident,5,' ') IDENT,
+rpad(nvl(r.rnom,' '),30,' ') NOM,
+rpad(nvl(r.rprenom,' '),15,' ') PRENOM,
+rpad(s.CODSG,7,' ') CODSG,
+rpad(s.SOCCODE,4,' ') SOCCODE,
+rpad(to_char(s.datsitu,'dd/mm/yyyy'),10,' ') DATSITU,
+rpad(NVL(to_char(s.datdep,'dd/mm/yyyy'),' '),10,' ') DATDEP,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('01', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('01', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ') Janvier,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('02', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('02', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Fevrier,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('03', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('03', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Mars,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('04', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('04', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ') Avril,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('05', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('05', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Mai,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('06', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('06', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Juin,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('07', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('07', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Juillet,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('08', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('08', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ') Aout,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('09', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('09', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Septembre,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('10', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('10', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Octobre,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('11', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('11', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Novembre,
+rpad( DECODE(pack_verif_reshist.f_conso_mois('12', SUBSTR(:P_PARAM6, 4, 4),s.ident),-1,'pas de situ',-2,NULL,pack_verif_reshist.f_conso_mois('12', SUBSTR(:P_PARAM6, 4, 4),s.ident))  ,11,' ')  Decembre
+FROM SITU_RESS s, datdebex d, ressource r, STRUCT_INFO str
+WHERE   s.prestation not in ('GRA','INT','STA','IFO','MO ','SLT')
+       AND (TO_DATE(TO_CHAR(s.DATDEP,'dd/mm/yyyy'),'dd/mm/yyyy') >= '01/01/2008' OR s.DATDEP IS NULL)
+       AND r.ident=s.ident
+       AND (s.ident, s.datsitu) in (SELECT sr.ident, max(sr.datsitu) FROM SITU_RESS sr group by ident)
+       AND s.codsg=str.codsg
+       AND (pack_verif_reshist.f_conso_mois('01', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('02', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('03', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('04', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('05', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('06', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('07', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('08', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('09', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('10', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('11', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 OR
+            pack_verif_reshist.f_conso_mois('12', SUBSTR(:P_PARAM6, 4, 4),s.ident)=0 )
+&P_WHERE
+ORDER BY s.ident;]]>
+      </select>
+      <displayInfo x="0.15625" y="0.10425" width="1.05212" height="0.45825"/>
+      <group name="G_clicode">
+        <displayInfo x="1.70520" y="1.54175" width="2.55518" height="4.01953"
+        />
+        <dataItem name="IDENT" datatype="vchar2" columnOrder="40" width="5"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl S Ident" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ident&quot;"/>
+          <dataDescriptor expression="rpad ( s.ident , 5 , &apos; &apos; )"
+           descriptiveExpression="IDENT" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOM" datatype="vchar2" columnOrder="41" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl R Rnom" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Nom&quot;"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( r.rnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="NOM" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PRENOM" datatype="vchar2" columnOrder="42" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl R Rprenom" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Prenom&quot;"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( r.rprenom , &apos; &apos; ) , 15 , &apos; &apos; )"
+           descriptiveExpression="PRENOM" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" datatype="vchar2" columnOrder="43" width="7"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl S Codsg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Codsg&quot;"/>
+          <dataDescriptor expression="rpad ( s.CODSG , 7 , &apos; &apos; )"
+           descriptiveExpression="CODSG" order="4" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCCODE" datatype="vchar2" columnOrder="44" width="4"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl S Soccode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Soccode&quot;"/>
+          <dataDescriptor expression="rpad ( s.SOCCODE , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCODE" order="5" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATSITU" datatype="vchar2" columnOrder="45"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl S Datsitu" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Date début de situ&quot;"/>
+          <dataDescriptor
+           expression="rpad ( to_char ( s.datsitu , &apos;dd/mm/yyyy&apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="DATSITU" order="6" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATDEP" datatype="vchar2" columnOrder="46"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rpad Nvl S Datdep" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Date fin situ&quot;"/>
+          <dataDescriptor
+           expression="rpad ( NVL ( to_char ( s.datdep , &apos;dd/mm/yyyy&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="DATDEP" order="7" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Janvier" datatype="vchar2" columnOrder="12" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 01" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Janvier&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;01&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;01&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="JANVIER" order="8" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Fevrier" datatype="vchar2" columnOrder="13" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 02" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Février&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;02&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;02&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FEVRIER" order="9" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Mars" datatype="vchar2" columnOrder="14" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 03" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Mars&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;03&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;03&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="MARS" order="10" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Avril" datatype="vchar2" columnOrder="15" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 04" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Avril&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;04&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;04&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="AVRIL" order="11" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Mai" datatype="vchar2" columnOrder="16" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 05" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Mai&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;05&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;05&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="MAI" order="12" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Juin" datatype="vchar2" columnOrder="17" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 06" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Juin&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;06&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;06&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="JUIN" order="13" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Juillet" datatype="vchar2" columnOrder="18" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 07" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Juillet&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;07&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;07&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="JUILLET" order="14" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Aout" datatype="vchar2" columnOrder="19" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 08" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Aout&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;08&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;08&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="AOUT" order="15" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Septembre" datatype="vchar2" columnOrder="20"
+         width="11" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 09" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Septembre&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;09&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;09&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="SEPTEMBRE" order="16" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Octobre" datatype="vchar2" columnOrder="21" width="11"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="2"
+         defaultLabel="Dc Conso 10" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Octobre&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;10&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;10&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="OCTOBRE" order="17" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Novembre" datatype="vchar2" columnOrder="22"
+         width="11" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 11" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Novembre&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;11&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;11&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="NOVEMBRE" order="18" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Decembre" datatype="vchar2" columnOrder="23"
+         width="11" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Conso 12" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Decembre&quot;"/>
+          <dataDescriptor
+           expression="rpad ( DECODE ( pack_verif_reshist.f_conso_mois ( &apos;12&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) , - 1 , &apos;pas de situ&apos; , - 2 , NULL , pack_verif_reshist.f_conso_mois ( &apos;12&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , s.ident ) ) , 11 , &apos; &apos; )"
+           descriptiveExpression="DECEMBRE" order="19" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_clicode" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.06250" width="7.37500" height="0.75000"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_nom" source="NOM" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.12500" y="0.12500" width="0.68750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterform">
+      <textSource>
+      <![CDATA[function AfterForm return boolean is
+      l_p_code_dpg VARCHAR2(10);
+      ------------------------------------------------------------------------
+      -- Conditions WHERE sur les différents paramètres
+      -----------------------------------------------------------------------
+      l_where_dpg VARCHAR2(1000) := '';
+      ----------------------------------------------------------------------
+      l_car_etoile CONSTANT VARCHAR2(1) := '*';   -- Caractère étoile
+      l_car_blanc  CONSTANT VARCHAR2(1) := ' ';   -- Caractère blanc
+
+      l_car_topage_ouvert CONSTANT VARCHAR2(1) := 'O';
+      l_car_topage_ferme  CONSTANT VARCHAR2(1) := 'F'; -- BPO : Modification de 'N' à 'F' car TOPFER = F pour fermé 
+      l_car_like CONSTANT VARCHAR2(1) := '%';
+
+
+      l_ch_00 CONSTANT VARCHAR2(2) := '00'; 
+      l_ch_0000 CONSTANT VARCHAR2(4) := '0000'; 
+      l_ch_99 CONSTANT VARCHAR2(2) := '99'; 
+      l_ch_9999 CONSTANT VARCHAR2(4) := '9999'; 
+
+      l_codsg_inf  VARCHAR2(7);
+      l_codsg_sup  VARCHAR2(7);
+begin
+  l_p_code_dpg := :P_PARAM6;
+  	------------------------------------------------------------------------
+      	-- Conditions WHERE sur dpg
+      	-----------------------------------------------------------------------
+
+	IF ( (l_p_code_dpg IS NULL) 
+			OR 
+             (l_p_code_dpg = l_car_etoile || l_car_etoile || l_car_etoile || l_car_etoile || l_car_etoile || l_car_etoile || l_car_etoile) 
+         		OR  
+	     (l_p_code_dpg = l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc)
+	   ) THEN
+	       -----------------------------------------------------------------------------------------------------------------------------------------
+	     	 -- Si Code DPG vide ou égal à 6 étoiles, Considérer tous les DPG avec code topé à 'O'
+	     	 -- Modifié par DDI le 14/10/2005 - Fiche TD N°276 : Les historiques doivent toujours être complets. Même sur les DPG qui ont été fermés .
+	     	 --                                                      l_where_dpg := ' str.topfer =   ''' || l_car_topage_ouvert || ''' ' ;
+		     -----------------------------------------------------------------------------------------------------------------------------------------
+		     l_where_dpg := ' str.topfer =   ''' || l_car_topage_ouvert || ''' OR str.topfer =   ''' || l_car_topage_ferme || '''  ' ;
+		
+	ELSIF ( 
+		( (NVL(LENGTH(l_p_code_dpg), 0) = 7) AND (SUBSTR(l_p_code_dpg, 4, 4) = l_car_etoile || l_car_etoile || l_car_etoile || l_car_etoile) )
+              		OR
+		( (NVL(LENGTH(l_p_code_dpg), 0) = 7) AND (SUBSTR(l_p_code_dpg, 4, 4) = l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc) )
+	      ) THEN
+	             -------------------------------------------------------------------------------------
+	     	     -- Cas nn ou nn****
+		     -------------------------------------------------------------------------------------
+		     l_codsg_inf := SUBSTR(l_p_code_dpg, 1, 3) || l_ch_0000;
+		     l_codsg_sup := SUBSTR(l_p_code_dpg, 1, 3) || l_ch_9999;
+		     l_where_dpg := ' s.codsg BETWEEN '  || l_codsg_inf || ' AND ' || l_codsg_sup;
+
+	ELSIF ( 
+	        ( (NVL(LENGTH(l_p_code_dpg), 0) = 7) AND (SUBSTR(l_p_code_dpg, 6, 2) = l_car_etoile || l_car_etoile) )
+			OR
+		( (NVL(LENGTH(l_p_code_dpg), 0) = 7) AND (SUBSTR(l_p_code_dpg, 6, 2) = l_car_blanc || l_car_blanc) )
+              ) THEN
+	             -------------------------------------------------------------------------------------
+	     	     -- Cas nnnn ou nnnn**
+		     -------------------------------------------------------------------------------------
+		     l_codsg_inf := SUBSTR(l_p_code_dpg, 1, 5) || l_ch_00;
+		     l_codsg_sup := SUBSTR(l_p_code_dpg, 1, 5) || l_ch_99;
+		     l_where_dpg := ' s.codsg BETWEEN '  || l_codsg_inf || ' AND ' || l_codsg_sup;
+
+	ELSE
+		     -------------------------------------------------------------------------------------
+                     -- Dans tous les autres cas, Restriction au Code DPG saisi
+		     -- Si un jour on ajoute Index sur divsecgrou, on gagnera du temps pour ce cas!!!
+		     -------------------------------------------------------------------------------------
+		     l_where_dpg := ' s.codsg = ' || l_p_code_dpg ;
+	END IF;
+
+        -----------------------------------------------------------------------
+	-- l_where_dpg := pack_verif_reshist.f_build_where_dpg(l_p_code_dpg);
+   	-----------------------------------------------------------------------
+	:P_WHERE :='';
+  
+  :P_WHERE := :P_WHERE || ' AND ( ' || l_where_dpg || ' ) ';
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

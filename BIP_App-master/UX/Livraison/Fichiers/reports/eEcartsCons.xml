@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eEcartsCons" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="EECARTSCONS" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT   
+sr.codsg codsg,
+s.LIBDSG,
+to_char(re.cdeb,'mm/yyyy') cdeb,
+re.ident ident,
+trim(r.rnom) nom,
+trim(r.RPRENOM) prenom,
+to_char(sr.datsitu,'dd/mm/yyyy') debutcontrat,
+to_char(sr.datdep,'dd/mm/yyyy') fincontrat,
+decode(b.BIPABS,'CONGES','CONGES et RTT',b.BIPABS) type,
+re.nbjbip nbjbip,
+re.nbjgersh nbjgersh,
+c.CJOURS nbjmois,
+re.valide valide,
+trim(re.commentaire) commentaire
+FROM ressource_ecart re, ressource r, SITU_RESS_full sr, STRUCT_INFO s, ( SELECT DISTINCT BIPABS FROM BJH_TYPE_ABSENCE) b,
+calendrier c
+WHERE 1=1
+AND c.CALANMOIS = re.cdeb
+AND s.CODSG = sr.codsg
+AND re.type = b.BIPABS(+)
+AND r.ident=re.ident
+AND sr.ident=re.ident
+AND sr.datsitu=pack_situation_full.datsitu_ressource(re.ident,re.cdeb)
+AND sr.codsg>=to_number(replace(:P_param6,'*','0'))
+AND sr.codsg<=to_number(replace(:P_param6,'*','9'))
+&P_WHERE
+ORDER BY sr.codsg,r.rnom,re.ident,re.cdeb;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_codsg">
+        <displayInfo x="1.23083" y="1.94995" width="1.53845" height="2.65234"
+        />
+        <dataItem name="codsg" oracleDatatype="number" columnOrder="13"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="DPGcode">
+          <xmlSettings xmlTag="DPGcode"/>
+          <dataDescriptor expression="sr.codsg" descriptiveExpression="CODSG"
+           order="1" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDSG" datatype="vchar2" columnOrder="27" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdsg">
+          <xmlSettings xmlTag="DPGsigle"/>
+          <dataDescriptor expression="s.LIBDSG" descriptiveExpression="LIBDSG"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cdeb" datatype="vchar2" columnOrder="14" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="PrestMois">
+          <xmlSettings xmlTag="PrestMois"/>
+          <dataDescriptor
+           expression="to_char ( re.cdeb , &apos;mm/yyyy&apos; )"
+           descriptiveExpression="CDEB" order="3" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" oracleDatatype="number" columnOrder="15"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="RessCode">
+          <xmlSettings xmlTag="RessCode"/>
+          <dataDescriptor expression="re.ident" descriptiveExpression="IDENT"
+           order="4" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom" datatype="vchar2" columnOrder="16" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="RessNom">
+          <xmlSettings xmlTag="RessNom"/>
+          <dataDescriptor expression="trim ( r.rnom )"
+           descriptiveExpression="NOM" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom" datatype="vchar2" columnOrder="17" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="RessPrenom">
+          <xmlSettings xmlTag="RessPrenom"/>
+          <dataDescriptor expression="trim ( r.RPRENOM )"
+           descriptiveExpression="PRENOM" order="6" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="debutcontrat" datatype="vchar2" columnOrder="18"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="SituDeb">
+          <xmlSettings xmlTag="SituDeb"/>
+          <dataDescriptor
+           expression="to_char ( sr.datsitu , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="DEBUTCONTRAT" order="7" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fincontrat" datatype="vchar2" columnOrder="19"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="SituFin">
+          <xmlSettings xmlTag="SituFin"/>
+          <dataDescriptor
+           expression="to_char ( sr.datdep , &apos;dd/mm/yyyy&apos; )"
+           descriptiveExpression="FINCONTRAT" order="8" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="type" datatype="vchar2" columnOrder="20" width="13"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="AbsType">
+          <xmlSettings xmlTag="AbsType"/>
+          <dataDescriptor
+           expression="decode ( b.BIPABS , &apos;CONGES&apos; , &apos;CONGES et RTT&apos; , b.BIPABS )"
+           descriptiveExpression="TYPE" order="9" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nbjbip" oracleDatatype="number" columnOrder="21"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="BipNbJH">
+          <xmlSettings xmlTag="BipNbJH"/>
+          <dataDescriptor expression="re.nbjbip"
+           descriptiveExpression="NBJBIP" order="10" oracleDatatype="number"
+           width="22" scale="2" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nbjgersh" oracleDatatype="number" columnOrder="22"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="GershNbJH">
+          <xmlSettings xmlTag="GershNbJH"/>
+          <dataDescriptor expression="re.nbjgersh"
+           descriptiveExpression="NBJGERSH" order="11" oracleDatatype="number"
+           width="22" scale="2" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nbjmois" oracleDatatype="number" columnOrder="23"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="OuvresNbJH">
+          <xmlSettings xmlTag="OuvresNbJH"/>
+          <dataDescriptor expression="c.CJOURS"
+           descriptiveExpression="NBJMOIS" order="12" oracleDatatype="number"
+           width="22" scale="1" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="valide" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="24" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Valid&apos;">
+          <xmlSettings xmlTag="Validé"/>
+          <dataDescriptor expression="re.valide"
+           descriptiveExpression="VALIDE" order="13"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="commentaire" datatype="vchar2" columnOrder="25"
+         width="255" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Commentaire">
+          <xmlSettings xmlTag="Commentaire"/>
+          <dataDescriptor expression="trim ( re.commentaire )"
+           descriptiveExpression="COMMENTAIRE" order="14" width="255"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_codsg_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.31250" height="0.37500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_codsg" source="G_codsg"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="7.31250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_codsg" source="codsg" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SIGDEP" source="LIBDSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="0.56250" y="0.18750" width="0.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_cdeb" source="cdeb" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="1.06250" y="0.18750" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ident" source="ident" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="1.62500" y="0.18750" width="0.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nom" source="nom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="2.12500" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_prenom" source="prenom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="2.56250" y="0.18750" width="0.62500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_debutcontrat" source="debutcontrat" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="3.18750" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_fincontrat" source="fincontrat" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="3.62500" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_type" source="type" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="4.06250" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nbjbip" source="nbjbip" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="4.50000" y="0.18750" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nbjgersh" source="nbjgersh" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="5.06250" y="0.18750" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nbjmois" source="nbjmois" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="5.62500" y="0.18750" width="0.62500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_valide" source="valide" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="6.25000" y="0.18750" width="0.37500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_commentaire" source="commentaire" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="6.62500" y="0.18750" width="0.68750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_codsg_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.31250"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_codsg" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[DPGcode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SIGDEP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.50000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[DPGsigle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_cdeb" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.06250" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[PrestMois]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ident" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.62500" y="0.00000" width="0.50000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[RessCode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.12500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[RessNom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_prenom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.56250" y="0.00000" width="0.62500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[RessPrenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_debutcontrat" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.18750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[SituDeb]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_fincontrat" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.62500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[SituFin]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_type" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.06250" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[AbsType]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nbjbip" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.50000" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[BipNbJH]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nbjgersh" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.06250" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[GershNbJH]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nbjmois" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.62500" y="0.00000" width="0.62500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[OuvresNbJH]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_valide" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.25000" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Valid']]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_commentaire" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.62500" y="0.00000" width="0.68750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Commentaire]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="2.87427" y="0.25000" width="2.75134" height="0.16675"
+        />
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[Extraction des consommés en écart]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+  
+	l_perim_me	VARCHAR2(4000) := '';
+	l_menu      VARCHAR2(10);
+
+begin
+  :P_WHERE := '';
+ 	l_perim_me := pack_global.lire_perime(:P_GLOBAL);		
+ 	l_menu :=  pack_global.lire_menutil(:P_GLOBAL);	
+ 	
+ 	if (l_menu != 'DIR') then
+		:P_WHERE := ' AND sr.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+	end if ;
+  return (TRUE);
+  
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="Extraction des consommés en écart"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

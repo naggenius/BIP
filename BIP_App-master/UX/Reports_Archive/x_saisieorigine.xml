@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_saisieorigine" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="X_SAISIEORIGINE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_TITRE_ETAT" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="1000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt" display="yes"
+    />
+    <systemParameter name="DESTYPE" initialValue="Preview" display="yes"/>
+    <dataSource name="Q_REQ_PRINC">
+      <select canParse="no">
+      <![CDATA[  select
+	to_date(lb.ttrmens),
+	decode(
+		(select distinct('ISAC') from isac_etape ie where ie.PID = lb.PID),
+		'ISAC',
+		decode(
+			INSTR(nvl(lb.p_saisie,0),'FBIPS'),
+			0,
+			lb.p_saisie,
+			NVL(substr(lb.P_SAISIE,0,INSTR(lb.P_SAISIE,';')-1),lb.P_SAISIE)
+		),
+		decode(
+			(select distinct('FICHIER') from etape e where e.PID = lb.PID),
+			'FICHIER',
+			decode(
+				lb.P_SAISIE,
+				null,
+				'Sans objet',
+				'AUTRE',
+				'Sans objet',
+				NVL(substr(lb.P_SAISIE,0,INSTR(lb.P_SAISIE,';')-1),lb.P_SAISIE)
+			),
+			'Sans objet'
+		) 
+	) "OPERATEUR",
+	
+	lb.CODSG, lb.PID, lb.PNOM, lb.TYPPROJ, lb.ARCTYPE, lb.PCPI, r.RNOM, r.RPRENOM, sr.CODSG "CPCODSG",
+	
+	decode(
+		(select distinct('ISAC') from isac_etape ie where ie.PID = lb.PID),
+		'ISAC',
+		DECODE(
+			INSTR(NVL(LB.P_SAISIE,0),'FBIPS'),
+			0,
+			'INTERNE',
+			'F-BIPS'
+		),
+		decode(
+		--FAD QC 1950 : Ajout du cas ou l'ORIGINE est INTERNE mais que la ligne BIP n'a plus de structure SR
+			(SELECT 1 FROM LIGNE_BIP LB1 WHERE LB1.PID = LB.PID AND LB1.P_SAISIE LIKE '__/__/____ __:__'),
+			1,
+			'INTERNE',
+		--FAD QC 1950 : Fin
+			decode(
+				(select distinct('FICHIER') from etape e where e.PID = lb.PID),
+				'FICHIER',
+				DECODE(
+					lb.P_SAISIE,
+					null,
+					'SERVEUR AUTRES',
+					'AUTRE',
+					'SERVEUR AUTRES',
+					DECODE (
+						SUBSTR(LB.P_SAISIE,INSTR(LB.P_SAISIE,';')+1),
+						'FBIPS',
+						'F-BIPS',
+						substr(lb.P_SAISIE,INSTR(lb.P_SAISIE,';')+1)
+					)
+				),
+				'PASSTR'
+			)
+		)
+	) "ORIGINE"
+from ligne_bip lb, ressource r, situ_ress sr
+where lb.PCPI = r.IDENT
+	and r.IDENT = sr.IDENT
+	and sr.DATSITU = (select max(sr1.DATSITU) from situ_ress sr1 where sr1.IDENT=r.IDENT)
+	and (lb.p_saisie not like 'RBIP' or lb.p_saisie is null)
+&P_WHERE
+order by lb.CODSG, lb.PCPI, decode( (select distinct('ISAC') from isac_etape ie where ie.PID = lb.PID), 
+	           'ISAC', 1,
+	           decode( (select distinct('FICHIER') from etape e where e.PID = lb.PID), 
+			           'FICHIER', decode(lb.P_SAISIE, null, 7, 'AUTRE', 7, 
+					   DECODE(LB.P_SAISIE, 'NIKU', 2, 'OSCAR', 3, 'RBIP', 4 , 5)), 
+					   9) 
+             )]]>
+      </select>
+      <displayInfo x="1.71958" y="1.35124" width="2.96323" height="0.55563"/>
+      <group name="G_CODSG">
+        <displayInfo x="1.66160" y="5.87375" width="3.07423" height="6.30287"
+        />
+		
+			
+		 <dataItem name="DATEMENSUELLE" datatype="vchar2" columnOrder="21" width="22"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="DateMensuelle">
+		 <xmlSettings xmlTag="DateMensuelle"/>
+		 <dataDescriptor expression="to_date(lb.ttrmens)" descriptiveExpression="DATEMENSUELLE"
+           order="1" width="22"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+		<dataItem name="OPERATEUR" datatype="vchar2" columnOrder="22"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="operateur">
+		 <xmlSettings xmlTag="Operateur"/>
+          <dataDescriptor expression="OPERATEUR" descriptiveExpression="OPERATEUR"
+           order="2" datatype="vchar2" width="22"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+		
+        <dataItem name="CODSG" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="CODSG">
+		 <xmlSettings xmlTag="LigneDpgCode"/>
+          <dataDescriptor expression="CODSG" descriptiveExpression="CODSG"
+           order="3" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PID" datatype="vchar2" columnOrder="26" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pid">
+		  <xmlSettings xmlTag="LigneCode"/>
+          <dataDescriptor expression="PID" descriptiveExpression="PID"
+           order="4" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PNOM" datatype="vchar2" columnOrder="27" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pnom">
+		 <xmlSettings xmlTag="LigneLibelle"/>
+          <dataDescriptor expression="PNOM" descriptiveExpression="PNOM"
+           order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPPROJ" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="28" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typproj">
+		 <xmlSettings xmlTag="TypePrin"/>
+          <dataDescriptor expression="TYPPROJ" descriptiveExpression="TYPPROJ"
+           order="6" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARCTYPE" datatype="vchar2" columnOrder="29" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arctype">
+		 <xmlSettings xmlTag="TypeSecond"/>
+          <dataDescriptor expression="ARCTYPE" descriptiveExpression="ARCTYPE"
+           order="7" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PCPI" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pcpi">
+		 <xmlSettings xmlTag="RessCPCode"/>
+          <dataDescriptor expression="PCPI" descriptiveExpression="PCPI"
+           order="8" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RNOM1" datatype="vchar2" columnOrder="23" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom">
+          <xmlSettings xmlTag="RNOM"/>
+          <dataDescriptor expression="RNOM" descriptiveExpression="RNOM"
+           order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RPRENOM1" datatype="vchar2" columnOrder="24"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Rprenom">
+          <xmlSettings xmlTag="RPRENOM"/>
+          <dataDescriptor expression="RPRENOM" descriptiveExpression="RPRENOM"
+           order="10" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CPCODSG" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cpcodsg">
+		 <xmlSettings xmlTag="RessCPDpgCode"/>
+          <dataDescriptor expression="CPCODSG" descriptiveExpression="CPCODSG"
+           order="11" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ORIGINE" datatype="vchar2" columnOrder="32" width="30"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Origine">
+          <dataDescriptor expression="ORIGINE" descriptiveExpression="ORIGINE"
+           order="12" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+      <frame name="M_G_CODSG_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="18.23145"
+         height="0.87406"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_CODSG" source="G_CODSG"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.43687" width="18.23145"
+           height="0.43718"/>
+          <generalLayout verticalElasticity="expand"/>
+          <visualSettings fillBackgroundColor="r100g0b0"/>
+		  
+		  
+		  
+		  
+		   <field name="F_DATEMENSUELLE" source="DATEMENSUELLE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.00000" y="0.43687" width="1.93539"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+		  
+		   <field name="F_OPERATEUR" source="OPERATEUR" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.00000" y="0.43687" width="1.93539"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+		  
+		  
+		  
+		  
+		  
+		  
+          <field name="F_CODSG" source="CODSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.00000" y="0.43687" width="1.93539"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_PID" source="PID" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="2.06034" y="0.43687" width="0.87406"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_PNOM" source="PNOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="3.05935" y="0.43687" width="2.12297"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_TYPPROJ" source="TYPPROJ" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="5.30696" y="0.43687" width="1.49851"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_ARCTYPE" source="ARCTYPE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="6.93043" y="0.43687" width="1.49851"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_PCPI" source="PCPI" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="8.55390" y="0.43687" width="1.49851"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_RNOM1" source="RNOM1" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="10.17705" y="0.43687" width="2.12297"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_RPRENOM1" source="RPRENOM1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="12.42498" y="0.43687" width="2.12266"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_CPCODSG" source="CPCODSG" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="14.67259" y="0.43687" width="1.93539"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+          <field name="F_ORIGINE" source="ORIGINE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="16.73293" y="0.43687" width="1.49851"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CODSG_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="18.23145"
+           height="0.43687"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillBackgroundColor="r100g0b0"/>
+		  
+		  
+		   <text name="B_DATEMENSUELLE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="1.93539"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[DateMensuelle4]]>
+              </string>
+            </textSegment>
+          </text>
+		  
+		   <text name="B_OPERATEUR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="1.93539"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Operateur]]>
+              </string>
+            </textSegment>
+          </text>
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+          <text name="B_CODSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="1.93539"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06034" y="0.00000" width="0.87406"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Pid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PNOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.05935" y="0.00000" width="2.12297"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Pnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPPROJ" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.30696" y="0.00000" width="1.49851"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Typproj]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ARCTYPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.93043" y="0.00000" width="1.49851"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Arctype]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PCPI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="8.55390" y="0.00000" width="1.49851"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Pcpi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RNOM1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="10.17705" y="0.00000" width="2.12297"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RPRENOM1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="12.42498" y="0.00000" width="2.12266"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Rprenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CPCODSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="14.67259" y="0.00000" width="1.93539"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Cpcodsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ORIGINE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="16.73293" y="0.00000" width="1.49851"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="r100g0b0"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Origine]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000">
+  <text name="PB_TITRE1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.60691" y="0.18510" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_TITRE2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.82618" y="0.56772" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="1.19869" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="2.12452" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.05036" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.97619" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="0.96490" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="1.89074" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="2.81657" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="3.74241" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM8" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="6.51991" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="6.75370" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM8]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="4.66824" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="5.59408" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="4.90203" width="2.18684" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="5.82786" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM7]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM9" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="7.44575" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="7.67953" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM9]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="8.37282" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_GLOBAL" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="8.60661" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+      l_where_dpg VARCHAR2(1000) := '';
+      p_dpg VARCHAR2(10) := '';
+      l_p_code_dpg VARCHAR2(10) := '';
+      l_nom_colonne VARCHAR2(10) := '';
+      l_perim_me	VARCHAR2(1000) := '';
+      
+BEGIN
+	
+	-- On crée la where clause avec filtre sur le DPG si besoin
+	-- paramètre :
+	--        P_PARAM6 : variable où se trouve le DPG saisi à l'écran
+	--        l_nom_colonne : nom de la colonne de la requête où l'on trouve le DPG
+	
+	-- On anlève tous les espaces
+	p_dpg := RTRIM(LTRIM(:P_PARAM6));
+	l_nom_colonne := 'lb.CODSG';
+
+	-- Informations pour le lancement par les autres menus 	
+	l_perim_me := pack_global.lire_perime(:P_GLOBAL);	
+	
+	:P_WHERE :=' AND lb.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+	
+	------------------------------------------------------------------------
+		-- Conditions WHERE sur dpg
+		-----------------------------------------------------------------------
+	
+		IF LPAD(p_dpg, 7, '*')='*******' OR p_dpg IS NULL THEN
+	  l_where_dpg := '';
+	ELSE
+	  l_where_dpg := ' lb.CODSG >= to_number('''|| replace(p_dpg,'*','0') || ''')';
+	  l_where_dpg := l_where_dpg || ' AND lb.CODSG <= to_number('''|| replace(p_dpg,'*','9') || ''')'; 	  
+	END IF;
+	   
+	if ( NVL(LENGTH(l_where_dpg), 0) != 0 ) then 
+		:P_WHERE := :P_WHERE || ' AND ( ' || l_where_dpg || ' ) ';
+	end if;
+	
+--	if ( NVL(LENGTH(:P_WHERE), 0) != 0 )
+--	then
+		--srw.message(1, '[P_WHERE] : ' || :P_WHERE);
+--	end if;
+ 	
+  RETURN TRUE;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

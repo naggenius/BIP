@@ -1,0 +1,1245 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ligneppcmActive_orbre" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_LIGNEPPCMACTIVE_ORBRE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="1024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param6" datatype="character" width="4"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMCLI" datatype="character" width="1024"
+     precision="10" validationTrigger="p_perimovalidtrigger" defaultWidth="0"
+     defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE1" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_A" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_dp" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_P" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HAB" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="40"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MOIS" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MOISMENS" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" display="yes"/>
+    <systemParameter name="ORIENTATION" display="yes"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[SELECT 
+A.igne_bip,
+A.libelle,
+A.Type,
+A.DPG,
+A.CA_Payeur,
+A.Typologie,
+NULL AS Chef_de_Projet,
+NULL AS Metier,
+NULL AS NomMO,
+A.projet,
+A.libprojet,
+A.applic,
+A.libappli,
+NULL AS libdosproj,
+NULL AS statut,
+NULL AS date_statut,
+NULL AS cout12,
+NULL AS cout,
+NULL AS stock_immo,
+A.top_fermeture,
+A.Client_Payeur,
+A.Top_tri,
+A.Paramètre_local,
+NULL AS CodDossProj,
+NULL AS PropAA1_Fourn,
+NULL AS NotAA1,
+NULL AS ArbAA1,
+A.PropAA_Fourn,
+NULL AS ReserveAA,
+A.NotAA,
+A.ArbAA,
+NULL AS PropAA1_Fourn1,
+NULL AS NotAA11,
+NULL AS PropAA2_Fourn1,
+NULL AS NotAA2,
+NULL AS PropAA1_Client,
+NULL AS PropAA_Client,
+NULL AS ConsAvAA1,
+NULL AS ConsAA1,
+A.ConsAA,
+A.ConsMM,
+NULL AS Consproj,
+A.ReestAA,
+NULL AS Projet_special,
+NULL AS projet_groupe,
+NULL AS libprojet_groupe,
+NULL AS applic_groupe,
+NULL AS libapplic_groupe,
+NULL AS CodMO_Oper,
+NULL AS COUTMM,
+NULL AS DBS,
+A.client,
+A.Libelle_DPG,
+A.Libelle_CSM,
+A.Application,
+A.TYPE_DE_PLAN,
+CASE WHEN (NVL(trim(A.PropAA_Fourn),'0,00') = '0,00' AND NVL(trim(A.NotAA),'0,00') = '0,00' 
+AND NVL(trim(A.ArbAA),'0,00') = '0,00' /*AND NVL(trim(A.PropAA_Client),'0,00') = '0,00'*/ AND NVL(trim(ConsAA),'0,00') = '0,00' 
+AND NVL(trim(ReestAA),'0,00') = '0,00' ) THEN
+'OUI'
+ELSE 'NON'
+END Valeur0,
+A.CDS_Fournisseur,
+A.Sous_type_de_Plan,
+'Non trouvee' AS DOMAINE_DRHG,
+'Non trouvee' AS ACTIVITe_DRHG,
+A.Chaine_de_Valeur_H2R,
+A.Notifie,
+A.Arbitre,
+A.Reestime,
+A.ConsAA as Consomme,
+A.ConsMM as Mensuel, 
+A.Propose,
+'Non trouvee' AS Zone_POS_BSC,
+'Non trouvee' AS Quartier_POS_BSC
+ FROM (
+SELECT LB.pid igne_bip,
+  LB.pnom libelle,
+  LB.typproj Type,
+  TO_CHAR(LB.codsg) DPG,
+  TO_CHAR(LB.codcamo) CA_Payeur,
+  LB.arctype Typologie,
+  LB.icpi projet,
+  PI.ilibel libprojet,
+  LB.airt applic,
+  AP.alibel libappli,
+  LB.topfer top_fermeture,
+  LB.clicode Client_Payeur,
+  LB.toptri Top_tri,
+  LB.pzone Paramètre_local,
+  SUBSTR(TO_CHAR(NVL(BUDG.bpmontme,0),'9999999990D00'),-8,8) PropAA_Fourn,
+  SUBSTR(TO_CHAR(NVL(BUDG.bnmont,0),'9999999990D00'),  -8,8) NotAA,
+  SUBSTR(TO_CHAR(NVL(BUDG.anmont,0),'9999999990D00'),  -8,8) ArbAA,
+  substr(to_char(NVL(BUDG.bpmontmo,0),'9999999990D00'),-8,8) PropAA_Client ,-- no need for report
+  lpad(NVL(TO_CHAR(CONSO.cusag, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),TO_CHAR(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.')),8,' ') ConsAA,
+  lpad(NVL(TO_CHAR( ROUND((SAM.consojh_sg                         +SAM.consojh_ssii ),2) , 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),TO_CHAR(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.')),8,' ') ConsMM,
+  lpad(ltrim(NVL(SUBSTR(TO_CHAR(NVL(BUDG.reestime,0),'9999999999990D00'),-9,9),'0')),9,' ') ReestAA,
+  --new columns
+  --cm.CLISIGLE client,
+  cm.CLILIB client,
+  s.LIBDSG Libelle_DPG ,
+  NVL(SUBSTR(s.LIBDSG,1,INSTR(s.LIBDSG||'/','/',1,4)-1),s.LIBDSG) Libelle_CSM,
+  ap.acdareg
+  ||'-'
+  ||APG.alibel Application,
+  CASE
+    WHEN ((l.type_proj = '1') or (l.type_proj = '2' and t.arctype in ('39','12','B02','B09')))
+    THEN 'CHANGE'
+     WHEN (l.type_proj = '2' and t.arctype not in ('39','12','B02','B09'))
+    THEN 'PLAN INTERNE'
+    WHEN l.type_proj = '5'
+    THEN 'STRUCTURE'
+    ELSE 'RUN'
+  END TYPE_DE_PLAN,
+  --NULL AS Valeur0,
+  NVL(SUBSTR(LIBDSG,1,INSTR(LIBDSG||'/','/',1,3)-1),LIBDSG) CDS_Fournisseur,
+  t.LIBARC	AS Sous_type_de_Plan,
+  LB.LINEAXISBUSINESS1 Chaine_de_Valeur_H2R,
+  NVL(BUDG.BNMONT,0) Notifie,
+  NVL(BUDG.ANMONT,0) Arbitre,
+  NVL(BUDG.REESTIME,0) Reestime,
+ -- NULL AS Consomme,
+  --NULL AS Mensuel,
+  NVL(BUDG.bpmontme,0) Propose
+FROM LIGNE_BIP LB,
+  PROJ_INFO PI,
+  APPLICATION AP,
+  APPLICATION APG,
+  BUDGET BUDG,
+  BUDGET BUDG_1,
+  BUDGET BUDG1,
+  BUDGET BUDG2,
+  BUDGET BUDG3,
+  CONSOMME CONSO,
+  CONSOMME CONSO_1,
+  CONSOMME CONSO_2,
+  SYNTHESE_ACTIVITE_MOIS SAM,
+  CLIENT_MO CM,
+  STRUCT_INFO S,
+  datdebex d,
+    type_activite t,
+  lien_types_proj_act l 
+WHERE LB.pid          = CONSO.pid(+)
+AND LB.pid            = CONSO_1.pid(+)
+AND LB.pid            = CONSO_2.pid(+)
+AND LB.pid            = SAM.pid (+)
+AND LB.pid            = BUDG.pid(+)
+AND LB.pid            = BUDG_1.pid(+)
+AND LB.pid            = BUDG1.pid(+)
+AND LB.pid            = BUDG2.pid(+)
+AND LB.pid            = BUDG3.pid(+)
+and trim(LB.TYPPROJ) = trim(l.type_proj)
+AND LB.ARCTYPE         = t.arctype
+AND l.type_act         = t.arctype
+AND t.actif            ='O'
+AND LB.CLICODE        =CM.CLICODE
+AND LB.CODSG          = s.CODSG
+AND LB.airt           = AP.airt
+AND AP.ACDAREG        = APG.AIRT
+AND BUDG.ANNEE(+)     = :P_ANNEE
+AND BUDG_1.ANNEE(+)   = :P_ANNEE-1
+AND BUDG1.ANNEE(+)    = :P_ANNEE+1
+AND BUDG2.ANNEE(+)    = :P_ANNEE+2
+AND BUDG3.ANNEE(+)    = :P_ANNEE+3
+AND CONSO.ANNEE (+)   = :P_ANNEE
+AND CONSO_1.ANNEE (+) = :P_ANNEE-1
+AND CONSO_2.ANNEE (+) = :P_ANNEE-2
+AND SAM.cdeb(+)       = :P_MOISMENS
+AND LB.icpi           = PI.icpi
+AND LB.airt           = AP.airt
+AND (LB.ADATESTATUT  IS NULL
+OR LB.adatestatut    >= d.datdebex)
+and LB.codcamo <> '77777'
+    &P_HAB
+        &P_WHERE
+ORDER BY LB.ADATESTATUT ) A
+union all
+SELECT 
+A.igne_bip,
+A.libelle,
+A.Type,
+A.DPG,
+A.CA_Payeur,
+A.Typologie,
+NULL AS Chef_de_Projet,
+NULL AS Metier,
+NULL AS NomMO,
+A.projet,
+A.libprojet,
+A.applic,
+A.libappli,
+NULL AS libdosproj,
+NULL AS statut,
+NULL AS date_statut,
+NULL AS cout12,
+NULL AS cout,
+NULL AS stock_immo,
+A.top_fermeture,
+A.Client_Payeur,
+A.Top_tri,
+A.Paramètre_local,
+NULL AS CodDossProj,
+NULL AS PropAA1_Fourn,
+NULL AS NotAA1,
+NULL AS ArbAA1,
+A.PropAA_Fourn,
+NULL AS ReserveAA,
+A.NotAA,
+A.ArbAA,
+NULL AS PropAA1_Fourn1,
+NULL AS NotAA11,
+NULL AS PropAA2_Fourn1,
+NULL AS NotAA2,
+NULL AS PropAA1_Client,
+NULL AS PropAA_Client,
+NULL AS ConsAvAA1,
+NULL AS ConsAA1,
+A.ConsAA,
+A.ConsMM,
+NULL AS Consproj,
+A.ReestAA,
+NULL AS Projet_special,
+NULL AS projet_groupe,
+NULL AS libprojet_groupe,
+NULL AS applic_groupe,
+NULL AS libapplic_groupe,
+NULL AS CodMO_Oper,
+NULL AS COUTMM,
+NULL AS DBS,
+A.client,
+A.Libelle_DPG,
+A.Libelle_CSM,
+A.Application,
+A.TYPE_DE_PLAN,
+CASE WHEN (NVL(trim(A.PropAA_Fourn),'0,00') = '0,00' AND NVL(trim(A.NotAA),'0,00') = '0,00' 
+AND NVL(trim(A.ArbAA),'0,00') = '0,00' /*AND NVL(trim(A.PropAA_Client),'0,00') = '0,00'*/ AND NVL(trim(ConsAA),'0,00') = '0,00' 
+AND NVL(trim(ReestAA),'0,00') = '0,00' ) THEN
+'OUI'
+ELSE 'NON'
+END Valeur0,
+A.CDS_Fournisseur,
+A.Sous_type_de_Plan,
+'Non trouvee' AS DOMAINE_DRHG,
+'Non trouvee' AS ACTIVITe_DRHG,
+A.Chaine_de_Valeur_H2R,
+A.Notifie,
+A.Arbitre,
+A.Reestime,
+to_char((nvl(a.cusag,0) * (nvl(a.tauxrep,100)/100))) as Consomme,
+to_char((nvl(ROUND((a.consojh_sg+a.consojh_ssii ),2),0) * (nvl(a.tauxrep,100)/100))) as Mensuel, 
+A.Propose,
+'Non trouvee' AS Zone_POS_BSC,
+'Non trouvee' AS Quartier_POS_BSC
+ FROM (
+SELECT LB.pid igne_bip,
+  LB.pnom libelle,
+  LB.typproj Type,
+  TO_CHAR(LB.codsg) DPG,
+  --TO_CHAR(LB.codcamo) CA_Payeur,
+  TO_CHAR(rl.codcamo) CA_Payeur,
+  LB.arctype Typologie,
+  LB.icpi projet,
+  PI.ilibel libprojet,
+  LB.airt applic,
+  AP.alibel libappli,
+  LB.topfer top_fermeture,
+  --LB.clicode Client_Payeur,
+  rl.clicode Client_Payeur,
+  LB.toptri Top_tri,
+  LB.pzone Paramètre_local,
+  SUBSTR(TO_CHAR(NVL(BUDG.bpmontme,0),'9999999990D00'),-8,8) PropAA_Fourn,
+  SUBSTR(TO_CHAR(NVL(BUDG.bnmont,0),'9999999990D00'),  -8,8) NotAA,
+  SUBSTR(TO_CHAR(NVL(BUDG.anmont,0),'9999999990D00'),  -8,8) ArbAA,
+  substr(to_char(NVL(BUDG.bpmontmo,0),'9999999990D00'),-8,8) PropAA_Client ,-- no need for report
+  lpad(NVL(TO_CHAR(nvl(CONSO.cusag,0) , 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),TO_CHAR(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.')),8,' ') ConsAA,
+  lpad(NVL(TO_CHAR( nvl(ROUND((SAM.consojh_sg+SAM.consojh_ssii ),2),0) , 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),TO_CHAR(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.')),8,' ') ConsMM,
+  lpad(ltrim(NVL(SUBSTR(TO_CHAR(NVL(BUDG.reestime,0),'9999999999990D00'),-9,9),'0')),9,' ') ReestAA,
+  --new columns
+  --cm.CLISIGLE client,
+  --CM1.CLISIGLE client,
+  cm1.CLILIB client,
+  s.LIBDSG Libelle_DPG ,
+  NVL(SUBSTR(s.LIBDSG,1,INSTR(s.LIBDSG||'/','/',1,4)-1),s.LIBDSG) Libelle_CSM,
+  ap.acdareg
+  ||'-'
+  ||APG.alibel Application,
+  CASE
+    WHEN ((l.type_proj = '1') or (l.type_proj = '2' and t.arctype in ('39','12','B02','B09')))
+    THEN 'CHANGE'
+     WHEN (l.type_proj = '2' and t.arctype not in ('39','12','B02','B09'))
+    THEN 'PLAN INTERNE'
+    WHEN l.type_proj = '5'
+    THEN 'STRUCTURE'
+    ELSE 'RUN'
+  END TYPE_DE_PLAN,
+  --NULL AS Valeur0,
+  NVL(SUBSTR(LIBDSG,1,INSTR(LIBDSG||'/','/',1,3)-1),s.LIBDSG) CDS_Fournisseur,
+  t.LIBARC	AS Sous_type_de_Plan,
+  LB.LINEAXISBUSINESS1 Chaine_de_Valeur_H2R,
+  (NVL(BUDG.BNMONT,0) * (nvl(rl.tauxrep,100)/100)) Notifie,
+  (NVL(BUDG.ANMONT,0) * (nvl(rl.tauxrep,100)/100)) Arbitre,
+  (NVL(BUDG.REESTIME,0) * (nvl(rl.tauxrep,100)/100)) Reestime,
+ -- NULL AS Consomme,
+  --NULL AS Mensuel,
+  (NVL(BUDG.bpmontme,0) * (nvl(rl.tauxrep,100)/100)) Propose,
+  rl.tauxrep,
+  SAM.consojh_sg,
+  SAM.consojh_ssii,
+  CONSO.cusag
+FROM LIGNE_BIP LB,
+  PROJ_INFO PI,
+  APPLICATION AP,
+  APPLICATION APG,
+  BUDGET BUDG,
+  BUDGET BUDG_1,
+  BUDGET BUDG1,
+  BUDGET BUDG2,
+  BUDGET BUDG3,
+  CONSOMME CONSO,
+  CONSOMME CONSO_1,
+  CONSOMME CONSO_2,
+  SYNTHESE_ACTIVITE_MOIS SAM,
+  CLIENT_MO CM,
+  STRUCT_INFO S,
+  datdebex d,
+    type_activite t,
+  lien_types_proj_act l,
+  REPARTITION_LIGNE RL ,
+  CENTRE_ACTIVITE CA,
+    CLIENT_MO CM1
+WHERE LB.pid          = CONSO.pid(+)
+AND LB.pid            = CONSO_1.pid(+)
+AND LB.pid            = CONSO_2.pid(+)
+AND LB.pid            = SAM.pid (+)
+AND LB.pid            = BUDG.pid(+)
+AND LB.pid            = BUDG_1.pid(+)
+AND LB.pid            = BUDG1.pid(+)
+AND LB.pid            = BUDG2.pid(+)
+AND LB.pid            = BUDG3.pid(+)
+and trim(LB.TYPPROJ) = trim(l.type_proj)
+AND LB.ARCTYPE         = t.arctype
+AND l.type_act         = t.arctype
+AND t.actif            ='O'
+AND LB.CLICODE        =CM.CLICODE
+AND LB.CODSG          = s.CODSG
+AND LB.airt           = AP.airt
+AND AP.ACDAREG        = APG.AIRT
+AND BUDG.ANNEE(+)     = :P_ANNEE
+AND BUDG_1.ANNEE(+)   = :P_ANNEE-1
+AND BUDG1.ANNEE(+)    = :P_ANNEE+1
+AND BUDG2.ANNEE(+)    = :P_ANNEE+2
+AND BUDG3.ANNEE(+)    = :P_ANNEE+3
+AND CONSO.ANNEE (+)   = :P_ANNEE
+AND CONSO_1.ANNEE (+) = :P_ANNEE-1
+AND CONSO_2.ANNEE (+) = :P_ANNEE-2
+AND SAM.cdeb(+)       = :P_MOISMENS
+AND LB.icpi           = PI.icpi
+AND LB.airt           = AP.airt
+AND (LB.ADATESTATUT  IS NULL
+OR LB.adatestatut    >= d.datdebex)
+and LB.codcamo = '77777'
+and LB.pid      = rl.pid
+AND rl.codcamo = ca.codcamo
+AND rl.clicode = CM1.clicode (+)
+and RL.DATFIN is null
+--AND rl.datdeb  =
+--  (SELECT MAX(datdeb)
+--  FROM repartition_ligne
+--  WHERE PID   = rl.PID
+--  AND CODCAMO = rl.CODCAMO
+--  )
+    &P_HAB
+        &P_WHERE
+ORDER BY LB.ADATESTATUT ) A;]]>
+      </select>
+      <displayInfo x="0.28796" y="0.05225" width="0.76038" height="0.23950"/>
+      <group name="G_pid">
+        <displayInfo x="1.38562" y="0.41418" width="2.83313" height="8.80469"
+        />
+        <dataItem name="IGNE_BIP" datatype="vchar2" columnOrder="27" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Igne Bip">
+          <dataDescriptor expression="IGNE_BIP"
+           descriptiveExpression="IGNE_BIP" order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="28" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="LIBELLE" descriptiveExpression="LIBELLE"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="29" width="2" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type">
+          <dataDescriptor expression="TYPE" descriptiveExpression="TYPE"
+           order="3" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG" datatype="vchar2" columnOrder="30" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg">
+          <dataDescriptor expression="DPG" descriptiveExpression="DPG"
+           order="4" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_PAYEUR" datatype="vchar2" columnOrder="31"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Payeur">
+          <dataDescriptor expression="CA_PAYEUR"
+           descriptiveExpression="CA_PAYEUR" order="5" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPOLOGIE" datatype="vchar2" columnOrder="32"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typologie">
+          <dataDescriptor expression="TYPOLOGIE"
+           descriptiveExpression="TYPOLOGIE" order="6" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHEF_DE_PROJET" datatype="vchar2" columnOrder="66"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Chef De Projet">
+          <dataDescriptor expression="CHEF_DE_PROJET"
+           descriptiveExpression="CHEF_DE_PROJET" order="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="67" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor expression="METIER" descriptiveExpression="METIER"
+           order="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOMMO" datatype="vchar2" columnOrder="68" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Nommo">
+          <dataDescriptor expression="NOMMO" descriptiveExpression="NOMMO"
+           order="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROJET" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="33" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Projet">
+          <dataDescriptor expression="PROJET" descriptiveExpression="PROJET"
+           order="10" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBPROJET" datatype="vchar2" columnOrder="34"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libprojet">
+          <dataDescriptor expression="LIBPROJET"
+           descriptiveExpression="LIBPROJET" order="11" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="APPLIC" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="35" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Applic">
+          <dataDescriptor expression="APPLIC" descriptiveExpression="APPLIC"
+           order="12" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBAPPLI" datatype="vchar2" columnOrder="36"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libappli">
+          <dataDescriptor expression="LIBAPPLI"
+           descriptiveExpression="LIBAPPLI" order="13" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDOSPROJ" datatype="vchar2" columnOrder="69"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdosproj">
+          <dataDescriptor expression="LIBDOSPROJ"
+           descriptiveExpression="LIBDOSPROJ" order="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="STATUT" datatype="vchar2" columnOrder="70" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Statut">
+          <dataDescriptor expression="STATUT" descriptiveExpression="STATUT"
+           order="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_STATUT" datatype="vchar2" columnOrder="71"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date Statut">
+          <dataDescriptor expression="DATE_STATUT"
+           descriptiveExpression="DATE_STATUT" order="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT12" datatype="vchar2" columnOrder="72" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout12">
+          <dataDescriptor expression="COUT12" descriptiveExpression="COUT12"
+           order="17"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT" datatype="vchar2" columnOrder="73" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout">
+          <dataDescriptor expression="COUT" descriptiveExpression="COUT"
+           order="18"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="STOCK_IMMO" datatype="vchar2" columnOrder="74"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Stock Immo">
+          <dataDescriptor expression="STOCK_IMMO"
+           descriptiveExpression="STOCK_IMMO" order="19"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOP_FERMETURE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="37" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Top Fermeture">
+          <dataDescriptor expression="TOP_FERMETURE"
+           descriptiveExpression="TOP_FERMETURE" order="20"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLIENT_PAYEUR" datatype="vchar2" columnOrder="38"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Client Payeur">
+          <dataDescriptor expression="CLIENT_PAYEUR"
+           descriptiveExpression="CLIENT_PAYEUR" order="21" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOP_TRI" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="39" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Top Tri">
+          <dataDescriptor expression="TOP_TRI" descriptiveExpression="TOP_TRI"
+           order="22" oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PARAMÈTRE_LOCAL" datatype="vchar2" columnOrder="40"
+         width="20" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Paramètre Local">
+          <dataDescriptor expression="PARAMÈTRE_LOCAL"
+           descriptiveExpression="PARAMÈTRE_LOCAL" order="23" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODDOSSPROJ" datatype="vchar2" columnOrder="75"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Coddossproj">
+          <dataDescriptor expression="CODDOSSPROJ"
+           descriptiveExpression="CODDOSSPROJ" order="24"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPAA1_FOURN" datatype="vchar2" columnOrder="76"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propaa1 Fourn">
+          <dataDescriptor expression="PROPAA1_FOURN"
+           descriptiveExpression="PROPAA1_FOURN" order="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOTAA1" datatype="vchar2" columnOrder="77" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Notaa1">
+          <dataDescriptor expression="NOTAA1" descriptiveExpression="NOTAA1"
+           order="26"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARBAA1" datatype="vchar2" columnOrder="78" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arbaa1">
+          <dataDescriptor expression="ARBAA1" descriptiveExpression="ARBAA1"
+           order="27"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPAA_FOURN" datatype="vchar2" columnOrder="41"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propaa Fourn">
+          <dataDescriptor expression="PROPAA_FOURN"
+           descriptiveExpression="PROPAA_FOURN" order="28" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RESERVEAA" datatype="vchar2" columnOrder="79"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Reserveaa">
+          <dataDescriptor expression="RESERVEAA"
+           descriptiveExpression="RESERVEAA" order="29"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOTAA" datatype="vchar2" columnOrder="42" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Notaa">
+          <dataDescriptor expression="NOTAA" descriptiveExpression="NOTAA"
+           order="30" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARBAA" datatype="vchar2" columnOrder="43" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arbaa">
+          <dataDescriptor expression="ARBAA" descriptiveExpression="ARBAA"
+           order="31" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPAA1_FOURN1" datatype="vchar2" columnOrder="80"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propaa1 Fourn1">
+          <dataDescriptor expression="PROPAA1_FOURN1"
+           descriptiveExpression="PROPAA1_FOURN1" order="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOTAA11" datatype="vchar2" columnOrder="81" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Notaa11">
+          <dataDescriptor expression="NOTAA11" descriptiveExpression="NOTAA11"
+           order="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPAA2_FOURN1" datatype="vchar2" columnOrder="82"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propaa2 Fourn1">
+          <dataDescriptor expression="PROPAA2_FOURN1"
+           descriptiveExpression="PROPAA2_FOURN1" order="34"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOTAA2" datatype="vchar2" columnOrder="83" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Notaa2">
+          <dataDescriptor expression="NOTAA2" descriptiveExpression="NOTAA2"
+           order="35"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPAA1_CLIENT" datatype="vchar2" columnOrder="84"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propaa1 Client">
+          <dataDescriptor expression="PROPAA1_CLIENT"
+           descriptiveExpression="PROPAA1_CLIENT" order="36"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPAA_CLIENT" datatype="vchar2" columnOrder="85"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propaa Client">
+          <dataDescriptor expression="PROPAA_CLIENT"
+           descriptiveExpression="PROPAA_CLIENT" order="37"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSAVAA1" datatype="vchar2" columnOrder="86"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consavaa1">
+          <dataDescriptor expression="CONSAVAA1"
+           descriptiveExpression="CONSAVAA1" order="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSAA1" datatype="vchar2" columnOrder="87" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consaa1">
+          <dataDescriptor expression="CONSAA1" descriptiveExpression="CONSAA1"
+           order="39"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSAA" datatype="vchar2" columnOrder="44" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consaa">
+          <dataDescriptor expression="CONSAA" descriptiveExpression="CONSAA"
+           order="40" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSMM" datatype="vchar2" columnOrder="45" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consmm">
+          <dataDescriptor expression="CONSMM" descriptiveExpression="CONSMM"
+           order="41" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSPROJ" datatype="vchar2" columnOrder="88" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consproj">
+          <dataDescriptor expression="CONSPROJ"
+           descriptiveExpression="CONSPROJ" order="42"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REESTAA" datatype="vchar2" columnOrder="46" width="9"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Reestaa">
+          <dataDescriptor expression="REESTAA" descriptiveExpression="REESTAA"
+           order="43" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROJET_SPECIAL" datatype="vchar2" columnOrder="89"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Projet Special">
+          <dataDescriptor expression="PROJET_SPECIAL"
+           descriptiveExpression="PROJET_SPECIAL" order="44"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROJET_GROUPE" datatype="vchar2" columnOrder="90"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Projet Groupe">
+          <dataDescriptor expression="PROJET_GROUPE"
+           descriptiveExpression="PROJET_GROUPE" order="45"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBPROJET_GROUPE" datatype="vchar2" columnOrder="91"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libprojet Groupe">
+          <dataDescriptor expression="LIBPROJET_GROUPE"
+           descriptiveExpression="LIBPROJET_GROUPE" order="46"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="APPLIC_GROUPE" datatype="vchar2" columnOrder="92"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Applic Groupe">
+          <dataDescriptor expression="APPLIC_GROUPE"
+           descriptiveExpression="APPLIC_GROUPE" order="47"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBAPPLIC_GROUPE" datatype="vchar2" columnOrder="93"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libapplic Groupe">
+          <dataDescriptor expression="LIBAPPLIC_GROUPE"
+           descriptiveExpression="LIBAPPLIC_GROUPE" order="48"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODMO_OPER" datatype="vchar2" columnOrder="94"
+         width="0" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codmo Oper">
+          <dataDescriptor expression="CODMO_OPER"
+           descriptiveExpression="CODMO_OPER" order="49"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUTMM" datatype="vchar2" columnOrder="95" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Coutmm">
+          <dataDescriptor expression="COUTMM" descriptiveExpression="COUTMM"
+           order="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DBS" datatype="vchar2" columnOrder="96" width="0"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dbs">
+          <dataDescriptor expression="DBS" descriptiveExpression="DBS"
+           order="51"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLIENT" datatype="vchar2" columnOrder="47" width="25"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Client">
+          <dataDescriptor expression="CLIENT" descriptiveExpression="CLIENT"
+           order="52" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_DPG" datatype="vchar2" columnOrder="48"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Dpg">
+          <dataDescriptor expression="LIBELLE_DPG"
+           descriptiveExpression="LIBELLE_DPG" order="53" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_CSM" datatype="vchar2" columnOrder="49"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Csm">
+          <dataDescriptor expression="LIBELLE_CSM"
+           descriptiveExpression="LIBELLE_CSM" order="54" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="APPLICATION" datatype="vchar2" columnOrder="50"
+         width="56" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Application">
+          <dataDescriptor expression="APPLICATION"
+           descriptiveExpression="APPLICATION" order="55" width="56"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_DE_PLAN" datatype="vchar2" columnOrder="51"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type De Plan">
+          <dataDescriptor expression="TYPE_DE_PLAN"
+           descriptiveExpression="TYPE_DE_PLAN" order="56" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VALEUR0" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="52" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Valeur0">
+          <dataDescriptor expression="VALEUR0" descriptiveExpression="VALEUR0"
+           order="57" oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CDS_FOURNISSEUR" datatype="vchar2" columnOrder="53"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cds Fournisseur">
+          <dataDescriptor expression="CDS_FOURNISSEUR"
+           descriptiveExpression="CDS_FOURNISSEUR" order="58" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOUS_TYPE_DE_PLAN" datatype="vchar2" columnOrder="54"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Sous Type De Plan">
+          <dataDescriptor expression="SOUS_TYPE_DE_PLAN"
+           descriptiveExpression="SOUS_TYPE_DE_PLAN" order="59" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DOMAINE_DRHG" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="55" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Domaine Drhg">
+          <dataDescriptor expression="DOMAINE_DRHG"
+           descriptiveExpression="DOMAINE_DRHG" order="60"
+           oracleDatatype="aFixedChar" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACTIVITE_DRHG" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="56" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Activite Drhg">
+          <dataDescriptor expression="ACTIVITE_DRHG"
+           descriptiveExpression="ACTIVITE_DRHG" order="61"
+           oracleDatatype="aFixedChar" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHAINE_DE_VALEUR_H2R" datatype="vchar2"
+         columnOrder="57" width="40" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Chaine De Valeur H2r">
+          <dataDescriptor expression="CHAINE_DE_VALEUR_H2R"
+           descriptiveExpression="CHAINE_DE_VALEUR_H2R" order="62" width="40"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOTIFIE" oracleDatatype="number" columnOrder="58"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Notifie">
+          <dataDescriptor expression="NOTIFIE" descriptiveExpression="NOTIFIE"
+           order="63" oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARBITRE" oracleDatatype="number" columnOrder="59"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arbitre">
+          <dataDescriptor expression="ARBITRE" descriptiveExpression="ARBITRE"
+           order="64" oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REESTIME" oracleDatatype="number" columnOrder="60"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Reestime">
+          <dataDescriptor expression="REESTIME"
+           descriptiveExpression="REESTIME" order="65" oracleDatatype="number"
+           width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSOMME" datatype="vchar2" columnOrder="61"
+         width="40" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Consomme">
+          <dataDescriptor expression="CONSOMME"
+           descriptiveExpression="CONSOMME" order="66" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MENSUEL" datatype="vchar2" columnOrder="62" width="40"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mensuel">
+          <dataDescriptor expression="MENSUEL" descriptiveExpression="MENSUEL"
+           order="67" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPOSE" oracleDatatype="number" columnOrder="63"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propose">
+          <dataDescriptor expression="PROPOSE" descriptiveExpression="PROPOSE"
+           order="68" oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ZONE_POS_BSC" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="64" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Zone Pos Bsc">
+          <dataDescriptor expression="ZONE_POS_BSC"
+           descriptiveExpression="ZONE_POS_BSC" order="69"
+           oracleDatatype="aFixedChar" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="QUARTIER_POS_BSC" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="65" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Quartier Pos Bsc">
+          <dataDescriptor expression="QUARTIER_POS_BSC"
+           descriptiveExpression="QUARTIER_POS_BSC" order="70"
+           oracleDatatype="aFixedChar" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" orientation="portrait"/>
+  <section name="main">
+    <body width="8.00000">
+      <location x="0.25000"/>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_menu VARCHAR2(25);
+	p_dpg VARCHAR2(10) := '';--PPM 61346
+begin
+  	  	
+	SELECT TO_NUMBER(TO_CHAR(datdebex.moismens,'YYYY')),
+  			TO_CHAR(datdebex.moismens) INTO :P_ANNEE , :P_MOISMENS
+  FROM datdebex;
+	
+	-- Initialisation des paramètres	  
+  :P_habili_DP := '';
+  :P_habili_P  := '';
+  :P_habili_A  :='';
+ 	:P_PERIME:='';
+	:P_PERIMCLI:='';
+	:P_HAB := 'VIDE';
+	:P_WHERE := '';   	
+  
+   -- Teste si on a été lancé par le menu habilitation par référentiels
+	IF :P_PARAM8='REF' THEN
+  
+	   -- Informations pour l'habilitation par référentiels
+		:P_habili_DP := pack_global.lire_doss_proj(:P_GLOBAL);
+	  :P_habili_P  := pack_global.lire_projet(:P_GLOBAL);
+	  :P_habili_A  := pack_global.lire_appli(:P_GLOBAL);
+
+	  IF (:P_habili_DP is null or :P_habili_DP='') THEN
+			  :P_habili_DP := 'VIDE';
+	  END IF;	
+	  IF (:P_habili_P is null or :P_habili_P='') THEN
+			  :P_habili_P := 'VIDE';
+	  END IF;	
+	  IF (:P_habili_A is null or :P_habili_A='') THEN
+			  :P_habili_A := 'VIDE';
+	  END IF;	
+  
+--		--srw.message(1,:P_habili_DP);
+--		--srw.message(1,:P_habili_P);
+--		--srw.message(1,:P_habili_A);
+  	
+	  -- Si on a une valeur égale à TOUS - on ne fait aucune Restriction
+	  IF (:P_habili_DP='TOUS' or :P_habili_P='TOUS' or :P_habili_A='TOUS' )THEN
+  		:P_HAB := '';
+  	ELSE	
+
+		  IF (:P_habili_DP<>'VIDE')THEN
+			  :P_HAB := ' lb.dpcode in ('||:P_habili_DP||') ';
+		  END IF;		
+		  -- Projet demandé
+		  -- On fait aussi le contrôle que sur le projet principal (icpir)
+		  IF (:P_habili_P<>'VIDE') THEN
+		  		IF (:P_HAB<>'VIDE') THEN  	
+		  			:P_HAB := :P_HAB 	||' OR ' ;
+		  		ELSE
+		  			:P_HAB := '' ;
+		  		END IF;	
+					:P_HAB := :P_HAB ||' (INSTR('''||:P_habili_P||''', lb.icpi) > 0) ';		  
+		  END IF;
+										
+			-- Application demandée
+		  -- On fait aussi le contrôle sur l'application principale
+		  IF (:P_habili_A<>'VIDE') THEN
+			  	IF (:P_HAB<>'VIDE') THEN  	
+			  		:P_HAB := :P_HAB 	||' OR ' ;
+		  		ELSE
+		  			:P_HAB := '' ;
+			  	END IF;	
+			 	  :P_HAB := :P_HAB ||' (INSTR('''||:P_habili_A||''', lb.airt) > 0) ' ; 
+		  END IF;
+		  
+		  -- On rajoute le 'AND devant P_HAB
+	  	IF (:P_HAB<>'VIDE') THEN  	
+		  		:P_HAB := ' AND ( ' || :P_HAB || ' ) ' ;
+		  		--srw.message(1,:P_HAB);
+	  	ELSE 
+	  		:P_HAB := '';
+	  	END IF;	
+		END IF;  		  
+	-- Le traitment n'a pas été lancé par le menu referentiel (il a pu été lancé par exemple par le menu administration )	
+  ELSE 
+	   -- Informations pour le lancement par les autres menus 	
+		:P_PERIME:=pack_global.lire_perime(:P_GLOBAL);
+		
+		if INSTR(:P_PERIME, '00000000000') > 0
+			then
+				:P_PERIME:= '06320000000';	
+			end if;
+		
+		
+		  /*CMA Fiche 1176 09/05/2011 le perimo est différent si l'utilisateur est dans le menu Client*/
+		l_menu := pack_global.lire_menutil(:P_global);
+		
+		if('MO'=l_menu)then
+			:P_PERIMCLI := pack_global.lire_perimcli(:P_global);
+		else
+			:P_PERIMCLI := pack_global.lire_perimo(:P_global);
+		end if;
+		
+		:P_HAB := '';
+
+  --QC1758 debut	:P_WHERE :=' AND ((LB.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIME||''', codbddpg) > 0 ))'; 
+				--KRA PPM 61346
+		p_dpg := RTRIM(LTRIM(:P_PARAM9));		
+		
+		IF LPAD(p_dpg, 7, '*') != '*******' OR p_dpg IS NULL THEN
+		p_dpg := REPLACE(p_dpg,'*','%');
+			--DPG de ligne			
+			:P_WHERE := :P_WHERE || ' AND (TO_CHAR(LB.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+		ELSIF p_dpg = '*******' THEN
+			--DPG de ligne
+			:P_WHERE := :P_WHERE || ' AND (( LB.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIME||''', codbddpg) > 0 ))';
+		END IF;	
+		--Fin KRA PPM 61346
+  --QC 1758 fin
+		IF :P_PARAM7='FOUR_CLI' THEN
+			IF ( LENGTH(:P_PERIMCLI) != 0 AND INSTR(:P_PERIMCLI,'000000000')=0 AND INSTR(:P_PERIMCLI,'099988888')=0 ) THEN
+				:P_WHERE := :P_WHERE || ' OR ((LB.clicode IN (SELECT clicode FROM vue_clicode_perimo where INSTR('''||:P_PERIMCLI||''', bdclicode) > 0 )) OR (LB.clicode_oper IN (SELECT clicode FROM vue_clicode_perimo where INSTR('''||:P_PERIMCLI||''', bdclicode) > 0 )) )';
+			END IF;
+		END IF;
+		:P_WHERE := :P_WHERE || ')';
+		
+	  ----srw.message(1,:p_perime|| 'et' || :p_perimcli || ' et '||:P_WHERE);
+	END IF;		
+    
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="p_perimovalidtrigger">
+      <textSource>
+      <![CDATA[function P_PERIMOValidTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

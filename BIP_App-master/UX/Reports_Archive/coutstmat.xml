@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="coutstmat" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="COUTSTMAT" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <comment>
+  <![CDATA[Edition desc outs standert par année et par plage de dpg  des logiciels et des frais d'environnement]]>
+  </comment>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+    cs2.annee,
+   LPAD(to_char(cs2.dpg_bas),7,'0') dpg_bas,
+    LPAD(to_char(cs2.dpg_haut),7,'0')  dpg_haut,
+    metier,
+    NVL(cs2.cout_log,0) cout_log,
+    NVL(cs2.coutenv_ssii,0) coutenv_ssii,
+   NVL(cs2.coutenv_sg,0) coutenv_sg
+
+from
+    cout_std2 cs2
+&P_WHERE
+order by annee,dpg_bas,metier]]>
+      </select>
+      <displayInfo x="1.53125" y="0.76038" width="0.69995" height="0.19995"/>
+      <group name="G_annee">
+        <displayInfo x="1.41541" y="1.19055" width="1.15222" height="0.43066"
+        />
+        <dataItem name="annee" oracleDatatype="number" columnOrder="11"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="cs2.annee" descriptiveExpression="ANNEE"
+           order="1" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_cout">
+        <displayInfo x="1.22791" y="1.94983" width="1.11926" height="1.45605"
+        />
+        <dataItem name="dpg_bas" datatype="vchar2" columnOrder="16" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lpad To Char Cs2 Dpg Bas 7 0">
+          <xmlSettings xmlTag="LPAD_TO_CHAR_CS2_DPG_BAS_7_0"/>
+          <dataDescriptor
+           expression="LPAD ( to_char ( cs2.dpg_bas ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="DPG_BAS" order="2" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpg_haut" datatype="vchar2" columnOrder="12" width="7"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Haut">
+          <dataDescriptor
+           expression="LPAD ( to_char ( cs2.dpg_haut ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="DPG_HAUT" order="3" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="metier" datatype="vchar2" columnOrder="19" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor expression="metier" descriptiveExpression="METIER"
+           order="4" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout_log" oracleDatatype="number" columnOrder="13"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cout Log" breakOrder="none">
+          <dataDescriptor expression="NVL ( cs2.cout_log , 0 )"
+           descriptiveExpression="COUT_LOG" order="5" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutenv_ssii" oracleDatatype="number" columnOrder="14"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutenv Ssii" breakOrder="none">
+          <dataDescriptor expression="NVL ( cs2.coutenv_ssii , 0 )"
+           descriptiveExpression="COUTENV_SSII" order="6"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutenv_sg" oracleDatatype="number" columnOrder="15"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutenv Sg" breakOrder="none">
+          <dataDescriptor expression="NVL ( cs2.coutenv_sg , 0 )"
+           descriptiveExpression="COUTENV_SG" order="7"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers gridSpacing="0.25"/>
+  <section name="header">
+    <body>
+      <location x="0.12500" y="0.18750"/>
+    </body>
+  </section>
+  <section name="main">
+    <body>
+      <location x="0.43750" y="0.37500"/>
+      <field name="F_DATE1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="0.62500" y="0.18750" width="1.00000" height="0.18750"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+      </field>
+      <frame name="M_1">
+        <geometryInfo x="2.35156" y="0.06250" width="3.33594" height="0.43750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineWidth="2" fillBackgroundColor="r88g88b100"
+         linePattern="solid" lineForegroundColor="r0g50b75"/>
+      </frame>
+      <text name="B_1" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="2.43750" y="0.12500" width="3.12500" height="0.37500"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <textSegment>
+          <font face="Arial" size="9" bold="yes"/>
+          <string>
+          <![CDATA[LISTE DES COUTS STANDARDS
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Arial" size="9" bold="yes"/>
+          <string>
+          <![CDATA[LOGICIELS -  FRAIS D'ENVIRONNEMENT]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_3" minWidowLines="1">
+        <textSettings justify="right" spacing="single"/>
+        <geometryInfo x="5.08350" y="0.16663" width="2.38684" height="0.21875"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Page : &<PageNumber> / &<TotalPages> ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.12500" y="0.19788" width="0.50000" height="0.18750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineForegroundColor="white"/>
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <frame name="M_G_nom1">
+        <geometryInfo x="0.56396" y="1.12439" width="6.67566" height="0.37170"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillForegroundColor="darkcyan"
+         fillBackgroundColor="r88g100b100" linePattern="solid"/>
+        <text name="B_nom1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.78650" y="1.23132" width="0.52551"
+           height="0.15649"/>
+          <visualSettings fillBackgroundColor="blue"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Année]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_prenom1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="1.56165" y="1.23132" width="0.68835"
+           height="0.15649"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[DPG bas]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_tel1" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="5.17029" y="1.14575" width="0.86853"
+           height="0.31250"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Frais
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[d'ENV SSII]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_prenom2" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="2.51965" y="1.23132" width="0.68835"
+           height="0.15649"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[DPG haut]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_prenom3" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="4.34900" y="1.23132" width="0.68835"
+           height="0.15649"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Logiciel]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_tel2" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="6.28491" y="1.14575" width="0.86853"
+           height="0.31250"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Frais
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[d'ENV SG]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_prenom4" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.50269" y="1.22864" width="0.68835"
+           height="0.15649"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Métier]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <repeatingFrame name="R_année" source="G_annee" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.56238" y="1.50073" width="6.67725" height="0.27124"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings linePattern="solid"/>
+        <repeatingFrame name="R_cout" source="G_cout" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.59375" y="1.50110" width="6.60413"
+           height="0.27087"/>
+          <generalLayout verticalElasticity="variable"/>
+          <field name="F_annee" source="annee" minWidowLines="1" spacing="0"
+           alignment="center">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="0.68738" y="1.54321" width="0.54175"
+             height="0.18750"/>
+          </field>
+          <field name="F_dpg_bas" source="dpg_bas" minWidowLines="1"
+           spacing="0" alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="1.29175" y="1.54321" width="0.76160"
+             height="0.18750"/>
+          </field>
+          <field name="F_dpg_haut" source="dpg_haut" minWidowLines="1"
+           spacing="0" alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="2.36218" y="1.54321" width="0.68872"
+             height="0.18750"/>
+          </field>
+          <field name="F_logiciel" source="cout_log" minWidowLines="1"
+           formatMask="NNNGNN0D00" spacing="0" alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="3.96606" y="1.54321" width="0.82300"
+             height="0.18750"/>
+          </field>
+          <field name="F_envssii" source="coutenv_ssii" minWidowLines="1"
+           formatMask="NNNGNN0D00" spacing="0" alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="5.04907" y="1.54321" width="0.82300"
+             height="0.18750"/>
+          </field>
+          <field name="F_env sg" source="coutenv_sg" minWidowLines="1"
+           formatMask="NNNGNN0D00" spacing="0" alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="6.13269" y="1.54321" width="0.82300"
+             height="0.18750"/>
+          </field>
+          <field name="F_metier" source="metier" minWidowLines="1" spacing="0"
+           alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="3.16882" y="1.54053" width="0.68872"
+             height="0.18750"/>
+          </field>
+        </repeatingFrame>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+
+	-- PARAM6 contient l'annee choisie
+	IF (:P_PARAM6 is not NULL) and (LENGTH(:P_PARAM6)=4) THEN
+		:p_where := ' where  annee=' || :P_PARAM6 ;
+	else
+		:p_where :=' ';
+  END IF;
+
+ 
+ --srw.message(1,:P_where);  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

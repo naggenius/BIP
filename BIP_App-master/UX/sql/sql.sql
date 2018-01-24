@@ -1,0 +1,4 @@
+alter table PMW_LIGNE_BIP MODIFY P_SAISIE VARCHAR2(30);
+alter table LIGNE_BIP MODIFY P_SAISIE VARCHAR2(30);
+commit;
+exit;

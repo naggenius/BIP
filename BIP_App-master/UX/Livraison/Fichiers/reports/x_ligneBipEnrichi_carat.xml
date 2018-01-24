@@ -1,0 +1,1350 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ligneppcmActive" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="X_LIGNEPPCMACTIVE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_MOISMENS" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" display="yes"/>
+    <systemParameter name="ORIENTATION" display="yes"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[SELECT
+		LB.pnom						pnom,
+		LB.pid						pid,
+		LB.typproj					typproj,
+		LB.codsg					codsg,
+		SI.libdsg					libdsg,
+		DIR.libdir					libdir,
+		--BR.libbr					libbr,
+		to_char(LB.codcamo)			codcamo,
+		LB.arctype					arctype,
+		to_char(LB.pcpi)			pcpi,
+		-- FAD PPM 63956 QC 1953 : Correction de RespNom et RespPrenom
+		RES.rnom	respnom,
+		--KRA 63956
+		--RES.rprenom					resnom,
+		-- FAD PPM 63956 QC 1953 : Fin
+		LB.metier					metier,
+		LB.pnmouvra					pnmouvra,
+		LB.icpi						icpi,
+		PI.ilibel					ilibel,
+		LB.airt						airt,
+		AP.alibel					alibel,
+		DP.dplib					dplib,
+		to_char(PI.dp_copi)			dpcopicode,
+		to_char(DPCOPI.libelle)		dpcopilib,
+		LB.astatut					astatut,
+		to_char(LB.adatestatut,'mmyyyy')	adatestatut,
+		nvl(to_char(round(sfb.D_CONSOSG_FI+sfb.D_CONSOSSII_FI)/1000, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),'0')		factintd,
+		nvl(to_char(round(sfb.CONSOSG_FI+sfb.CONSOSSII_FI-sfb.D_CONSOSG_FI-sfb.D_CONSOSSII_FI)/1000, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),'0')		factint,
+		NVL (TO_CHAR(NVL(round(sfb.CONSOFTSG_IM + sfb.CONSOFTSSII_IM)/1000 ,0.0), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,0')					stock_immo,
+		LB.topfer					topfer,
+		LB.clicode					codmo,
+		--KRA 63956
+		--(select br.libbr from directions dr, branches br, client_mo m where br.codbr=dr.codbr and dr.coddir = m.clidir and m.clicode = LB.clicode)			cliprinbranchelib,
+		--KRA 63956
+		--(select clilib from CLIENT_MO where clicode = LB.clicode_oper)			clioperlib,
+		MO.clilib					libmo,
+		LB.toptri					tarcproc,
+		LB.pzone					pzone,
+		to_char(LB.dpcode)			dpcode,
+		nvl(substr(to_char(BUDG_1.bpmontme,'9999999990D00'),-8,8), '0')			bud_prop_m1,
+		nvl(substr(to_char(BUDG_1.bnmont,'9999999990D00'),-8,8), '0')			bud_notN_m1,
+		nvl(substr(to_char(BUDG_1.anmont,'9999999990D00'),-8,8), '0')			bud_arb_notN_m1,
+		nvl(substr(to_char(BUDG.bpmontme,'9999999990D00'),-8,8), '0')			bud_propN1,
+		nvl(substr(to_char(BUDG.reserve,'9999999990D00'),-8,8), '0')			bud_propN3,
+		nvl(substr(to_char(BUDG.bnmont,'9999999990D00'),-8,8), '0')				bud_notN1,
+		nvl(substr(to_char(cout.notif_ke,'9999999990D00'),-8,8), '0')						bud_notN1Eur,
+		nvl(substr(to_char(BUDG.anmont,'9999999990D00'),-8,8), '0')						bud_arb_notN1,
+		nvl(substr(to_char(cout.arbit_ke,'9999999990D00'),-8,8), '0')						bud_arb_notN1Eur,
+		nvl(substr(to_char(BUDG1.bpmontme,'9999999990D00'),-8,8), '0')					bud_propN_p11,
+		nvl(substr(to_char(BUDG1.bnmont,'9999999990D00'),-8,8), '0')						bud_notN_p1,
+		nvl(substr(to_char(BUDG2.bpmontme,'9999999990D00'),-8,8), '0')					bud_propN_p2,
+		nvl(substr(to_char(BUDG2.bnmont,'9999999990D00'),-8,8), '0')						bud_notN_p2,
+		nvl(substr(to_char(BUDG1.bpmontmo,'9999999990D00'),-8,8), '0')					bud_propNmo_p1,
+		--KRA 63956
+		--nvl(substr(to_char(BUDG2.bpmontmo,'9999999990D00'),-8,8), '0')					bud_propNmo_p2,
+		nvl(substr(to_char(BUDG.bpmontmo,'9999999990D00'),-8,8), '0')						bud_propNmo,
+		nvl(substr(to_char(cout.propomo_ke,'9999999990D00'),-8,8), '0')					bud_propNmoEur,
+		nvl(to_char(CONSO_2.xcusag, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),to_char(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'))		xcusaghi,
+		nvl(to_char(CONSO_1.cusag, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),to_char(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'))		xcusagm1,
+		nvl(to_char(CONSO.cusag, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),to_char(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'))			xcusag0,
+		nvl(substr(to_char(cout.conso_ke,'9999999990D00'),-8,8),'0')			xcusag0Eur,
+		nvl(to_char( round((SAM.consojh_sg +SAM.consojh_ssii ),2)  , 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),to_char(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'))		xcusmois,
+		nvl(substr(to_char(round((( NVL(SAM.CONSOFT_SG,0) + NVL(SAM.CONSOFT_SSII,0) + NVL(SAM.CONSOENV_SG,0) + NVL(SAM.CONSOENV_SSII,0)  ) /1000),0),'9999999990D00'),-8,8),'0')		xcusmoisEur,
+		nvl(to_char(CONSO.xcusag, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),to_char(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'))			xcusag,
+		nvl(to_char(round(sum(SYNTH.consoft_sg+SYNTH.consoft_ssii+SYNTH.consoenv_sg+SYNTH.consoenv_ssii))/1000, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'),to_char(0, 'FM999990D00','NLS_NUMERIC_CHARACTERS='',.'))	xcusagEur,
+		nvl(substr(to_char(BUDG.reestime,'9999999999990D00'),-9,9),'0')			preesancou,
+		nvl(substr(to_char(cout.reest_ke,'9999999990D00'),-8,8),'0')			preesancouEur,
+		LB.codpspe												codpspe,
+		PI.icpir												icpir,
+		PIG.ilibel												gilibel,
+		AP.acdareg												acdareg,
+		APG.alibel												galibel,
+		LB.clicode_oper											codmo_oper,
+		nvl(to_char(round((sfb.M_CONSOSG_FI + sfb.M_CONSOSSII_FI)/1000) , 'FM999999999990D00','NLS_NUMERIC_CHARACTERS='',.'),'0,0')		CoûtMM,
+		LB.sous_type											sous_typo,
+		replace(replace( replace( nvl(to_char(LB.POBJET),' ' ) , CHR(10) , ' ' ), '  ',' '), ';', ',')	pobjet,
+		
+		--Ajout dans le cadre de la PPM 62334 paragraphe 6.9 par FAD
+                                --BIP 32 CHANGES START
+		PACK_ARBITRE.FIND_REF_DEMANDE(NULL,DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,LB.PID) Ref_demande,
+		PACK_ARBITRE.FIND_REF_DEMANDE_LIB(DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER,LB.PID) Ref_demande_Lib,
+                 --BIP 32 CHANGES DONE
+		DPCOPI.DPCOPIAXEMETIER DpCopiAxeMetierCode,
+		DECODE ( DPCOPI.DPCOPIAXEMETIER , NULL , ' ' , DECODE ( ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM ) = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1 ) , NULL , '???' , ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM ) = TRIM ( DPCOPI.DPCOPIAXEMETIER ) AND ROWNUM = 1 ) ) ) DpCopiAxeMetierLib,
+		PI.PROJAXEMETIER ProjAxeMetierCode ,
+		DECODE ( PI.PROJAXEMETIER , NULL , ' ' , DECODE ( ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM ) = TRIM ( PI.PROJAXEMETIER ) AND ROWNUM = 1 ) , NULL , '???' , ( SELECT DMPLIBEL FROM DMP_RESEAUXFRANCE WHERE TRIM ( DMPNUM ) = TRIM ( PI.PROJAXEMETIER ) AND ROWNUM = 1 ) ) ) ProjAxeMetierLib 
+		--Fin
+
+FROM    
+    CONSOMME CONSO,
+    CONSOMME CONSO_1,
+    CONSOMME CONSO_2,
+    BUDGET BUDG,                                       --table des budgets pour l'année en cours
+    BUDGET BUDG_1,                                         --table des budgets pour l'année en cours-1
+                BUDGET BUDG1,                                         --table des budgets pour l'année en cours+1
+                BUDGET BUDG2,                                         --table des budgets pour l'année en cours+2
+                BUDGET BUDG3,                                         --table des budgets pour l'année en cours+3
+    LIGNE_BIP LB,
+                DATDEBEX,
+    APPLICATION AP,
+    PROJ_INFO PI,
+    STRUCT_INFO SI,
+    DIRECTIONS DIR,
+	BRANCHES BR,
+    RESSOURCE RES,
+    CLIENT_MO MO,
+    PROJ_INFO PIG,
+    DOSSIER_PROJET DP,
+    DOSSIER_PROJET_COPI DPCOPI,
+    APPLICATION APG,
+    SYNTHESE_ACTIVITE_MOIS SAM,
+    SYNTHESE_ACTIVITE SYNTH,
+    SYNTHESE_FIN_BIP SFB,
+    TMP_COUTKE_ETATS cout
+--ISAC_TACHE ita,  isac_sous_tache isst, isac_etape iet
+WHERE   -- jointures
+      LB.pid = CONSO.pid(+)
+      AND LB.pid = CONSO_1.pid(+)
+      AND LB.pid = CONSO_2.pid(+)
+      AND LB.pid = SFB.pid(+)
+      AND LB.pid = SAM.pid (+)
+      AND LB.pid = BUDG.pid(+)
+      AND LB.pid = BUDG_1.pid(+)
+      AND LB.pid = BUDG1.pid(+)
+      AND LB.pid = BUDG2.pid(+)
+      AND LB.pid = BUDG3.pid(+)
+      AND LB.pid = SYNTH.pid(+)
+      AND BUDG.annee(+) = :P_ANNEE
+      AND BUDG_1.annee(+) = :P_ANNEE-1
+      AND BUDG1.annee(+) = :P_ANNEE+1
+      AND BUDG2.annee(+) = :P_ANNEE+2
+      AND BUDG3.annee(+) = :P_ANNEE+3
+      AND CONSO.annee (+) =  :P_ANNEE
+      AND CONSO_1.annee (+) = :P_ANNEE-1
+      AND CONSO_2.annee (+) = :P_ANNEE-2
+      AND SAM.cdeb(+) = :P_MOISMENS
+      AND SFB.annee(+) =  :P_ANNEE
+      AND LB.icpi = PI.icpi(+)
+      AND LB.codsg = SI.codsg(+)
+      AND SI.coddir = DIR.coddir(+)
+	  --KRA 63956
+	  -- FAD PPM 63956 QC 1954 : Ajout du (+) à BR.CODBR
+	  AND BR.CODBR(+) = DIR.CODBR
+	  -- FAD PPM 63956 QC 1954 : Fin
+      AND LB.pcpi = RES.ident(+)
+      AND LB.clicode = MO.clicode(+)
+      AND LB.airt = AP.airt(+)
+      AND LB.dpcode = DP.dpcode(+)
+      AND PI.dp_copi = DPCOPI.dp_copi(+)
+      AND PI.icpir = PIG.icpi(+)
+      AND AP.acdareg = APG.airt(+)
+      AND cout.pid(+) = LB.pid
+      AND cout.codsg(+) = LB.codsg
+      AND cout.metier(+) = LB.metier	 
+      AND cout.numseq(+) = :P_NUMSEQ
+AND (extract (YEAR FROM LB.ADATESTATUT) >= :P_ANNEE OR LB.adatestatut IS NULL)
+--and isst.pid        = lb.pid
+--AND isst.etape        = iet.etape
+--AND isst.tache        = ita.tache
+--AND DPCOPI.dp_copi(+) = PI.dp_copi
+
+   AND (EXISTS (SELECT CLICODE FROM CLICODE_RBDF WHERE CLICODE = LB.CLICODE)
+   OR
+   EXISTS (SELECT CODSG FROM CODSG_RBDF WHERE CODSG = LB.CODSG))
+
+group by LB.pid,LB.pnom, LB.codsg,LB.typproj,SI.libdsg,DIR.libdir,BR.libbr,LB.codcamo,LB.arctype,LB.pcpi,res.rnom,res.rprenom,LB.metier,LB.pnmouvra,LB.icpi,PI.ilibel,LB.airt,AP.alibel,DP.dplib,PI.dp_copi,
+DPCOPI.libelle,LB.astatut,LB.adatestatut,sfb.D_CONSOSG_FI,D_CONSOSSII_FI,sfb.CONSOSG_FI,CONSOSSII_FI,
+sfb.CONSOFTSG_IM,sfb.CONSOFTSSII_IM,LB.topfer,LB.clicode,MO.clilib,LB.toptri,LB.pzone,LB.dpcode,BUDG_1.bpmontme,BUDG_1.bnmont,BUDG_1.anmont,BUDG.bpmontme,
+BUDG.reserve,BUDG.bnmont,cout.notif_ke,BUDG.anmont,cout.arbit_ke,BUDG1.bpmontme,BUDG1.bnmont,BUDG2.bpmontme,BUDG2.bnmont,BUDG1.bpmontmo,BUDG2.bpmontmo,BUDG.bpmontmo,
+cout.propomo_ke,CONSO_2.xcusag,CONSO_1.cusag,CONSO.cusag,cout.conso_ke,SAM.consojh_sg,SAM.consojh_ssii,SAM.CONSOFT_SG,SAM.CONSOFT_SSII,SAM.CONSOENV_SG,SAM.CONSOENV_SSII,
+CONSO.xcusag,BUDG.reestime,cout.reest_ke,LB.codpspe,PI.icpir,PIG.ilibel,AP.acdareg,APG.alibel,LB.clicode_oper,sfb.M_CONSOSG_FI,sfb.M_CONSOSSII_FI,LB.sous_type,LB.POBJET,
+DPCOPI.DPCOPIAXEMETIER,PI.PROJAXEMETIER--,LB.LINEAXISBUSINESS2,ITA.TACHEAXEMETIER
+ORDER BY LB.adatestatut;]]>
+      </select>
+      <displayInfo x="0.28796" y="0.05225" width="0.76416" height="0.23950"/>
+      <group name="G_pid">
+        <displayInfo x="4.39600" y="0.03918" width="2.84070" height="11.36816"
+        />
+        <dataItem name="pid" datatype="vchar2" columnOrder="14" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pid" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ligne_Code&quot;"/>
+          <dataDescriptor expression="PID" descriptiveExpression="PID"
+           order="2" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pnom" datatype="vchar2" columnOrder="15" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pnom" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ligne_Lib&quot;"/>
+          <dataDescriptor expression="PNOM" descriptiveExpression="PNOM"
+           order="1" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="typproj" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="16" width="2"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Typproj" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TypePrin&quot;"/>
+          <dataDescriptor expression="TYPPROJ" descriptiveExpression="TYPPROJ"
+           order="3" oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="arctype" datatype="vchar2" columnOrder="19" width="3"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Arctype" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TypeSec&quot;"/>
+          <dataDescriptor expression="ARCTYPE" descriptiveExpression="ARCTYPE"
+           order="8" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="sous_typo" datatype="vchar2" columnOrder="64"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Sous Typo" breakOrder="none">
+          <xmlSettings xmlTag="DBS"/>
+          <dataDescriptor expression="SOUS_TYPO"
+           descriptiveExpression="SOUS_TYPO" order="64" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsg" oracleDatatype="number" columnOrder="17"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpgCode&quot;"/>
+          <dataDescriptor expression="CODSG" descriptiveExpression="CODSG"
+           order="4" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdsg" datatype="vchar2" columnOrder="70" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdsg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpgLib&quot;"/>
+          <dataDescriptor expression="LIBDSG" descriptiveExpression="LIBDSG"
+           order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdir" datatype="vchar2" columnOrder="71" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdir" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpgDirLib&quot;"/>
+          <dataDescriptor expression="LIBDIR" descriptiveExpression="LIBDIR"
+           order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="metier" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="21" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Metier&quot;"/>
+          <dataDescriptor expression="METIER" descriptiveExpression="METIER"
+           order="11" oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pcpi" datatype="vchar2" columnOrder="20" width="40"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pcpi" breakOrder="none">
+          <xmlSettings xmlTag="&quot;RespCode&quot;"/>
+          <dataDescriptor expression="PCPI" descriptiveExpression="PCPI"
+           order="9" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="respnom" datatype="vchar2" columnOrder="74" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Respnom" breakOrder="none">
+          <xmlSettings xmlTag="&quot;RespNom&quot;"/>
+          <dataDescriptor expression="RESPNOM" descriptiveExpression="RESPNOM"
+           order="10" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codcamo" datatype="vchar2" columnOrder="18" width="40"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codcamo" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CaPayeur&quot;"/>
+          <dataDescriptor expression="CODCAMO" descriptiveExpression="CODCAMO"
+           order="7" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pnmouvra" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="22" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pnmouvra" breakOrder="none">
+          <xmlSettings xmlTag="&quot;MoNom&quot;"/>
+          <dataDescriptor expression="PNMOUVRA"
+           descriptiveExpression="PNMOUVRA" order="12"
+           oracleDatatype="aFixedChar" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpcode" datatype="vchar2" columnOrder="36" width="40"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dpcode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCode&quot;"/>
+          <dataDescriptor expression="DPCODE" descriptiveExpression="DPCODE"
+           order="30" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dplib" datatype="vchar2" columnOrder="27" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dplib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpLib&quot;"/>
+          <dataDescriptor expression="DPLIB" descriptiveExpression="DPLIB"
+           order="17" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpcopicode" datatype="vchar2" columnOrder="75"
+         width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dpcopicode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiCode&quot;"/>
+          <dataDescriptor expression="DPCOPICODE"
+           descriptiveExpression="DPCOPICODE" order="18" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpcopilib" datatype="vchar2" columnOrder="76"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dpcopilib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiLib&quot;"/>
+          <dataDescriptor expression="DPCOPILIB"
+           descriptiveExpression="DPCOPILIB" order="19" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="icpi" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="23" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Icpi" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjCode&quot;"/>
+          <dataDescriptor expression="ICPI" descriptiveExpression="ICPI"
+           order="13" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ilibel" datatype="vchar2" columnOrder="24" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ilibel" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjLib&quot;"/>
+          <dataDescriptor expression="ILIBEL" descriptiveExpression="ILIBEL"
+           order="14" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="icpir" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="56" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Icpir" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjGroupeCode&quot;"/>
+          <dataDescriptor expression="ICPIR" descriptiveExpression="ICPIR"
+           order="58" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="gilibel" datatype="vchar2" columnOrder="57" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Gilibel" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjGroupeLib&quot;"/>
+          <dataDescriptor expression="GILIBEL" descriptiveExpression="GILIBEL"
+           order="59" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codpspe" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="54" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codpspe" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjSpecialCode&quot;"/>
+          <dataDescriptor expression="CODPSPE" descriptiveExpression="CODPSPE"
+           order="57" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="airt" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="25" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Airt" breakOrder="none">
+          <xmlSettings xmlTag="&quot;AppliCode&quot;"/>
+          <dataDescriptor expression="AIRT" descriptiveExpression="AIRT"
+           order="15" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="alibel" datatype="vchar2" columnOrder="26" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Alibel" breakOrder="none">
+          <xmlSettings xmlTag="&quot;AppliLib&quot;"/>
+          <dataDescriptor expression="ALIBEL" descriptiveExpression="ALIBEL"
+           order="16" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="acdareg" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="58" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Acdareg" breakOrder="none">
+          <xmlSettings xmlTag="&quot;AppliGroupeCode&quot;"/>
+          <dataDescriptor expression="ACDAREG" descriptiveExpression="ACDAREG"
+           order="60" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="galibel" datatype="vchar2" columnOrder="59" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Galibel" breakOrder="none">
+          <xmlSettings xmlTag="&quot;AppliGroupeLib&quot;"/>
+          <dataDescriptor expression="GALIBEL" descriptiveExpression="GALIBEL"
+           order="61" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="topfer" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="32" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Topfer" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TopFermeture&quot;"/>
+          <dataDescriptor expression="TOPFER" descriptiveExpression="TOPFER"
+           order="25" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="astatut" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="28" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Astatut" breakOrder="none">
+          <xmlSettings xmlTag="&quot;StatutCode&quot;"/>
+          <dataDescriptor expression="ASTATUT" descriptiveExpression="ASTATUT"
+           order="20" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="adatestatut" datatype="vchar2" columnOrder="29"
+         width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Adatestatut" breakOrder="none">
+          <xmlSettings xmlTag="&quot;StatutDate&quot;"/>
+          <dataDescriptor expression="ADATESTATUT"
+           descriptiveExpression="ADATESTATUT" order="21" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codmo" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="33" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codmo" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CliPrinCode&quot;"/>
+          <dataDescriptor expression="CODMO" descriptiveExpression="CODMO"
+           order="26" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libmo" datatype="vchar2" columnOrder="77" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libmo" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CliPrinLib&quot;"/>
+          <dataDescriptor expression="LIBMO" descriptiveExpression="LIBMO"
+           order="27" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codmo_oper" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="61" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codmo Oper" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CliOperCode&quot;"/>
+          <dataDescriptor expression="CODMO_OPER"
+           descriptiveExpression="CODMO_OPER" order="62"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tarcproc" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="34" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Tarcproc" breakOrder="none">
+          <xmlSettings xmlTag="&quot;TopTri&quot;"/>
+          <dataDescriptor expression="TARCPROC"
+           descriptiveExpression="TARCPROC" order="28"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pzone" datatype="vchar2" columnOrder="35" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pzone" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ParamLocal&quot;"/>
+          <dataDescriptor expression="PZONE" descriptiveExpression="PZONE"
+           order="29" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_prop_m1" datatype="vchar2" columnOrder="37"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Prop M1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropAA-1Frn&quot;"/>
+          <dataDescriptor expression="BUD_PROP_M1"
+           descriptiveExpression="BUD_PROP_M1" order="31" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_notN_m1" datatype="vchar2" columnOrder="38"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Notn M1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;NotAA-1&quot;"/>
+          <dataDescriptor expression="BUD_NOTN_M1"
+           descriptiveExpression="BUD_NOTN_M1" order="32" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_arb_notN_m1" datatype="vchar2" columnOrder="39"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Arb Notn M1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ArbAA-1&quot;"/>
+          <dataDescriptor expression="BUD_ARB_NOTN_M1"
+           descriptiveExpression="BUD_ARB_NOTN_M1" order="33" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propNmo" datatype="vchar2" columnOrder="49"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propnmo" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropAACli&quot;"/>
+          <dataDescriptor expression="BUD_PROPNMO"
+           descriptiveExpression="BUD_PROPNMO" order="45" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propNmoEur" datatype="vchar2" columnOrder="78"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propnmoeur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropEurAACli&quot;"/>
+          <dataDescriptor expression="BUD_PROPNMOEUR"
+           descriptiveExpression="BUD_PROPNMOEUR" order="46" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propN1" datatype="vchar2" columnOrder="40"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propn1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropAAFrn&quot;"/>
+          <dataDescriptor expression="BUD_PROPN1"
+           descriptiveExpression="BUD_PROPN1" order="34" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propN3" datatype="vchar2" columnOrder="41"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propn3" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ReserveAA&quot;"/>
+          <dataDescriptor expression="BUD_PROPN3"
+           descriptiveExpression="BUD_PROPN3" order="35" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_notN1" datatype="vchar2" columnOrder="42"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Notn1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;NotAA&quot;"/>
+          <dataDescriptor expression="BUD_NOTN1"
+           descriptiveExpression="BUD_NOTN1" order="36" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_notN1Eur" datatype="vchar2" columnOrder="79"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Notn1eur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;NotEurAA&quot;"/>
+          <dataDescriptor expression="BUD_NOTN1EUR"
+           descriptiveExpression="BUD_NOTN1EUR" order="37" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_arb_notN1" datatype="vchar2" columnOrder="43"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Arb Notn1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ArbAA&quot;"/>
+          <dataDescriptor expression="BUD_ARB_NOTN1"
+           descriptiveExpression="BUD_ARB_NOTN1" order="38" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_arb_notN1Eur" datatype="vchar2" columnOrder="80"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Arb Notn1eur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ArbEurAA&quot;"/>
+          <dataDescriptor expression="BUD_ARB_NOTN1EUR"
+           descriptiveExpression="BUD_ARB_NOTN1EUR" order="39" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propNmo_p1" datatype="vchar2" columnOrder="48"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propnmo P1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropAA+1Cli&quot;"/>
+          <dataDescriptor expression="BUD_PROPNMO_P1"
+           descriptiveExpression="BUD_PROPNMO_P1" order="44" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propN_p11" datatype="vchar2" columnOrder="44"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propn P11" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropAA+1Frn&quot;"/>
+          <dataDescriptor expression="BUD_PROPN_P11"
+           descriptiveExpression="BUD_PROPN_P11" order="40" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_notN_p1" datatype="vchar2" columnOrder="45"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Notn P1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;NotAA+1&quot;"/>
+          <dataDescriptor expression="BUD_NOTN_P1"
+           descriptiveExpression="BUD_NOTN_P1" order="41" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_propN_p2" datatype="vchar2" columnOrder="46"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Propn P2" breakOrder="none">
+          <xmlSettings xmlTag="&quot;PropAA+2Frn&quot;"/>
+          <dataDescriptor expression="BUD_PROPN_P2"
+           descriptiveExpression="BUD_PROPN_P2" order="42" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="bud_notN_p2" datatype="vchar2" columnOrder="47"
+         width="8" defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Bud Notn P2" breakOrder="none">
+          <xmlSettings xmlTag="&quot;NotAA+2&quot;"/>
+          <dataDescriptor expression="BUD_NOTN_P2"
+           descriptiveExpression="BUD_NOTN_P2" order="43" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusaghi" datatype="vchar2" columnOrder="50"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusaghi" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsAvAA-1&quot;"/>
+          <dataDescriptor expression="XCUSAGHI"
+           descriptiveExpression="XCUSAGHI" order="47" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusagm1" datatype="vchar2" columnOrder="51"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusagm1" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsAA-1&quot;"/>
+          <dataDescriptor expression="XCUSAGM1"
+           descriptiveExpression="XCUSAGM1" order="48" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusag0" datatype="vchar2" columnOrder="52"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusmois" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsAA&quot;"/>
+          <dataDescriptor expression="XCUSAG0" descriptiveExpression="XCUSAG0"
+           order="49" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusag0Eur" datatype="vchar2" columnOrder="82"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusag0eur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsEurAA&quot;"/>
+          <dataDescriptor expression="XCUSAG0EUR"
+           descriptiveExpression="XCUSAG0EUR" order="50" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusmois" datatype="vchar2" columnOrder="62"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusmois" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsMM&quot;"/>
+          <dataDescriptor expression="XCUSMOIS"
+           descriptiveExpression="XCUSMOIS" order="51" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusmoisEur" datatype="vchar2" columnOrder="83"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusmoiseur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsEurMM&quot;"/>
+          <dataDescriptor expression="XCUSMOISEUR"
+           descriptiveExpression="XCUSMOISEUR" order="52" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusag" datatype="vchar2" columnOrder="53"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusag" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsLigne&quot;"/>
+          <dataDescriptor expression="XCUSAG" descriptiveExpression="XCUSAG"
+           order="53" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="xcusagEur" datatype="vchar2" columnOrder="84"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Xcusageur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ConsEurLigne&quot;"/>
+          <dataDescriptor expression="XCUSAGEUR"
+           descriptiveExpression="XCUSAGEUR" order="54" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="factintd" datatype="vchar2" columnOrder="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Factintd" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Cout12&quot;"/>
+          <dataDescriptor expression="FACTINTD"
+           descriptiveExpression="FACTINTD" order="22" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CoûtMM" datatype="vchar2" columnOrder="63" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coûtmm" breakOrder="none">
+          <xmlSettings xmlTag="&quot;CoutMM&quot;"/>
+          <dataDescriptor expression="COÛTMM" descriptiveExpression="COÛTMM"
+           order="63" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="factint" datatype="vchar2" columnOrder="31"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Factint" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Cout&quot;"/>
+          <dataDescriptor expression="FACTINT" descriptiveExpression="FACTINT"
+           order="23" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="stock_immo" datatype="vchar2" columnOrder="60"
+         width="14" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Stock Immo" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Stock_Immos&quot;"/>
+          <dataDescriptor expression="STOCK_IMMO"
+           descriptiveExpression="STOCK_IMMO" order="24" width="14"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="preesancou" datatype="vchar2" columnOrder="55"
+         width="9" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Preesancou" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ReestAA&quot;"/>
+          <dataDescriptor expression="PREESANCOU"
+           descriptiveExpression="PREESANCOU" order="55" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="preesancouEur" datatype="vchar2" columnOrder="81"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Preesancoueur" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ReestEurAA&quot;"/>
+          <dataDescriptor expression="PREESANCOUEUR"
+           descriptiveExpression="PREESANCOUEUR" order="56" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pobjet" datatype="vchar2" columnOrder="65" width="304"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pobjet" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Objet de la ligne BIP&quot;"/>
+          <dataDescriptor expression="POBJET" descriptiveExpression="POBJET"
+           order="65" width="304"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande" datatype="vchar2" columnOrder="66"
+         width="4000" defaultWidth="10000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Ref_demande" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande&quot;"/>
+          <dataDescriptor expression="REF_DEMANDE"
+           descriptiveExpression="REF_DEMANDE" order="66" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ref_demande_Lib" datatype="vchar2" columnOrder="67"
+         width="4000" defaultWidth="10000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Ref_demande_Lib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;Ref_demande_Lib&quot;"/>
+          <dataDescriptor expression="REF_DEMANDE_LIB"
+           descriptiveExpression="REF_DEMANDE_LIB" order="67" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierCode" datatype="vchar2"
+         columnOrder="68" width="12" defaultWidth="10000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierCode&quot;"/>
+          <dataDescriptor expression="DPCOPIAXEMETIERCODE"
+           descriptiveExpression="DPCOPIAXEMETIERCODE" order="68" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DpCopiAxeMetierLib" datatype="vchar2" columnOrder="69"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="DpCopiAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;DpCopiAxeMetierLib&quot;"/>
+          <dataDescriptor expression="DPCOPIAXEMETIERLIB"
+           descriptiveExpression="DPCOPIAXEMETIERLIB" order="69" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierCode" datatype="vchar2" columnOrder="72"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierCode" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierCode&quot;"/>
+          <dataDescriptor expression="PROJAXEMETIERCODE"
+           descriptiveExpression="PROJAXEMETIERCODE" order="70" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjAxeMetierLib" datatype="vchar2" columnOrder="73"
+         width="80" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="ProjAxeMetierLib" breakOrder="none">
+          <xmlSettings xmlTag="&quot;ProjAxeMetierLib&quot;"/>
+          <dataDescriptor expression="PROJAXEMETIERLIB"
+           descriptiveExpression="PROJAXEMETIERLIB" order="71" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" orientation="portrait"/>
+  <section name="main">
+    <body width="8.00000">
+      <location x="0.25000"/>
+      <field name="F_pid" source="pid" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.00000" y="0.43750" width="0.12500" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_pzone" source="pzone" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.00000" y="0.56250" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_icpir" source="icpir" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.00000" y="0.68750" width="0.12500" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_gilibel" source="gilibel" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.25000" y="0.68750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_pnom" source="pnom" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.25000" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_dpcode" source="dpcode" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.43750" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_typproj" source="typproj" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.68750" y="0.43750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_prop_m1" source="bud_prop_m1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.81250" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_acdareg" source="acdareg" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="0.68750" y="0.68750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_codsg" source="codsg" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.06250" y="0.43750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_notN_m1" source="bud_notN_m1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.18750" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_galibel" source="galibel" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.06250" y="0.68750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_codcamo" source="codcamo" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.43750" y="0.43750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_arb_notN_m1" source="bud_arb_notN_m1"
+       minWidowLines="1" spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.56250" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_arctype" source="arctype" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.81250" y="0.43750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_propN1" source="bud_propN1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="1.93750" y="0.56250" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_pcpi" source="pcpi" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.18750" y="0.43750" width="0.12500" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_propN3" source="bud_propN3" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.25000" y="0.56250" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_metier" source="metier" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.43750" y="0.43750" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_notN1" source="bud_notN1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.56250" y="0.56250" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_stock_immo" source="stock_immo" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.50000" y="0.68750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_pnmouvra" source="pnmouvra" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.75000" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_arb_notN1" source="bud_arb_notN1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.87500" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_codmo_oper" source="codmo_oper" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="2.93750" y="0.68750" width="0.37500" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_icpi" source="icpi" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.18750" y="0.43750" width="0.12500" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_propN_p11" source="bud_propN_p11" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.25000" y="0.56250" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_xcusmois" source="xcusmois" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.43750" y="0.68750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_ilibel" source="ilibel" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.43750" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_notN_p1" source="bud_notN_p1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.68750" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_CoûtMM" source="CoûtMM" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.81250" y="0.68750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_airt" source="airt" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="3.87500" y="0.43750" width="0.12500" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_alibel" source="alibel" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.12500" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_propN_p2" source="bud_propN_p2" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.06250" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_sous_typo" source="sous_typo" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.25000" y="0.68750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_dplib" source="dplib" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.56250" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_notN_p2" source="bud_notN_p2" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.43750" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_propNmo_p1" source="bud_propNmo_p1" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.81250" y="0.56250" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_pobjet" source="pobjet" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="4.68750" y="0.68750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_astatut" source="astatut" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="5.00000" y="0.43750" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_adatestatut" source="adatestatut" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="5.31250" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_bud_propNmo" source="bud_propNmo" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="5.25000" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_factintd" source="factintd" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="5.75000" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_xcusaghi" source="xcusaghi" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="5.62500" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_xcusagm1" source="xcusagm1" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="6.00000" y="0.56250" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_factint" source="factint" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="6.18750" y="0.43750" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_xcusag0" source="xcusag0" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="6.43750" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_topfer" source="topfer" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="6.62500" y="0.43750" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_codmo" source="codmo" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="6.93750" y="0.43750" width="0.18750" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_xcusag" source="xcusag" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="6.81250" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_tarcproc" source="tarcproc" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="7.25000" y="0.43750" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_preesancou" source="preesancou" minWidowLines="1"
+       spacing="0" alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="7.18750" y="0.56250" width="0.31250" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+      <field name="F_codpspe" source="codpspe" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="4"/>
+        <geometryInfo x="7.62500" y="0.56250" width="0.25000" height="0.12500"
+        />
+        <generalLayout verticalElasticity="expand"/>
+      </field>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_menu VARCHAR2(25);
+begin
+SELECT TO_NUMBER(TO_CHAR(datdebex.moismens,'YYYY')), TO_CHAR(datdebex.moismens)
+	INTO :P_ANNEE , :P_MOISMENS
+	FROM datdebex;
+
+
+		
+
+	:P_NUMSEQ := pack_cout_standard_ke.insert_tmp_coutke_etats(:P_ANNEE,'',NULL,NULL,NULL,NULL, NULL, '00000000000');
+
+	return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  
+  DELETE FROM TMP_COUTKE_ETATS WHERE NUMSEQ = :P_NUMSEQ ; 
+  
+  COMMIT ; 
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

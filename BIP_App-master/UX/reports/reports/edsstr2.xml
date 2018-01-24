@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="edsstr2" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="EDSSTR2" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM12" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_POLE" datatype="character" defaultWidth="0"
+     defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="File" display="yes"/>
+    <dataSource name="Q_edsstr2">
+      <select>
+      <![CDATA[SELECT 
+	substr(to_char(pro.divsecgrou, 'FM0000000'),1,5)||' - '||substr(pack_utile.f_get_deppole_codsg(pro.divsecgrou),1,11) 	dc_polefrn,
+	substr(to_char(pro.factpdsg, 'FM0000000'),1,5)||' - '||substr(pack_utile.f_get_deppole_codsg(pro.factpdsg),1,11) 		dc_polerec,
+   	sum(pro.cusag) 	dc_somcusag
+ FROM
+  	situ_ress_full 	sf,
+  	datdebex 		dat,
+	proplus 		pro
+ WHERE   
+	substr(to_char(pro.divsecgrou, 'FM0000000'),1,5) like :p_pole
+   	-- Jointure datdebex <-> reste
+  	and to_char(pro.cdeb,'YYYY') =  to_char(datdebex,'YYYY')
+	and pro.cusag <> 0 and pro.cusag is not null
+	and substr(to_char(pro.divsecgrou, 'FM0000000'),1,5)!=substr(to_char(pro.factpdsg, 'FM0000000'),1,5)
+                and pro.qualif not in ('MO ','STA','INT','IFO','GRA')
+                and trunc(pro.cdeb,'mm') <= dat.moismens
+	and sf.ident=pro.tires
+	and (sf.datsitu <= pro.cdeb or sf.datsitu is null)
+	and (sf.datdep >= pro.cdeb or sf.datdep is null)
+ GROUP BY
+  	substr(to_char(pro.divsecgrou, 'FM0000000'),1,5)||' - '||substr(pack_utile.f_get_deppole_codsg(pro.divsecgrou),1,11) ,
+ 	substr(to_char(pro.factpdsg, 'FM0000000'),1,5)||' - '||substr(pack_utile.f_get_deppole_codsg(pro.factpdsg),1,11) ;
+
+  
+ ]]>
+      </select>
+      <displayInfo x="0.47625" y="0.18510" width="2.40760" height="0.66167"/>
+      <group name="G_dpg">
+        <displayInfo x="0.28339" y="1.80206" width="2.79394" height="1.52797"
+        />
+        <dataItem name="dc_polefrn" datatype="vchar2" columnOrder="25"
+         width="19" defaultWidth="180000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dc Polefrn">
+          <dataDescriptor
+           expression="substr ( to_char ( pro.divsecgrou , &apos;FM0000000&apos; ) , 1 , 5 ) || &apos; - &apos; || substr ( pack_utile.f_get_deppole_codsg ( pro.divsecgrou ) , 1 , 11 )"
+           descriptiveExpression="DC_POLEFRN" order="1" width="19"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_tot_pole" source="dc_somcusag" function="sum"
+         width="40" precision="38" reset="G_dpg" compute="report"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Tot Pole">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_edsstr1">
+        <displayInfo x="0.28277" y="4.05185" width="2.79394" height="1.52797"
+        />
+        <dataItem name="dc_somcusag" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Somcusag" breakOrder="none">
+          <dataDescriptor expression="sum ( pro.cusag )"
+           descriptiveExpression="DC_SOMCUSAG" order="3"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_polerec" datatype="vchar2" columnOrder="24"
+         width="19" defaultWidth="180000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dc Polerec">
+          <dataDescriptor
+           expression="substr ( to_char ( pro.factpdsg , &apos;FM0000000&apos; ) , 1 , 5 ) || &apos; - &apos; || substr ( pack_utile.f_get_deppole_codsg ( pro.factpdsg ) , 1 , 11 )"
+           descriptiveExpression="DC_POLEREC" order="2" width="19"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <summary name="CS_total" source="CS_tot_pole" function="sum" width="40"
+     precision="38" reset="report" compute="report" defaultWidth="400000"
+     defaultHeight="10000" columnFlags="40" defaultLabel="Cs Total">
+      <displayInfo x="0.82042" y="5.97948" width="2.03181" height="0.50788"/>
+    </summary>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.00002" height="26.95029">
+      <location x="0.50012" y="1.74997"/>
+      <frame name="M_factdpg_GRPFR">
+        <geometryInfo x="2.80293" y="0.29021" width="14.64035"
+         height="2.84448"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_dpg" source="G_dpg" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="2.80293" y="1.53882" width="14.53431"
+           height="1.55959"/>
+          <generalLayout verticalElasticity="variable"/>
+          <repeatingFrame name="R_edsstr1" source="G_edsstr1"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="6.24551" y="1.53882" width="10.95065"
+             height="0.37114"/>
+            <field name="F_dc_somcusag" source="dc_somcusag" minWidowLines="1"
+             formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="7.39862" y="1.53882" width="3.58211"
+               height="0.37114"/>
+            </field>
+            <field name="F_dc_polerec" source="dc_polerec" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="13.82241" y="1.53882" width="3.09842"
+               height="0.37114"/>
+            </field>
+          </repeatingFrame>
+          <field name="F_CS_tot_pole" source="CS_tot_pole" minWidowLines="1"
+           formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="7.42435" y="2.17227" width="3.56288"
+             height="0.37145"/>
+          </field>
+          <text name="B_1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.90928" y="2.18653" width="6.10288"
+             height="0.32835"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[*TOTAL &F_dc_polefrn1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CS_tot_pole" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.83549" y="2.53938" width="14.39602"
+             height="0.37114"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[--------------------------------------------------------------------------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_dc_polefrn1" source="dc_polefrn" visible="no"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="11.38287" y="2.18560" width="3.09842"
+             height="0.37114"/>
+            <advancedLayout printObjectOnPage="firstPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <field name="F_dc_polefrn" source="dc_polefrn" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="2.97501" y="1.53882" width="3.09842"
+             height="0.37114"/>
+            <advancedLayout printObjectOnPage="firstPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_edsstr1_HDR">
+          <geometryInfo x="2.80386" y="0.29021" width="14.39230"
+           height="1.16706"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_dc_somcusag" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.29382" y="0.39905" width="4.13742"
+             height="0.94878"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[SOUS-TRAITANCE FOURNIE
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----------------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_polefrn" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="13.78738" y="0.39905" width="2.74619"
+             height="0.94878"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[CLIENT
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[-------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_polerec1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.96695" y="0.39905" width="3.09842"
+             height="0.94878"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[DEP/POLE
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[-----------]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+      <frame name="M_factdpg_FTR">
+        <geometryInfo x="2.83052" y="3.17283" width="14.11480"
+         height="0.43408"/>
+        <advancedLayout printObjectOnPage="lastPage"
+         basePrintingOn="anchoringObject"/>
+        <field name="F_CS_total" source="CS_total" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="7.42435" y="3.23577" width="3.56288"
+           height="0.37114"/>
+        </field>
+        <text name="B_Sum" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.00261" y="3.23577" width="1.37697"
+           height="0.37114"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[TOTAL]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_Page" minWidowLines="1">
+        <textSettings justify="right" spacing="single"/>
+        <geometryInfo x="14.89459" y="0.66725" width="4.30795"
+         height="0.79809"/>
+        <generalLayout horizontalElasticity="variable"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page : &F_Page / &F_TotalPage]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Page" source="PageNumber" visible="no" minWidowLines="1"
+       formatMask="NNNNNNNN0" spacing="single" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.49369" y="0.39129" width="0.80429"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_TotalPage" source="TotalPages" visible="no"
+       minWidowLines="1" formatMask="NNNN" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.48098" y="1.01203" width="0.99994"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Date" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.69205" y="0.68120" width="1.66501" height="0.39688"
+        />
+        <generalLayout horizontalElasticity="expand"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[DATE : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_NomEtat" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.67469" y="1.27589" width="6.28644" height="0.39688"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ETAT : EDSSTR2]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_Titre1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="7.86991" y="0.66725" width="5.82104" height="0.82786"
+        />
+        <visualSettings fillBackgroundColor="red"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[---  SOUS-TRAITANCE FOURNIE  ---
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[---   PAR DEP/POLE EN J/H    ---
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="2.32699" y="0.65608" width="3.93929" height="0.46664"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_param2" source="P_PARAM2" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.99510" y="5.97948" width="4.31292" height="0.66167"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.23813" y="5.90010" width="2.75177" height="0.87313"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[code dep/pole
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[1221]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+	if substr(LPAD(:p_param2, 7, '0'),4,2) = '00' then
+		:p_pole := substr(LPAD(:p_param2, 7, '0'),1,3) || '__';
+	else 
+		:p_pole := substr(LPAD(:p_param2, 7, '0'),1,5);
+	end if;
+  if substr(LPAD(:p_param2, 7, '0'),1,5) = '00000' then
+    :p_pole := '_____';
+  end if;
+
+	--srw.message(1,:p_pole);
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

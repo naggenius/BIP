@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_SousSysteme" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_SOUSSYSTEME" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+RPAD(code_ss,5,' ') code,
+RPAD(libelle,40,' ') libelle,
+DECODE(top_actif,'O','Oui','N','Non') actif
+from sous_systeme
+WHERE
+code_ss not in ('0','ZZZZZ')
+ORDER BY NLSSORT(code_ss, 'NLS_SORT=FRENCH_M');]]>
+      </select>
+      <displayInfo x="1.47913" y="1.18750" width="0.69995" height="0.19995"/>
+      <group name="G_code_ss">
+        <displayInfo x="0.62366" y="1.88745" width="2.41089" height="1.62695"
+        />
+        <dataItem name="code" datatype="vchar2" columnOrder="11" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ss">
+          <xmlSettings xmlTag="&quot;Code sous_systeme&quot;"/>
+          <dataDescriptor expression="RPAD ( code_ss , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle" datatype="vchar2" columnOrder="12" width="40"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <xmlSettings xmlTag="&quot;Libelle sous-systeme&quot;"/>
+          <dataDescriptor expression="RPAD ( libelle , 40 , &apos; &apos; )"
+           descriptiveExpression="LIBELLE" order="2" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="actif" datatype="vchar2" columnOrder="13" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode Top Actif O Oui N Non">
+          <xmlSettings xmlTag="&quot;Top actif&quot;"/>
+          <dataDescriptor
+           expression="DECODE ( top_actif , &apos;O&apos; , &apos;Oui&apos; , &apos;N&apos; , &apos;Non&apos; )"
+           descriptiveExpression="ACTIF" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

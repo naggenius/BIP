@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="resqual1" DTDVersion="9.0.2.0.10" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="RESQUAL1" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM12" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="File" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+          	to_char(plus.cdeb,'mm/yyyy') dc_mois,
+         	pack_utile.f_get_dep(MAX(TO_NUMBER((substr(TO_CHAR(plus.divsecgrou, 'FM0000000'), 1, 3))))) dc_dept ,
+         	pack_utile.f_get_deppole_codsg(MAX(plus.divsecgrou)) dc_pole,
+         	plus.qualif  dc_qualif,
+         	plus.rnom dc_nom,
+         	decode(max(plus.societe),'SG..',1,0) dc_sg,
+	sum(plus.cusag) dc_consoa,  
+	sum(plus.cusag) dc_conso
+from 
+         	proplus plus,
+          	datdebex bex
+where 
+         	plus.qualif!='GRA'
+  	and to_char(plus.cdeb,'mm/yyyy')=to_char(add_months(bex.cmensuelle,-2),'mm/yyyy')	
+ 	and (plus.aist not in ('FORMAT','CONGES','ABSDIV','MOBILI','PARTIE','RTT') or plus.aist is null)
+	and plus.cusag!=0
+group by 	plus.cdeb,
+	plus.divsecgrou,
+	plus.qualif,
+	plus.rnom
+order by 	dc_pole,
+	dc_qualif,
+	dc_nom;]]>
+      </select>
+      <displayInfo x="1.11125" y="0.34385" width="1.98438" height="0.76740"/>
+      <group name="G_mois">
+        <displayInfo x="0.70662" y="1.32891" width="2.79394" height="1.09389"
+        />
+        <dataItem name="dc_mois" datatype="vchar2" columnOrder="24" width="7"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dc Mois">
+          <dataDescriptor
+           expression="to_char ( plus.cdeb , &apos;mm/yyyy&apos; )"
+           descriptiveExpression="DC_MOIS" order="1" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_dept">
+        <displayInfo x="0.49485" y="2.86401" width="2.79394" height="1.96205"
+        />
+        <dataItem name="dc_dept" datatype="vchar2" columnOrder="30"
+         width="4000" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dc Dept">
+          <dataDescriptor
+           expression="pack_utile.f_get_dep ( MAX ( TO_NUMBER ( ( substr ( TO_CHAR ( plus.divsecgrou , &apos;FM0000000&apos; ) , 1 , 3 ) ) ) ) )"
+           descriptiveExpression="DC_DEPT" order="2" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_sg_dept" source="dc_sg" function="sum" width="40"
+         precision="38" reset="G_dept" compute="report" defaultWidth="400000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Sg Dept">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_conso_dept" source="dc_conso" function="sum"
+         width="40" precision="38" reset="G_dept" compute="report"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Conso Dept">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_pole">
+        <displayInfo x="0.54787" y="5.48277" width="2.79394" height="1.96205"
+        />
+        <dataItem name="dc_pole" datatype="vchar2" columnOrder="25"
+         width="4000" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dc Pole">
+          <dataDescriptor
+           expression="pack_utile.f_get_deppole_codsg ( MAX ( plus.divsecgrou ) )"
+           descriptiveExpression="DC_POLE" order="3" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_sg_pole" source="dc_sg" function="sum" width="40"
+         precision="38" reset="G_pole" compute="report" defaultWidth="400000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Sg Pole">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_conso_pole" source="dc_conso" function="sum"
+         width="40" precision="38" reset="G_pole" compute="report"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Conso Pole">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_qualif">
+        <displayInfo x="0.65360" y="8.46677" width="2.79394" height="1.52797"
+        />
+        <dataItem name="dc_qualif" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="26" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Dc Qualif">
+          <dataDescriptor expression="plus.qualif"
+           descriptiveExpression="DC_QUALIF" order="4"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_consoa" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="sum ( plus.cusag )"
+           descriptiveExpression="DC_CONSOA" order="7" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_resqual">
+        <displayInfo x="0.67965" y="10.18635" width="2.79394" height="2.39613"
+        />
+        <dataItem name="dc_nom" datatype="vchar2" columnOrder="27" width="30"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Dc Nom">
+          <dataDescriptor expression="plus.rnom"
+           descriptiveExpression="DC_NOM" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_sg" oracleDatatype="number" columnOrder="28"
+         width="2" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Sg" breakOrder="none">
+          <dataDescriptor
+           expression="decode ( max ( plus.societe ) , &apos;SG..&apos; , 1 , 0 )"
+           descriptiveExpression="DC_SG" order="6" oracleDatatype="number"
+           width="2" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso" breakOrder="none">
+          <dataDescriptor expression="sum ( plus.cusag )"
+           descriptiveExpression="DC_CONSO" order="8" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <summary name="CS_tot_sg" source="dc_sg" function="sum" width="40"
+     precision="38" reset="report" compute="report" defaultWidth="400000"
+     defaultHeight="10000" columnFlags="40" defaultLabel="Cs Tot Sg">
+      <displayInfo x="5.82073" y="1.13760" width="2.03181" height="0.50788"/>
+    </summary>
+    <summary name="CS_tot_conso" source="dc_conso" function="sum" width="40"
+     precision="38" reset="report" compute="report" defaultWidth="400000"
+     defaultHeight="10000" columnFlags="40" defaultLabel="Cs Tot Conso">
+      <displayInfo x="5.87375" y="2.03740" width="2.03181" height="0.50788"/>
+    </summary>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" widthInChar="122"
+   heightInChar="80">
+    <body width="20.00002" height="24.61958">
+      <location x="0.50012" y="2.44016"/>
+      <frame name="M_mois_GRPFR">
+        <geometryInfo x="1.61448" y="0.58043" width="16.54287"
+         height="5.40029"/>
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="red"/>
+        <frame name="M_lib">
+          <geometryInfo x="1.68238" y="0.61702" width="15.52215"
+           height="1.20334"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <text name="B_dc_pole1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.83115" y="0.87064" width="0.90444"
+             height="0.87685"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[POLE
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_qualif1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.22294" y="0.87064" width="1.48487"
+             height="0.87685"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[QUALIF
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[------]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nom1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.51365" y="0.87064" width="4.95009"
+             height="0.87685"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[NOM
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[---]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_sg1" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="12.79674" y="0.89297" width="0.68058"
+             height="0.84057"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[SG
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[--]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_conso1" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="15.55223" y="0.90878" width="0.99002"
+             height="0.87685"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[CONSO
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[-----]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <repeatingFrame name="R_dept" source="G_dept" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="1.96453" y="1.85756" width="15.76896"
+           height="2.88106"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <repeatingFrame name="R_pole" source="G_pole" printDirection="down"
+           maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="2.17320" y="1.89415" width="15.38418"
+             height="1.78687"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <field name="F_dc_pole2" source="dc_pole" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="2.83239" y="2.03274" width="1.84640"
+               height="0.35006"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillBackgroundColor="red"/>
+            </field>
+            <repeatingFrame name="R_qualif" source="G_qualif"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="4.81955" y="1.93042" width="12.59644"
+               height="0.47656"/>
+              <generalLayout verticalElasticity="variable"/>
+              <advancedLayout formatTrigger="r_qualifformattrigger"/>
+              <visualSettings fillBackgroundColor="red"/>
+              <field name="F_dc_qualif" source="dc_qualif" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="5.42044" y="2.02220" width="0.77577"
+                 height="0.35006"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <visualSettings fillBackgroundColor="red"/>
+              </field>
+              <repeatingFrame name="R_resqual" source="G_resqual"
+               printDirection="down" minWidowRecords="1" columnMode="no">
+                <geometryInfo x="6.64859" y="1.96701" width="10.59129"
+                 height="0.43780"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout formatTrigger="r_resqualformattrigger"/>
+                <visualSettings fillBackgroundColor="red"/>
+                <field name="F_dc_nom" source="dc_nom" minWidowLines="1"
+                 spacing="0" alignment="start">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="7.54000" y="2.00794" width="4.95009"
+                   height="0.34975"/>
+                  <visualSettings fillBackgroundColor="red"/>
+                </field>
+                <field name="F_dc_sg1" source="dc_sg" minWidowLines="1"
+                 spacing="0" alignment="left">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="12.95859" y="2.01910" width="0.43873"
+                   height="0.34975"/>
+                  <visualSettings fillBackgroundColor="red"/>
+                </field>
+                <field name="F_dc_conso1" source="dc_conso" minWidowLines="1"
+                 formatMask="NNNGNNNGNNND00" spacing="0" alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="14.38269" y="2.03026" width="2.13320"
+                   height="0.34975"/>
+                  <visualSettings fillBackgroundColor="red"/>
+                </field>
+              </repeatingFrame>
+              <field name="F_dc_conso2" source="dc_consoa" visible="no"
+               minWidowLines="1" spacing="0" alignment="right">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="4.95970" y="2.03026" width="0.40990"
+                 height="0.34975"/>
+                <advancedLayout printObjectOnPage="allPage"
+                 basePrintingOn="enclosingObject"/>
+                <visualSettings fillBackgroundColor="red"/>
+              </field>
+            </repeatingFrame>
+            <text name="B_1" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="2.45969" y="2.76944" width="9.91319"
+               height="0.83871"/>
+              <visualSettings fillBackgroundColor="red"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[TOTAL POLE &F_dc_pole :
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[-------------------------------------------------]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CS_sg_pole1" source="CS_sg_pole" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="12.97161" y="2.78588" width="1.24520"
+               height="0.36680"/>
+              <visualSettings fillBackgroundColor="red"/>
+            </field>
+            <field name="F_CS_conso_pole1" source="CS_conso_pole"
+             minWidowLines="1" formatMask="NNNGNNNGNNND00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="14.39323" y="2.77316" width="2.10437"
+               height="0.36680"/>
+              <visualSettings fillBackgroundColor="red"/>
+            </field>
+            <text name="B_3" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="12.08794" y="2.76944" width="0.98878"
+               height="0.36680"/>
+              <visualSettings fillBackgroundColor="red"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[SG =]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_dc_pole" source="dc_pole" visible="no"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="8.89372" y="2.54062" width="1.84640"
+               height="0.35006"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillBackgroundColor="red"/>
+            </field>
+          </repeatingFrame>
+          <text name="B_2" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="2.45969" y="3.71264" width="9.91319"
+             height="0.91653"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[TOTAL DEPARTEMENT &F_dc_dept :
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[-------------------------------------------------]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_CS_sg_dept1" source="CS_sg_dept" minWidowLines="1"
+           spacing="0" alignment="left">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="12.97161" y="3.73342" width="1.24520"
+             height="0.36680"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CS_conso_dept1" source="CS_conso_dept"
+           minWidowLines="1" formatMask="NNNGNNNGNNND00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="14.35819" y="3.72039" width="2.16235"
+             height="0.36680"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <text name="B_4" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="12.08794" y="3.71264" width="0.98878"
+             height="0.36680"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[SG =]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_dc_dept" source="dc_dept" visible="no"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="11.41791" y="4.24036" width="1.17636"
+             height="0.35006"/>
+            <generalLayout horizontalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+        </repeatingFrame>
+        <field name="F_CS_tot_sg" source="CS_tot_sg" minWidowLines="1"
+         spacing="0" alignment="left">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="12.97285" y="4.81335" width="1.27930"
+           height="0.36680"/>
+          <visualSettings fillBackgroundColor="red"/>
+        </field>
+        <field name="F_CS_tot_conso" source="CS_tot_conso" minWidowLines="1"
+         formatMask="NNNGNNNGNNND00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="14.35819" y="4.81304" width="2.14126"
+           height="0.36680"/>
+          <visualSettings fillBackgroundColor="red"/>
+        </field>
+        <text name="B_5" minWidowLines="1">
+          <textSettings justify="left" spacing="0"/>
+          <geometryInfo x="2.45969" y="4.80095" width="9.91319"
+           height="0.91653"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[TOTAL DIRECTION INFO :
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[-------------------------------------------------]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_6" minWidowLines="1">
+          <textSettings justify="left" spacing="0"/>
+          <geometryInfo x="12.08794" y="4.80095" width="0.98878"
+           height="0.36680"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[SG =]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_Page" minWidowLines="1">
+        <textSettings justify="right" spacing="single"/>
+        <geometryInfo x="15.38108" y="0.66725" width="3.85651"
+         height="0.79809"/>
+        <generalLayout horizontalElasticity="variable"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page : &F_Page / &F_TotalPage]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Page" source="PageNumber" visible="no" minWidowLines="1"
+       formatMask="NNNNNNNN0" spacing="single" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.49369" y="0.39129" width="0.80429"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_TotalPage" source="TotalPages" visible="no"
+       minWidowLines="1" formatMask="NNNN" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="19.48098" y="1.01203" width="0.99994"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Date" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.69205" y="0.68120" width="1.66501" height="0.39688"
+        />
+        <generalLayout horizontalElasticity="expand"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[DATE : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_NomEtat" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.67469" y="1.27589" width="4.58174" height="0.39688"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ETAT : RESQUAL1]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="2.32699" y="0.65608" width="3.93929" height="0.46664"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+      </field>
+      <repeatingFrame name="R_mois" source="G_mois" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="6.20613" y="0.25518" width="8.68970" height="1.60114"
+        />
+        <visualSettings fillBackgroundColor="red"/>
+        <text name="B_Titre1" minWidowLines="1">
+          <textSettings justify="left" spacing="single"/>
+          <geometryInfo x="6.52735" y="0.55842" width="8.36073"
+           height="1.17419"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[--             BIP PROJETS              --
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[-- NOMBRE DE RESSOURCES PAR POLE/QUALIF --
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[--      AYANT TRAVAILLE EN &F_dc_mois      --
+]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_dc_mois" source="dc_mois" visible="no"
+         minWidowLines="1" spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="6.22629" y="1.19311" width="1.14412"
+           height="0.35006"/>
+          <generalLayout horizontalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+        </field>
+      </repeatingFrame>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="r_resqualformattrigger">
+      <textSource>
+      <![CDATA[function R_resqualFormatTrigger return boolean is
+begin
+if :dc_conso=0 then
+	return (false);
+else
+	return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_qualifformattrigger">
+      <textSource>
+      <![CDATA[function R_qualifFormatTrigger return boolean is
+begin
+  if :dc_consoa=0 then
+ return (false);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

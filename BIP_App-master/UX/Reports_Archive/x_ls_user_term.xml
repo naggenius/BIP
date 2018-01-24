@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ls_user_term" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="X_LS_USER_TERM" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+             rt.ident RIDENT, 
+             rt.user_rtfe USER_RTFE, 
+             r.matricule MATRICULE, 
+             r.rnom NOM, 
+             r.rprenom PRENOM, 
+             r1.ident CP_IDENT, 
+             r1.rnom CP_NOM, 
+             r1.rprenom CP_PRENOM, 
+             sr.soccode SOCIETE, 
+             sr.codsg CODSG, 
+             sr.datsitu as "DATE DEBUT", 
+             sr.datdep as "DATE DEPART",
+             rt.ROLE ROLE_RTFE
+FROM RTFE rt,RESSOURCE r, SITU_RESS sr,RESSOURCE r1
+WHERE r.ident=rt.ident
+AND  sr.ident=rt.ident
+AND sr.datdep < SYSDATE 
+AND sr.datdep IS NOT NULL
+AND (sr.ident, TO_CHAR(sr.datsitu,'dd/mm/yyyy')) IN (SELECT ident, TO_CHAR(MAX(datsitu),'dd/mm/yyyy')
+                                                                                                    FROM SITU_RESS 
+                                                                                                     GROUP BY ident
+					     )
+AND r1.ident=sr.cpident																								ORDER BY 	r.rnom, r.rprenom, rt.ident;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_RIDENT1">
+        <displayInfo x="1.22046" y="1.68958" width="1.53845" height="3.33594"
+        />
+        <dataItem name="RIDENT1" oracleDatatype="number" columnOrder="15"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Rident1">
+          <xmlSettings xmlTag="&quot;RIDENT&quot;"/>
+          <dataDescriptor expression="rt.ident" descriptiveExpression="RIDENT"
+           order="1" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="user_rtfe" datatype="vchar2" columnOrder="14"
+         width="60" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="User Rtfe">
+          <xmlSettings xmlTag="&quot;USER_RTFE&quot;"/>
+          <dataDescriptor expression="rt.user_rtfe"
+           descriptiveExpression="USER_RTFE" order="2" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATRICULE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="16" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Matricule">
+          <xmlSettings xmlTag="&quot;MATRICULE&quot;"/>
+          <dataDescriptor expression="r.matricule"
+           descriptiveExpression="MATRICULE" order="3" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOM" datatype="vchar2" columnOrder="12" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Rnom">
+          <xmlSettings xmlTag="&quot;NOM&quot;"/>
+          <dataDescriptor expression="r.rnom" descriptiveExpression="NOM"
+           order="4" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PRENOM" datatype="vchar2" columnOrder="13" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Rprenom">
+          <xmlSettings xmlTag="&quot;PRENOM&quot;"/>
+          <dataDescriptor expression="r.rprenom"
+           descriptiveExpression="PRENOM" order="5" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CP_IDENT" oracleDatatype="number" columnOrder="11"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Ident">
+          <xmlSettings xmlTag="&quot;CP_IDENT&quot;"/>
+          <dataDescriptor expression="r1.ident"
+           descriptiveExpression="CP_IDENT" order="6" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CP_NOM" datatype="vchar2" columnOrder="17" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cp Nom">
+          <xmlSettings xmlTag="&quot;CP_NOM&quot;"/>
+          <dataDescriptor expression="r1.rnom" descriptiveExpression="CP_NOM"
+           order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CP_PRENOM" datatype="vchar2" columnOrder="18"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Cp Prenom">
+          <xmlSettings xmlTag="&quot;CP_PRENOM&quot;"/>
+          <dataDescriptor expression="r1.rprenom"
+           descriptiveExpression="CP_PRENOM" order="8" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCIETE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="19" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Societe">
+          <xmlSettings xmlTag="&quot;SOCIETE&quot;"/>
+          <dataDescriptor expression="sr.soccode"
+           descriptiveExpression="SOCIETE" order="9" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" oracleDatatype="number" columnOrder="20"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Codsg">
+          <xmlSettings xmlTag="&quot;CODSG&quot;"/>
+          <dataDescriptor expression="sr.codsg" descriptiveExpression="CODSG"
+           order="10" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_DEBUT" datatype="date" oracleDatatype="date"
+         columnOrder="21" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Date Debut">
+          <xmlSettings xmlTag="&quot;DATE DEBUT&quot;"/>
+          <dataDescriptor expression="sr.datsitu"
+           descriptiveExpression="DATE DEBUT" order="11" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_DEPART" datatype="date" oracleDatatype="date"
+         columnOrder="22" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Date Depart">
+          <xmlSettings xmlTag="&quot;DATE DEPART&quot;"/>
+          <dataDescriptor expression="sr.datdep"
+           descriptiveExpression="DATE DEPART" order="12" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ROLE_RTFE" datatype="vchar2" columnOrder="23"
+         width="20" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Role Rtfe">
+          <xmlSettings xmlTag="&quot;ROLE_RTFE&quot;"/>
+          <dataDescriptor expression="rt.ROLE"
+           descriptiveExpression="ROLE_RTFE" order="13" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_RIDENT1_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.37500" height="0.50000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_RIDENT1" source="G_RIDENT1"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.37500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_RIDENT1" source="RIDENT1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="0.00000" y="0.31250" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_user_rtfe" source="user_rtfe" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="0.56250" y="0.31250" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATRICULE" source="MATRICULE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="1.25000" y="0.31250" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NOM" source="NOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="1.93750" y="0.31250" width="0.31250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_PRENOM" source="PRENOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="2.37500" y="0.31250" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CP_IDENT" source="CP_IDENT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="2.93750" y="0.31250" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CP_NOM" source="CP_NOM" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="3.50000" y="0.31250" width="0.31250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CP_PRENOM" source="CP_PRENOM" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="3.93750" y="0.31250" width="0.37500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_SOCIETE" source="SOCIETE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="4.43750" y="0.31250" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CODSG" source="CODSG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="5.00000" y="0.31250" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DATE_DEBUT" source="DATE_DEBUT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="5.68750" y="0.31250" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DATE_DEPART" source="DATE_DEPART" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="6.37500" y="0.31250" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ROLE_RTFE" source="ROLE_RTFE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="7"/>
+            <geometryInfo x="7.06250" y="0.31250" width="0.31250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_RIDENT1_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.37500"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_RIDENT1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Rident1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_user_rtfe" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[User Rtfe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATRICULE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.25000" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Matricule]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.93750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PRENOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.37500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Rprenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CP_IDENT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Ident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CP_NOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.50000" y="0.00000" width="0.31250"
+             height="0.31250"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Cp
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Nom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CP_PRENOM" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.93750" y="0.00000" width="0.37500"
+             height="0.31250"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Cp
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Prenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SOCIETE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.43750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Societe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODSG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.00000" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DATE_DEBUT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.68750" y="0.00000" width="0.56250"
+             height="0.31250"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Date
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Debut]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DATE_DEPART" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.37500" y="0.00000" width="0.56250"
+             height="0.31250"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Date
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Depart]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ROLE_RTFE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.06250" y="0.00000" width="0.31250"
+             height="0.31250"/>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Role
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="7"/>
+              <string>
+              <![CDATA[Rtfe]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.87476" y="0.25000" width="0.75037" height="0.16675"
+        />
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[x_Resserr]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="x_Resserr"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

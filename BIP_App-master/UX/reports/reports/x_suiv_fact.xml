@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_suivi_fact" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes"/>
+  <xmlSettings xmlTag="T00902216" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="2500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Date fin de prestation]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Code Filiale]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM6" datatype="character" width="4"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[code societe]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM11" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[code dep/pole]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM8" datatype="character" width="3"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Date Fin Enregistrement]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM14" datatype="character" width="15"
+     defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Montant Minimum]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM12" datatype="character" width="1"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Societe Argée ?]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM13" datatype="character" width="11"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Code comptable]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_FILTRE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Sert à afficher les critères de selection]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[inutilisé]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM5" datatype="character" width="3"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[inutilisé]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM7" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Date début Enregistrement]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_PARAM9" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0">
+      <comment>
+      <![CDATA[Date début de prestation]]>
+      </comment>
+    </userParameter>
+    <userParameter name="P_WHERE2" datatype="character" width="2500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_TitreDPG" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_MtMin" datatype="number" precision="10"
+     inputMask="999G999G999G999D99" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_PeriodeEnreg" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_PeriodePrest" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_Soc" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_CodCompt" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_cds_PourSoc" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CDS_CODDPG" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="default"/>
+    <systemParameter name="ORIENTATION" initialValue="Landscape"/>
+    <systemParameter name="DECIMAL" initialValue=","/>
+    <systemParameter name="THOUSANDS" initialValue="." display="yes"/>
+    <systemParameter name="CURRENCY" display="yes"/>
+    <systemParameter name="COPIES" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+       LPAD(NVL(TO_CHAR(f.fdeppole),' '),7,' ') fdeppole,
+	   SI.CAFI CA,
+	   RPAD(f.numcont || DECODE(c.top30,'O',DECODE(f.cav,'000',NULL,' - ' ||RPAD(f.cav,3)),'N',' - ' ||SUBSTR(f.cav,2,2) ) ,33,' ')  numcont,
+	   RPAD(NVL(f.socfact,' '),4,' ') socfact, 
+	   RPAD(NVL(s.soclib,' '),25,' ') soclib, 
+	   LPAD(NVL(TO_CHAR(l.ident),' '),5,' ') ident,
+	   RPAD(NVL(r.rnom,' '),30,' ') nom_ress,
+	   RPAD(f.numfact,15,' ') numfact,
+	   LPAD(NVL(TO_CHAR(f.fmoiacompta,'DD/MM/YYYY'),' '),10,' ') fmoiacompta,
+	   LPAD(NVL(TO_CHAR(l.lmoisprest,'DD/MM/YYYY'),' '),10,' ') lmoisprest,
+	   LPAD(NVL(TO_CHAR(f.fenrcompta,'DD/MM/YYYY'),' '),10,' ') fenrcompta,
+	   LPAD(NVL(TO_CHAR(DECODE(f.typfact,'A',-f.fmontht,f.fmontht),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),TO_CHAR(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),12,' ') fmontht,
+	   LPAD(NVL(TO_CHAR(DECODE(f.typfact,'A',-f.fmontttc,f.fmontttc),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),TO_CHAR(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),12,' ') fmontttc,
+	   LPAD(NVL(TO_CHAR(pack_utile_cout.AppliqueTauxHTR (TO_CHAR(l.lmoisprest, 'yyyy'), DECODE(f.typfact,'A',-f.fmontht,f.fmontht), TO_CHAR(l.lmoisprest, 'dd/mm/yyyy'), si.filcode),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),TO_CHAR(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),12,' ') fmonthtr,
+	   d.LIBDIR || ' de l''année ' ||  :p_param6 libelle
+FROM  FACTURE F, LIGNE_FACT L, CONTRAT C,
+      RESSOURCE R, SOCIETE S,  STRUCT_INFO SI, DIRECTIONS d,
+	  SITU_RESS sr, RESSOURCE r1
+WHERE F.SOCFACT = L.SOCFACT
+     AND F.TYPFACT = L.TYPFACT
+     AND F.DATFACT = L.DATFACT
+     AND F.NUMFACT = L.NUMFACT
+     AND F.SOCCONT = C.SOCCONT
+     AND F.NUMCONT = C.NUMCONT
+     AND F.CAV = C.CAV
+     AND F.SOCFACT = S.SOCCODE
+     AND F.FDEPPOLE = SI.CODSG
+     AND L.IDENT = R.IDENT
+     AND F.NUMCONT IS NOT NULL
+     AND l.ident=sr.ident
+     AND (l.lmoisprest>=sr.datsitu OR sr.datsitu IS NULL)
+     AND (l.lmoisprest<=sr.datdep OR sr.datdep IS NULL)
+     AND sr.cpident=r1.ident
+     AND d.coddir=si.coddir
+     &P_WHERE
+  UNION ALL
+SELECT 
+        LPAD(NVL(TO_CHAR(f.fdeppole),' '),7,' ') fdeppole,
+	   SI.CAFI CA,
+	   RPAD(f.numcont || ' - ' || f.cav ,33,' ')  numcont,
+	   RPAD(NVL(f.socfact,' '),4,' ') socfact, 
+	   RPAD(NVL(s.soclib,' '),25,' ') soclib, 
+	   LPAD(NVL(TO_CHAR(l.ident),' '),5,' ') ident,
+	   RPAD(NVL(r.rnom,' '),30,' ') nom_ress,
+	   RPAD(f.numfact,15,' ') numfact,
+	   LPAD(NVL(TO_CHAR(f.fmoiacompta,'DD/MM/YYYY'),' '),10,' ') fmoiacompta,
+	   LPAD(NVL(TO_CHAR(l.lmoisprest,'DD/MM/YYYY'),' '),10,' ') lmoisprest,
+	   LPAD(NVL(TO_CHAR(f.fenrcompta,'DD/MM/YYYY'),' '),10,' ') fenrcompta,
+	   LPAD(NVL(TO_CHAR(DECODE(f.typfact,'A',-f.fmontht,f.fmontht),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),TO_CHAR(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),12,' ') fmontht,
+	   LPAD(NVL(TO_CHAR(DECODE(f.typfact,'A',-f.fmontttc,f.fmontttc),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),TO_CHAR(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),12,' ') fmontttc,
+	   LPAD(NVL(TO_CHAR(pack_utile_cout.AppliqueTauxHTR (TO_CHAR(l.lmoisprest, 'yyyy'), DECODE(f.typfact,'A',-f.fmontht,f.fmontht), TO_CHAR(l.lmoisprest, 'dd/mm/yyyy'), si.filcode),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),TO_CHAR(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),12,' ') fmonthtr,
+	   d.LIBDIR || ' de l''année ' ||  :p_param6 libelle
+FROM  FACTURE F, LIGNE_FACT L,
+      RESSOURCE R,  SOCIETE S, STRUCT_INFO SI, DIRECTIONS d,
+	  SITU_RESS sr, RESSOURCE r1
+WHERE F.SOCFACT = L.SOCFACT
+     AND F.TYPFACT = L.TYPFACT
+     AND F.DATFACT = L.DATFACT
+     AND F.NUMFACT = L.NUMFACT
+     AND F.SOCFACT = S.SOCCODE
+     AND F.FDEPPOLE = SI.CODSG
+     AND L.IDENT = R.IDENT
+     AND F.NUMCONT IS NULL
+     AND l.ident=sr.ident
+     AND (l.lmoisprest>=sr.datsitu OR sr.datsitu IS NULL)
+     AND (l.lmoisprest<=sr.datdep OR sr.datdep IS NULL)
+     AND sr.cpident=r1.ident
+     AND d.coddir=si.coddir
+     &P_WHERE
+]]>
+      </select>
+      <comment>
+      <![CDATA[Deux selects : s1 union s2
+s1 : rammerne les factures avec contrat (celles qu'ont un contrat, leur filiale est compara au filiale d'utilisateur)
+s2 : les factures sans contrat]]>
+      </comment>
+      <displayInfo x="2.54000" y="0.53981" width="2.54000" height="0.50788"/>
+      <group name="G_FDEPPOLE">
+        <displayInfo x="15.19256" y="4.76219" width="6.40736"
+         height="15.41859"/>
+        <dataItem name="FDEPPOLE" datatype="vchar2" columnOrder="28" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="CODE">
+          <xmlSettings xmlTag="&quot;DPG_facture&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( f.fdeppole ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="FDEPPOLE" order="1" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA" oracleDatatype="number" columnOrder="48"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca">
+          <dataDescriptor expression="SI.CAFI" descriptiveExpression="CA"
+           order="2" oracleDatatype="number" width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="numcont" datatype="vchar2" columnOrder="45" width="33"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Numcont">
+          <xmlSettings xmlTag="&quot;Num_contrat&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( f.numcont || DECODE ( c.top30 , &apos;O&apos; , DECODE ( f.cav , &apos;000&apos; , NULL , &apos; - &apos; || RPAD ( f.cav , 3 ) ) , &apos;N&apos; , &apos; - &apos; || SUBSTR ( f.cav , 2 , 2 ) ) , 33 , &apos; &apos; )"
+           descriptiveExpression="NUMCONT" order="3" width="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCFACT" datatype="vchar2" columnOrder="26" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="CODE">
+          <xmlSettings xmlTag="&quot;Code-ste&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( f.socfact , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCFACT" order="4" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soclib" datatype="vchar2" columnOrder="46" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Soclib">
+          <xmlSettings xmlTag="&quot;Lib-ste&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( s.soclib , &apos; &apos; ) , 25 , &apos; &apos; )"
+           descriptiveExpression="SOCLIB" order="5" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENT" datatype="vchar2" columnOrder="30" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="CODE">
+          <xmlSettings xmlTag="&quot;ID_ressource&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( l.ident ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="IDENT" order="6" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom_ress" datatype="vchar2" columnOrder="47"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Nom Ress">
+          <xmlSettings xmlTag="&quot;Nom-ress&quot;"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( r.rnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="NOM_RESS" order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NUMFACT" datatype="vchar2" columnOrder="25" width="15"
+         defaultWidth="150000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="NUMERO">
+          <xmlSettings xmlTag="&quot;Num_facture&quot;"/>
+          <dataDescriptor expression="RPAD ( f.numfact , 15 , &apos; &apos; )"
+           descriptiveExpression="NUMFACT" order="8" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fmoiacompta" datatype="vchar2" columnOrder="44"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Fmoiacompta">
+          <xmlSettings xmlTag="&quot;Mois_a_comptabiliser&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( f.fmoiacompta , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="FMOIACOMPTA" order="9" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LMOISPREST" datatype="vchar2" columnOrder="29"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="MOIS">
+          <xmlSettings xmlTag="&quot;Mois_prestation&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( l.lmoisprest , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="LMOISPREST" order="10" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FENRCOMPTA" datatype="vchar2" columnOrder="27"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="ENREGT">
+          <xmlSettings xmlTag="&quot;Date_env_enr_comptable&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( f.fenrcompta , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="FENRCOMPTA" order="11" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FMONTHT" datatype="vchar2" columnOrder="34" width="12"
+         defaultWidth="130000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Fmontht">
+          <xmlSettings xmlTag="&quot;Montant_facture_HT&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( DECODE ( f.typfact , &apos;A&apos; , - f.fmontht , f.fmontht ) , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , TO_CHAR ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 12 , &apos; &apos; )"
+           descriptiveExpression="FMONTHT" order="12" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fmontttc" datatype="vchar2" columnOrder="43"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Fmontttc">
+          <xmlSettings xmlTag="&quot;Montant_facture_TTC&quot;"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( DECODE ( f.typfact , &apos;A&apos; , - f.fmontttc , f.fmontttc ) , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , TO_CHAR ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 12 , &apos; &apos; )"
+           descriptiveExpression="FMONTTTC" order="13" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fmonthtr1" datatype="vchar2" columnOrder="49"
+         width="12" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Fmonthtr1">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( pack_utile_cout.AppliqueTauxHTR ( TO_CHAR ( l.lmoisprest , &apos;yyyy&apos; ) , DECODE ( f.typfact , &apos;A&apos; , - f.fmontht , f.fmontht ) , TO_CHAR ( l.lmoisprest , &apos;dd/mm/yyyy&apos; ) , si.filcode ) , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , TO_CHAR ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 12 , &apos; &apos; )"
+           descriptiveExpression="FMONTHTR" order="14" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle" datatype="vchar2" columnOrder="50" width="74"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor
+           expression="d.LIBDIR || &apos; de l&apos;&apos;année &apos; || : p_param6"
+           descriptiveExpression="LIBELLE" order="15" width="74"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="28.49997" height="18.62460">
+      <location x="0.50012" y="2.26250"/>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="20.00000" height="20.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="4.08347" y="0.00000" width="2.06313" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Parametres etat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.99889" y="0.31781" width="4.23261" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Entrer les valeurs des parametres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.72988" y="1.05854" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.72988" y="1.79927" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.72988" y="2.43427" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_THOUSANDS" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.72988" y="3.17624" width="1.50750" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Thousands]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="0.84615" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="1.58688" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="2.32761" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_THOUSANDS" source="THOUSANDS" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="3.06958" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.73050" y="4.35570" width="1.42875" height="0.34385"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Code Filiale]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_annee" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="4.97303" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.72988" y="5.18201" width="4.20750" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Annee]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_dpg" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="5.83065" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_Filiale" source="P_PARAM3" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.61950" y="4.12378" width="4.98481" height="0.74073"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_dpg" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.72988" y="5.95778" width="4.14517" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Dpg]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_codefiliale" source="P_PARAM8" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.56214" y="6.77323" width="4.88962" height="0.63252"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.67252" y="6.90066" width="4.14517" height="0.52927"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[filiale]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="5.68740" y="7.91642" width="4.75010" height="0.83344"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.68740" y="7.91642" width="1.45510" height="0.34385"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[------------------------------------------------------------------------------------------
+-- Rôle : Construire un Where conditionnel. La chaine construite sera affectée au parametre
+-- de P_WHERE. 
+------------------------------------------------------------------------------------------
+function AfterPForm return boolean is
+  
+  l_perim_me	VARCHAR2(1000) := '';
+  p_dpg 			VARCHAR2(10) := '';
+	l_menutil		VARCHAR2(50);
+	
+begin
+	
+	l_menutil := pack_global.lire_globaldata( :P_GLOBAL).menutil;
+	
+	-- Ajout du prerim ME si menu different de ordonnancement ( ACH)
+	IF NVL(l_menutil,'-1') != 'ACH' THEN
+		
+		l_perim_me := pack_global.lire_perime(:P_GLOBAL);		
+		:P_WHERE :=' AND f.fdeppole IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+		
+	END IF;
+	
+	-- Filtre sur centre de frais uniquement pour le menu Ordonnancement ( ACH )
+	IF NVL(l_menutil,'-1') = 'ACH' THEN
+		
+		IF (:P_PARAM5 !='0') THEN 
+			:p_where := :p_where || ' and to_char(f.FCENTREFRAIS) = ''' || :P_PARAM5 ||'''';
+		END IF;
+		
+	END IF;
+	
+	
+  IF (:P_PARAM6 IS NOT NULL)  THEN 
+       	:p_where := :P_where || ' and TO_CHAR(f.FENRCOMPTA, ''yyyy'') = ''' || :P_PARAM6 || ''' ';
+  END IF;
+
+	-- Filtre sur le dpg generique
+  IF :P_PARAM7 IS NOT NULL THEN 
+  	
+		p_dpg := RTRIM(LTRIM(:P_PARAM7));
+		p_dpg := REPLACE(p_dpg    ,'*','%');
+         
+		:p_where := :p_where || ' and  to_char(f.fdeppole,''FM0000000'') like ''' || p_dpg|| '''';
+
+  END IF;
+
+	IF (:P_PARAM8 IS NOT NULL)  THEN 
+	   	:p_where := :P_where || ' and si.FILCODE = ''' || :P_PARAM8 || ''' ';
+	END IF;
+ 
+ 	--srw.message(1,:p_where);
+
+  RETURN (TRUE);
+END;
+
+]]>
+      </textSource>
+    </function>
+    <function name="rtrimetoile">
+      <textSource>
+      <![CDATA[FUNCTION RtrimEtoile(P_Text In VARCHAR2) RETURN VARCHAR2 IS
+  meta VARCHAR2(1);
+  L_Text VARCHAR2(7);
+BEGIN
+  L_Text := P_Text;
+  meta := SUBSTR(P_Text, NVL(length(P_Text), 0),1);
+  IF (meta = ' ') OR (meta = '*') THEN
+      L_Text := RTRIM(P_Text,meta);   
+  END IF;
+  RETURN(L_Text);
+END;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   charPromptMustSplit="0" charPromptMaySplit="0" minFieldResizeRate="0"
+   minFontPoints="0" templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

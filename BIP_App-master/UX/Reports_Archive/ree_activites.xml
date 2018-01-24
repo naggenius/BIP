@@ -1,0 +1,912 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="ree_activites" DTDVersion="9.0.2.0.10"
+ beforeReportTrigger="beforepform">
+  <xmlSettings xmlTag="REE_ACTIVITES_MANU" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_MSG" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="number" width="7" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_DOSS_PROJ" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_APPLI" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_PROJ" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_CA_PAYEUR" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_APP" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DOS_PROJ" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PROJET" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ARRETE" datatype="date" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="character" width="4"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESTYPE" initialValue="Preview"/>
+    <dataSource name="REESTIME_ACTIVITE">
+      <select>
+      <![CDATA[select ra.codsg DPG,
+	   ra.codsg ||'  '||st.LIBDSG LIBDPG,
+       ra.CODE_ACTIVITE ACTIVITE,
+	   ra.LIB_ACTIVITE LIB_ACTIVITE,
+	   RS.LIB_SCENARIO LIB_SCENARIO,
+	   lb.pid L_CODE_BIP, 
+       lb.pnom L_LIB,
+       NVL(c.cusag,0) REALISE,
+       NVL(b.anmont,0) ARBITRE,
+       NVL(b.reestime,0) LREESTIME,
+	   NVL(pack_ree_synthese_locale.RAF_RESSOURCE(ra.CODSG,ra.CODE_ACTIVITE,rs.CODE_SCENARIO,D.MOISMENS),0) RAF_RESSOURCE
+from 
+     REE_ACTIVITES ra,
+	 STRUCT_INFO st,
+	 REE_ACTIVITES_LIGNE_BIP ral,
+	 LIGNE_BIP lb,
+     CONSOMME C,
+     BUDGET b,
+	 DATDEBEX D,
+     REE_REESTIME re,
+	 REE_SCENARIOS RS
+where 
+         ra.codsg=:P_param6
+	 and st.codsg=ra.codsg
+	 and lb.pid=ral.pid(+)
+	 and ral.codsg=ra.codsg(+)
+	 and ral.code_activite=ra.code_activite(+)
+	 and lb.pid=b.pid(+)
+	 and lb.pid=c.pid(+)
+     and b.annee=:P_ANNEE
+	 and c.annee=:P_ANNEE
+     and ra.code_activite=re.code_activite(+)
+	 and ra.codsg=re.codsg(+)
+	 and (to_char(re.cdeb,'YYYY')=:P_ANNEE OR re.cdeb IS NULL)
+	 and RS.CODSG=Ra.CODSG
+	 --and re.code_scenario=rs.code_scenario
+	 and UPPER(RS.CODE_SCENARIO) like UPPER(pack_ree_synthese_locale.code_scenario(:P_param7))
+                   and UPPER(RS.OFFICIEL) like UPPER(pack_ree_synthese_locale.officiel(:P_param7))
+GROUP BY lb.pid,  ra.codsg, st.LIBDSG, ra.CODE_ACTIVITE, ra.LIB_ACTIVITE, lb.pnom, c.cusag,b.anmont,b.reestime,D.MOISMENS,rs.code_scenario, RS.LIB_SCENARIO
+ORDER BY ra.CODE_ACTIVITE]]>
+      </select>
+      <displayInfo x="1.32288" y="0.01038" width="1.54175" height="0.20837"/>
+      <group name="G_DPG">
+        <displayInfo x="0.97913" y="0.51123" width="2.22913" height="1.11426"
+        />
+        <dataItem name="DPG" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg">
+          <dataDescriptor expression="ra.codsg" descriptiveExpression="DPG"
+           order="1" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDPG" datatype="vchar2" columnOrder="30" width="72"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdpg">
+          <dataDescriptor expression="ra.codsg || &apos;  &apos; || st.LIBDSG"
+           descriptiveExpression="LIBDPG" order="2" width="72"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_SCENARIO" datatype="vchar2" columnOrder="53"
+         width="60" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Scenario">
+          <dataDescriptor expression="RS.LIB_SCENARIO"
+           descriptiveExpression="LIB_SCENARIO" order="5" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="SumRREESTIMEPerDPG" source="CF_RRESSOURCE"
+         function="sum" width="22" precision="38" reset="G_DPG"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="520" defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumLREESTIMEPerDPG" source="LREESTIME" function="sum"
+         width="22" precision="38" reset="G_DPG" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="520"
+         defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumREALISEPerDPG" source="REALISE" function="sum"
+         width="22" precision="38" reset="G_DPG" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="520"
+         defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumARBITREPerDPG" source="ARBITRE" function="sum"
+         width="22" precision="38" reset="G_DPG" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="520"
+         defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_LIB_ACTIVITE">
+        <displayInfo x="0.96863" y="1.94360" width="2.18750" height="1.11426"
+        />
+        <dataItem name="LIB_ACTIVITE" datatype="vchar2" columnOrder="32"
+         width="60" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Activite">
+          <dataDescriptor expression="ra.LIB_ACTIVITE"
+           descriptiveExpression="LIB_ACTIVITE" order="4" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RAF_RESSOURCE" oracleDatatype="number"
+         columnOrder="41" width="22" defaultWidth="90000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Sum Re Conso Prevu" valueIfNull="0">
+          <xmlSettings xmlTag="SUM_RE_CONSO_PREVU"/>
+          <dataDescriptor
+           expression="NVL ( pack_ree_synthese_locale.RAF_RESSOURCE ( ra.CODSG , ra.CODE_ACTIVITE , rs.CODE_SCENARIO , D.MOISMENS ) , 0 )"
+           descriptiveExpression="RAF_RESSOURCE" order="11"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_RRESSOURCE" source="cf_1formula" datatype="number"
+         width="20" precision="10" defaultWidth="0" defaultHeight="0"
+         columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <dataItem name="ACTIVITE" datatype="vchar2" columnOrder="31"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Activite">
+          <dataDescriptor expression="ra.CODE_ACTIVITE"
+           descriptiveExpression="ACTIVITE" order="3" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_BIP" source="L_CODE_BIP" function="count"
+         width="20" precision="10" reset="G_LIB_ACTIVITE" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumLREESTIMEPerLIB_ACTIVITE" source="LREESTIME"
+         function="sum" width="22" precision="38" reset="G_LIB_ACTIVITE"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="552" defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumARBITREPerLIB_ACTIVITE" source="ARBITRE"
+         function="sum" width="22" precision="38" reset="G_LIB_ACTIVITE"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="552" defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="SumREALISEPerLIB_ACTIVITE" source="REALISE"
+         function="sum" width="22" precision="38" reset="G_LIB_ACTIVITE"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="552" defaultLabel="Total :" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_RREESTIME">
+        <displayInfo x="0.94788" y="3.44568" width="2.57300" height="1.11426"
+        />
+        <dataItem name="LREESTIME" oracleDatatype="number" columnOrder="38"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lreestime" valueIfNull="0">
+          <dataDescriptor expression="NVL ( b.reestime , 0 )"
+           descriptiveExpression="LREESTIME" order="10"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARBITRE" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arbitre" valueIfNull="0">
+          <dataDescriptor expression="NVL ( b.anmont , 0 )"
+           descriptiveExpression="ARBITRE" order="9" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REALISE" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cusag" valueIfNull="0">
+          <xmlSettings xmlTag="CUSAG"/>
+          <dataDescriptor expression="NVL ( c.cusag , 0 )"
+           descriptiveExpression="REALISE" order="8" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="L_CODE_BIP" datatype="vchar2" columnOrder="33"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="L Code Bip">
+          <dataDescriptor expression="lb.pid"
+           descriptiveExpression="L_CODE_BIP" order="6" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="L_LIB" datatype="vchar2" columnOrder="34" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="L Lib">
+          <dataDescriptor expression="lb.pnom" descriptiveExpression="L_LIB"
+           order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DATE">
+      <select>
+      <![CDATA[select moismens from datdebex]]>
+      </select>
+      <displayInfo x="3.83752" y="0.19788" width="0.69995" height="0.19995"/>
+      <group name="G_moismens1">
+        <displayInfo x="3.75818" y="0.93945" width="1.21301" height="0.43066"
+        />
+        <dataItem name="moismens1" datatype="date" oracleDatatype="date"
+         columnOrder="40" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Moismens">
+          <xmlSettings xmlTag="MOISMENS"/>
+          <dataDescriptor expression="moismens"
+           descriptiveExpression="MOISMENS" order="1" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <summary name="SumRREESTIMEPerReport" source="RAF_RESSOURCE"
+     function="sum" width="22" precision="38" reset="report" compute="report"
+     defaultWidth="90000" defaultHeight="10000" columnFlags="552"
+     defaultLabel="Total :">
+      <displayInfo x="0.00000" y="0.00000" width="0.79993" height="0.19995"/>
+    </summary>
+    <summary name="SumLREESTIMEPerReport" source="LREESTIME" function="sum"
+     width="22" precision="38" reset="report" compute="report"
+     defaultWidth="90000" defaultHeight="10000" columnFlags="552"
+     defaultLabel="Total :">
+      <displayInfo x="0.79993" y="0.00000" width="0.79993" height="0.19995"/>
+    </summary>
+    <summary name="SumARBITREPerReport" source="ARBITRE" function="sum"
+     width="22" precision="38" reset="report" compute="report"
+     defaultWidth="90000" defaultHeight="10000" columnFlags="552"
+     defaultLabel="Total :">
+      <displayInfo x="4.66235" y="0.00000" width="0.79993" height="0.19995"/>
+    </summary>
+    <summary name="SumREALISEPerReport" source="REALISE" function="sum"
+     width="22" precision="38" reset="report" compute="report"
+     defaultWidth="90000" defaultHeight="10000" columnFlags="552"
+     defaultLabel="Total :">
+      <displayInfo x="3.37891" y="0.04163" width="0.79993" height="0.19995"/>
+    </summary>
+  </data>
+  <layout>
+    <rulers gridSpacing="0.25"/>
+  <section name="main">
+    <body width="8.00000" height="7.34375">
+      <location x="0.17188" y="1.25000"/>
+      <text name="B_19" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.57813" y="1.37378" width="0.18750" height="0.00122"
+        />
+        <visualSettings fillBackgroundColor="gray"/>
+        <textSegment>
+          <font face="Courier New" size="8" bold="yes"/>
+          <string>
+          <![CDATA[ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_21" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.28125" y="1.71753" width="0.18750" height="0.00122"
+        />
+        <visualSettings fillBackgroundColor="gray"/>
+        <textSegment>
+          <font face="Courier New" size="8" bold="yes"/>
+          <string>
+          <![CDATA[ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_22" minWidowLines="1">
+        <textSettings justify="end" spacing="0"/>
+        <geometryInfo x="1.03125" y="1.96875" width="0.13538" height="0.06250"
+        />
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <repeatingFrame name="R_2" source="G_DPG" printDirection="down"
+       maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.07813" y="0.09375" width="7.90625" height="2.53125"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <field name="DPG1" source="LIBDPG" minWidowLines="1"
+         formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="0.89063" y="0.09375" width="5.04688"
+           height="0.21875"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_5" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.10938" y="0.09375" width="0.75000"
+           height="0.20313"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[DPG : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <repeatingFrame name="R_3" source="G_LIB_ACTIVITE"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.10938" y="0.92188" width="7.81250"
+           height="1.35938"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="Libelle_activite1" source="LIB_ACTIVITE"
+           minWidowLines="1" formatMask="DD/MM/YYYY HH24:MI" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="1.28125" y="0.93750" width="4.56250"
+             height="0.18750"/>
+          </field>
+          <repeatingFrame name="R_1" source="G_RREESTIME"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="1.42188" y="1.66479" width="6.43750"
+             height="0.31384"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout formatTrigger="r_1formattrigger"/>
+            <field name="code_ligne1" source="L_CODE_BIP" minWidowLines="1"
+             formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.54688" y="1.71729" width="0.50000"
+               height="0.20313"/>
+            </field>
+            <field name="code_ligne_lib1" source="L_LIB" minWidowLines="1"
+             formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="2.18750" y="1.70166" width="2.17188"
+               height="0.22168"/>
+            </field>
+            <field name="realise" source="REALISE" minWidowLines="1"
+             formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="4.45313" y="1.70166" width="0.96875"
+               height="0.22168"/>
+            </field>
+            <field name="arbitre" source="ARBITRE" minWidowLines="1"
+             formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="5.48438" y="1.70459" width="0.76563"
+               height="0.22156"/>
+            </field>
+            <field name="lreestime" source="LREESTIME" minWidowLines="1"
+             formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="6.29688" y="1.70740" width="0.75000"
+               height="0.22156"/>
+            </field>
+          </repeatingFrame>
+          <text name="B_6" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.57813" y="2.04688" width="0.73438"
+             height="0.23438"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="11" bold="yes"/>
+              <string>
+              <![CDATA[S/total: ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="realise1" source="SumREALISEPerLIB_ACTIVITE"
+           minWidowLines="1" formatMask="NNNGNNNGNNNGNN0D00" spacing="0"
+           alignment="center">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="4.42188" y="2.01416" width="1.01563"
+             height="0.22168"/>
+          </field>
+          <field name="arbitre1" source="SumARBITREPerLIB_ACTIVITE"
+           minWidowLines="1" formatMask="NNNGNNNGNNNGNN0D00" spacing="0"
+           alignment="center">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="5.46875" y="2.01709" width="0.79688"
+             height="0.22156"/>
+          </field>
+          <field name="lreestime2" source="SumLREESTIMEPerLIB_ACTIVITE"
+           minWidowLines="1" formatMask="NNNGNNNGNNNGNN0D00" spacing="0"
+           alignment="center">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="6.34375" y="2.01990" width="0.71875"
+             height="0.22156"/>
+          </field>
+          <field name="rreestime2" source="CF_RRESSOURCE" minWidowLines="1"
+           formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="7.09375" y="2.01709" width="0.79688"
+             height="0.22156"/>
+          </field>
+          <frame name="M_2">
+            <geometryInfo x="0.39063" y="1.17188" width="7.53125"
+             height="0.40625"/>
+            <advancedLayout formatTrigger="m_2formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+          </frame>
+          <text name="B_3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.57813" y="1.20313" width="7.34375"
+             height="0.45313"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="11" bold="yes"/>
+              <string>
+              <![CDATA[Lignes Bip:Code   Libellé                 Réalisé   Arbitré    Ré-estimé
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="11" bold="yes"/>
+              <string>
+              <![CDATA[                                                             Ligne - Ressource ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="activite" source="ACTIVITE" minWidowLines="1"
+           formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.17188" y="0.95313" width="0.96875"
+             height="0.18750"/>
+          </field>
+        </repeatingFrame>
+        <text name="B_7" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.82813" y="2.34375" width="0.73438"
+           height="0.23438"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <textSegment>
+            <font face="Courier New" size="11" bold="yes"/>
+            <string>
+            <![CDATA[total: ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="realise2" source="SumREALISEPerDPG" minWidowLines="1"
+         formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="4.43750" y="2.32666" width="0.98438"
+           height="0.22168"/>
+        </field>
+        <field name="arbitre2" source="SumARBITREPerDPG" minWidowLines="1"
+         formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="5.46875" y="2.32959" width="0.82813"
+           height="0.22156"/>
+        </field>
+        <field name="lreestime1" source="SumLREESTIMEPerDPG" minWidowLines="1"
+         formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="6.34375" y="2.33240" width="0.71875"
+           height="0.22156"/>
+        </field>
+        <field name="rreestime3" source="SumRREESTIMEPerDPG" minWidowLines="1"
+         formatMask="NNNGNNNGNNNGNN0D00" spacing="0" alignment="center">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="7.07813" y="2.32959" width="0.79688"
+           height="0.22156"/>
+        </field>
+        <frame name="M_3">
+          <geometryInfo x="0.10938" y="0.65625" width="7.78125"
+           height="0.21875"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray4"/>
+          <text name="B_4" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.14063" y="0.70313" width="6.15625"
+             height="0.17188"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="11" bold="yes"/>
+              <string>
+              <![CDATA[Activité    Libellé]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <text name="B_9" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.09058" y="0.41260" width="1.05591"
+           height="0.20459"/>
+          <textSegment>
+            <font face="Courier New" size="12" bold="yes"/>
+            <string>
+            <![CDATA[SCENARIO : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="LIB_scenario1" source="LIB_SCENARIO" minWidowLines="1"
+         formatMask="DD/MM/YYYY" spacing="0" alignment="start">
+          <font face="Courier New" size="12" bold="yes"/>
+          <geometryInfo x="1.16150" y="0.41589" width="6.32288"
+           height="0.22046"/>
+        </field>
+      </repeatingFrame>
+    </body>
+    <margin>
+      <frame name="M_1">
+        <geometryInfo x="0.12500" y="0.00000" width="8.12500" height="0.82813"
+        />
+        <visualSettings fillBackgroundColor="gray16"/>
+        <text name="B_8" minWidowLines="1">
+          <textSettings justify="center" spacing="single"/>
+          <geometryInfo x="2.18750" y="0.18750" width="4.62500"
+           height="0.62500"/>
+          <textSegment>
+            <font face="Courier New" size="16" bold="yes"/>
+            <string>
+            <![CDATA[BIP: Outil Réestimé JH
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Courier New" size="16" bold="yes"/>
+            <string>
+            <![CDATA[Liste des Activités]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_DATE1" source="CurrentDate" minWidowLines="1"
+         formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="0.18750" y="0.06250" width="2.00000"
+           height="0.18750"/>
+        </field>
+        <text name="B_2" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="6.84375" y="0.06250" width="0.29163"
+           height="0.14587"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Page]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_NUM_PAGE1" source="PageNumber" minWidowLines="1"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="7.21875" y="0.06250" width="0.31250"
+           height="0.18750"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="report"/>
+        </field>
+        <text name="B_1" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="7.59375" y="0.06250" width="0.07288"
+           height="0.14587"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[/]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_TOTAL_PAGE1" source="TotalPages" minWidowLines="1"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="7.71875" y="0.06250" width="0.37500"
+           height="0.18750"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="report"/>
+        </field>
+      </frame>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_10" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.53479" y="0.15979" width="0.95801" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.22754" y="0.49304" width="1.57263" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.33691" y="1.08496" width="0.59351" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[DPG]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.45825" y="1.01184" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="P_ANNEE" source="P_ANNEE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.44788" y="1.57434" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.35779" y="1.63708" width="0.59351" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Annee]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.29529" y="2.09375" width="0.60059" height="0.11963"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Scenario]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_1" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.43005" y="2.03516" width="2.02380" height="0.21179"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="m_2formattrigger">
+      <textSource>
+      <![CDATA[function M_2FormatTrigger return boolean is
+begin
+  if(:CS_NUM_BIP=0)then
+ 		return (FALSE);
+  END IF;	
+  
+  	return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_1formattrigger">
+      <textSource>
+      <![CDATA[function R_1FormatTrigger return boolean is
+begin
+  if(:CS_NUM_BIP=0)then
+  	return (FALSE);
+  END IF;	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="beforepform">
+      <textSource>
+      <![CDATA[function BeforePForm return boolean is
+begin
+  select to_char(moismens, 'YYYY') into :P_ANNEE from datdebex;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_1formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_1Formula return Number is
+begin
+  return (NVL(:SumREALISEPerLIB_ACTIVITE,0))+(NVL(:RAF_RESSOURCE,0));
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

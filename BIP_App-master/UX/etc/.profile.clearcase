@@ -1,0 +1,49 @@
+#! /bin/ksh 
+# fichier tire des scripts d'environnement de la BCA (RSRH/ICH/RIS)
+
+ENV=$HOME/.kshrc
+export ENV
+
+umask 022
+
+MA_CDT=true
+VUE_NONE=none
+
+while $MA_CDT
+do
+	echo
+	echo "Selectionnez une vue :"
+	echo
+	
+	nbElem=0
+	
+	echo "               $nbElem. $VUE_NONE"
+	FIC_TAB[$nbElem]=$VUE_NONE
+	
+	for FIC_LST in `ls -d /projet/bip/vues/*.vws`
+	do
+		nbElem=$(($nbElem+1))
+		FIC=`basename $FIC_LST .vws`
+		echo "               $nbElem. $FIC"
+		FIC_TAB[$nbElem]=$FIC
+	done
+	
+	echo
+	echo "Votre choix : \c"
+	read VALVUE
+	if [ $VALVUE -ge 0 -a $VALVUE -le $nbElem ]
+	then
+		MA_CDT=false;
+	fi
+done
+
+if [ $VALVUE -ne 0  ]
+then
+	cleartool startview ${FIC_TAB[$VALVUE]}
+	cd /vich/bip1/
+	echo "on charge le .profile.bip de la vue selectionnee"
+	. /view/${FIC_TAB[$VALVUE]}/vich/bip1/etc/.profile.bip ${FIC_TAB[$VALVUE]}
+	unset BIPPARAM_DEFINED
+	. /view/${FIC_TAB[$VALVUE]}/vich/bip1/etc/bipparam.sh
+	cleartool setview ${FIC_TAB[$VALVUE]}
+fi

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="coutstsg" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="COUTSTSG" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <comment>
+  <![CDATA[Edition desc outs standert par année et par plage de dpg  des logiciels et des frais d'environnement]]>
+  </comment>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="p_where" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+	csSg.annee annee,
+	csSg.dpg_bas dpg_bas,
+     	csSg.dpg_haut dpg_haut,
+      	csSg.niveau niveau,
+      	csSg.cout_sg cout,
+      	DECODE(metier, 'ME' , '   ME', 'MO', '  MO', 'HOM', ' HOM', metier)  lib_metier
+from
+    	cout_std_sg csSg
+where      metier in ('ME','MO','HOM','GAP')
+&P_WHERE
+order by	lib_metier
+]]>
+      </select>
+      <displayInfo x="0.74166" y="0.00000" width="1.77788" height="0.50788"/>
+      <group name="G_annee">
+        <displayInfo x="0.15751" y="1.25078" width="2.92664" height="1.96205"
+        />
+        <dataItem name="annee" oracleDatatype="number" columnOrder="14"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="csSg.annee"
+           descriptiveExpression="ANNEE" order="1" oracleDatatype="number"
+           width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpg_bas" oracleDatatype="number" columnOrder="15"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Bas">
+          <dataDescriptor expression="csSg.dpg_bas"
+           descriptiveExpression="DPG_BAS" order="2" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpg_haut" oracleDatatype="number" columnOrder="16"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Haut">
+          <dataDescriptor expression="csSg.dpg_haut"
+           descriptiveExpression="DPG_HAUT" order="3" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_niveau">
+        <displayInfo x="0.15596" y="3.94364" width="2.92664" height="1.09389"
+        />
+        <dataItem name="niveau" datatype="vchar2" columnOrder="11" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Niveau">
+          <dataDescriptor expression="csSg.niveau"
+           descriptiveExpression="NIVEAU" order="4" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_cout">
+        <displayInfo x="0.20898" y="5.74167" width="2.84293" height="1.52797"
+        />
+        <dataItem name="lib_metier" datatype="vchar2" columnOrder="17"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier Lib1">
+          <xmlSettings xmlTag="METIER_LIB1"/>
+          <dataDescriptor
+           expression="DECODE ( metier , &apos;ME&apos; , &apos;   ME&apos; , &apos;MO&apos; , &apos;  MO&apos; , &apos;HOM&apos; , &apos; HOM&apos; , metier )"
+           descriptiveExpression="LIB_METIER" order="6" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout" oracleDatatype="number" columnOrder="12"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout1">
+          <xmlSettings xmlTag="COUT1"/>
+          <dataDescriptor expression="csSg.cout_sg"
+           descriptiveExpression="COUT" order="5" oracleDatatype="number"
+           width="22" scale="2" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_2">
+      <select>
+      <![CDATA[select distinct DECODE(metier, 'ME' , '   ME', 'MO', '  MO', 'HOM', ' HOM', metier)  metier_lib
+from cout_std_sg
+where metier in ('ME','MO','HOM','GAP')
+&P_WHERE
+order by metier_lib ]]>
+      </select>
+      <displayInfo x="4.89458" y="0.00000" width="1.77788" height="0.71438"/>
+      <group name="G_metier_lib">
+        <displayInfo x="4.36221" y="1.98438" width="2.84293" height="1.09389"
+        />
+        <dataItem name="metier_lib" datatype="vchar2" columnOrder="13"
+         width="5" defaultWidth="30000" defaultHeight="10000" columnFlags="2"
+         defaultLabel="Metier Lib" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( metier , &apos;ME&apos; , &apos;   ME&apos; , &apos;MO&apos; , &apos;  MO&apos; , &apos;HOM&apos; , &apos; HOM&apos; , metier )"
+           descriptiveExpression="METIER_LIB" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers gridSpacing="0.25"/>
+  <section name="header" width="21.59000" height="27.94000">
+    <body width="19.05000" height="22.86000">
+      <location x="0.31750" y="0.47625"/>
+    </body>
+  </section>
+  <section name="trailer" width="21.59000" height="27.94000">
+    <body width="19.05000" height="22.86000">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="main" width="21.79991" height="29.99972">
+    <body width="19.25991" height="24.91972">
+      <location x="1.11125" y="0.95250"/>
+      <field name="F_DATE1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="1.58750" y="0.35254" width="2.54000" height="0.47625"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+      </field>
+      <frame name="M_1">
+        <geometryInfo x="5.97297" y="0.03504" width="8.47328" height="1.11125"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineWidth="2" fillBackgroundColor="r88g88b100"
+         linePattern="solid" lineForegroundColor="r0g50b75"/>
+      </frame>
+      <text name="B_1" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="6.19125" y="0.19379" width="7.93750" height="0.95250"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <textSegment>
+          <font face="Arial" size="9" bold="yes"/>
+          <string>
+          <![CDATA[LISTE DES COUTS STANDARDS
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Arial" size="9" bold="yes"/>
+          <string>
+          <![CDATA[PERSONNEL SG]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_3" minWidowLines="1">
+        <textSettings justify="right" spacing="single"/>
+        <geometryInfo x="12.91208" y="0.29952" width="6.06258"
+         height="0.55563"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Page : &<PageNumber> / &<TotalPages> ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.31750" y="0.37889" width="1.27000" height="0.47625"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineForegroundColor="white"/>
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <frame name="M_G_nom1">
+        <geometryInfo x="0.81359" y="1.59897" width="17.76078"
+         height="0.88553"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillForegroundColor="darkcyan"
+         fillBackgroundColor="r88g100b100" linePattern="solid"/>
+        <text name="B_ANNEE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.96986" y="1.87058" width="1.33480"
+           height="0.39750"/>
+          <visualSettings fillBackgroundColor="blue"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Année]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DPG_BAS" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="2.85967" y="1.87058" width="1.74842"
+           height="0.39750"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[DPG bas]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_DPG_HAUT" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="5.29301" y="1.87058" width="1.74842"
+           height="0.39750"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[DPG haut]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_NIVEAU" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="7.72573" y="1.87058" width="1.74842"
+           height="0.39750"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Niveau]]>
+            </string>
+          </textSegment>
+        </text>
+        <repeatingFrame name="R_TITRE_METIER" source="G_metier_lib"
+         printDirection="across" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="9.30982" y="1.99492" width="2.14716"
+           height="0.48958"/>
+          <field name="F_COUT_SG1" source="metier_lib" minWidowLines="1"
+           formatMask="NNNGNN0D00" spacing="0" alignment="end">
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <geometryInfo x="9.44563" y="2.07739" width="1.95461"
+             height="0.39377"/>
+          </field>
+        </repeatingFrame>
+        <text name="B_COUTS" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="12.33785" y="1.59897" width="3.77589"
+           height="0.39750"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+            <string>
+            <![CDATA[Coûts par métier]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <repeatingFrame name="R_année" source="G_annee" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.80429" y="2.48357" width="17.77008"
+         height="0.63593"/>
+        <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+        <visualSettings linePattern="solid"/>
+        <repeatingFrame name="R_cout" source="G_niveau" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="7.28018" y="2.52140" width="11.26753"
+           height="0.59810"/>
+          <generalLayout verticalElasticity="variable"/>
+          <field name="F_niveau" source="niveau" minWidowLines="1"
+           formatMask="NNNGNN0D00" spacing="0" alignment="end">
+            <font face="Arial" size="9"/>
+            <geometryInfo x="7.28018" y="2.53845" width="1.45169"
+             height="0.47625"/>
+          </field>
+          <repeatingFrame name="R_COUT_METIER" source="G_cout"
+           printDirection="across" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="9.29308" y="2.53845" width="2.16390"
+             height="0.50540"/>
+            <field name="F_COUT_SG" source="cout" minWidowLines="1"
+             formatMask="NNNGNN0D00" spacing="0" alignment="end">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="9.29308" y="2.53845" width="2.09042"
+               height="0.47625"/>
+            </field>
+          </repeatingFrame>
+          <line name="B_6" arrow="none">
+            <geometryInfo x="8.06121" y="3.11640" width="10.47316"
+             height="0.00000"/>
+            <visualSettings linePattern="solid"/>
+            <points>
+              <point x="8.06121" y="3.11640"/>
+              <point x="18.53437" y="3.11640"/>
+            </points>
+          </line>
+        </repeatingFrame>
+        <field name="F_dpg_bas" source="dpg_bas" minWidowLines="1" spacing="0"
+         alignment="end">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="2.54434" y="2.53690" width="1.93446"
+           height="0.47625"/>
+        </field>
+        <field name="F_dpg_haut" source="dpg_haut" minWidowLines="1"
+         spacing="0" alignment="end">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="4.93923" y="2.53039" width="1.74935"
+           height="0.47625"/>
+        </field>
+        <field name="F_annee" source="annee" minWidowLines="1" spacing="0"
+         alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="0.80429" y="2.53039" width="1.37604"
+           height="0.47625"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000"/>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+
+	-- PARAM6 contient l'annee choisie
+	IF (:P_PARAM6 is not NULL) and (LENGTH(:P_PARAM6)=4)THEN
+		:p_where := ' and  annee=' || :P_PARAM6 ;
+	else
+		:p_where :=' ';
+  END IF;
+ 
+ --srw.message(1,:P_where);  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

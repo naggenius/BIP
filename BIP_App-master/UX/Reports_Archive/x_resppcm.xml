@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_resppcm" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_RESPPCM" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[select 	rpad(nvl(R.RNOM,' '),30,' ') RNOM,
+	lpad(nvl(to_char(R.IDENT),' '),5,' ') IDENT,
+	rpad(nvl(R.RPRENOM,' '),15,' ') RPRENOM, 
+	rpad(nvl(R.RTYPE,' '),1,' ') RTYPE, 
+	rpad(nvl(R.ICODIMM,' '),5,' ') ICODIMM, 
+	rpad(nvl(I.IADRABR,' '),10,' ') IADRABR,
+       	rpad(nvl(R.ICODIMM,' '),5,' ') ICODIMM2, 
+	rpad(nvl(R.BATIMENT,' '),1,' ') BATIMENT, 
+	rpad(nvl(R.ETAGE,' '),2,' ') ETAGE, 
+	rpad(nvl(R.BUREAU,' '),3,' ') BUREAU,
+       	rpad(nvl(R.RTEL,' '),16,' ') RTEL, 
+	rpad(nvl(R.MATRICULE,' '),7,' ') MATRICULE, 
+	rpad(nvl(SR.SOCCODE,' '),4,' ') SOCCODE, 
+	rpad(nvl(S.SOCLIB,' '),25,' ') SOCLIB, 
+	rpad(nvl(SR.PRESTATION,' '),3,' ') PRESTATION,
+       	lpad(nvl(to_char(SR.CODSG),' '),7,' ') CODSG, 
+	rpad(nvl(to_char(SR.DATSITU,'ddmmyyyy'),' '),8,' ') DATSITU, 
+	lpad(nvl(to_char(DECODE(SR.SOCCODE,'SG..',0,SR.COUT),'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.'),' '),12,' ') COUT, 
+	lpad(nvl(to_char(SR.CPIDENT,'FM00000'),' '),5,' ') CPIDENT,
+
+rpad(nvl(to_char(( SELECT MIN(s.datsitu) FROM situ_ress s
+             WHERE s.ident = r.ident
+               and s.codsg = sr.codsg
+               and rownum < 2),'ddmmyyyy'),' '),8,' ') date_entree_SG ,
+               
+          rpad(nvl(to_char((SELECT MIN(v.cdatdeb) FROM vue_ext_ppcm2 v
+            WHERE v.ident = r.ident
+            and rownum < 2),'ddmmyyyy'),' '),8,' ') date_debut,
+  
+  
+       rpad(nvl(to_char((SELECT MIN(v.cdatfin) FROM vue_ext_ppcm2 v
+                WHERE v.ident = r.ident
+                AND TO_CHAR(V.cdatdeb,'DDMMYYYY') = (SELECT MIN(v.cdatdeb) FROM vue_ext_ppcm2 v
+                                                        WHERE v.ident = r.ident and rownum < 2 ) 
+                and rownum < 2),'ddmmyyyy'),' '),8,' ') date_fin,
+
+
+                rpad(nvl(MODE_CONTRACTUEL_INDICATIF,' '),5,' ') MODE_CONTRACTUEL_INDICATIF
+from  RESSOURCE R, SOCIETE S, IMMEUBLE I, vue_dpg_perime VDP, SITU_RESS SR
+where R.IDENT    = SR.IDENT
+  and R.ICODIMM  = I.ICODIMM (+)
+  and SR.SOCCODE = S.SOCCODE
+  and R.RTYPE = 'P'
+  and SR.datsitu <= trunc(SYSDATE)
+  and ( SR.DATDEP is null or SR.DATDEP >= trunc(SYSDATE))
+AND     SR.codsg =VDP.codsg
+AND   INSTR(:P_PERIME, VDP.codbddpg) > 0
+ORDER BY R.RNOM, R.IDENT, SR.DATSITU desc;
+]]>
+      </select>
+      <displayInfo x="2.73901" y="0.36462" width="0.77087" height="0.37500"/>
+      <group name="G_RNOM">
+        <displayInfo x="1.96106" y="1.08459" width="2.95557" height="4.70313"
+        />
+        <dataItem name="RNOM" datatype="vchar2" columnOrder="11" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Rnom" breakOrder="none">
+          <xmlSettings xmlTag="Nom"/>
+          <dataDescriptor expression="RNOM" descriptiveExpression="RNOM"
+           order="1" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IDENT" datatype="vchar2" columnOrder="12" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Ident" breakOrder="none">
+          <xmlSettings xmlTag="Code ressource"/>
+          <dataDescriptor expression="IDENT" descriptiveExpression="IDENT"
+           order="2" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RPRENOM" datatype="vchar2" columnOrder="13" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Rprenom" breakOrder="none">
+          <xmlSettings xmlTag="prénom"/>
+          <dataDescriptor expression="RPRENOM" descriptiveExpression="RPRENOM"
+           order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RTYPE" datatype="vchar2" columnOrder="14" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Rtype" breakOrder="none">
+          <xmlSettings xmlTag="type"/>
+          <dataDescriptor expression="RTYPE" descriptiveExpression="RTYPE"
+           order="4" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ICODIMM" datatype="vchar2" columnOrder="15" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Icodimm" breakOrder="none">
+          <xmlSettings xmlTag="code immeuble"/>
+          <dataDescriptor expression="ICODIMM" descriptiveExpression="ICODIMM"
+           order="5" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IADRABR" datatype="vchar2" columnOrder="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Iadrabr" breakOrder="none">
+          <xmlSettings xmlTag="batiment"/>
+          <dataDescriptor expression="IADRABR" descriptiveExpression="IADRABR"
+           order="6" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ICODIMM2" datatype="vchar2" columnOrder="17" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Icodimm2" breakOrder="none">
+          <xmlSettings xmlTag="immeuble"/>
+          <dataDescriptor expression="ICODIMM2"
+           descriptiveExpression="ICODIMM2" order="7" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="BATIMENT" datatype="vchar2" columnOrder="18" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Batiment" breakOrder="none">
+          <xmlSettings xmlTag="Zone"/>
+          <dataDescriptor expression="BATIMENT"
+           descriptiveExpression="BATIMENT" order="8" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ETAGE" datatype="vchar2" columnOrder="19" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Etage" breakOrder="none">
+          <xmlSettings xmlTag="Etage"/>
+          <dataDescriptor expression="ETAGE" descriptiveExpression="ETAGE"
+           order="9" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="BUREAU" datatype="vchar2" columnOrder="20" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Bureau" breakOrder="none">
+          <xmlSettings xmlTag="Bureau"/>
+          <dataDescriptor expression="BUREAU" descriptiveExpression="BUREAU"
+           order="10" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RTEL" datatype="vchar2" columnOrder="21" width="16"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Rtel" breakOrder="none">
+          <xmlSettings xmlTag="téléphone"/>
+          <dataDescriptor expression="RTEL" descriptiveExpression="RTEL"
+           order="11" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATRICULE" datatype="vchar2" columnOrder="22"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Matricule" breakOrder="none">
+          <xmlSettings xmlTag="Matricule"/>
+          <dataDescriptor expression="MATRICULE"
+           descriptiveExpression="MATRICULE" order="12" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCCODE" datatype="vchar2" columnOrder="23" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Soccode" breakOrder="none">
+          <xmlSettings xmlTag="code société"/>
+          <dataDescriptor expression="SOCCODE" descriptiveExpression="SOCCODE"
+           order="13" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SOCLIB" datatype="vchar2" columnOrder="24" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Soclib" breakOrder="none">
+          <xmlSettings xmlTag="libellé société"/>
+          <dataDescriptor expression="SOCLIB" descriptiveExpression="SOCLIB"
+           order="14" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PRESTATION" datatype="vchar2" columnOrder="25"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Prestation" breakOrder="none">
+          <xmlSettings xmlTag="prestation"/>
+          <dataDescriptor expression="PRESTATION"
+           descriptiveExpression="PRESTATION" order="15" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODSG" datatype="vchar2" columnOrder="26" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Codsg" breakOrder="none">
+          <xmlSettings xmlTag="DPG"/>
+          <dataDescriptor expression="CODSG" descriptiveExpression="CODSG"
+           order="16" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATSITU" datatype="vchar2" columnOrder="27" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Datsitu" breakOrder="none">
+          <xmlSettings xmlTag="Date entrée groupe"/>
+          <dataDescriptor expression="DATSITU" descriptiveExpression="DATSITU"
+           order="17" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT" datatype="vchar2" columnOrder="28" width="12"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Cout" breakOrder="none">
+          <xmlSettings xmlTag="coût JH HT"/>
+          <dataDescriptor expression="COUT" descriptiveExpression="COUT"
+           order="18" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CPIDENT" datatype="vchar2" columnOrder="29" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Cpident" breakOrder="none">
+          <xmlSettings xmlTag="code chef de projet"/>
+          <dataDescriptor expression="CPIDENT" descriptiveExpression="CPIDENT"
+           order="19" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_ENTREE_SG" datatype="vchar2" columnOrder="33"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Date Entree Sg" breakOrder="none">
+          <xmlSettings xmlTag="Date entrée SG"/>
+          <dataDescriptor expression="DATE_ENTREE_SG"
+           descriptiveExpression="DATE_ENTREE_SG" order="20" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_DEBUT" datatype="vchar2" columnOrder="34"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Date Debut" breakOrder="none">
+          <xmlSettings xmlTag="date début contrat"/>
+          <dataDescriptor expression="DATE_DEBUT"
+           descriptiveExpression="DATE_DEBUT" order="21" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_FIN" datatype="vchar2" columnOrder="35" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Date Fin" breakOrder="none">
+          <xmlSettings xmlTag="date fin contrat"/>
+          <dataDescriptor expression="DATE_FIN"
+           descriptiveExpression="DATE_FIN" order="22" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MODE_CONTRACTUEL_INDICATIF" datatype="vchar2"
+         columnOrder="32" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Mode Contractuel Indicatif"
+         breakOrder="none">
+          <xmlSettings xmlTag="Mode_contractuel_indicatif"/>
+          <dataDescriptor expression="MODE_CONTRACTUEL_INDICATIF"
+           descriptiveExpression="MODE_CONTRACTUEL_INDICATIF" order="23"
+           width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+  :P_PERIME:=PACK_GLOBAL.LIRE_PERIME(:P_GLOBAL);
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+
+
+</head>
+
+
+<body>
+
+<!-- Data Area Generated by Reports Developer -->
+<rw:dataArea id="MGRNOMGRPFR83">
+<table>
+<caption>  </caption>
+ <!-- Header -->
+ <thead>
+  <tr>
+   <th <rw:id id="HBRNOM83" asArray="no"/>> Rnom </th>
+   <th <rw:id id="HBIDENT83" asArray="no"/>> Ident </th>
+   <th <rw:id id="HBRPRENOM83" asArray="no"/>> Rprenom </th>
+   <th <rw:id id="HBRTYPE83" asArray="no"/>> Rtype </th>
+   <th <rw:id id="HBICODIMM83" asArray="no"/>> Icodimm </th>
+   <th <rw:id id="HBIADRABR83" asArray="no"/>> Iadrabr </th>
+   <th <rw:id id="HBICODIMM283" asArray="no"/>> Icodimm2 </th>
+   <th <rw:id id="HBBATIMENT83" asArray="no"/>> Batiment </th>
+   <th <rw:id id="HBETAGE83" asArray="no"/>> Etage </th>
+   <th <rw:id id="HBBUREAU83" asArray="no"/>> Bureau </th>
+   <th <rw:id id="HBRTEL83" asArray="no"/>> Rtel </th>
+   <th <rw:id id="HBMATRICULE83" asArray="no"/>> Matricule </th>
+   <th <rw:id id="HBSOCCODE83" asArray="no"/>> Soccode </th>
+   <th <rw:id id="HBSOCLIB83" asArray="no"/>> Soclib </th>
+   <th <rw:id id="HBPRESTATION83" asArray="no"/>> Prestation </th>
+   <th <rw:id id="HBCODSG83" asArray="no"/>> Codsg </th>
+   <th <rw:id id="HBDATSITU83" asArray="no"/>> Datsitu </th>
+   <th <rw:id id="HBCOUT83" asArray="no"/>> Cout </th>
+   <th <rw:id id="HBCPIDENT83" asArray="no"/>> Cpident </th>
+   <th <rw:id id="HBMODECONTRACTUELINDICATIF83" asArray="no"/>> Mode Contractuel
+Indicatif </th>
+   <th <rw:id id="HBDATEENTREESG83" asArray="no"/>> Date Entree Sg </th>
+   <th <rw:id id="HBDATEDEBUT83" asArray="no"/>> Date
+Debut </th>
+   <th <rw:id id="HBDATEFIN83" asArray="no"/>> Date
+Fin </th>
+  </tr>
+ </thead>
+ <!-- Body -->
+ <tbody>
+  <rw:foreach id="RGRNOM831" src="G_RNOM">
+   <tr>
+    <td <rw:headers id="HFRNOM183" src="HBRNOM83"/>><rw:field id="FRNOM183" src="RNOM" nullValue="&nbsp;"> F_RNOM1 </rw:field></td>
+    <td <rw:headers id="HFIDENT183" src="HBIDENT83"/>><rw:field id="FIDENT183" src="IDENT" nullValue="&nbsp;"> F_IDENT1 </rw:field></td>
+    <td <rw:headers id="HFRPRENOM183" src="HBRPRENOM83"/>><rw:field id="FRPRENOM183" src="RPRENOM" nullValue="&nbsp;"> F_RPRENOM1 </rw:field></td>
+    <td <rw:headers id="HFRTYPE183" src="HBRTYPE83"/>><rw:field id="FRTYPE183" src="RTYPE" nullValue="&nbsp;"> F_RTYPE1 </rw:field></td>
+    <td <rw:headers id="HFICODIMM183" src="HBICODIMM83"/>><rw:field id="FICODIMM183" src="ICODIMM" nullValue="&nbsp;"> F_ICODIMM1 </rw:field></td>
+    <td <rw:headers id="HFIADRABR183" src="HBIADRABR83"/>><rw:field id="FIADRABR183" src="IADRABR" nullValue="&nbsp;"> F_IADRABR1 </rw:field></td>
+    <td <rw:headers id="HFICODIMM383" src="HBICODIMM283"/>><rw:field id="FICODIMM383" src="ICODIMM2" nullValue="&nbsp;"> F_ICODIMM3 </rw:field></td>
+    <td <rw:headers id="HFBATIMENT183" src="HBBATIMENT83"/>><rw:field id="FBATIMENT183" src="BATIMENT" nullValue="&nbsp;"> F_BATIMENT1 </rw:field></td>
+    <td <rw:headers id="HFETAGE183" src="HBETAGE83"/>><rw:field id="FETAGE183" src="ETAGE" nullValue="&nbsp;"> F_ETAGE1 </rw:field></td>
+    <td <rw:headers id="HFBUREAU183" src="HBBUREAU83"/>><rw:field id="FBUREAU183" src="BUREAU" nullValue="&nbsp;"> F_BUREAU1 </rw:field></td>
+    <td <rw:headers id="HFRTEL183" src="HBRTEL83"/>><rw:field id="FRTEL183" src="RTEL" nullValue="&nbsp;"> F_RTEL1 </rw:field></td>
+    <td <rw:headers id="HFMATRICULE183" src="HBMATRICULE83"/>><rw:field id="FMATRICULE183" src="MATRICULE" nullValue="&nbsp;"> F_MATRICULE1 </rw:field></td>
+    <td <rw:headers id="HFSOCCODE183" src="HBSOCCODE83"/>><rw:field id="FSOCCODE183" src="SOCCODE" nullValue="&nbsp;"> F_SOCCODE1 </rw:field></td>
+    <td <rw:headers id="HFSOCLIB183" src="HBSOCLIB83"/>><rw:field id="FSOCLIB183" src="SOCLIB" nullValue="&nbsp;"> F_SOCLIB1 </rw:field></td>
+    <td <rw:headers id="HFPRESTATION183" src="HBPRESTATION83"/>><rw:field id="FPRESTATION183" src="PRESTATION" nullValue="&nbsp;"> F_PRESTATION1 </rw:field></td>
+    <td <rw:headers id="HFCODSG183" src="HBCODSG83"/>><rw:field id="FCODSG183" src="CODSG" nullValue="&nbsp;"> F_CODSG1 </rw:field></td>
+    <td <rw:headers id="HFDATSITU183" src="HBDATSITU83"/>><rw:field id="FDATSITU183" src="DATSITU" nullValue="&nbsp;"> F_DATSITU1 </rw:field></td>
+    <td <rw:headers id="HFCOUT183" src="HBCOUT83"/>><rw:field id="FCOUT183" src="COUT" nullValue="&nbsp;"> F_COUT1 </rw:field></td>
+    <td <rw:headers id="HFCPIDENT183" src="HBCPIDENT83"/>><rw:field id="FCPIDENT183" src="CPIDENT" nullValue="&nbsp;"> F_CPIDENT1 </rw:field></td>
+    <td <rw:headers id="HFMODECONTRACTUELINDICATIF83" src="HBMODECONTRACTUELINDICATIF83"/>><rw:field id="FMODECONTRACTUELINDICATIF83" src="MODE_CONTRACTUEL_INDICATIF" nullValue="&nbsp;"> F_MODE_CONTRACTUEL_INDICATIF </rw:field></td>
+    <td <rw:headers id="HFDATEENTREESG83" src="HBDATEENTREESG83"/>><rw:field id="FDATEENTREESG83" src="DATE_ENTREE_SG" nullValue="&nbsp;"> F_DATE_ENTREE_SG </rw:field></td>
+    <td <rw:headers id="HFDATEDEBUT83" src="HBDATEDEBUT83"/>><rw:field id="FDATEDEBUT83" src="DATE_DEBUT" nullValue="&nbsp;"> F_DATE_DEBUT </rw:field></td>
+    <td <rw:headers id="HFDATEFIN83" src="HBDATEFIN83"/>><rw:field id="FDATEFIN83" src="DATE_FIN" nullValue="&nbsp;"> F_DATE_FIN </rw:field></td>
+   </tr>
+  </rw:foreach>
+ </tbody>
+</table>
+</rw:dataArea> <!-- id="MGRNOMGRPFR83" -->
+<!-- End of Data Area Generated by Reports Developer -->
+
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

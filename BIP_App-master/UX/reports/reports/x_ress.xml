@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_ress" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_RESS" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PERIME" datatype="character" width="512"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10"
+     initialValue="X111282;;11050;3261212;01 ;01030000000;000000000;0;36662;;;;;;ges,isac,ginv,act,fin,supach,acdet,fidet,admin,copi;;dir,me,isacm,inv,ach,suiviact,rbip,ref,ore,req;;"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" precision="10"
+     validationTrigger="ck1validtrigger" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" precision="10"
+     validationTrigger="ck4validtrigger" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM12" datatype="character" width="40"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DATE_REF" datatype="date" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[SELECT DISTINCT
+	rpad( nvl(R.rnom,' '),30,' ')		rnom,
+	lpad( nvl(to_char(R.ident),'0'),5,'0')	ident,
+	rpad( nvl(R.rprenom,' '),15,' ')		rprenom,
+	lpad( nvl(R.rtype,' '),1,' ')		rtype,
+	lpad( nvl(R.icodimm,'0'),5,'0')		icodimm,
+	rpad( nvl(I.iadrabr,' '),10,' ')		iadrabr,
+	rpad( rpad(nvl(R.icodimm,' '),5,' ') || 
+		rpad(nvl(R.batiment,' '),1,' ')	||
+		rpad(nvl(R.etage,' '),2,' ') ||
+		rpad(nvl(R.bureau,' '),3,' ') , 11,' ')	adrdetail,
+	lpad(nvl(R.rtel,'0'),16,'0')		rtel,
+	rpad(nvl(R.matricule,' '),7,' ')		matricule,
+	rpad(nvl(SR.soccode,' '),4,' ')		soccode,
+	rpad(nvl(S.soclib,' '),25,' ')		soclib,
+	rpad(nvl(SR.prestation,' '),3,' ')		prestation,
+	lpad(nvl(to_char(SR.codsg),' '),7,' ')	codsg,
+	rpad(nvl(to_char(SQ_ress.max_datsitu, 'DDMMYYYY'),'0'),8,'0')	max_datsitu,
+	rpad(nvl(to_char(SQ_ress.min_datsitu, 'DDMMYYYY'),'0'),8,'0')	min_datsitu,
+	rpad(nvl(to_char(decode(SR.soccode, 'SG..', 0,
+		decode(R.rtype, 'L', (select cout_log from cout_std2 std2
+					where SR.codsg between std2.dpg_bas and std2.dpg_haut
+                                                                                   and std2.metier = 'ME'
+					   and std2.annee=to_char(sysdate, 'YYYY')), -- logiciel
+			SR.cout)),	-- SSII et forfaitS
+		'FM9999999999.00'),'.00'),13,' ') 		cout, 
+	lpad(nvl(to_char(SR.cpident),'0'),5,'0')			cpident,
+	rpad(nvl(to_char(SQ_cont.cdatdeb, 'DDMMYYYY'),'0'),8,'0')	cdatdeb,
+	rpad(nvl(to_char(SQ_cont.cdatfin, 'DDMMYYYY'),'0'),8,'0')	cdatfin,
+	lpad(nvl(to_char(SQ_proplus.cumul_cusag, 'FM999999.00'),'.00'),8,' ')	cumul_cusag,
+	rpad(nvl(SR.dprest,' '),3,' ')				dprest, 
+	R.IGG  IGG,
+               TO_CHAR(SR.DATSITU,'DD/MM/YYYY') SITU_DEB,
+               TO_CHAR(SR.DATDEP,'DD/MM/YYYY') SITU_FIN,
+               SR.MODE_CONTRACTUEL_INDICATIF SITU_MCI,
+               DECODE( PACK_UTIL_SITU.ISACTIVESITU(SR.DATSITU,SR.DATDEP, SR.IDENT  ), 'O', '1' , ' ')   SITU_ACTIVE,
+	SR.FIDENT			FIDENT
+
+                		
+FROM
+	ressource   R,
+	immeuble    I, 
+	societe     S,
+	situ_ress   SR,
+	vue_dpg_perime VDP,
+	(SELECT
+		ident,
+		MAX(datsitu)  max_datsitu,
+		MIN(datsitu)  min_datsitu
+	FROM
+		situ_ress
+	GROUP BY
+		ident	
+	) SQ_ress,
+	(SELECT
+		LC.ident,
+		LC.numcont,
+		LC.soccont,
+		LC.cav,
+		C.cdatdeb,
+		C.cdatfin,
+		LC.lcnum,
+		LC.lresdeb,
+		LC.lresfin
+	FROM
+		ligne_cont  LC,
+		contrat     C
+	WHERE
+		C.numcont = LC.numcont
+	AND   C.soccont = LC.soccont
+	AND   C.cav     = LC.cav
+		) SQ_cont,
+	-----------------------------------------------------------------------------
+	(SELECT
+		tires, 
+		NVL(SUM(cusag),0) AS cumul_cusag
+	FROM
+		proplus   P
+	WHERE
+                                trunc(P.cdeb, 'year') = trunc(sysdate, 'year')
+
+	GROUP BY
+		tires
+	) SQ_proplus
+	-----------------------------------------------------------------------------
+WHERE
+	-----------------------------------------------------------------------------
+	I.icodimm(+)           = R.icodimm
+	-----------------------------------------------------------------------------
+	AND	S.soccode           = SR.soccode(+)
+	-----------------------------------------------------------------------------
+	AND	SR.ident            = R.ident
+	AND	SR.ident            = SQ_ress.ident
+	--AND   	SR.datsitu          = SQ_ress.max_datsitu 
+                &P_WHERE
+
+	-----------------------------------------------------------------------------
+	AND   SQ_proplus.tires (+) = SR.ident
+	AND   SQ_proplus.tires (+) > 0
+	-----------------------------------------------------------------------------
+	AND   SQ_cont.ident    (+) = SR.ident
+	AND   SQ_cont.lresdeb  (+)<= SR.datsitu
+	AND   SQ_cont.lresfin  (+)>= nvl( SR.datdep, to_date('01011900','DDMMYYYY') )	
+	AND   SQ_cont.cdatdeb  (+)<= sysdate
+	AND   SQ_cont.cdatfin  (+)>= SYSDATE
+	AND   SR.codsg=VDP.codsg
+	AND   INSTR(:P_PERIME, VDP.codbddpg) > 0	
+ORDER BY rnom	ASC,  to_number(ident)	ASC;]]>
+      </select>
+      <displayInfo x="0.51917" y="0.10413" width="1.16675" height="0.23962"/>
+      <group name="G_rnom">
+        <displayInfo x="0.44019" y="0.67932" width="2.01819" height="4.87402"
+        />
+        <dataItem name="rnom" datatype="vchar2" columnOrder="22" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom">
+          <dataDescriptor expression="RNOM" descriptiveExpression="RNOM"
+           order="1" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="23" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <dataDescriptor expression="IDENT" descriptiveExpression="IDENT"
+           order="2" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rprenom" datatype="vchar2" columnOrder="24" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rprenom">
+          <dataDescriptor expression="RPRENOM" descriptiveExpression="RPRENOM"
+           order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rtype" datatype="vchar2" columnOrder="25" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rtype">
+          <dataDescriptor expression="RTYPE" descriptiveExpression="RTYPE"
+           order="4" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="icodimm" datatype="vchar2" columnOrder="26" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Icodimm">
+          <dataDescriptor expression="ICODIMM" descriptiveExpression="ICODIMM"
+           order="5" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="iadrabr" datatype="vchar2" columnOrder="27"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Iadrabr">
+          <dataDescriptor expression="IADRABR" descriptiveExpression="IADRABR"
+           order="6" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="adrdetail" datatype="vchar2" columnOrder="28"
+         width="11" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Adrdetail">
+          <dataDescriptor expression="ADRDETAIL"
+           descriptiveExpression="ADRDETAIL" order="7" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rtel" datatype="vchar2" columnOrder="29" width="16"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rtel">
+          <dataDescriptor expression="RTEL" descriptiveExpression="RTEL"
+           order="8" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="matricule" datatype="vchar2" columnOrder="30"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Matricule">
+          <dataDescriptor expression="MATRICULE"
+           descriptiveExpression="MATRICULE" order="9" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soccode" datatype="vchar2" columnOrder="31" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Soccode">
+          <dataDescriptor expression="SOCCODE" descriptiveExpression="SOCCODE"
+           order="10" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soclib" datatype="vchar2" columnOrder="32" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Soclib">
+          <dataDescriptor expression="SOCLIB" descriptiveExpression="SOCLIB"
+           order="11" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prestation" datatype="vchar2" columnOrder="33"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Prestation">
+          <dataDescriptor expression="PRESTATION"
+           descriptiveExpression="PRESTATION" order="12" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsg" datatype="vchar2" columnOrder="34" width="7"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codsg">
+          <dataDescriptor expression="CODSG" descriptiveExpression="CODSG"
+           order="13" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="max_datsitu" datatype="vchar2" columnOrder="35"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Max Datsitu">
+          <dataDescriptor expression="MAX_DATSITU"
+           descriptiveExpression="MAX_DATSITU" order="14" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="min_datsitu" datatype="vchar2" columnOrder="36"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Min Datsitu">
+          <dataDescriptor expression="MIN_DATSITU"
+           descriptiveExpression="MIN_DATSITU" order="15" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cout" datatype="vchar2" columnOrder="37" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout">
+          <dataDescriptor expression="COUT" descriptiveExpression="COUT"
+           order="16" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cpident" datatype="vchar2" columnOrder="38" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cpident">
+          <dataDescriptor expression="CPIDENT" descriptiveExpression="CPIDENT"
+           order="17" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cdatdeb" datatype="vchar2" columnOrder="39" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdatdeb">
+          <dataDescriptor expression="CDATDEB" descriptiveExpression="CDATDEB"
+           order="18" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cdatfin" datatype="vchar2" columnOrder="40" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cdatfin">
+          <dataDescriptor expression="CDATFIN" descriptiveExpression="CDATFIN"
+           order="19" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cumul_cusag" datatype="vchar2" columnOrder="41"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cumul Cusag">
+          <dataDescriptor expression="CUMUL_CUSAG"
+           descriptiveExpression="CUMUL_CUSAG" order="20" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dprest" datatype="vchar2" columnOrder="42" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dprest">
+          <dataDescriptor expression="DPREST" descriptiveExpression="DPREST"
+           order="21" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="IGG" oracleDatatype="number" columnOrder="43"
+         width="22" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Igg">
+          <dataDescriptor expression="IGG" descriptiveExpression="IGG"
+           order="22" oracleDatatype="number" width="22" precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SITU_DEB" datatype="vchar2" columnOrder="44"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Situ Deb">
+          <dataDescriptor expression="SITU_DEB"
+           descriptiveExpression="SITU_DEB" order="23" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SITU_FIN" datatype="vchar2" columnOrder="45"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Situ Fin">
+          <dataDescriptor expression="SITU_FIN"
+           descriptiveExpression="SITU_FIN" order="24" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SITU_MCI" datatype="vchar2" columnOrder="46" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Situ Mci">
+          <dataDescriptor expression="SITU_MCI"
+           descriptiveExpression="SITU_MCI" order="25" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SITU_ACTIVE" datatype="vchar2" columnOrder="47"
+         width="1" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Situ Active">
+          <dataDescriptor expression="SITU_ACTIVE"
+           descriptiveExpression="SITU_ACTIVE" order="26" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		<dataItem name="fident" datatype="number" columnOrder="48" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Fident">
+          <dataDescriptor expression="FIDENT" descriptiveExpression="FIDENT"
+           order="27" oracleDatatype="number" width="22" precision="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_rnom" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.06250" width="7.37500" height="0.56250"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_rnom" source="rnom" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.18750" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_ident" source="ident" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.56250" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_rprenom" source="rprenom" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.93750" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_rtype" source="rtype" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.31250" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_icodimm" source="icodimm" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.62500" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_iadrabr" source="iadrabr" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.00000" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_adrdetail" source="adrdetail" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.37500" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_rtel" source="rtel" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.75000" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_matricule" source="matricule" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="3.18750" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_soccode" source="soccode" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="3.62500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_soclib" source="soclib" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.06250" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_prestation" source="prestation" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.43750" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_codsg" source="codsg" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.75000" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_max_datsitu" source="max_datsitu" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.06250" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_min_datsitu" source="min_datsitu" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.37500" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cout" source="cout" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.75000" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cpident" source="cpident" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.06250" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cdatdeb" source="cdatdeb" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.37500" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cdatfin" source="cdatfin" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.68750" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_cumul_cusag" source="cumul_cusag" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="7.00000" y="0.12500" width="0.18750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_dprest" source="dprest" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.18750" y="0.37500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_IGG" source="IGG" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.56250" y="0.37500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_SITU_DEB" source="SITU_DEB" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.93750" y="0.37500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_SITU_FIN" source="SITU_FIN" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.31250" y="0.37500" width="0.25000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_SITU_MCI" source="SITU_MCI" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.62500" y="0.37500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_SITU_ACTIVE" source="SITU_ACTIVE" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.00000" y="0.37500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+		
+		<field name="F_fident" source="FIDENT" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.37500" y="0.37500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+		
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+p_dpg VARCHAR2(10) := '';--PPM 61346
+Check_Box1 VARCHAR2(200);
+Check_Box2 VARCHAR2(200);
+Check_Box3 VARCHAR2(200);
+Check_Box4 VARCHAR2(200);
+Check_Box5 VARCHAR2(200);
+
+
+begin
+	
+	-- Check_Box1 : Correspond à l'option --> à cette date ou ultérieurement
+	-- Check_Box2 : Correspond à l'option --> à cette date
+	-- Check_Box3 : Correspond à l'option --> au 1er jour de cette année
+	-- Check_Box4 : Correspond à l'option --> au 1er de ce mois
+	-- Check_Box5 : Correspond à l'option --> aujourd'hui
+	
+	:P_WHERE := ' AND ( ';
+	
+	Check_Box1 := ' ( ( SR.DATSITU <= ' || ' to_date(''' ||:P_PARAM6|| ''',''DD/MM/RRRR'') AND ( SR.datdep >= ' || ' to_date(''' ||:P_PARAM6|| ''',''DD/MM/RRRR'') OR SR.datdep is NULL ) ) OR SR.DATSITU >= ' || ' to_date(''' ||:P_PARAM6|| ''',''DD/MM/RRRR'') ) ';
+	Check_Box2 := ' ( ( SR.DATSITU <= ' || ' to_date(''' ||:P_PARAM6|| ''',''DD/MM/RRRR'') AND ( SR.datdep >= ' || ' to_date(''' ||:P_PARAM6|| ''',''DD/MM/RRRR'') OR SR.datdep is NULL ) ) ) ';
+	Check_Box3 := ' ( (SR.datdep >= trunc(sysdate, ''year'') OR SR.datdep is NULL) AND SR.DATSITU <= trunc(sysdate, ''year'') ) ' ;
+	Check_Box4 := ' ( (trunc(SR.datdep, ''month'') >= trunc(sysdate, ''month'') OR SR.datdep is NULL )AND trunc(SR.DATSITU, ''month'') <= trunc(sysdate, ''month'') ) ' ;
+	Check_Box5 := ' ( (SR.datdep >= trunc(sysdate,''DDD'') OR SR.datdep is NULL) AND SR.DATSITU <= trunc(sysdate,''DDD'') ) ' ;
+	
+		
+	IF(:P_PARAM6 IS NOT NULL) THEN
+			
+			IF(:P_PARAM7 IS NOT NULL) THEN
+					
+		    :P_WHERE := :P_WHERE || Check_Box1;
+		    
+			END IF;
+			
+			IF(:P_PARAM8 IS NOT NULL) THEN
+					
+    		:P_WHERE := :P_WHERE || Check_Box2;
+                			
+			END IF;			
+
+			IF(:P_PARAM9 IS NOT NULL) THEN
+				:P_WHERE := :P_WHERE || ' OR ' || Check_Box3;
+			END IF;
+			
+			IF(:P_PARAM10 IS NOT NULL) THEN
+				:P_WHERE := :P_WHERE || ' OR ' || Check_Box4;
+			END IF;
+			
+			IF(:P_PARAM11 IS NOT NULL) THEN
+				:P_WHERE := :P_WHERE || ' OR ' || Check_Box5;
+			END IF;	
+			
+		
+			
+	ELSE
+		
+			IF(:P_PARAM9 IS NOT NULL) THEN 
+				:P_WHERE := :P_WHERE || Check_Box3;
+
+					IF(:P_PARAM10 IS NOT NULL) THEN
+						:P_WHERE := :P_WHERE || ' OR ' || Check_Box4 ;
+					END IF;
+						
+					IF(:P_PARAM11 IS NOT NULL) THEN
+						:P_WHERE := :P_WHERE || ' OR ' || Check_Box5;
+					END IF;			
+									
+			ELSE
+						
+					IF(:P_PARAM10 IS NOT NULL) THEN
+						:P_WHERE := :P_WHERE || Check_Box4;
+							
+							IF(:P_PARAM11 IS NOT NULL) THEN
+								:P_WHERE := :P_WHERE || ' OR ' || Check_Box5;
+							END IF;
+						
+					ELSE
+						
+							IF(:P_PARAM11 IS NOT NULL) THEN
+								:P_WHERE := :P_WHERE || Check_Box5;
+							END IF;			
+					END IF;
+				
+			END IF;	
+	
+	 
+	 END IF;
+
+	:P_WHERE := :P_WHERE || ' ) ';
+
+	:P_PERIME:=PACK_GLOBAL.LIRE_PERIME(:P_GLOBAL); COMMIT;
+	
+		--KRA PPM 61346
+		p_dpg := RTRIM(LTRIM(:P_PARAM12));		
+		
+		IF LPAD(p_dpg, 7, '*') != '*******' OR p_dpg IS NULL THEN
+		p_dpg := REPLACE(p_dpg,'*','%');
+			--DPG de ressource
+			:P_WHERE := :P_WHERE || ' AND  TO_CHAR(SR.codsg, ''FM0000000'') like ''' || p_dpg || '''';
+		ELSIF p_dpg = '*******' THEN
+			--DPG de ressource
+			:P_WHERE := :P_WHERE || ' AND SR.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIME||''', codbddpg) > 0)';
+		END IF;	
+		--Fin KRA PPM 61346
+		
+	----srw.message(1, 'P_PERIME : ' || '[' || :P_PERIME || ']');
+	----srw.message(1, 'P_WHERE : ' || '[' || :P_WHERE || ']');
+	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="ck1validtrigger">
+      <textSource>
+      <![CDATA[function ck1ValidTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="ck4validtrigger">
+      <textSource>
+      <![CDATA[function ck4ValidTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

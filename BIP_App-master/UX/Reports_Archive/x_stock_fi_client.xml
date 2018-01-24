@@ -1,0 +1,1444 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_stock_fi_client" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="T00901016" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="32000"
+     initialValue="from stock_fi s,ligne_bip lb, synthese_fin_ress sfr group by s.pid, s.cdeb, s.ident, s.cafi, s.typproj , s.metier , s.pnom,s.codsg,s.dpcode,s.icpi,s.codsgress,s.libdsg,s.codcamo,s.clibrca,s.rtype,s.soccode,s.coutftht,s.coutft,s.coutenv"
+     label="P Where" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="32000"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_FROM" datatype="character" width="32000"
+     precision="10" initialValue="entite_structure" label="P From"
+     defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_PARAM7" datatype="character" width="5024"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMCLI" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select	rpad(nvl(s.pid ,' '),4,' ')			pid		,
+		rpad(nvl(to_char(s.cdeb,'MM/YYYY'),' '),7,' ') 	cdeb		,
+		rpad(nvl(s.typproj,' '),2,' ')			typproj 		,
+		rpad(nvl(s.metier,' '),3,' ')			metier		,	
+		rpad(nvl(s.pnom,' '),30,' ')			pnom		,
+		lpad(nvl(to_char(s.codsg),' '),7,'0')		codsg 		,
+		lpad(nvl(to_char(s.dpcode ),' '),5,'0')		dpcode 		,
+		rpad(nvl(s.icpi,' '),5,' ')			icpi 		,
+		lpad(nvl(to_char(s.cafi),' '),6,'0')		cafi 		,
+		lpad(nvl(to_char(s.codsgress),' '),7,'0')		codsgress 	,
+		rpad(nvl(s.libdsg,' '),30,' ')			libdsg		,		
+		lpad(nvl(to_char(s.codcamo),' '),6,'0')		codcamo 		,
+		rpad(nvl(s.clibrca,' '),16,' ')			clibrca 		,
+		/*lpad(nvl(to_char(s.ident),' '),5,'0')		ident 		,		
+		rpad(nvl(s.rtype,' '),1,' ')			rtype		,
+		rpad(nvl(s.soccode,' '),4,' ')			soccode 		,*/
+		-- FAD PPM 65049 : Non réstitution des données RESSOURCES
+		lpad(nvl(to_char(NULL),' '),5,' ')		ident 		,		
+		rpad(nvl(NULL,' '),1,' ')			rtype		,
+		rpad(nvl(NULL,' '),4,' ')			soccode 		,
+		-- FAD PPM 65049 : Fin
+		lpad (NVL (TO_CHAR(s.coutftht, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 		coutftht	,
+		lpad (NVL (TO_CHAR(s.coutft, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		coutft 	,
+		lpad (NVL (TO_CHAR(s.coutenv, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		    coutenv	,
+		lpad (NVL (TO_CHAR(sum(sfr.d_consojh_im), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')   	consojhimmo_dec,
+ 		lpad (NVL (TO_CHAR(sum(sfr.d_consojh_ni), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	nconsojhimmo_dec,	
+		lpad (NVL (TO_CHAR(sum(sfr.d_consoft) , 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		consoft_dec,
+		lpad (NVL (TO_CHAR(sum(sfr.d_consoenv_im), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	consoenvimmo_dec,
+		lpad (NVL (TO_CHAR(sum(sfr.d_consoenv_ni), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	nconsoenvimmo_dec,
+		lpad (NVL (TO_CHAR(NVL(sum(s.consojhimmo),0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') consojhimmo,
+		lpad (NVL (TO_CHAR(NVL(sum(s.nconsojhimmo),0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')   nconsojhimmo,
+		lpad (NVL (TO_CHAR(sum(s.consoft), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		consoft,
+		lpad (NVL (TO_CHAR(sum(s.consoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	consoenvimmo,
+		lpad (NVL (TO_CHAR(sum(s.nconsoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	nconsoenvimmo,
+		lpad (NVL (TO_CHAR(sum(s.a_consojhimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 		a_consojhimmo,
+		lpad (NVL (TO_CHAR(sum(s.a_nconsojhimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 		a_nconsojhimmo,
+		lpad (NVL (TO_CHAR(sum(s.a_consoft), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		a_consoft,
+		lpad (NVL (TO_CHAR(sum(s.a_consoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')	a_consoenvimmo,
+		lpad (NVL (TO_CHAR(sum(s.a_nconsoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')	a_nconsoenvimmo
+                                &p_where]]>
+      </select>
+      <displayInfo x="2.50000" y="0.10425" width="0.69995" height="0.19995"/>
+      <group name="G_pid">
+        <displayInfo x="1.79565" y="0.70825" width="2.37097" height="8.80469"
+        />
+        <dataItem name="pid" datatype="vchar2" columnOrder="48" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rpad Nvl S Pid 3">
+          <xmlSettings xmlTag="ligne"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.pid , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="PID" order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cdeb" datatype="vchar2" columnOrder="49" width="7"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rpad Nvl S Cdeb 10">
+          <xmlSettings xmlTag="mois"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( s.cdeb , &apos;MM/YYYY&apos; ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="CDEB" order="2" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="typproj" datatype="vchar2" columnOrder="18" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Typproj" breakOrder="none">
+          <xmlSettings xmlTag="Type ligne"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.typproj , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="TYPPROJ" order="3" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="metier" datatype="vchar2" columnOrder="19" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="Métier"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.metier , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="METIER" order="4" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pnom" datatype="vchar2" columnOrder="20" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pnom" breakOrder="none">
+          <xmlSettings xmlTag="Libellé"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.pnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="PNOM" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsg" datatype="vchar2" columnOrder="21" width="7"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg" breakOrder="none">
+          <xmlSettings xmlTag="Pôle ME"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.codsg ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSG" order="6" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpcode" datatype="vchar2" columnOrder="22" width="5"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dpcode" breakOrder="none">
+          <xmlSettings xmlTag="Dossier projet"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.dpcode ) , &apos; &apos; ) , 5 , &apos;0&apos; )"
+           descriptiveExpression="DPCODE" order="7" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="icpi" datatype="vchar2" columnOrder="23" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Icpi" breakOrder="none">
+          <xmlSettings xmlTag="Projet Pxxxx"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.icpi , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="ICPI" order="8" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cafi" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cafi" breakOrder="none">
+          <xmlSettings xmlTag="CAFI ress"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.cafi ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CAFI" order="9" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsgress" datatype="vchar2" columnOrder="25"
+         width="7" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsgress" breakOrder="none">
+          <xmlSettings xmlTag="DPG ress"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.codsgress ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSGRESS" order="10" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdsg" datatype="vchar2" columnOrder="26" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdsg" breakOrder="none">
+          <xmlSettings xmlTag="LibelleDPG"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.libdsg , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBDSG" order="11" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codcamo" datatype="vchar2" columnOrder="27" width="6"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codcamo" breakOrder="none">
+          <xmlSettings xmlTag="CAMO"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.codcamo ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODCAMO" order="12" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="clibrca" datatype="vchar2" columnOrder="28" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clibrca" breakOrder="none">
+          <xmlSettings xmlTag="Lib MO"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.clibrca , &apos; &apos; ) , 16 , &apos; &apos; )"
+           descriptiveExpression="CLIBRCA" order="13" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="29" width="5"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <xmlSettings xmlTag="Code ressource"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.ident ) , &apos; &apos; ) , 5 , &apos;0&apos; )"
+           descriptiveExpression="IDENT" order="14" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rtype" datatype="vchar2" columnOrder="30" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rtype" breakOrder="none">
+          <xmlSettings xmlTag="Type ressource"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.rtype , &apos; &apos; ) , 1 , &apos; &apos; )"
+           descriptiveExpression="RTYPE" order="15" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soccode" datatype="vchar2" columnOrder="31" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Soccode" breakOrder="none">
+          <xmlSettings xmlTag="Société"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.soccode , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCODE" order="16" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutftht" datatype="vchar2" columnOrder="32"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutftht" breakOrder="none">
+          <xmlSettings xmlTag="Cout ress HT"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.coutftht , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTFTHT" order="17" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutft" datatype="vchar2" columnOrder="33" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutft" breakOrder="none">
+          <xmlSettings xmlTag="Cout ress HTR"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.coutft , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTFT" order="18" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutenv" datatype="vchar2" columnOrder="34" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutenv" breakOrder="none">
+          <xmlSettings xmlTag="Coût env IMMO"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.coutenv , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTENV" order="19" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_dec" datatype="vchar2" columnOrder="44"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consojhimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( sfr.d_consojh_im ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_DEC" order="20" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_dec" datatype="vchar2" columnOrder="45"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsojhimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( sfr.d_consojh_ni ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_DEC" order="21" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_dec" datatype="vchar2" columnOrder="35"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoft Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( sfr.d_consoft ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_DEC" order="22" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_dec" datatype="vchar2" columnOrder="36"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoenvimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( sfr.d_consoenv_im ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_DEC" order="23" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_dec" datatype="vchar2" columnOrder="37"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsoenvimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( sfr.d_consoenv_ni ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_DEC" order="24" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo" datatype="vchar2" columnOrder="46"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sum ( s.consojhimmo ) , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO" order="25" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo" datatype="vchar2" columnOrder="47"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sum ( s.nconsojhimmo ) , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO" order="26" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft" datatype="vchar2" columnOrder="38" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoft" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.consoft ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT" order="27" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo" datatype="vchar2" columnOrder="39"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.consoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO" order="28" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo" datatype="vchar2" columnOrder="40"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.nconsoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO" order="29" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_consojhimmo" datatype="vchar2" columnOrder="50"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="A Consojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="conso jh RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.a_consojhimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_CONSOJHIMMO" order="30" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_nconsojhimmo" datatype="vchar2" columnOrder="51"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="A Nconsojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="conso jh non immo RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.a_nconsojhimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_NCONSOJHIMMO" order="31" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_consoft" datatype="vchar2" columnOrder="41"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="A Consoft" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.a_consoft ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_CONSOFT" order="32" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_consoenvimmo" datatype="vchar2" columnOrder="42"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="A Consoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.a_consoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_CONSOENVIMMO" order="33" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_nconsoenvimmo" datatype="vchar2" columnOrder="43"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="A Nconsoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sum ( s.a_nconsoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_NCONSOENVIMMO" order="34" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      <filter type="plsql" plsqlFilter="g_pidgroupfilter" numberOfRecords="0"
+      />
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_pid_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.37500" height="0.87500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_pid" source="G_pid" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.50000" width="7.37500"
+           height="0.37500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_pid" source="pid" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.50000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_coutft" source="coutft" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.62500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_cdeb" source="cdeb" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.43750" y="0.50000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_coutenv" source="coutenv" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.37500" y="0.62500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_typproj" source="typproj" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.87500" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consojhimmo_dec" source="consojhimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.75000" y="0.62500" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_metier" source="metier" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.25000" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsojhimmo_dec" source="nconsojhimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.43750" y="0.62500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoenvimmo" source="consoenvimmo" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.43750" y="0.75000" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_pnom" source="pnom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.62500" y="0.50000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codsg" source="codsg" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.93750" y="0.50000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoft_dec" source="consoft_dec" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.00000" y="0.62500" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsoenvimmo" source="nconsoenvimmo"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.00000" y="0.75000" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_dpcode" source="dpcode" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.25000" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoenvimmo_dec" source="consoenvimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.37500" y="0.62500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoft" source="consoft" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.56250" y="0.75000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_icpi" source="icpi" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.62500" y="0.50000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_cafi" source="cafi" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.50000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsoenvimmo_dec" source="nconsoenvimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.62500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consojhimmo" source="consojhimmo" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.75000" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codsgress" source="codsgress" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.25000" y="0.50000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsojhimmo" source="nconsojhimmo" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.43750" y="0.75000" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_libdsg" source="libdsg" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.68750" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_codcamo" source="codcamo" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.06250" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_a_consojhimmo" source="a_consojhimmo"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.00000" y="0.75000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_clibrca" source="clibrca" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.43750" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_a_nconsojhimmo" source="a_nconsojhimmo"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.37500" y="0.75000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ident" source="ident" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.81250" y="0.50000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_rtype" source="rtype" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.43750" y="0.50000" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_a_consoenvimmo" source="a_consoenvimmo"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.43750" y="0.75000" width="0.50000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_soccode" source="soccode" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.62500" y="0.50000" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_coutftht" source="coutftht" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.00000" y="0.50000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_a_consoft" source="a_consoft" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.00000" y="0.75000" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_a_nconsoenvimmo" source="a_nconsoenvimmo"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.06250" y="0.75000" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_pid_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.37500"
+           height="0.50000"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_pid" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rpad Nvl S Pid 3]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_cdeb" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.43750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rpad Nvl S Cdeb 10]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_typproj" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Typproj]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_metier" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.25000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_pnom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.62500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Pnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codsg" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.93750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dpcode" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.25000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dpcode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_icpi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.62500" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Icpi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_cafi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cafi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codsgress" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.25000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codsgress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_libdsg" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.68750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libdsg]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_codcamo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.06250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Codcamo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_clibrca" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.43750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Clibrca]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ident" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.81250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Ident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_rtype" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.43750" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Rtype]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_soccode" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.62500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Soccode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_coutftht" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.00000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Coutftht]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_coutft" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Coutft]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_coutenv" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.37500" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Coutenv]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consojhimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consojhimmo Dec]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsojhimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.43750" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nconsojhimmo Dec]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoft_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.00000" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consoft Dec]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoenvimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.37500" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consoenvimmo
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dec]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsoenvimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nconsoenvimmo
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dec]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoenvimmo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.43750" y="0.37500" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consoenvimmo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsoenvimmo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.00000" y="0.37500" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nconsoenvimmo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoft" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.56250" y="0.37500" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consoft]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consojhimmo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.37500" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Consojhimmo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsojhimmo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.37500" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Nconsojhimmo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_a_consojh" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.00000" y="0.37500" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[A Consojh]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_a_consoft" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.43750" y="0.37500" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[A Consoft]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_a_consoenvimmo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.87500" y="0.37500" width="0.50000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[A Consoenvimmo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_a_nconsoenvimmo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.50000" y="0.37500" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[A Nconsoenvimmo]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_GLOBAL" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.54138" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param7]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+	chaine_ca_payeur VARCHAR2(5000);
+	l_ca_payeur VARCHAR2(5000);
+	l_compteur NUMBER;
+	l_perimcli VARCHAR2(255);
+	p_where_perim VARCHAR2(5000); 
+	l_menu VARCHAR2(25);
+
+begin
+
+ 
+	   /*CMA Fiche 1176 09/05/2011 le perimo est différent si l'utilisateur est dans le menu Client*/
+		l_menu := pack_global.lire_menutil(:P_global);
+		
+		if('MO'=l_menu)then
+			l_perimcli := pack_global.lire_perimcli(:P_global);
+		else
+			l_perimcli := pack_global.lire_perimo(:P_global);
+		end if;
+	  
+	  :P_CA_PAYEUR := pack_global.lire_ca_payeur(:p_global);
+	  p_where_perim := ' ';
+	  		
+		if length(l_perimcli) != 0 then	  	
+				p_where_perim := ' and ( lb.clicode in (select clicode from vue_clicode_perimo where BDCLICODE in ('||l_perimcli||') ) 
+																or lb.clicode_oper in (select clicode from vue_clicode_perimo where BDCLICODE in ('||l_perimcli||') ) )';
+		end if;
+		
+		if(:p_param7 = 'Pas de limitation') then
+			chaine_ca_payeur := '';
+		elsif(:p_param7 = 'Tous')	then
+			if(:P_CA_PAYEUR IS NOT NULL AND :P_CA_PAYEUR <> 'Tous' ) then
+	  		chaine_ca_payeur := :P_CA_PAYEUR;
+			else
+				chaine_ca_payeur := '';	
+			end if;	
+		else
+			chaine_ca_payeur := :p_param7;
+		end if;	
+			
+	  :p_from :='(';
+	  l_compteur := 1 ;
+  
+     while (length(chaine_ca_payeur) != 0) loop
+     
+     if (instr(chaine_ca_payeur,',') != 0) then
+          l_ca_payeur := substr(chaine_ca_payeur,0,instr(chaine_ca_payeur,',')-1);
+          chaine_ca_payeur := substr(chaine_ca_payeur,instr(chaine_ca_payeur,',')+1);
+     else
+        l_ca_payeur := chaine_ca_payeur;
+        chaine_ca_payeur := '';
+     end if;
+     
+    
+     
+        if (l_compteur != 1) then
+            :p_from := :p_from || 'UNION';
+    
+        end if;
+             
+     if (pack_global.recherche_niveau(l_ca_payeur) != 99) then
+     
+     if (pack_global.recherche_niveau(l_ca_payeur) = 0) then
+   
+             	:p_from := :p_from||'(
+                            select codcamo 
+							from centre_activite
+							where 
+							codcamo IN ('|| l_ca_payeur || ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)
+										AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))				)';	 
+							
+      
+     elsif (pack_global.recherche_niveau(l_ca_payeur) = 1) then
+            	
+                :p_from := :p_from||'(						 		        
+						     select codcamo 
+						     from centre_activite
+							 where 
+								 CANIV1 IN ('|| l_ca_payeur || ')
+							AND (cdateferm is null or substr(TO_DATE(cdateferm, ''DD/MM/YYYY''), 7, 8) = substr(TO_DATE(sysdate, ''DD/MM/YYYY''), 7, 8))
+								)';	      
+           elsif (pack_global.recherche_niveau(l_ca_payeur) = 2) then
+             :p_from := :p_from||' (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+														CANIV2 IN ('|| l_ca_payeur|| ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)														
+														AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+					)';
+               elsif (pack_global.recherche_niveau(l_ca_payeur) = 3) then
+                :p_from := :p_from||' (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+												 			CANIV3 IN ('|| l_ca_payeur || ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)															
+														AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';	 
+                elsif (pack_global.recherche_niveau(l_ca_payeur) = 4) then       
+                :p_from :=:p_from|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV4 IN ('|| l_ca_payeur || ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)																
+															AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+								elsif (pack_global.recherche_niveau(l_ca_payeur) = 5) then       
+                :p_from :=:p_from|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV5 IN ('|| l_ca_payeur || ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)																
+															AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+										elsif (pack_global.recherche_niveau(l_ca_payeur) = 6) then       
+                :p_from :=:p_from|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV6 IN ('|| l_ca_payeur || ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)																
+															AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+                  	
+          end if;
+           
+        l_compteur := l_compteur+1;
+       end if;
+      END LOOP;      
+    
+    :p_from := :p_from || ')';
+    
+
+    if  (:p_from = '()') then
+    		:p_where := 'from stock_fi s,ligne_bip lb, synthese_fin_ress sfr
+    		  where s.ident= sfr.ident(+)
+					and s.pid = sfr.pid(+)
+					and s.codcamo = sfr.codcamo(+)
+					and s.cafi = sfr.cafi(+)
+					and s.PID = lb.PID(+)'
+					||p_where_perim||
+					' group by s.pid, s.cdeb, s.ident, s.cafi, s.typproj , s.metier , s.pnom,s.codsg,s.dpcode,s.icpi,s.codsgress,s.libdsg,s.codcamo,s.clibrca,s.rtype,s.soccode,s.coutftht,s.coutft,s.coutenv
+					order by s.pid, s.cdeb, s.ident, s.cafi
+				';
+    else
+    		:p_where := 'from stock_fi s,ligne_bip lb, synthese_fin_ress sfr, '||:p_from||' liste_ca	
+    		  where s.ident= sfr.ident(+)
+					and s.pid = sfr.pid(+)
+					and s.codcamo = sfr.codcamo(+)
+					and s.cafi = sfr.cafi(+)
+					and s.PID = lb.PID(+)
+					and s.codcamo = liste_ca.codcamo'
+					||p_where_perim||
+					' group by s.pid, s.cdeb, s.ident, s.cafi, s.typproj , s.metier , s.pnom,s.codsg,s.dpcode,s.icpi,s.codsgress,s.libdsg,s.codcamo,s.clibrca,s.rtype,s.soccode,s.coutftht,s.coutft,s.coutenv
+					order by s.pid, s.cdeb, s.ident, s.cafi
+				';
+    end if;	
+    
+    --srw.message(1,''||:p_where);	
+     --srw.message(1,'toto :'||length(:p_from));	
+
+  return (TRUE);
+end;
+
+]]>
+      </textSource>
+    </function>
+    <function name="g_pidgroupfilter">
+      <textSource>
+      <![CDATA[function G_pidGroupFilter return boolean is
+begin
+  if (length(:p_from)<30000)then
+    return (TRUE);
+  else           
+  	 return (FALSe);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

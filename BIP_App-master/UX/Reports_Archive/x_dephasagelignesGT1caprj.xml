@@ -1,0 +1,1285 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_dephasagelignesGT1caprj" DTDVersion="9.0.2.0.10"
+ unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="X_DEPHASAGELIGNESGT1CAPRJ" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_TITRE_ETAT" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="1000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt"/>
+    <systemParameter name="DESTYPE" initialValue="Preview"/>
+    <dataSource name="Q_REQ">
+      <select>
+      <![CDATA[-- Lignes obtenues après comparaison avec les CA préconisés au niveau projet [Lignes de type GT1]
+(SELECT  
+	  RPAD(NVL(SUBSTR(si.LIBDSG,1,8),''), 8,' ') DEPARTEMENT_FOURNISSEUR, -- Direction + Département
+	  RPAD(NVL(SUBSTR(si.LIBDSG,6,7),''), 7,' ') POLE_FOURNISSEUR, -- Département + Pôle
+	  LPAD(NVL(TO_CHAR(lb.DPCODE),' '),6,'0') CODE_DOSSIER_PROJET, -- Code Dossier Projet
+	  RPAD(NVL(dp.DPLIB,''), 35,' ') LIB_DOSSIER_PROJET, -- Libellé Dossier Projet
+	  RPAD(NVL(TO_CHAR(lb.ICPI),' '),5,' ') CODE_PROJET, -- Code Projet
+	  RPAD(NVL(p.ILIBEL,''), 50,' ') LIB_PROJET, -- Libellé Projet
+	  RPAD(NVL(lb.PID,''), 4,' ') CODE_LIGNE_BIP, -- Code BIP
+	  RPAD(NVL(lb.PNOM,''), 30,' ') LIB_LIGNE_BIP, -- Libellé ligne BIP
+	  RPAD(NVL(lb.TYPPROJ,''), 2,' ') TYPE_LIGNE, -- Type ligne
+	  RPAD(NVL(lb.ARCTYPE,''), 3,' ') TYPOLOGIE, -- Typologie
+	  RPAD(NVL(lb.METIER,''), 3,' ') METIER, -- Métier ligne BIP
+	  LPAD(NVL(TO_CHAR(conso.cusag, 'FM999990D0','NLS_NUMERIC_CHARACTERS='',.'),TO_CHAR(0, 'FM999990D0','NLS_NUMERIC_CHARACTERS='',.')),12, ' ') CONSOAA, -- Conso AA
+	  LPAD(NVL(TO_CHAR(ROUND(sfb.D_CONSOSG_FI + sfb.D_CONSOSSII_FI)/1000, 'FM999990D0','NLS_NUMERIC_CHARACTERS='',.'),'0'),12, ' ') COUT12, -- Coût FI déc. N-1 K€
+	  LPAD(NVL(TO_CHAR(ROUND(sfb.CONSOSG_FI + sfb.CONSOSSII_FI - sfb.D_CONSOSG_FI - sfb.D_CONSOSSII_FI)/1000, 'FM999990D0','NLS_NUMERIC_CHARACTERS='',.'), '0'),12, ' ') COUT, -- Coût FI AAAA K€
+	  LPAD(NVL(TO_CHAR(NVL(ROUND(sfb.CONSOFTSG_IM + sfb.CONSOFTSSII_IM)/1000, 0.0), 'FM9999999990D0','NLS_NUMERIC_CHARACTERS='',.'), '0,0'),12, ' ') COUT_IMMO, -- Coût immo AAAA K€
+	  RPAD(NVL(TO_CHAR(lb.TTRMENS,'mm/yyyy'), ' '), 7, ' ') DATE_TT_MENS, -- Date traitement BIP (Mois et année de la dernière mensuelle)
+	  RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CAMO, -- Libellé du CAMO
+	  LPAD(NVL(TO_CHAR(lb.CODCAMO),' '),6,'0') CODE_CAMO, -- CA à facturer
+	  LPAD(NVL(TO_CHAR(p.CODCAMO1),' '),6,'0') CODE_CA1, -- CA1 préconisé
+	  RPAD(NVL(p.CLIBCA1,''), 30,' ') LIB_CA1, -- Libellé CA1 préconisé
+	  LPAD(NVL(TO_CHAR(p.CODCAMO2),' '),6,'0') CODE_CA2, -- CA2 préconisé
+	  RPAD(NVL(p.CLIBCA2,''), 30,' ') LIB_CA2, -- Libellé CA2 préconisé
+	  LPAD(NVL(TO_CHAR(p.CODCAMO3),' '),6,'0') CODE_CA3, -- CA3 préconisé
+	  RPAD(NVL(p.CLIBCA3,''), 30,' ') LIB_CA3, -- Libellé CA3 préconisé
+	  LPAD(NVL(TO_CHAR(p.CODCAMO4),' '),6,'0') CODE_CA4, -- CA4 préconisé
+	  RPAD(NVL(p.CLIBCA4,''), 30,' ') LIB_CA4, -- Libellé CA4 préconisé
+	  LPAD(NVL(TO_CHAR(p.CODCAMO5),' '),6,'0') CODE_CA5, -- CA5 préconisé
+	  RPAD(NVL(p.CLIBCA5,''), 30,' ') LIB_CA5 -- Libellé CA5 préconisé		
+FROM LIGNE_BIP lb, STRUCT_INFO si, DOSSIER_PROJET dp, PROJ_INFO p, CENTRE_ACTIVITE ca, CONSOMME conso, SYNTHESE_FIN_BIP sfb,
+	 (SELECT DISTINCT
+	  		pj.ICODPROJ,
+			pj.ICPI,
+			pj.CODCAMO1,
+			pj.CODCAMO2,           
+			pj.CODCAMO3,
+			pj.CODCAMO4,
+			pj.CODCAMO5
+	  FROM PROJ_INFO pj, LIGNE_BIP lbip
+	  WHERE pj.ICODPROJ = lbip.DPCODE
+	  AND pj.ICPI = lbip.ICPI) ca_pj,
+	  (SELECT
+	  		lbp.PID,
+			lbp.AIRT,
+			lbp.DPCODE,
+			lbp.ICPI,
+			lbp.CODCAMO
+	   FROM LIGNE_BIP lbp
+	   WHERE
+	   		-- Lignes de type GT1 
+    		((lbp.ARCTYPE LIKE 'T1') 
+			-- Lignes ouvertes ou fermées dans l'année en cours
+			AND	(((TO_CHAR(lbp.PDATDEBPRE, 'yyyy') = TO_CHAR(SYSDATE,'yyyy')) OR (TO_CHAR(lbp.PDATFINPRE, 'yyyy') = TO_CHAR(SYSDATE,'yyyy')))
+	  	 	-- Lignes fermées au mois de décembre de l'année précédente
+		 	-- PPM 58986 : Bascule FI --OR (TO_CHAR(lbp.PDATFINPRE, 'mm/yyyy') = '12/' || TO_CHAR((TO_NUMBER(TO_CHAR(SYSDATE, 'yyyy'))-1)))
+			))) p_lbip	   
+WHERE
+	lb.PID = conso.PID(+)
+AND	lb.PID = sfb.PID(+)
+AND lb.CODSG = si.CODSG
+AND lb.DPCODE = dp.DPCODE
+AND lb.ICPI = p.ICPI
+AND lb.CODCAMO = ca.CODCAMO
+AND lb.ICPI = ca_pj.ICPI
+AND lb.PID = p_lbip.PID
+AND lb.CODCAMO = p_lbip.CODCAMO
+-- CAMO n'appartient pas aux CA préconisés au niveau projet
+AND NOT (lb.CODCAMO IN (ca_pj.CODCAMO1, ca_pj.CODCAMO2, ca_pj.CODCAMO3, ca_pj.CODCAMO4, ca_pj.CODCAMO5)))
+;]]>
+      </select>
+      <displayInfo x="0.52896" y="0.26479" width="1.77788" height="0.50788"/>
+      <group name="G_DEPHASAGE_LIGNE_GT1">
+        <displayInfo x="2.55023" y="1.79927" width="6.15001" height="13.24818"
+        />
+        <dataItem name="DEPARTEMENT_FOURNISSEUR" datatype="vchar2"
+         columnOrder="28" width="8" defaultWidth="80000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Departement Fournisseur">
+          <dataDescriptor
+           expression="RPAD ( NVL ( SUBSTR ( si.LIBDSG , 1 , 8 ) , &apos;&apos; ) , 8 , &apos; &apos; )"
+           descriptiveExpression="DEPARTEMENT_FOURNISSEUR" order="1" width="8"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="POLE_FOURNISSEUR" datatype="vchar2" columnOrder="29"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pole Fournisseur">
+          <dataDescriptor
+           expression="RPAD ( NVL ( SUBSTR ( si.LIBDSG , 6 , 7 ) , &apos;&apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="POLE_FOURNISSEUR" order="2" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_DOSSIER_PROJET" datatype="vchar2"
+         columnOrder="23" width="6" defaultWidth="60000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Code Dossier Projet">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( lb.DPCODE ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_DOSSIER_PROJET" order="3" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_DOSSIER_PROJET" datatype="vchar2" columnOrder="24"
+         width="35" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Dossier Projet">
+          <dataDescriptor
+           expression="RPAD ( NVL ( dp.DPLIB , &apos;&apos; ) , 35 , &apos; &apos; )"
+           descriptiveExpression="LIB_DOSSIER_PROJET" order="4" width="35"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_PROJET" datatype="vchar2" columnOrder="25"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Projet">
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( lb.ICPI ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_PROJET" order="5" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_PROJET" datatype="vchar2" columnOrder="26"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Projet">
+          <dataDescriptor
+           expression="RPAD ( NVL ( p.ILIBEL , &apos;&apos; ) , 50 , &apos; &apos; )"
+           descriptiveExpression="LIB_PROJET" order="6" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_LIGNE_BIP" datatype="vchar2" columnOrder="30"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ligne Bip">
+          <dataDescriptor
+           expression="RPAD ( NVL ( lb.PID , &apos;&apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="CODE_LIGNE_BIP" order="7" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_LIGNE_BIP" datatype="vchar2" columnOrder="31"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Ligne Bip">
+          <dataDescriptor
+           expression="RPAD ( NVL ( lb.PNOM , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_LIGNE_BIP" order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_LIGNE" datatype="vchar2" columnOrder="32"
+         width="2" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type Ligne">
+          <dataDescriptor
+           expression="RPAD ( NVL ( lb.TYPPROJ , &apos;&apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="TYPE_LIGNE" order="9" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPOLOGIE" datatype="vchar2" columnOrder="33"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Typologie">
+          <dataDescriptor
+           expression="RPAD ( NVL ( lb.ARCTYPE , &apos;&apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="TYPOLOGIE" order="10" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="34" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor
+           expression="RPAD ( NVL ( lb.METIER , &apos;&apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="METIER" order="11" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CONSO_AA" datatype="vchar2" columnOrder="35"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Conso Aa">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( conso.cusag , &apos;FM999990D0&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , TO_CHAR ( 0 , &apos;FM999990D0&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) ) , 12 , &apos; &apos; )"
+           descriptiveExpression="CONSOAA" order="12" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT_12" datatype="vchar2" columnOrder="36" width="12"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout 12">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( ROUND ( sfb.D_CONSOSG_FI + sfb.D_CONSOSSII_FI ) / 1000 , &apos;FM999990D0&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0&apos; ) , 12 , &apos; &apos; )"
+           descriptiveExpression="COUT12" order="13" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT" datatype="vchar2" columnOrder="37" width="12"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( ROUND ( sfb.CONSOSG_FI + sfb.CONSOSSII_FI - sfb.D_CONSOSG_FI - sfb.D_CONSOSSII_FI ) / 1000 , &apos;FM999990D0&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0&apos; ) , 12 , &apos; &apos; )"
+           descriptiveExpression="COUT" order="14" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT_IMMO" datatype="vchar2" columnOrder="38"
+         width="12" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cout Immo">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( NVL ( ROUND ( sfb.CONSOFTSG_IM + sfb.CONSOFTSSII_IM ) / 1000 , 0.0 ) , &apos;FM9999999990D0&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,0&apos; ) , 12 , &apos; &apos; )"
+           descriptiveExpression="COUT_IMMO" order="15" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_TT_MENS" datatype="vchar2" columnOrder="39"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date Tt Mens">
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( lb.TTRMENS , &apos;mm/yyyy&apos; ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="DATE_TT_MENS" order="16" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CAMO" datatype="vchar2" columnOrder="27"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Cada">
+          <xmlSettings xmlTag="LIB_CADA"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( ca.CLIBCA , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CAMO" order="17" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CAMO" datatype="vchar2" columnOrder="40"
+         width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Camo">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( lb.CODCAMO ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CAMO" order="18" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CA1" datatype="vchar2" columnOrder="41" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ca1">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( p.CODCAMO1 ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CA1" order="19" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CA1" datatype="vchar2" columnOrder="42" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lib Ca1">
+          <dataDescriptor
+           expression="RPAD ( NVL ( p.CLIBCA1 , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CA1" order="20" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CA2" datatype="vchar2" columnOrder="43" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ca2">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( p.CODCAMO2 ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CA2" order="21" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CA2" datatype="vchar2" columnOrder="44" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lib Ca2">
+          <dataDescriptor
+           expression="RPAD ( NVL ( p.CLIBCA2 , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CA2" order="22" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CA3" datatype="vchar2" columnOrder="45" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ca3">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( p.CODCAMO3 ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CA3" order="23" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CA3" datatype="vchar2" columnOrder="46" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lib Ca3">
+          <dataDescriptor
+           expression="RPAD ( NVL ( p.CLIBCA3 , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CA3" order="24" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CA4" datatype="vchar2" columnOrder="47" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ca4">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( p.CODCAMO4 ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CA4" order="25" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CA4" datatype="vchar2" columnOrder="48" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lib Ca4">
+          <dataDescriptor
+           expression="RPAD ( NVL ( p.CLIBCA4 , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CA4" order="26" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CA5" datatype="vchar2" columnOrder="49" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ca5">
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( p.CODCAMO5 ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CA5" order="27" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CA5" datatype="vchar2" columnOrder="50" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lib Ca5">
+          <dataDescriptor
+           expression="RPAD ( NVL ( p.CLIBCA5 , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CA5" order="28" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+      <frame name="M_G_CODSG_GRPFR">
+        <geometryInfo x="0.12495" y="0.00000" width="26.92611"
+         height="0.87499"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_CODSG" source="G_DEPHASAGE_LIGNE_GT1"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.24929" y="0.43687" width="26.68767"
+           height="0.43718"/>
+          <generalLayout verticalElasticity="expand"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <field name="F_DEPARTEMENT_FOURNISSEUR"
+           source="DEPARTEMENT_FOURNISSEUR" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.24929" y="0.43687" width="0.62570"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_POLE_FOURNISSEUR" source="POLE_FOURNISSEUR"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.92180" y="0.43687" width="0.82817"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_DOSSIER_PROJET" source="CODE_DOSSIER_PROJET"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="1.92577" y="0.43687" width="1.12427"
+             height="0.43718"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_DOSSIER_PROJET" source="LIB_DOSSIER_PROJET"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="3.23639" y="0.43687" width="0.88801"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_PROJET" source="CODE_PROJET" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="4.30516" y="0.43687" width="0.81917"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_PROJET" source="LIB_PROJET" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="5.18108" y="0.43687" width="1.06846"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_LIGNE_BIP" source="CODE_LIGNE_BIP"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="6.42969" y="0.43687" width="0.75716"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_LIGNE_BIP" source="LIB_LIGNE_BIP"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="7.23987" y="0.43687" width="0.75964"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_TYPE_LIGNE" source="TYPE_LIGNE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="8.17469" y="0.43687" width="0.88708"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_TYPOLOGIE" source="TYPOLOGIE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="9.24006" y="0.43687" width="0.61888"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="10.05024" y="0.43687" width="0.69918"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CONSO_AA" source="CONSO_AA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="10.98507" y="0.43687" width="0.45145"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_COUT_12" source="COUT_12" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="11.60828" y="0.43687" width="0.50447"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_COUT" source="COUT" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="12.29382" y="0.43687" width="0.58074"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_COUT_IMMO" source="COUT_IMMO" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="12.97936" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_DATE_TT_MENS" source="DATE_TT_MENS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="13.78955" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CAMO" source="LIB_CAMO" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="14.66205" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CAMO" source="CODE_CAMO" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="15.53456" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CA1" source="CODE_CA1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="17.21724" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CA1" source="LIB_CA1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="18.15207" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CA2" source="CODE_CA2" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="18.96225" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CA2" source="LIB_CA2" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="19.77244" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CA3" source="CODE_CA3" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="20.70726" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CA3" source="LIB_CA3" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="21.64209" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CA4" source="CODE_CA4" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="22.51459" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CA4" source="LIB_CA4" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="23.51174" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CA5" source="CODE_CA5" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="24.57121" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CA5" source="LIB_CA5" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="25.63068" y="0.43687" width="0.70724"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CODSG_HDR">
+          <geometryInfo x="0.24929" y="0.00000" width="26.79123"
+           height="0.43687"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <text name="B_DEPARTEMENT_FOURNISSEUR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.24929" y="0.00000" width="0.81328"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[DEPT]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_POLE_FOURNISSEUR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00087" y="0.00000" width="0.87406"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[POLE]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_DOSSIER_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.93756" y="0.00000" width="1.31248"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[DPCODE]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_DOSSIER_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.25034" y="0.00000" width="1.12489"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_DP]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.37524" y="0.00000" width="0.87468"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[ICPI]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.25084" y="0.00000" width="1.07063"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_ICPI]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.50069" y="0.00000" width="0.69670"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[PID]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_LIGNE_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.25289" y="0.00000" width="0.95064"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_PID]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPE_LIGNE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="8.25407" y="0.00000" width="0.87095"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[TYPE]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPOLOGIE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="9.18890" y="0.00000" width="0.88801"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[TYPO]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="10.12372" y="0.00000" width="0.51687"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[METIER]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CONSO_AA" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="10.93391" y="0.00000" width="0.50385"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CONSO_AA]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUT_12" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="11.49480" y="0.00000" width="0.90010"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[COUT_12]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="12.30499" y="0.00000" width="0.63252"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[COUT]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_COUT_IMMO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="12.97967" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[COUT_IMMO]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DATE_TT_MENS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="13.78986" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[DATE_TT_MENS]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CAMO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="14.66236" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CAMO]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODCAMO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="15.53487" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CODCAMO]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="17.34220" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CA1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="18.27702" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CA1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_CA2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="18.96256" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CA2]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CA2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="19.89739" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CA2]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_CA3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="20.76990" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CA3]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CA3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="21.70472" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CA3]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_CA4" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="22.63955" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CA4]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CA4" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="23.57438" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CA4]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_CA5" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="24.69617" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CA5]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CA5" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="25.63099" y="0.00000" width="0.64523"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CA5]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000">
+  <text name="PB_TITRE1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.60691" y="0.18510" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_TITRE2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.82618" y="0.56772" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="1.19869" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="2.12452" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.05036" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.97619" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="0.96490" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="1.89074" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="2.81657" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="3.74241" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM8" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="6.51991" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="6.75370" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM8]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="4.66824" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="5.59408" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="4.90203" width="2.18684" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="5.82786" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM7]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM9" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="7.44575" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="7.67953" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM9]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="8.37282" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_GLOBAL" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="8.60661" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

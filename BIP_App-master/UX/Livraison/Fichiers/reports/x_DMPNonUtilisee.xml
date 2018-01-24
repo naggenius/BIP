@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_DMPNonUtilisee.xml" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform"  afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="X_DMPNONUTILISEE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+
+<body dir=&Direction bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+
+
+
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+	<userParameter name="P_NUMSEQ" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 
+RefDemande RefDmp,
+DdeType  DdeType ,
+DPCOPI DPCOPIcode ,
+Projet ProjCode
+from 
+TMP_DMP_NONUTILISEE DMP
+where
+DMP.numseq = :P_NUMSEQ
+;]]>
+      </select>
+      <displayInfo x="1.70837" y="1.58337" width="0.69995" height="0.19995"/>
+      <group name="G_PID">
+        <displayInfo x="1.32690" y="2.28333" width="1.46301" height="3.33594"
+        />
+        <dataItem name="RefDmp" datatype="vchar2" columnOrder="1" width="12"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="RefDmp">
+		 <xmlSettings xmlTag="&quot;RefDmp&quot;"/>
+          <dataDescriptor
+           expression="RefDemande"
+           descriptiveExpression="RefDmp" order="1" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+		  
+        </dataItem>
+		
+        <dataItem name="DdeType" datatype="vchar2" columnOrder="14" width="1"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="DdeType">
+		 <xmlSettings xmlTag="&quot;DdeType&quot;"/>
+          <dataDescriptor
+           expression="DdeType"
+           descriptiveExpression="DdeType" order="2" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+		
+        <dataItem name="DPCOPIcode" datatype="vchar2" columnOrder="15" width="6"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="DPCOPIcode">
+		 <xmlSettings xmlTag="&quot;DPCOPIcode&quot;"/>
+          <dataDescriptor expression="DPCOPI"
+           descriptiveExpression="DPCOPIcode" order="3" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjCode" datatype="vchar2" columnOrder="16" width="5"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="ProjCode">
+		 <xmlSettings xmlTag="&quot;ProjCode&quot;"/>
+          <dataDescriptor
+           expression="Projet"
+           descriptiveExpression="ProjCode" order="4" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_PID_GRPFR">
+        
+      </frame>
+    </body>
+  </section>
+  </layout>
+<programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+	-- récupération de numéro de séquence
+	:P_NUMSEQ := Pack_Ligne_Bip.RecupDmpNonUtilisee;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  DELETE FROM TMP_DMP_NONUTILISEE WHERE NUMSEQ = :P_NUMSEQ ; 
+  COMMIT ; 
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#cccc99"/>
+    <color index="192" displayName="TableCell" value="#f7f7e7"/>
+    <color index="193" displayName="Totals" value="#ffffcc"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

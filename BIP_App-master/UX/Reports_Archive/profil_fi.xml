@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="profil_fi" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="PROFIL_FI" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="2"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_LIBELLE" datatype="character" width="100"
+     precision="10" validationTrigger="p_libellevalidtrigger" defaultWidth="0"
+     defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT DISTINCT PFI.PROFIL_FI, PFI.LIBELLE,
+        PFI.DATE_EFFET, 
+        PFI.TOP_ACTIF, 
+        PFI.COUT, 
+        nvl(PFI.COMMENTAIRE,'(N/A)') commentaire, 
+        PFI.CODDIR, 
+        PFI.TOPEGALPRESTATION, 
+        PFI.PRESTATION, 
+        PFI.TOPEGALLOCALISATION,
+        PFI.LOCALISATION,
+        PFI.TOPEGALES,
+        PFI.CODE_ES
+FROM   PROFIL_FI PFI
+&P_WHERE
+ORDER BY PROFIL_FI,  DATE_EFFET]]>
+      </select>
+      <displayInfo x="1.85742" y="0.36487" width="0.69995" height="0.32983"/>
+      <group name="G_PROFI">
+        <displayInfo x="0.91785" y="1.09741" width="2.57324" height="0.77246"
+        />
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="15" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="PFI.LIBELLE"
+           descriptiveExpression="LIBELLE" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROFIL_FI" datatype="vchar2" columnOrder="28"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Profil Fi">
+          <dataDescriptor expression="PFI.PROFIL_FI"
+           descriptiveExpression="PROFIL_FI" order="1" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_PROFILFI_DET">
+        <displayInfo x="0.93872" y="2.37756" width="2.54028" height="3.33594"
+        />
+        <dataItem name="DATE_EFFET" datatype="date" oracleDatatype="date"
+         columnOrder="17" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Date Effet">
+          <dataDescriptor expression="PFI.DATE_EFFET"
+           descriptiveExpression="DATE_EFFET" order="3" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOP_ACTIF" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="18" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Top Actif">
+          <dataDescriptor expression="PFI.TOP_ACTIF"
+           descriptiveExpression="TOP_ACTIF" order="4"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COUT" oracleDatatype="number" columnOrder="19"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Cout">
+          <dataDescriptor expression="PFI.COUT" descriptiveExpression="COUT"
+           order="5" oracleDatatype="number" width="22" scale="2"
+           precision="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COMMENTAIRE" datatype="vchar2" columnOrder="20"
+         width="300" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Commentaire">
+          <dataDescriptor
+           expression="nvl ( PFI.COMMENTAIRE , &apos;(N/A)&apos; )"
+           descriptiveExpression="COMMENTAIRE" order="6" width="300"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODDIR" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="21" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Coddir">
+          <dataDescriptor expression="PFI.CODDIR"
+           descriptiveExpression="CODDIR" order="7"
+           oracleDatatype="aFixedChar" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOPEGALPRESTATION" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="22" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Topegalprestation">
+          <dataDescriptor expression="PFI.TOPEGALPRESTATION"
+           descriptiveExpression="TOPEGALPRESTATION" order="8"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PRESTATION" datatype="vchar2" columnOrder="23"
+         width="119" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Prestation">
+          <dataDescriptor expression="PFI.PRESTATION"
+           descriptiveExpression="PRESTATION" order="9" width="119"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOPEGALLOCALISATION" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="24" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Topegallocalisation">
+          <dataDescriptor expression="PFI.TOPEGALLOCALISATION"
+           descriptiveExpression="TOPEGALLOCALISATION" order="10"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOCALISATION" datatype="vchar2" columnOrder="25"
+         width="29" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Localisation">
+          <dataDescriptor expression="PFI.LOCALISATION"
+           descriptiveExpression="LOCALISATION" order="11" width="29"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOPEGALES" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="26" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Topegales">
+          <dataDescriptor expression="PFI.TOPEGALES"
+           descriptiveExpression="TOPEGALES" order="12"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_ES" datatype="vchar2" columnOrder="27" width="29"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Code Es">
+          <dataDescriptor expression="PFI.CODE_ES"
+           descriptiveExpression="CODE_ES" order="13" width="29"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <placeholder name="CP_indice" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         valueIfNull="1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </placeholder>
+        <summary name="CS_compteur" source="CP_indice" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="10.81250" height="7.18750">
+      <location x="0.06250" y="1.12500"/>
+      <frame name="M_G_PROFI_GRPFR">
+        <geometryInfo x="0.06250" y="0.00000" width="10.68750"
+         height="3.68750"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout keepWithAnchoringObject="yes"/>
+        <repeatingFrame name="R_G_PROFI" source="G_PROFI"
+         printDirection="down" minWidowRecords="1" columnMode="no"
+         vertSpaceBetweenFrames="0.2500">
+          <geometryInfo x="0.06250" y="0.00000" width="10.68750"
+           height="3.12500"/>
+          <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="gray24"/>
+          <rectangle name="B_1">
+            <geometryInfo x="0.06250" y="0.12500" width="2.81250"
+             height="0.43750"/>
+            <generalLayout pageProtect="yes"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100" linePattern="transparent"
+             lineBackgroundColor="black"/>
+            <points>
+              <point x="0.06250" y="0.12500"/>
+              <point x="2.81250" y="0.43750"/>
+            </points>
+          </rectangle>
+          <field name="F_LIBELLE" source="LIBELLE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="3.68750" y="0.25000" width="6.12500"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="gray24"/>
+          </field>
+          <frame name="M_G_PROFILFI_DET_GRPFR">
+            <geometryInfo x="0.06250" y="0.62500" width="10.68750"
+             height="2.12500"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillBackgroundColor="r100g100b75"/>
+            <repeatingFrame name="R_G_PROFILFI_DET" source="G_PROFILFI_DET"
+             printDirection="down" minWidowRecords="1" columnMode="no"
+             vertSpaceBetweenFrames="0.1000">
+              <geometryInfo x="0.06250" y="0.62500" width="10.68750"
+               height="1.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout keepWithAnchoringObject="yes"
+               formatTrigger="r_g_profilfi_detformattrigger"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray4" linePattern="solid"/>
+              <field name="F_DATE_EFFET" source="DATE_EFFET" minWidowLines="1"
+               formatMask="MM/RRRR" spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="0.93750" y="0.75000" width="1.00000"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_COMMENTAIRE" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="0.12500" y="0.93750" width="1.00000"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Commentaire :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_COMMENTAIRE" source="COMMENTAIRE"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="0.18750" y="1.12500" width="10.25000"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_CODDIR" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="0.12500" y="1.31250" width="0.68750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Direction]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_CODDIR" source="CODDIR" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="0.18750" y="1.50000" width="0.31250"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_TOPEGALPRESTATION" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="1.00000" y="1.31250" width="0.31250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[=/#]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_TOPEGALPRESTATION" source="TOPEGALPRESTATION"
+               minWidowLines="1" spacing="0" alignment="center">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="0.93750" y="1.50000" width="0.25000"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <field name="F_PRESTATION" source="PRESTATION" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="1.18750" y="1.50000" width="4.31250"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_TOPEGALPRESTATION1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="8.50000" y="1.31250" width="0.31250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[=/#]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_TOPEGALES" source="TOPEGALES" minWidowLines="1"
+               spacing="0" alignment="center">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="8.50000" y="1.50000" width="0.18750"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <field name="F_CODE_ES" source="CODE_ES" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="8.68750" y="1.50000" width="2.06250"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_TOPEGALPRESTATION2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.81250" y="1.31250" width="0.31250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[=/#]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_TOPEGALLOCALISATION" source="TOPEGALLOCALISATION"
+               minWidowLines="1" spacing="0" alignment="center">
+                <font face="Arial" size="10"/>
+                <geometryInfo x="5.81250" y="1.50000" width="0.18750"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <field name="F_LOCALISATION" source="LOCALISATION"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="6.00000" y="1.50000" width="2.37500"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_CODE_ES1" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="6.00000" y="1.31250" width="2.31250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Localisations_________________]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_CODE_ES2" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="1.18750" y="1.31250" width="4.43750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Codes prestations___________________________________________________]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_CODE_ES3" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="8.68750" y="1.31250" width="2.06250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Codes ES__________________]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_DATE_EFFET" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="0.12500" y="0.75000" width="0.87500"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Date d'effet :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_TOP_ACTIF" source="TOP_ACTIF" minWidowLines="1"
+               spacing="0" alignment="center">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="3.12500" y="0.75000" width="0.18750"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_TOP_ACTIF" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="2.56250" y="0.75000" width="0.68750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Top actif :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <field name="F_COUT" source="COUT" minWidowLines="1"
+               formatMask="NNNGNNNGNN0D00" spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="5.56250" y="0.75000" width="1.12500"
+                 height="0.18750"/>
+                <generalLayout verticalElasticity="expand"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+              </field>
+              <text name="B_COUT" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="4.43750" y="0.75000" width="1.31250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray24"/>
+                <textSegment>
+                  <font face="Arial" size="8" bold="yes"/>
+                  <string>
+                  <![CDATA[Coût unitaire HTR :]]>
+                  </string>
+                </textSegment>
+              </text>
+            </repeatingFrame>
+          </frame>
+          <text name="B_LIBELLE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.06250" y="0.25000" width="0.62500"
+             height="0.25000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Libellé :]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_PROFIL_FI" source="PROFIL_FI" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10" bold="yes" textColor="red"/>
+            <geometryInfo x="1.25000" y="0.25000" width="1.50000"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="gray24"/>
+          </field>
+          <text name="B_PROFIL_FI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.18750" y="0.25000" width="1.06250"
+             height="0.25000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Code PROFIL :]]>
+              </string>
+            </textSegment>
+          </text>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="4.37500" y="0.25000" width="2.68750" height="0.31250"
+        />
+        <textSegment>
+          <font face="Arial" size="14" bold="yes"/>
+          <string>
+          <![CDATA[LISTE DES PROFILS DE FI]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/RRRR HH24:MI" spacing="0" alignment="start">
+        <font face="Arial" size="10"/>
+        <geometryInfo x="0.62500" y="0.25000" width="1.25000" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+      </field>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.18750" y="0.25000" width="0.43750" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[Date :]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_3" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.93750" y="0.75000" width="1.81250" height="0.16663"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <textSegment>
+          <font face="Arial" size="10" bold="yes"/>
+          <string>
+          <![CDATA[Paramètres de la demande :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_2" source="P_PARAM6" minWidowLines="1"
+       formatMask="DD/MM/RRRR HH24:MI" spacing="0" alignment="start">
+        <font face="Arial" size="10"/>
+        <geometryInfo x="3.68750" y="0.75000" width="0.75000" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+      </field>
+      <text name="B_4" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="3.00000" y="0.75000" width="0.68750" height="0.16663"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[Direction :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_4" source="P_PARAM8" minWidowLines="1"
+       formatMask="DD/MM/RRRR HH24:MI" spacing="0" alignment="start">
+        <font face="Arial" size="10"/>
+        <geometryInfo x="5.87500" y="0.75000" width="2.62500" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+      </field>
+      <text name="B_6" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="9.68750" y="0.25000" width="0.68750" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[Page(s) :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_5" source="PageNumber" minWidowLines="1" spacing="0"
+       alignment="end">
+        <font face="Arial" size="10"/>
+        <geometryInfo x="10.18750" y="0.25000" width="0.25000"
+         height="0.18750"/>
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_7" minWidowLines="1">
+        <textSettings justify="end" spacing="0"/>
+        <geometryInfo x="10.37500" y="0.25000" width="0.12500"
+         height="0.18750"/>
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_6" source="TotalPages" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="10"/>
+        <geometryInfo x="10.56250" y="0.25000" width="0.25000"
+         height="0.18750"/>
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <rectangle name="B_8">
+        <geometryInfo x="4.00000" y="0.18750" width="3.25000" height="0.37500"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="r100g100b88"
+         linePattern="transparent" lineBackgroundColor="black"/>
+        <points>
+          <point x="4.00000" y="0.18750"/>
+          <point x="3.25000" y="0.37500"/>
+        </points>
+      </rectangle>
+      <field name="F_7" source="P_LIBELLE" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="10"/>
+        <geometryInfo x="4.25000" y="0.75000" width="1.87500" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g100b88"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+  	
+  	:P_WHERE := 'WHERE 1=1 ';
+
+   
+	IF(:P_PARAM6 != '*') THEN
+		:P_WHERE := :P_WHERE || ' and  PFI.CODDIR= ''' ||:P_PARAM6||'''';
+	END IF;					
+					
+		IF (:P_PARAM7 IS NOT NULL) THEN
+						IF (:P_PARAM7 != '*') THEN	
+									:P_WHERE := :P_WHERE || ' and TO_CHAR(PFI.DATE_EFFET,''MM/YYYY'') >= '''||:P_PARAM7 ||'''';
+  				 				--srw.message(1,'P_WHERE : '||:P_WHERE);
+								
+						END IF;		
+						
+						IF(:P_PARAM8 = 'ACTIVES') THEN
+					 					:P_WHERE := :P_WHERE || ' and PFI.TOP_ACTIF = ''O'' ';
+  				 					--srw.message(1,'P_WHERE : '||:P_WHERE);
+						END IF;
+						
+				IF (:P_PARAM8 is null) THEN
+						:P_PARAM8 := '(néant)';
+  		ELSE
+  			  
+  				IF (:P_PARAM8 ='ACTIVES') THEN
+						:P_PARAM8 := ' DATES D''EFFET ACTIVES';
+						
+  				END IF;
+  				
+  				IF (:P_PARAM8 ='TOUTES') THEN
+						:P_PARAM8 := ' TOUTES DATES D''EFFET';
+					
+					END IF;
+  			
+  		END IF;
+		END IF;
+
+	  --srw.message(1,'WHERE : '||:P_WHERE);  
+	  
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_profilfi_detformattrigger">
+      <textSource>
+      <![CDATA[function R_G_PROFILFI_DETFormatTrigger return boolean is
+begin
+ IF (:CS_compteur mod 2 = 0)
+   THEN
+      srw.set_background_fill_color('grey');
+ else
+ 	 srw.set_background_fill_color('white');
+       END IF;
+
+  return (TRUE);
+end;
+]]>
+      </textSource>
+    </function>
+    <function name="p_libellevalidtrigger">
+      <textSource>
+      <![CDATA[function P_LIBELLEValidTrigger return boolean is
+begin
+  
+  if (:p_param7 is not null) then
+  	:p_libelle := 'A compter de : ' || :p_param7;
+  	
+  else
+  		:p_libelle := 'Mensuelle de : ' || :p_param9;
+  end if;
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+
+
+</head>
+
+
+<body>
+
+<!-- Data Area Generated by Reports Developer -->
+<rw:dataArea id="MGPROFIGRPFR20">
+<rw:foreach id="RGPROFI201" src="G_PROFI">
+<!-- Start GetGroupHeader/n --> <table>
+ <caption> LISTE DES PROFILS DE FI <br>Libelle <rw:field id="F_LIBELLE" src="LIBELLE" breakLevel="RGPROFI201" breakValue="&nbsp;"> F_LIBELLE </rw:field><br>
+Profil Fi <rw:field id="F_PROFIL_FI" src="PROFIL_FI" breakLevel="RGPROFI201" breakValue="&nbsp;"> F_PROFIL_FI </rw:field><br>
+ </caption>
+<!-- End GetGroupHeader/n -->   <tr>
+    <td valign="top">
+    <table summary="LISTE DES PROFILS DE FI">
+     <!-- Header -->
+     <thead>
+      <tr>
+       <th <rw:id id="HBDATEEFFET20" asArray="no"/>> Date Effet </th>
+       <th <rw:id id="HBTOPACTIF20" asArray="no"/>> Top Actif </th>
+       <th <rw:id id="HBCOUT20" asArray="no"/>> Cout </th>
+       <th <rw:id id="HBCOMMENTAIRE20" asArray="no"/>> Commentaire </th>
+       <th <rw:id id="HBCODDIR20" asArray="no"/>> Coddir </th>
+       <th <rw:id id="HBTOPEGALPRESTATION20" asArray="no"/>> Topegalprestation </th>
+       <th <rw:id id="HBPRESTATION20" asArray="no"/>> Prestation </th>
+       <th <rw:id id="HBTOPEGALLOCALISATION20" asArray="no"/>> Topegallocalisation </th>
+       <th <rw:id id="HBLOCALISATION20" asArray="no"/>> Localisation </th>
+       <th <rw:id id="HBTOPEGALES20" asArray="no"/>> Topegales </th>
+       <th <rw:id id="HBCODEES20" asArray="no"/>> Code Es </th>
+      </tr>
+     </thead>
+     <!-- Body -->
+     <tbody>
+      <rw:foreach id="RGPROFILFIDET201" src="G_PROFILFI_DET">
+       <tr>
+        <td <rw:headers id="HFDATEEFFET20" src="HBDATEEFFET20"/>><rw:field id="FDATEEFFET20" src="DATE_EFFET" nullValue="&nbsp;"> F_DATE_EFFET </rw:field></td>
+        <td <rw:headers id="HFTOPACTIF20" src="HBTOPACTIF20"/>><rw:field id="FTOPACTIF20" src="TOP_ACTIF" nullValue="&nbsp;"> F_TOP_ACTIF </rw:field></td>
+        <td <rw:headers id="HFCOUT20" src="HBCOUT20"/>><rw:field id="FCOUT20" src="COUT" nullValue="&nbsp;"> F_COUT </rw:field></td>
+        <td <rw:headers id="HFCOMMENTAIRE20" src="HBCOMMENTAIRE20"/>><rw:field id="FCOMMENTAIRE20" src="COMMENTAIRE" nullValue="&nbsp;"> F_COMMENTAIRE </rw:field></td>
+        <td <rw:headers id="HFCODDIR20" src="HBCODDIR20"/>><rw:field id="FCODDIR20" src="CODDIR" nullValue="&nbsp;"> F_CODDIR </rw:field></td>
+        <td <rw:headers id="HFTOPEGALPRESTATION20" src="HBTOPEGALPRESTATION20"/>><rw:field id="FTOPEGALPRESTATION20" src="TOPEGALPRESTATION" nullValue="&nbsp;"> F_TOPEGALPRESTATION </rw:field></td>
+        <td <rw:headers id="HFPRESTATION20" src="HBPRESTATION20"/>><rw:field id="FPRESTATION20" src="PRESTATION" nullValue="&nbsp;"> F_PRESTATION </rw:field></td>
+        <td <rw:headers id="HFTOPEGALLOCALISATION20" src="HBTOPEGALLOCALISATION20"/>><rw:field id="FTOPEGALLOCALISATION20" src="TOPEGALLOCALISATION" nullValue="&nbsp;"> F_TOPEGALLOCALISATION </rw:field></td>
+        <td <rw:headers id="HFLOCALISATION20" src="HBLOCALISATION20"/>><rw:field id="FLOCALISATION20" src="LOCALISATION" nullValue="&nbsp;"> F_LOCALISATION </rw:field></td>
+        <td <rw:headers id="HFTOPEGALES20" src="HBTOPEGALES20"/>><rw:field id="FTOPEGALES20" src="TOPEGALES" nullValue="&nbsp;"> F_TOPEGALES </rw:field></td>
+        <td <rw:headers id="HFCODEES20" src="HBCODEES20"/>><rw:field id="FCODEES20" src="CODE_ES" nullValue="&nbsp;"> F_CODE_ES </rw:field></td>
+       </tr>
+      </rw:foreach>
+     </tbody>
+     <tr>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</rw:foreach>
+<table summary="LISTE DES PROFILS DE FI">
+</table>
+</rw:dataArea> <!-- id="MGPROFIGRPFR20" -->
+<!-- End of Data Area Generated by Reports Developer -->
+
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#336699"/>
+    <color index="192" displayName="TableCell" value="#e0f0ff"/>
+    <color index="193" displayName="Totals" value="#c5e3ff"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName="" sectionTitle="LISTE DES PROFILS DE FI"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

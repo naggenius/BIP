@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="logs_referentiel_dp_copi" DTDVersion="9.0.2.0.10"
+ unitOfMeasurement="centimeter" designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="LOGS_REFERENTIEL_DP_COPI" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" label="P Param1" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" label="P Param2" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" label="P Param3" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" label="P Param4" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" label="P Param5" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt"/>
+    <systemParameter name="DESNAME" initialValue="c:\donnees\liste.txt"/>
+    <systemParameter name="DESTYPE" initialValue="Preview"/>
+    <dataSource name="Q_LOGS">
+      <select>
+      <![CDATA[SELECT 	       dp.dp_copi,
+                       dp.libelle,
+                       dpl.date_log,
+                       dpl.user_log,
+                       dpl.colonne,
+                       dpl.valeur_prec,
+                       dpl.valeur_nouv,
+                       dpl.commentaire
+FROM	       dossier_projet_copi dp,
+                       dossier_projet_copi_logs dpl
+WHERE	       dpl.dp_copi=dp.dp_copi (+)
+AND 	       dpl.dp_copi=:P_PARAM6
+ORDER BY    dp.dp_copi,
+                       dpl.date_log desc,
+                       dpl.user_log,
+                       dpl.colonne]]>
+      </select>
+      <displayInfo x="1.05823" y="0.08217" width="3.54521" height="0.87313"/>
+      <group name="G_pid">
+        <displayInfo x="0.77298" y="3.23267" width="4.07355" height="1.52797"
+        />
+        <dataItem name="dp_copi" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dp Copi">
+          <dataDescriptor expression="dp.dp_copi"
+           descriptiveExpression="DP_COPI" order="1" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libelle" datatype="vchar2" columnOrder="25" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="dp.libelle"
+           descriptiveExpression="LIBELLE" order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_LOGS">
+        <displayInfo x="0.82445" y="8.41561" width="3.98983" height="3.26430"
+        />
+        <dataItem name="date_log" datatype="date" oracleDatatype="date"
+         columnOrder="18" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Date Log">
+          <dataDescriptor expression="dpl.date_log"
+           descriptiveExpression="DATE_LOG" order="3" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="user_log" datatype="vchar2" columnOrder="19"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="User Log">
+          <dataDescriptor expression="dpl.user_log"
+           descriptiveExpression="USER_LOG" order="4" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="colonne" datatype="vchar2" columnOrder="20" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Colonne">
+          <dataDescriptor expression="dpl.colonne"
+           descriptiveExpression="COLONNE" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="valeur_prec" datatype="vchar2" columnOrder="21"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Valeur Prec" breakOrder="none">
+          <dataDescriptor expression="dpl.valeur_prec"
+           descriptiveExpression="VALEUR_PREC" order="6" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="valeur_nouv" datatype="vchar2" columnOrder="22"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Valeur Nouv" breakOrder="none">
+          <dataDescriptor expression="dpl.valeur_nouv"
+           descriptiveExpression="VALEUR_NOUV" order="7" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="commentaire" datatype="vchar2" columnOrder="23"
+         width="200" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Commentaire" breakOrder="none">
+          <dataDescriptor expression="dpl.commentaire"
+           descriptiveExpression="COMMENTAIRE" order="8" width="200"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DATE">
+      <select>
+      <![CDATA[select to_char(sysdate,'DD/MM/YYYY HH24:MI') date_jour from dual]]>
+      </select>
+      <displayInfo x="6.98469" y="0.07906" width="3.38677" height="0.71438"/>
+      <group name="G_DATE">
+        <displayInfo x="7.28173" y="2.35458" width="2.79394" height="1.52797"
+        />
+        <dataItem name="date_jour" datatype="vchar2" columnOrder="17"
+         width="75" defaultWidth="0" defaultHeight="0" columnFlags="33">
+          <dataDescriptor
+           expression="to_char(sysdate,&apos;DD/MM/YYYY HH24:MI&apos;)"
+           descriptiveExpression="DATE_JOUR" order="1" width="75"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="28.49997" height="17.89999">
+      <location x="0.45889" y="2.25134"/>
+      <frame name="M_LOGS_GRPFR">
+        <geometryInfo x="0.23595" y="0.02635" width="28.21998"
+         height="1.92577"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_LIGNE_BIP" source="G_pid"
+         printDirection="down" maxRecordsPerPage="1" minWidowRecords="1"
+         columnMode="no">
+          <geometryInfo x="0.23595" y="0.03969" width="28.20665"
+           height="1.91151"/>
+          <generalLayout verticalElasticity="expand"/>
+          <visualSettings fillBackgroundColor="gray8"/>
+          <frame name="M_PROJ_HDR">
+            <geometryInfo x="0.23595" y="0.67469" width="28.17968"
+             height="0.60833"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray8"/>
+            <text name="B_DATE_LOG" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.23595" y="0.78321" width="2.80665"
+               height="0.36773"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[ Date Heure]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_COLONNE" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="6.84578" y="0.80956" width="1.90004"
+               height="0.36773"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[Zone]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_VALEUR_PREC" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="9.91164" y="0.75685" width="3.82023"
+               height="0.42044"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[Donnée Précédente]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_VALEUR_NOUV" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="15.94910" y="0.73019" width="3.33902"
+               height="0.40742"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[Nouvelle Donnée]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_COMMENTAIRE" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="22.00610" y="0.75685" width="2.71859"
+               height="0.44710"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[Remarque]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_LOGIN" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="3.40630" y="0.77918" width="3.42305"
+               height="0.41145"/>
+              <textSegment>
+                <font face="Courier New" size="10"/>
+                <string>
+                <![CDATA[Identif. RTFE]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_LOGS" source="G_LOGS" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.23813" y="1.33325" width="28.17875"
+             height="0.61237"/>
+            <field name="F_DATE_LOG" source="date_log" minWidowLines="1"
+             formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="0.32587" y="1.49820" width="3.17965"
+               height="0.35719"/>
+            </field>
+            <field name="F_ZONE" source="colonne" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="6.71463" y="1.50875" width="3.05067"
+               height="0.33083"/>
+            </field>
+            <field name="F_VALEUR_PREC" source="valeur_prec" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="9.93986" y="1.49789" width="5.73050"
+               height="0.38385"/>
+            </field>
+            <field name="F_VALEUR_NOUV" source="valeur_nouv" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="15.97019" y="1.49820" width="5.76430"
+               height="0.39656"/>
+            </field>
+            <field name="F_REMARQUE" source="commentaire" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="22.00052" y="1.44611" width="6.41635"
+               height="0.37021"/>
+            </field>
+            <field name="F_IDENT" source="user_log" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="4.01340" y="1.43898" width="1.55835"
+               height="0.41393"/>
+            </field>
+            <line name="B_1" arrow="none">
+              <geometryInfo x="0.23813" y="1.91957" width="28.11177"
+               height="0.00000"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="0.23813" y="1.91957"/>
+                <point x="28.34990" y="1.91957"/>
+              </points>
+            </line>
+          </repeatingFrame>
+          <text name="B_LIGNE_BIP" minWidowLines="1">
+            <textSettings justify="end" spacing="0"/>
+            <geometryInfo x="7.05104" y="0.10573" width="3.06927"
+             height="0.47625"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="Arial" size="11" bold="yes"/>
+              <string>
+              <![CDATA[ LOG DP-COPI  ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="DP_COPI" source="dp_copi" minWidowLines="1"
+           formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="center">
+            <font face="Arial" size="11" bold="yes"/>
+            <geometryInfo x="10.26170" y="0.09240" width="1.92205"
+             height="0.51594"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <field name="LIB_DP_COPI" source="libelle" minWidowLines="1"
+           formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+            <font face="Arial" size="11" bold="yes"/>
+            <geometryInfo x="12.18561" y="0.07938" width="6.52177"
+             height="0.54229"/>
+            <generalLayout horizontalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_Page" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="23.12851" y="0.68678" width="1.17295"
+         height="0.50385"/>
+        <generalLayout verticalElasticity="variable"/>
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[Page:]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Page" source="PageNumber" minWidowLines="1"
+       formatMask="NNNN" spacing="single" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="24.36006" y="0.76305" width="1.08769"
+         height="0.40370"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Date" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.62787" y="0.71872" width="1.35217" height="0.39688"
+        />
+        <generalLayout horizontalElasticity="expand"/>
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[DATE :]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_Titre1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="9.57492" y="0.54229" width="9.97769" height="0.51594"
+        />
+        <visualSettings fillBackgroundColor="red"/>
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA[Actions intervenues sur le référentiel DP-COPI]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="2.02096" y="0.79778" width="5.93452" height="0.43749"
+        />
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.97160" y="0.40587" width="4.12688" height="0.56400"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.12483" y="1.25233" width="5.82011" height="0.45827"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.53386" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM1" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

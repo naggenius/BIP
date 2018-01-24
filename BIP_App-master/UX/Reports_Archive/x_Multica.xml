@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_Multica" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="X_MULTICA" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_MSG" datatype="character" precision="10"
+     initialValue="AUCUN TYPE DE PROJET" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="50"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="FIXE_1" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="PRINTJOB" initialValue="No"/>
+    <systemParameter name="MODE" initialValue="bitmap"/>
+    <systemParameter name="ORIENTATION" initialValue="Portrait"/>
+    <systemParameter name="THOUSANDS" display="yes"/>
+    <systemParameter name="CURRENCY" display="yes"/>
+    <systemParameter name="COPIES" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088" display="yes"/>
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="Preview" display="yes"/>
+    <dataSource name="Q_REPARTITION_LIGNE">
+      <select>
+      <![CDATA[SELECT 	rl.pid,
+	lb.pnom,
+	rl.datdeb,
+	rl.datfin,
+	rl.codcamo,
+	ca.clibrca,
+	rl.clicode,
+	cm.clilib,
+	rl.tauxrep,
+	lb.CODSG
+FROM 	repartition_ligne rl,
+	ligne_bip lb,
+	centre_activite ca,
+	client_mo cm
+WHERE 	
+ca.codcamo=rl.codcamo (+)
+AND	rl.clicode = cm.clicode (+)
+AND rl.pid=lb.pid (+)
+AND lb.CODCAMO = '77777'
+&P_WHERE
+ORDER BY rl.pid, rl.datdeb desc, rl.codcamo]]>
+      </select>
+      <displayInfo x="0.53088" y="0.28125" width="1.54114" height="0.26038"/>
+      <group name="G_Repartition_ligne">
+        <displayInfo x="0.63281" y="1.16663" width="1.33630" height="1.96875"
+        />
+        <dataItem name="CODSG" oracleDatatype="number" columnOrder="26"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codsg">
+          <xmlSettings xmlTag="Code DPG"/>
+          <dataDescriptor expression="lb.CODSG" descriptiveExpression="CODSG"
+           order="10" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pid" datatype="vchar2" columnOrder="17" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pid">
+          <xmlSettings xmlTag="Ligne BIP"/>
+          <dataDescriptor expression="rl.pid" descriptiveExpression="PID"
+           order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pnom" datatype="vchar2" columnOrder="18" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pnom" breakOrder="none">
+          <xmlSettings xmlTag="Libellé ligne"/>
+          <dataDescriptor expression="lb.pnom" descriptiveExpression="PNOM"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datdeb" datatype="date" oracleDatatype="date"
+         columnOrder="19" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="3" defaultLabel="Datdeb" breakOrder="descending">
+          <xmlSettings xmlTag="Date de debut"/>
+          <dataDescriptor expression="rl.datdeb"
+           descriptiveExpression="DATDEB" order="3" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datfin" datatype="date" oracleDatatype="date"
+         columnOrder="20" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Datfin" breakOrder="none">
+          <xmlSettings xmlTag="Date de fin"/>
+          <dataDescriptor expression="rl.datfin"
+           descriptiveExpression="DATFIN" order="4" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codcamo" oracleDatatype="number" columnOrder="21"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcamo">
+          <xmlSettings xmlTag="CA Payeur"/>
+          <dataDescriptor expression="rl.codcamo"
+           descriptiveExpression="CODCAMO" order="5" oracleDatatype="number"
+           width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="clibrca" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="22" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clibrca" breakOrder="none">
+          <xmlSettings xmlTag="Libellé CA"/>
+          <dataDescriptor expression="ca.clibrca"
+           descriptiveExpression="CLIBRCA" order="6"
+           oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="clicode" datatype="vchar2" columnOrder="24" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clicode" breakOrder="none">
+          <xmlSettings xmlTag="Code Client"/>
+          <dataDescriptor expression="rl.clicode"
+           descriptiveExpression="CLICODE" order="7" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="clilib" datatype="vchar2" columnOrder="25" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clilib" breakOrder="none">
+          <xmlSettings xmlTag="Libellé client"/>
+          <dataDescriptor expression="cm.clilib"
+           descriptiveExpression="CLILIB" order="8" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="tauxrep" oracleDatatype="number" columnOrder="23"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Tauxrep">
+          <xmlSettings xmlTag="Taux de facturation"/>
+          <dataDescriptor expression="rl.tauxrep"
+           descriptiveExpression="TAUXREP" order="9" oracleDatatype="number"
+           width="22" scale="2" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="2"/>
+  <section name="header" width="8.26990" height="11.68994" widthInChar="102"
+   heightInChar="85">
+    <body width="8.26990" height="11.68994">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="8.26990" height="11.68994" widthInChar="102"
+   heightInChar="85">
+    <body width="8.26990" height="11.68994">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="8.26990" height="11.68994" widthInChar="102"
+   heightInChar="85">
+    <body width="8.26990" height="10.11011">
+      <location x="0.00000" y="1.01807"/>
+      <repeatingFrame name="R_LIGNE_BIP1" source="G_Repartition_ligne"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.09290" y="0.06873" width="8.13647" height="0.39697"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <visualSettings fillBackgroundColor="gray8"/>
+        <field name="F_LIGNE_BIP1" source="pid" minWidowLines="1"
+         formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="0.97314" y="0.19885" width="0.75671"
+           height="0.20313"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_LIB_LIGNE_BIP1" source="pnom" minWidowLines="1"
+         formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="1.73059" y="0.19373" width="1.03931"
+           height="0.21350"/>
+          <generalLayout horizontalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_DATDEB1" source="datdeb" minWidowLines="1"
+         formatMask="MM/YYYY" spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="2.77576" y="0.24011" width="0.56152"
+           height="0.17188"/>
+        </field>
+        <field name="F_DATFIN1" source="datfin" minWidowLines="1"
+         formatMask="MM/YYYY" spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="3.33594" y="0.23901" width="0.60950"
+           height="0.17188"/>
+        </field>
+        <field name="F_CA_PAYEUR1" source="codcamo" minWidowLines="1"
+         spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="3.96204" y="0.24011" width="0.67212"
+           height="0.17188"/>
+        </field>
+        <field name="F_LIB_CA1" source="clibrca" minWidowLines="1" spacing="0"
+         alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="4.63416" y="0.25049" width="1.25720"
+           height="0.15112"/>
+        </field>
+        <field name="F_CLIENT1" source="clicode" minWidowLines="1" spacing="0"
+         alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="5.90735" y="0.24011" width="0.55115"
+           height="0.17188"/>
+        </field>
+        <field name="F_LIB_CLIENT1" source="clilib" minWidowLines="1"
+         spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="6.45850" y="0.25049" width="1.01379"
+           height="0.15112"/>
+        </field>
+        <field name="F_TAUX_REP1" source="tauxrep" minWidowLines="1"
+         formatMask="NNNDNN %" spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="7.51282" y="0.19739" width="0.60815"
+           height="0.15625"/>
+        </field>
+        <field name="F_LIGNE_DPG1" source="CODSG" minWidowLines="1"
+         spacing="0" alignment="center">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="0.21790" y="0.23120" width="0.75671"
+           height="0.13757"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.53479" y="0.15979" width="0.95801" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.22754" y="0.49304" width="1.57263" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.44763" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.51013" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.49280" width="0.54138" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_COPIES" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.82605" width="0.37476" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Copies]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_CURRENCY" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.15930" width="0.47888" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Currency]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_THOUSANDS" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.49255" width="0.59351" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Thousands]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.45081" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_COPIES" source="COPIES" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.78406" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_CURRENCY" source="CURRENCY" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.11731" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_THOUSANDS" source="THOUSANDS" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.45056" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.85571" width="0.59351" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.81372" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24365" y="3.24854" width="0.59351" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[FIXE1]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_1" source="FIXE_1" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50049" y="3.20654" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+l_perimo	VARCHAR2(1000);
+l_menu VARCHAR2(25);
+begin 
+  	
+	
+	 IF (:FIXE_1 = 'MO') THEN
+	 	
+    /*CMA Fiche 1176 09/05/2011 le perimo est différent si l'utilisateur est dans le menu Client*/
+		l_menu := pack_global.lire_menutil(:P_global);
+		
+		if('MO'=l_menu)then
+			l_perimo := pack_global.lire_perimcli(:P_global);
+		else
+			l_perimo := pack_global.lire_perimo(:P_global);
+		end if;
+		
+	 	  
+	 	  :P_WHERE :=' AND (lb.clicode IN (SELECT clicode FROM vue_clicode_perimo where INSTR('''||l_perimo||''', bdclicode) > 0 )) ';
+	 	  
+	 ELSE	
+	     :P_PERIME:=pack_global.lire_perime(:P_GLOBAL);
+ 
+       :P_WHERE :=' AND ((LB.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''||:P_PERIME||''', codbddpg) > 0 )))';
+       
+   END IF;    
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

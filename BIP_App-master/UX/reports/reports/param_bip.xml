@@ -1,0 +1,1342 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_param_bip" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_PARAM_BIP" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="25"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="25"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[SELECT (select count(*) from LIGNE_PARAM_BIP l where l.code_action=de.code_action and l.code_version=de.code_version ) AS nbLignes,
+de.CODE_ACTION codaction,
+de.CODE_VERSION codversion,
+de.DATE_EFFET dateffet,
+de.HEURE_EFFET heureffet,
+de.DATE_FIN datfin,
+de.HEURE_FIN heurfin,
+de.COMMENTAIRE comParam,
+lpb.NUM_LIGNE numLigne,
+lpb.ACTIF actif,
+lpb.OBLIGATOIRE obligatoire,
+lpb.MULTI multi,
+lpb.SEPARATEUR separateur,
+lpb.FORMAT format,
+lpb.CASSE casse,
+lpb.CODE_ACTION_LIE codaction_lie,
+lpb.CODE_VERSION_LIE codversion_lie,
+lpb.NUM_LIGNE_LIE numLigne_lie,
+lpb.MIN_SIZE_UNIT min_size_unit,
+lpb.MAX_SIZE_UNIT max_size_unit,
+lpb.MIN_SIZE_TOT min_size_tot,
+lpb.MAX_SIZE_TOT max_size_tot,
+lpb.VALEUR valeur,
+lpb.COMMENTAIRE comLigne
+FROM LIGNE_PARAM_BIP lpb, DATE_EFFET de
+WHERE de.CODE_ACTION = lpb.CODE_ACTION (+)
+AND de.CODE_VERSION = lpb.CODE_VERSION (+)
+&p_where
+ORDER BY de.CODE_ACTION, de.CODE_VERSION, lpb.NUM_LIGNE]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_codaction">
+        <displayInfo x="1.30408" y="1.94995" width="1.39197" height="1.45605"
+        />
+        <dataItem name="codaction" datatype="vchar2" columnOrder="12"
+         width="25" defaultWidth="250000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Codaction">
+          <dataDescriptor expression="CODACTION"
+           descriptiveExpression="CODACTION" order="2" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codversion" datatype="vchar2" columnOrder="13"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codversion">
+          <dataDescriptor expression="CODVERSION"
+           descriptiveExpression="CODVERSION" order="3" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dateffet" datatype="date" oracleDatatype="date"
+         columnOrder="14" width="9" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Dateffet">
+          <dataDescriptor expression="DATEFFET"
+           descriptiveExpression="DATEFFET" order="4" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="heureffet" datatype="vchar2" columnOrder="15"
+         width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Heureffet">
+          <dataDescriptor expression="HEUREFFET"
+           descriptiveExpression="HEUREFFET" order="5" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datfin" datatype="date" oracleDatatype="date"
+         columnOrder="16" width="9" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Datfin">
+          <dataDescriptor expression="DATFIN" descriptiveExpression="DATFIN"
+           order="6" oracleDatatype="date" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="heurfin" datatype="vchar2" columnOrder="17" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Heurfin">
+          <dataDescriptor expression="HEURFIN" descriptiveExpression="HEURFIN"
+           order="7" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="comParam" datatype="vchar2" columnOrder="18"
+         width="200" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Comparam">
+          <dataDescriptor expression="COMPARAM"
+           descriptiveExpression="COMPARAM" order="8" width="200"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_NBLIGNES">
+        <displayInfo x="1.37732" y="4.21924" width="1.24548" height="0.43066"
+        />
+        <dataItem name="NBLIGNES" oracleDatatype="number" columnOrder="35"
+         width="22" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Nblignes">
+          <dataDescriptor expression="NBLIGNES"
+           descriptiveExpression="NBLIGNES" order="1" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_numLigne">
+        <displayInfo x="1.15759" y="5.40894" width="2.54028" height="3.33594"
+        />
+        <dataItem name="numLigne" oracleDatatype="number" columnOrder="19"
+         width="22" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Numligne">
+          <dataDescriptor expression="NUMLIGNE"
+           descriptiveExpression="NUMLIGNE" order="9" oracleDatatype="number"
+           width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="actif" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="20" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Actif">
+          <dataDescriptor expression="ACTIF" descriptiveExpression="ACTIF"
+           order="10" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="obligatoire" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="21" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Obligatoire">
+          <dataDescriptor expression="OBLIGATOIRE"
+           descriptiveExpression="OBLIGATOIRE" order="11"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="multi" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="22" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Multi">
+          <dataDescriptor expression="MULTI" descriptiveExpression="MULTI"
+           order="12" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="separateur" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="23" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Separateur">
+          <dataDescriptor expression="SEPARATEUR"
+           descriptiveExpression="SEPARATEUR" order="13"
+           oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="format" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="24" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Format">
+          <dataDescriptor expression="FORMAT" descriptiveExpression="FORMAT"
+           order="14" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="casse" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="25" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Casse">
+          <dataDescriptor expression="CASSE" descriptiveExpression="CASSE"
+           order="15" oracleDatatype="aFixedChar" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codaction_lie" datatype="vchar2" columnOrder="26"
+         width="25" defaultWidth="250000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Codaction Lie">
+          <dataDescriptor expression="CODACTION_LIE"
+           descriptiveExpression="CODACTION_LIE" order="16" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codversion_lie" datatype="vchar2" columnOrder="27"
+         width="8" defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Codversion Lie">
+          <dataDescriptor expression="CODVERSION_LIE"
+           descriptiveExpression="CODVERSION_LIE" order="17" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="numLigne_lie" oracleDatatype="number" columnOrder="28"
+         width="22" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Numligne Lie">
+          <dataDescriptor expression="NUMLIGNE_LIE"
+           descriptiveExpression="NUMLIGNE_LIE" order="18"
+           oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="min_size_unit" oracleDatatype="number"
+         columnOrder="29" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="33" defaultLabel="Min Size Unit">
+          <dataDescriptor expression="MIN_SIZE_UNIT"
+           descriptiveExpression="MIN_SIZE_UNIT" order="19"
+           oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="max_size_unit" oracleDatatype="number"
+         columnOrder="30" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="33" defaultLabel="Max Size Unit">
+          <dataDescriptor expression="MAX_SIZE_UNIT"
+           descriptiveExpression="MAX_SIZE_UNIT" order="20"
+           oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="min_size_tot" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="30000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Min Size Tot">
+          <dataDescriptor expression="MIN_SIZE_TOT"
+           descriptiveExpression="MIN_SIZE_TOT" order="21"
+           oracleDatatype="number" width="22" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="max_size_tot" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="30000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Max Size Tot">
+          <dataDescriptor expression="MAX_SIZE_TOT"
+           descriptiveExpression="MAX_SIZE_TOT" order="22"
+           oracleDatatype="number" width="22" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="valeur" datatype="vchar2" columnOrder="33" width="400"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Valeur">
+          <dataDescriptor expression="VALEUR" descriptiveExpression="VALEUR"
+           order="23" width="400"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="comLigne" datatype="vchar2" columnOrder="34"
+         width="300" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Comligne">
+          <dataDescriptor expression="COMLIGNE"
+           descriptiveExpression="COMLIGNE" order="24" width="300"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="11.00000" height="8.50000">
+      <location x="0.00000" y="0.00000"/>
+      <frame name="M_ENTETE">
+        <geometryInfo x="0.06250" y="0.06250" width="10.87500"
+         height="0.31250"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineWidth="4"/>
+        <text name="B_DATE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.12500" y="0.12500" width="0.40625"
+           height="0.16663"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Date : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+         formatMask="DD/MM/RRRR HH24:MI" spacing="0" alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="0.50000" y="0.12500" width="1.87500"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings lineWidth="4"/>
+        </field>
+        <text name="B_TITRE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.93750" y="0.12500" width="3.37500"
+           height="0.16663"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings linePattern="solid"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[ LISTE DES PARAMETRES GENERAUX DE LA BIP ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_PAGE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="9.37500" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Page : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_PAGE" source="PageNumber" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="9.87500" y="0.12500" width="0.25000"
+           height="0.18750"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="report"/>
+        </field>
+        <text name="B_SLASH_DATE" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="10.12500" y="0.12500" width="0.18750"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[/]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_TOTAL_PAGES" source="TotalPages" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="10.18750" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings lineWidth="4"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="report"/>
+        </field>
+      </frame>
+      <text name="B_PARAMETRES" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.37500" y="0.43750" width="1.75000" height="0.16663"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Times New Roman" size="10"/>
+          <string>
+          <![CDATA[Paramètres de la demande : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_CODE_ACTION" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="2.37500" y="0.43750" width="1.21875" height="0.16663"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Times New Roman" size="10"/>
+          <string>
+          <![CDATA[Code action début : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_FIN" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="6.18750" y="0.43750" width="0.26038" height="0.16663"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Times New Roman" size="10"/>
+          <string>
+          <![CDATA[fin : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_PARAM7" source="P_PARAM7" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Times New Roman" size="10"/>
+        <geometryInfo x="6.50000" y="0.43750" width="2.31250" height="0.18750"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings linePattern="solid"/>
+      </field>
+      <frame name="M_1">
+        <geometryInfo x="0.06250" y="0.75000" width="10.87500"
+         height="0.37500"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings fillPattern="transparent" fillBackgroundColor="gray24"/>
+        <text name="B_codaction" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.18750" y="0.75000" width="0.68750"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="r25g50b75"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Code
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[action]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_codversion" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="2.31250" y="0.75000" width="0.81250"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="r25g50b75"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Code
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[version]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_dateffet" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="3.62500" y="0.75000" width="0.56250"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="TableHeading"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Date
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[d'effet]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_heureffet" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="4.62500" y="0.75000" width="0.62500"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="r25g50b75"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Heure
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[d'effet]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_datfin" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="5.25000" y="0.75000" width="0.43750"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="TableHeading"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Date
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[de fin]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_heurfin" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="6.06250" y="0.75000" width="0.50000"
+           height="0.37500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="r25g50b75"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Heure
+]]>
+            </string>
+          </textSegment>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[de fin]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_comParam" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="7.37500" y="0.75000" width="0.93750"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="r25g50b75"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Commentaire : ]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_NB_LIGNES" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="6.62500" y="0.75000" width="0.62500"
+           height="0.37500"/>
+          <visualSettings fillBackgroundColor="TableCell"/>
+          <textSegment>
+            <font face="Times New Roman" size="10"/>
+            <string>
+            <![CDATA[Nb de lignes]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <frame name="M_G_codaction_GRPFR">
+        <geometryInfo x="0.06250" y="2.25000" width="10.87500"
+         height="0.56250"/>
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="r100g100b100"/>
+      </frame>
+      <repeatingFrame name="R_G_codaction" source="G_codaction"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="1.18750" width="10.87500"
+         height="1.62500"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings fillBackgroundColor="TableCell"/>
+        <field name="F_codaction" source="codaction" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Times New Roman" size="10" bold="yes"/>
+          <geometryInfo x="0.12500" y="1.31250" width="2.00000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_codversion" source="codversion" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Times New Roman" size="10" bold="yes"/>
+          <geometryInfo x="2.31250" y="1.31250" width="1.18750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_dateffet" source="dateffet" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="3.62500" y="1.31250" width="0.87500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_heureffet" source="heureffet" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="4.62500" y="1.31250" width="0.43750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_datfin" source="datfin" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="5.25000" y="1.31250" width="0.68750"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_heurfin" source="heurfin" minWidowLines="1" spacing="0"
+         alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="6.06250" y="1.31250" width="0.37500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <field name="F_comParam" source="comParam" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Times New Roman" size="10"/>
+          <geometryInfo x="7.31250" y="1.31250" width="3.56250"
+           height="0.31250"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="firstPage"
+           basePrintingOn="enclosingObject" keepWithAnchoringObject="yes"/>
+        </field>
+        <repeatingFrame name="R_G_NUMLIGNES" source="G_numLigne"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.06250" y="1.75000" width="10.87500"
+           height="1.06250"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout keepWithAnchoringObject="yes"/>
+          <visualSettings fillBackgroundColor="TableCell"/>
+          <field name="F_numLigne" source="numLigne" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10" bold="yes"/>
+            <geometryInfo x="1.31250" y="1.75000" width="0.18750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <text name="B_codaction_lie" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="1.93750" width="1.62500"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="r25g50b75"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Param Bip lié : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <rectangle name="B_1">
+            <geometryInfo x="0.12500" y="2.12500" width="1.62500"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray"/>
+            <points>
+              <point x="0.12500" y="2.12500"/>
+              <point x="1.62500" y="0.18750"/>
+            </points>
+          </rectangle>
+          <text name="B_valeur" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="2.31250" width="0.56250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Valeur : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_numLigne" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="1.75000" width="1.18750"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[N° de ligne / Actif : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_actif" source="actif" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Times New Roman" size="10" bold="yes"/>
+            <geometryInfo x="1.56250" y="1.75000" width="0.25000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <field name="F_codaction_lie" source="codaction_lie"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="1.75000" y="1.93750" width="2.31250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <text name="B_10" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.75000" y="2.12500" width="9.06250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_valeur" source="valeur" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="1.75000" y="2.31250" width="8.37500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <frame name="M_8">
+            <geometryInfo x="0.31250" y="2.50000" width="4.56250"
+             height="0.06250"/>
+            <visualSettings fillBackgroundColor="TableCell"/>
+          </frame>
+          <field name="F_comLigne" source="comLigne" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="1.75000" y="2.56250" width="9.06250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <frame name="M_2">
+            <geometryInfo x="0.31250" y="2.75000" width="7.06250"
+             height="0.06250"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableCell"/>
+          </frame>
+          <text name="B_comLigne" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="2.56250" width="1.62500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Commentaire sur la ligne : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_obligatoire" source="obligatoire" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="4.25000" y="1.75000" width="0.18750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <field name="F_codversion_lie" source="codversion_lie"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="4.25000" y="1.93750" width="0.75000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <text name="B_numLigne4" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.18750" y="1.93750" width="0.18750"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_obligatoire" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.50000" y="1.75000" width="0.75000"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Obligatoire : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_multi" source="multi" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="6.12500" y="1.75000" width="0.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <text name="B_min_size_unit" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.62500" y="1.93750" width="1.31250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Long unit min / max : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_multi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.62500" y="1.75000" width="1.50000"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Multivalué / séparateur : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_separateur" source="separateur" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="6.31250" y="1.75000" width="0.25000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <field name="F_format" source="format" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="8.68750" y="1.75000" width="0.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <text name="B_max_size_unit" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.81250" y="1.93750" width="1.31250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Long tot min / max : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_casse" source="casse" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="8.87500" y="1.75000" width="0.25000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </field>
+          <text name="B_casse" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.93750" y="1.75000" width="1.75000"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[Num seulement / Convertir : ]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_numLigne_lie" source="numLigne_lie" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="5.12500" y="1.93750" width="0.25000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <field name="F_min_size_unit" source="min_size_unit"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="6.93750" y="1.93750" width="0.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"
+             horizontalElasticity="variable"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <text name="B_numLigne6" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.06250" y="1.93750" width="0.06250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_max_size_unit" source="max_size_unit"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="7.12500" y="1.93750" width="0.37500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <field name="F_min_size_tot" source="min_size_tot" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="9.12500" y="1.93750" width="0.18750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"
+             horizontalElasticity="variable"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <text name="B_numLigne7" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="9.31250" y="1.93750" width="0.06250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_max_size_tot" source="max_size_tot" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="9.37500" y="1.93750" width="0.25000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+          </field>
+          <text name="B_numLigne1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.49878" y="1.75000" width="0.00122"
+             height="0.12500"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_numLigne2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.25000" y="1.75000" width="0.06250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_numLigne3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="8.81250" y="1.75000" width="0.06250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_numLigne5" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.06250" y="1.93750" width="0.18750"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillBackgroundColor="TableHeading"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_numLigne8" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.50000" y="1.75000" width="0.06250"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+            <textSegment>
+              <font face="Times New Roman" size="10"/>
+              <string>
+              <![CDATA[/]]>
+              </string>
+            </textSegment>
+          </text>
+          <frame name="M_4">
+            <geometryInfo x="1.75000" y="1.75000" width="1.75000"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </frame>
+          <frame name="M_5">
+            <geometryInfo x="4.43750" y="1.75000" width="0.18750"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </frame>
+          <frame name="M_6">
+            <geometryInfo x="6.56250" y="1.75000" width="0.37500"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </frame>
+          <frame name="M_7">
+            <geometryInfo x="9.12500" y="1.75000" width="1.68750"
+             height="0.18750"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray24"/>
+          </frame>
+        </repeatingFrame>
+        <repeatingFrame name="R_G_NBLIGNES" source="G_NBLIGNES"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="6.50000" y="1.31250" width="0.68750"
+           height="0.25000"/>
+          <visualSettings fillBackgroundColor="TableCell"/>
+          <field name="F_NB_LIGNES" source="NBLIGNES" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Times New Roman" size="10"/>
+            <geometryInfo x="6.62500" y="1.31250" width="0.43750"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="TableCell"/>
+          </field>
+        </repeatingFrame>
+      </repeatingFrame>
+      <text name="B_LIGNES" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="8.87500" y="0.43750" width="0.52087" height="0.16663"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Times New Roman" size="10"/>
+          <string>
+          <![CDATA[Lignes : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Param8" source="P_PARAM8" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Times New Roman" size="10"/>
+        <geometryInfo x="9.43750" y="0.43750" width="0.75000" height="0.18750"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <advancedLayout printObjectOnPage="firstPage"
+         basePrintingOn="enclosingObject"/>
+      </field>
+      <field name="F_PARAM6" source="P_PARAM6" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Times New Roman" size="10"/>
+        <geometryInfo x="3.68750" y="0.43750" width="2.43750" height="0.18750"
+        />
+        <generalLayout verticalElasticity="expand"/>
+        <visualSettings fillBackgroundColor="TableCell" linePattern="solid"/>
+      </field>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+  	:P_WHERE := '';
+	IF(:P_PARAM6 is not null AND :P_PARAM7 is not null)THEN
+		
+		:P_WHERE := :P_WHERE || ' AND (UPPER(de.CODE_ACTION) BETWEEN UPPER('''||:P_PARAM6||''') AND UPPER('''||:P_PARAM7||''') OR
+		UPPER(de.CODE_ACTION) LIKE UPPER('''||:P_PARAM6||'%'') OR
+		UPPER(de.CODE_ACTION) LIKE UPPER('''||:P_PARAM7||'%'')) ';
+		
+	ELSIF (:P_PARAM6 is null AND :P_PARAM7 is not null) THEN
+		
+			:P_WHERE := :P_WHERE || ' AND (UPPER(de.CODE_ACTION) <= UPPER('''||:P_PARAM7||''') OR
+			UPPER(de.CODE_ACTION) LIKE UPPER('''||:P_PARAM7||'%'')) ';
+		
+	ELSIF(:P_PARAM7 is null AND :P_PARAM6 is not null) THEN
+		
+			:P_WHERE := :P_WHERE || ' AND (UPPER(de.CODE_ACTION) >= UPPER('''||:P_PARAM6||''') OR
+			UPPER(de.CODE_ACTION) LIKE UPPER('''||:P_PARAM6||'%'')) ';
+		
+	END IF;
+	
+	IF (:P_PARAM6 is null) THEN
+		:P_PARAM6 := '(vide)';
+	END IF;
+	
+	IF (:P_PARAM7 is null) THEN
+		:P_PARAM7 := '(vide)';
+	END IF;
+	
+	IF(:P_PARAM8='ACTIVES') THEN
+		
+			:P_WHERE := :P_WHERE ||' AND lpb.ACTIF=''O'' ';
+		
+	END IF;
+	
+	  --srw.message(1,'WHERE : '||:P_WHERE);
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#336699"/>
+    <color index="192" displayName="TableCell" value="#e0f0ff"/>
+    <color index="193" displayName="Totals" value="#c5e3ff"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName="rwblue"
+   sectionTitle="LISTE DES PARAMETRES GENERAUX DE LA BIP"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

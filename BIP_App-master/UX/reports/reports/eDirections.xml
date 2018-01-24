@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eDirections" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="EDIRECTIONS" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="PRINTJOB" initialValue="No"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="html"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT ALL DIRECTIONS.CODDIR || ' - ' || 
+DIRECTIONS.LIBDIR, decode(DIRECTIONS.TOPME,0,'non',1,'oui'), DIRECTIONS.SYSCOMPTA, DIRECTIONS.CODREF, 
+DIRECTIONS.CODPERIM, DIRECTIONS.CODBR || ' - ' || BRANCHES.LIBBR 
+FROM DIRECTIONS, BRANCHES
+WHERE (DIRECTIONS.CODBR = BRANCHES.CODBR)
+ORDER BY DIRECTIONS.CODDIR ASC 
+
+]]>
+      </select>
+      <displayInfo x="2.58325" y="1.30212" width="0.69995" height="0.19995"/>
+      <group name="G_CODDIR">
+        <displayInfo x="1.33630" y="3.60364" width="1.32751" height="2.13965"
+        />
+        <dataItem name="decode_DIRECTIONS_TOPME_0_non_" datatype="vchar2"
+         columnOrder="18" width="3" defaultWidth="30000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Decode Directions Topme 0 Non">
+          <dataDescriptor
+           expression="decode ( DIRECTIONS.TOPME , 0 , &apos;non&apos; , 1 , &apos;oui&apos; )"
+           descriptiveExpression="DECODE(DIRECTIONS.TOPME,0,&apos;NON&apos;,1,&apos;OUI&apos;)"
+           order="2" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DIRECTIONS_CODDIR_DIRECTIONS_L" datatype="vchar2"
+         columnOrder="16" width="73" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Directions Coddir Directions L">
+          <dataDescriptor
+           expression="DIRECTIONS.CODDIR || &apos; - &apos; || DIRECTIONS.LIBDIR"
+           descriptiveExpression="DIRECTIONS.CODDIR||&apos;-&apos;||DIRECTIONS.LIBDIR"
+           order="1" width="73"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DIRECTIONS_CODBR_BRANCHES_LIBB" datatype="vchar2"
+         columnOrder="17" width="73" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Directions Codbr Branches Libb">
+          <dataDescriptor
+           expression="DIRECTIONS.CODBR || &apos; - &apos; || BRANCHES.LIBBR"
+           descriptiveExpression="DIRECTIONS.CODBR||&apos;-&apos;||BRANCHES.LIBBR"
+           order="6" width="73"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SYSCOMPTA" datatype="vchar2" columnOrder="11"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Système comptable">
+          <dataDescriptor expression="DIRECTIONS.SYSCOMPTA"
+           descriptiveExpression="SYSCOMPTA" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODREF" datatype="vchar2" columnOrder="12" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Référentiel">
+          <dataDescriptor expression="DIRECTIONS.CODREF"
+           descriptiveExpression="CODREF" order="4" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODPERIM" datatype="vchar2" columnOrder="13" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Perimètre (BU)">
+          <dataDescriptor expression="DIRECTIONS.CODPERIM"
+           descriptiveExpression="CODPERIM" order="5" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <placeholder name="CP_indice" datatype="number" width="20"
+         precision="10" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="16" defaultLabel="Cp 1" valueIfNull="1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </placeholder>
+        <summary name="CS_compteur" source="CP_indice" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs 1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" orientation="portrait"/>
+  <section name="main">
+    <body width="8.50000" height="9.50000">
+      <location x="0.00000"/>
+      <frame name="M_G_CODDIR_GRPFR">
+        <geometryInfo x="0.06250" y="0.00000" width="8.37500" height="0.37500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings linePattern="solid" lineForegroundColor="gray96"/>
+        <repeatingFrame name="R_G_CODDIR" source="G_CODDIR"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.06250" y="0.18750" width="8.37500"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <advancedLayout formatTrigger="r_g_codbrformattrigger"/>
+          <visualSettings fillPattern="transparent" fillForegroundColor="gray"
+           fillBackgroundColor="custom6" linePattern="solid"/>
+          <field name="F_CODDIR" source="DIRECTIONS_CODDIR_DIRECTIONS_L"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Arial" size="10" textColor="r0g0b50"/>
+            <geometryInfo x="0.12500" y="0.18750" width="2.62500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="custom7" hideLeftBorder="yes"
+             hideTopBorder="yes" hideBottomBorder="yes"/>
+          </field>
+          <field name="F_CODBR" source="DIRECTIONS_CODBR_BRANCHES_LIBB"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Arial" size="10" textColor="darkblue"/>
+            <geometryInfo x="2.75000" y="0.18750" width="2.00000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings hideLeftBorder="yes" hideTopBorder="yes"
+             hideBottomBorder="yes"/>
+          </field>
+          <field name="F_TOPME" source="decode_DIRECTIONS_TOPME_0_non_"
+           minWidowLines="1" spacing="0" alignment="center">
+            <font face="Arial" size="10" textColor="darkblue"/>
+            <geometryInfo x="4.68750" y="0.18750" width="0.43750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings hideLeftBorder="yes" hideTopBorder="yes"
+             hideBottomBorder="yes"/>
+          </field>
+          <field name="F_SYSCOMPTA" source="SYSCOMPTA" minWidowLines="1"
+           spacing="0" alignment="center">
+            <font face="Arial" size="10" textColor="darkblue"/>
+            <geometryInfo x="5.12500" y="0.18750" width="1.18750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings hideLeftBorder="yes" hideTopBorder="yes"
+             hideBottomBorder="yes"/>
+          </field>
+          <field name="F_CODREF" source="CODREF" minWidowLines="1" spacing="0"
+           alignment="center">
+            <font face="Arial" size="10" textColor="darkblue"/>
+            <geometryInfo x="6.31250" y="0.18750" width="0.93750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings hideLeftBorder="yes" hideTopBorder="yes"
+             hideBottomBorder="yes"/>
+          </field>
+          <field name="F_CODPERIM" source="CODPERIM" minWidowLines="1"
+           spacing="0" alignment="center">
+            <font face="Arial" size="10" textColor="darkblue"/>
+            <geometryInfo x="7.25000" y="0.18750" width="1.18750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CODDIR_HDR">
+          <geometryInfo x="0.06250" y="0.00000" width="8.37500"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillForegroundColor="darkcyan"
+           fillBackgroundColor="r100g50b100"/>
+          <text name="B_LIBDIR" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="0.06250" y="0.00000" width="2.62500"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <textSegment>
+              <font face="Arial" size="10" textColor="r0g0b50"/>
+              <string>
+              <![CDATA[Directions]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODBR" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="2.00000"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <textSegment>
+              <font face="Arial" size="10" textColor="r0g0b50"/>
+              <string>
+              <![CDATA[Branches]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TOPME" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="4.68750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <textSegment>
+              <font face="Arial" size="10" textColor="r0g0b50"/>
+              <string>
+              <![CDATA[ME]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_SYSCOMPTA" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="5.12500" y="0.00000" width="1.18750"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <textSegment>
+              <font face="Arial" size="10" textColor="r0g0b50"/>
+              <string>
+              <![CDATA[Syst. compta.]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODREF" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="6.31250" y="0.00000" width="0.93750"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <textSegment>
+              <font face="Arial" size="10" textColor="r0g0b50"/>
+              <string>
+              <![CDATA[Référentiel]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODPERIM" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="7.25000" y="0.00000" width="1.18750"
+             height="0.18750"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <textSegment>
+              <font face="Arial" size="10" textColor="r0g0b50"/>
+              <string>
+              <![CDATA[Perimètre (BU)]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_PAGENUM_SEC2" minWidowLines="1" templateSection="main">
+        <textSettings justify="end" spacing="0"/>
+        <geometryInfo x="6.81250" y="0.37500" width="1.56250" height="0.16663"
+        />
+        <textSegment>
+          <font face="Arial" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Page &<PageNumber>]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_2" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="2.67712" y="0.26038" width="3.51038" height="0.42712"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <textSegment>
+          <font face="Arial" size="20" bold="yes" textColor="darkblue"/>
+          <string>
+          <![CDATA[Liste des directions]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="r_g_codbrformattrigger">
+      <textSource>
+      <![CDATA[function R_G_CODBRFormatTrigger return boolean is
+begin
+ IF (:CS_compteur mod 2 = 0)
+   THEN
+      srw.set_background_fill_color('r88g75b88');
+ else
+ 	 srw.set_background_fill_color('white');
+       END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"
+   templateName="gngd1"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

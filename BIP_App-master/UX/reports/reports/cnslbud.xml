@@ -1,0 +1,2107 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="cnslbud" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="T03400200" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" label="P Param1" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" label="P Param2" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" label="P Param3" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" initialValue="11000" label="P Param4" defaultWidth="0"
+     defaultHeight="0" display="no"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" label="P Param5" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5024"
+     precision="10" label="P Where" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_ANNEE" datatype="character" precision="10"
+     label="P Annee" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_ANNEE1" datatype="character" precision="10"
+     label="P Annee1" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMCLI" datatype="character" width="5024"
+     precision="10" label="P Perimo" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip088.prt"/>
+    <systemParameter name="DESNAME" initialValue="c:\donnees\liste.txt"/>
+    <systemParameter name="DESTYPE" initialValue="Preview"/>
+    <dataSource name="Q_Proeta2">
+      <select>
+      <![CDATA[select  	'AAA'  			Pbreak,
+       	cm.clicode||' - '|| cm.clisigle      	DepClient,
+       	lb.typproj            		Ptype,
+       	a.amop           		MOPrincipal,
+       	lb.pid                		LigBipCode,
+       	substr(lb.pnom,1,27)        	Libelle,
+       	a.airt                		AppliCode,
+       	substr(a.alibel,1,35)              	AppliLib,
+       	pi.icpi               		ProjCode,
+       	substr(pi.ilibel,1,37)             	ProjLib,
+       	lb.codcamo            		CAPayeur,
+       	lb.codsg             		Dpg,
+       	lb.metier 			METIER,
+       	rpad(r.rnom,12)        		CHEFPROJET,
+       	nvl(budg.bnmont,0)             	NotifN,
+       	nvl(budg.bpmontmo,0)            	PROPOMOJH,
+       	nvl(budg.anmont,0)            	ArbitN,
+       	nvl(conso.cusag,0)            	RealcumN,
+       	nvl(budg.reestime,0)         	ReestN,
+       	nvl(budg1.bpmontme,0)          	PropoN1,
+       	 nvl(budg.bpmontme,0)         	PROPOJH,
+      	nvl(budg1.bpmontmo,0)          	PropomoN1
+from
+  	budget    budg,
+	budget   budg1,
+	consomme conso,
+	ligne_bip     lb, 
+	ressource r,
+	application   a,
+	proj_info     pi,
+	client_mo     cm
+where DECODE(:P_PARAM6, 'OPER', lb.clicode_oper, lb.clicode)  = rtrim(ltrim(cm.clicode))
+   and lb.airt = a.airt
+   and lb.icpi = pi.icpi
+   and lb.pcpi    = r.ident
+   and lb.pid = budg.pid  (+)
+   and lb.pid = budg1.pid (+)
+   and lb.pid = conso.pid  (+)
+  and (    ( budg.bnmont 	   <> 0 AND budg.bnmont is not null )        
+       	OR ( budg.bpmontmo    <> 0 AND budg.bpmontmo  is not null )
+    	OR ( budg.anmont	   <> 0 AND budg.anmont is not null )
+    	OR ( conso.cusag	   <> 0 AND conso.cusag is not null )
+     	OR ( budg.reestime <> 0 AND budg.reestime is not null )
+    	OR ( budg1.bpmontme   <> 0 AND budg1.bpmontme is not null )
+    	OR (budg.bpmontme     <> 0 AND budg.bpmontme is not null ) 
+	OR ( budg1.bpmontmo   <> 0 AND budg1.bpmontmo is not null )
+	)
+--
+and rtrim(ltrim(cm.clicode)) in (select vu.clicoderatt from vue_clicode_hierarchie vu where rtrim(ltrim(vu.clicode)) = :P_PARAM4)
+  &P_WHERE
+order by DepClient, AppliCode, ProjCode,  LigBipCode
+
+-- p_where est :
+--   and bn.bnannee   (+) = &AN0
+--   and ban.anannee (+) = &AN0
+--   and pb.bpannee   (+) = &AN0
+--   and pb1.bpannee  (+) = &AN1
+--   and cm.clicode between '501  ' and '509  '
+
+]]>
+      </select>
+      <comment>
+      <![CDATA[Dans ce report,  on utilise le meme select pour faire deux états
+1° REFPCA2BIS  est un état sans le détail des lignes bip
+2° REFPCA2        est un état avec le détail des lignes bip
+   Pour pouvoir paginer en fonction de l'état, on utilise un artifice avec une colonne 'p_break' qui sera vu par report comme un repeating frame englobant le tout.
+   Grace à ce repeating frame calquée  sur 'p_break' on arrive à remettre à zéro la numérotation des pages quand on passe au deuxième état.]]>
+      </comment>
+      <displayInfo x="1.13760" y="0.47656" width="2.93688" height="1.53448"/>
+      <group name="G_pbreak">
+        <displayInfo x="1.28860" y="2.65348" width="2.79394" height="1.52797"
+        />
+        <dataItem name="Pbreak" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="52" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pbreak">
+          <dataDescriptor expression="&apos;AAA&apos;"
+           descriptiveExpression="PBREAK" order="1"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_Dep">
+        <displayInfo x="0.83871" y="4.86823" width="4.02921" height="4.56654"
+        />
+        <dataItem name="DepClient" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="18" width="16"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Depclient">
+          <dataDescriptor
+           expression="cm.clicode || &apos; - &apos; || cm.clisigle"
+           descriptiveExpression="DEPCLIENT" order="2"
+           oracleDatatype="aFixedChar" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_Dep_NotifN" source="CS_Appl_NotifN" function="sum"
+         precision="8" reset="G_Dep" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Dep Notifn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_PropomoN" source="PROPOMOJH" function="sum"
+         precision="8" reset="G_Dep" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Dep Resern"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_ArbitN" source="CS_Appl_ArbitN" function="sum"
+         precision="8" reset="G_Dep" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Dep Arbitn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_RealcumN" source="CS_Appl_RealcumN"
+         function="sum" width="9" precision="7" reset="G_Dep" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Dep Realcumn" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_ReestN" source="CS_Appl_ReestN" function="sum"
+         precision="8" reset="G_Dep" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Dep Reestn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_PropoN1" source="CS_Appl_PropoN1" function="sum"
+         precision="8" reset="G_Dep" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Dep Propon1"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_Propojh" source="PROPOJH" function="sum"
+         precision="8" reset="G_Dep" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Dep_PropomoN1" source="CS_Appl_PropomoN1"
+         function="sum" precision="8" reset="G_Dep" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_Appl">
+        <displayInfo x="5.86631" y="2.93284" width="4.18765" height="5.43471"
+        />
+        <dataItem name="AppliCode" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="23" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Applicode">
+          <dataDescriptor expression="a.airt"
+           descriptiveExpression="APPLICODE" order="7"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AppliLib" datatype="vchar2" columnOrder="24"
+         width="35" defaultWidth="400000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Applilib" breakOrder="none">
+          <dataDescriptor expression="substr ( a.alibel , 1 , 35 )"
+           descriptiveExpression="APPLILIB" order="8" width="35"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MOPrincipal" datatype="vchar2" columnOrder="20"
+         width="35" defaultWidth="150000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Moprincipal" breakOrder="none">
+          <dataDescriptor expression="a.amop"
+           descriptiveExpression="MOPRINCIPAL" order="4" width="35"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_Appl_NotifN" source="CS_Proj_NotifN" function="sum"
+         precision="8" reset="G_Appl" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Appl Notifn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_propomoN" source="PROPOMOJH" function="sum"
+         precision="8" reset="G_Appl" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Appl Resern"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_ArbitN" source="CS_Proj_ArbitN" function="sum"
+         precision="8" reset="G_Appl" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Appl Arbitn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_RealcumN" source="CS_Proj_RealcumN"
+         function="sum" width="9" precision="7" reset="G_Appl"
+         compute="report" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Appl Realcumn" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_ReestN" source="CS_Proj_ReestN" function="sum"
+         precision="8" reset="G_Appl" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Appl Reestn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_PropoN1" source="CS_Proj_PropoN1"
+         function="sum" precision="8" reset="G_Appl" compute="report"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Appl Propon1" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_Propojh" source="PROPOJH" function="sum"
+         precision="8" reset="G_Appl" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Appl_PropomoN1" source="CS_proj_propomoN1"
+         function="sum" precision="8" reset="G_Appl" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_Proj">
+        <displayInfo x="10.76151" y="2.91703" width="3.87015" height="5.43471"
+        />
+        <dataItem name="ProjCode" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="25" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Projcode">
+          <dataDescriptor expression="pi.icpi"
+           descriptiveExpression="PROJCODE" order="9"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ProjLib" datatype="vchar2" columnOrder="26" width="37"
+         defaultWidth="400000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Projlib" breakOrder="none">
+          <dataDescriptor expression="substr ( pi.ilibel , 1 , 37 )"
+           descriptiveExpression="PROJLIB" order="10" width="37"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_Proj_NotifN" source="NotifN" function="sum"
+         precision="8" reset="G_Proj" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Proj Notifn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Proj_PropomoN" source="PROPOMOJH" function="sum"
+         width="40" precision="38" reset="G_Proj" compute="report"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Proj Resern" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Proj_ArbitN" source="ArbitN" function="sum"
+         precision="8" reset="G_Proj" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Proj Arbitn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Proj_RealcumN" source="RealcumN" function="sum"
+         width="9" precision="7" reset="G_Proj" compute="report"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="40"
+         defaultLabel="Cs Proj Realcumn" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Proj_ReestN" source="ReestN" function="sum"
+         precision="8" reset="G_Proj" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Proj Reestn"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Proj_PropoN1" source="PropoN1" function="sum"
+         precision="8" reset="G_Proj" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="40" defaultLabel="Cs Proj Propon1"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_Proj_Propojh" source="PROPOJH" function="sum"
+         precision="8" reset="G_Proj" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_proj_propomoN1" source="PropomoN1" function="sum"
+         precision="8" reset="G_Proj" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_1">
+        <displayInfo x="15.31162" y="2.19552" width="3.31515" height="7.60512"
+        />
+        <dataItem name="LigBipCode" datatype="vchar2" columnOrder="21"
+         width="4" defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ligbipcode">
+          <dataDescriptor expression="lb.pid"
+           descriptiveExpression="LIGBIPCODE" order="5" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Ptype" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="19" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="32"
+         defaultLabel="Ptype" breakOrder="none">
+          <dataDescriptor expression="lb.typproj"
+           descriptiveExpression="PTYPE" order="3" oracleDatatype="aFixedChar"
+           width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Libelle" datatype="vchar2" columnOrder="22" width="27"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libelle" breakOrder="none">
+          <dataDescriptor expression="substr ( lb.pnom , 1 , 27 )"
+           descriptiveExpression="LIBELLE" order="6" width="27"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CAPayeur" oracleDatatype="number" columnOrder="27"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Capayeur" breakOrder="none">
+          <dataDescriptor expression="lb.codcamo"
+           descriptiveExpression="CAPAYEUR" order="11" oracleDatatype="number"
+           width="22" precision="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="Dpg" oracleDatatype="number" columnOrder="61"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="lb.codsg" descriptiveExpression="DPG"
+           order="12" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHEFPROJET" datatype="vchar2" columnOrder="56"
+         width="12" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="rpad ( r.rnom , 12 )"
+           descriptiveExpression="CHEFPROJET" order="14" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NotifN" oracleDatatype="number" columnOrder="28"
+         width="22" defaultWidth="140000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Notifn" valueIfNull="0"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( budg.bnmont , 0 )"
+           descriptiveExpression="NOTIFN" order="15" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ArbitN" oracleDatatype="number" columnOrder="29"
+         width="22" defaultWidth="140000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Arbitn" valueIfNull="0"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( budg.anmont , 0 )"
+           descriptiveExpression="ARBITN" order="17" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RealcumN" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Realcumn" valueIfNull="0"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( conso.cusag , 0 )"
+           descriptiveExpression="REALCUMN" order="18" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ReestN" oracleDatatype="number" columnOrder="31"
+         width="22" defaultWidth="150000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Reestn" valueIfNull="0"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( budg.reestime , 0 )"
+           descriptiveExpression="REESTN" order="19" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PropoN1" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="140000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Propon1" valueIfNull="0"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( budg1.bpmontme , 0 )"
+           descriptiveExpression="PROPON1" order="20" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPOJH" oracleDatatype="number" columnOrder="57"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         valueIfNull="0" breakOrder="none">
+          <dataDescriptor expression="nvl ( budg.bpmontme , 0 )"
+           descriptiveExpression="PROPOJH" order="21" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PROPOMOJH" oracleDatatype="number" columnOrder="62"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( budg.bpmontmo , 0 )"
+           descriptiveExpression="PROPOMOJH" order="16"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PropomoN1" oracleDatatype="number" columnOrder="63"
+         width="22" defaultWidth="0" defaultHeight="0" columnFlags="32"
+         breakOrder="none">
+          <dataDescriptor expression="nvl ( budg1.bpmontmo , 0 )"
+           descriptiveExpression="PROPOMON1" order="22"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="67" width="3"
+         defaultWidth="0" defaultHeight="0" columnFlags="32" breakOrder="none">
+          <dataDescriptor expression="lb.metier"
+           descriptiveExpression="METIER" order="13"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select clilib 
+from client_mo
+where clicode = :P_PARAM4;
+]]>
+      </select>
+      <displayInfo x="6.45573" y="0.50260" width="2.38125" height="0.60865"/>
+      <group name="G_3">
+        <displayInfo x="9.34548" y="0.44990" width="2.79394" height="1.52797"
+        />
+        <dataItem name="clilib1" datatype="vchar2" columnOrder="76" width="25"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Clilib1">
+          <xmlSettings xmlTag="CLILIB"/>
+          <dataDescriptor expression="clilib" descriptiveExpression="CLILIB"
+           order="1" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <formula name="CF_annee" source="cf_anneeformula" datatype="character"
+     width="20" defaultWidth="200000" defaultHeight="10000" columnFlags="48"
+     defaultLabel="Cf Annee" breakOrder="none">
+      <displayInfo x="1.32302" y="10.21302" width="2.11119" height="0.68771"/>
+    </formula>
+    <formula name="CF_an1" source="cf_an1formula" datatype="character"
+     width="2" defaultWidth="0" defaultHeight="0" columnFlags="48"
+     breakOrder="none">
+      <displayInfo x="1.34938" y="11.35063" width="2.09010" height="0.66135"/>
+    </formula>
+    <summary name="CS_tot_notif" source="CS_Dep_NotifN" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="5.23875" y="10.71563" width="3.88938" height="0.50788"/>
+    </summary>
+    <summary name="CS_tot_propomo" source="CS_Dep_PropomoN" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="5.21240" y="11.50938" width="3.94208" height="0.50788"/>
+    </summary>
+    <summary name="CS_tot_arbit" source="CS_Dep_ArbitN" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="5.21240" y="12.35615" width="3.78333" height="0.50788"/>
+    </summary>
+    <summary name="CS_tot_realcum" source="CS_Dep_RealcumN" function="sum"
+     width="9" precision="7" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="10.05427" y="10.71563" width="3.88938" height="0.58198"
+      />
+    </summary>
+    <summary name="CS_tot_reest" source="CS_Dep_ReestN" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="10.10698" y="11.58875" width="3.94240" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_tot_propoN1" source="CS_Dep_PropoN1" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="10.08063" y="12.46188" width="3.94240" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_tot_propojh" source="CS_Dep_Propojh" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="5.52990" y="13.54677" width="3.25438" height="0.50788"/>
+    </summary>
+    <summary name="CS_tot_propomoN1" source="CS_Dep_PropomoN1" function="sum"
+     precision="8" reset="report" compute="report" defaultWidth="0"
+     defaultHeight="0" columnFlags="40" valueIfNull="0">
+      <displayInfo x="9.97490" y="13.52010" width="3.83635" height="0.63500"/>
+    </summary>
+    <formula name="CF_CLIENT" source="cf_clientformula" datatype="character"
+     width="20" precision="10" defaultWidth="0" defaultHeight="0"
+     columnFlags="16" breakOrder="none">
+      <displayInfo x="1.29635" y="12.46188" width="2.75177" height="0.58198"/>
+    </formula>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="28.69995" height="19.75817">
+      <location x="0.34230" y="0.35874"/>
+      <repeatingFrame name="R_proeta2" source="G_pbreak" printDirection="down"
+       maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.00000" y="0.01829" width="28.56880"
+         height="12.70279"/>
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings lineForegroundColor="white"/>
+        <repeatingFrame name="R_Dep" source="G_Dep" printDirection="down"
+         maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.10573" y="3.77496" width="28.43919"
+           height="6.59681"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings lineForegroundColor="white"/>
+          <frame name="M_2">
+            <geometryInfo x="0.21177" y="3.84597" width="10.97142"
+             height="0.77608"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings lineWidth="1" fillPattern="transparent"
+             fillBackgroundColor="r100g100b50" linePattern="solid"/>
+            <text name="B_5" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.44276" y="4.03727" width="2.52264"
+               height="0.35688"/>
+              <generalLayout verticalElasticity="variable"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings lineForegroundColor="white"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[DEPARTEMENT :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_Depclient_det" source="DepClient" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="3.01222" y="4.03758" width="7.67209"
+               height="0.41734"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+          </frame>
+          <frame name="M_Appl_GRPFR">
+            <geometryInfo x="0.16805" y="4.72963" width="28.35610"
+             height="3.70179"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="firstPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <repeatingFrame name="R_Appl" source="G_Appl"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="0.17642" y="4.79599" width="28.30649"
+               height="3.56474"/>
+              <generalLayout verticalElasticity="variable"/>
+              <visualSettings lineForegroundColor="blue"/>
+              <field name="F_AppliCode" source="AppliCode" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="0.88770" y="5.08589" width="1.17357"
+                 height="0.37145"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout printObjectOnPage="firstPage"
+                 basePrintingOn="enclosingObject"/>
+                <visualSettings lineForegroundColor="white"/>
+              </field>
+              <field name="F_AppliLib" source="AppliLib" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="8" bold="yes"/>
+                <geometryInfo x="2.61906" y="5.08589" width="6.83152"
+                 height="0.37145"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout printObjectOnPage="firstPage"
+                 basePrintingOn="enclosingObject"/>
+                <visualSettings lineForegroundColor="white"/>
+              </field>
+              <field name="F_MOPrincipal" source="MOPrincipal"
+               minWidowLines="1" spacing="0" alignment="left">
+                <font face="Courier New" size="8"/>
+                <geometryInfo x="11.38008" y="5.08589" width="6.28024"
+                 height="0.37145"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout printObjectOnPage="firstPage"
+                 basePrintingOn="enclosingObject"/>
+                <visualSettings lineForegroundColor="white"/>
+              </field>
+              <text name="B_MOPrincipal" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="10.39875" y="5.08589" width="1.64982"
+                 height="0.37145"/>
+                <generalLayout verticalElasticity="variable"/>
+                <advancedLayout printObjectOnPage="firstPage"
+                 basePrintingOn="enclosingObject"/>
+                <visualSettings lineForegroundColor="white"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[MOP:]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_16" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="0.59872" y="5.10232" width="0.31874"
+                 height="0.41889"/>
+                <generalLayout verticalElasticity="variable"/>
+                <visualSettings lineForegroundColor="white"/>
+                <textSegment>
+                  <font face="Courier New" size="8"/>
+                  <string>
+                  <![CDATA[*]]>
+                  </string>
+                </textSegment>
+              </text>
+              <frame name="M_Proj_GRPFR">
+                <geometryInfo x="0.24309" y="5.53858" width="28.19859"
+                 height="2.68108"/>
+                <generalLayout verticalElasticity="variable"/>
+                <visualSettings lineForegroundColor="blue"/>
+                <repeatingFrame name="R_Proj" source="G_Proj"
+                 printDirection="down" minWidowRecords="1" columnMode="no">
+                  <geometryInfo x="0.31812" y="5.57392" width="28.10309"
+                   height="1.58750"/>
+                  <generalLayout verticalElasticity="variable"/>
+                  <visualSettings lineForegroundColor="blue"/>
+                  <frame name="M_1_GRPFR">
+                    <geometryInfo x="0.39315" y="5.60927" width="27.98682"
+                     height="1.44642"/>
+                    <generalLayout verticalElasticity="variable"/>
+                    <visualSettings lineForegroundColor="white"/>
+                    <repeatingFrame name="R_1" source="G_1"
+                     printDirection="down" minWidowRecords="1" columnMode="no"
+                      >
+                      <geometryInfo x="0.49392" y="5.64431" width="27.86528"
+                       height="0.41951"/>
+                      <generalLayout verticalElasticity="variable"/>
+                      <visualSettings lineForegroundColor="white"/>
+                      <field name="F_LigBipCode" source="LigBipCode"
+                       minWidowLines="1" spacing="0" alignment="left">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="0.59965" y="5.66849" width="0.88522"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_Ptype" source="Ptype" minWidowLines="1"
+                       spacing="0" alignment="center">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="1.60114" y="5.66849" width="0.54384"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_Libelle" source="Libelle"
+                       minWidowLines="1" spacing="0" alignment="left">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="3.98642" y="5.66818" width="5.24588"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CAPayeur" source="CAPayeur"
+                       minWidowLines="1" spacing="0" alignment="left">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="2.27335" y="5.67996" width="1.53665"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_NotifN" source="NotifN" minWidowLines="1"
+                       formatMask="NNNGNN0D0" spacing="0" alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="21.43311" y="5.66818" width="1.50471"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_PropomoN" source="PROPOMOJH"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="19.61586" y="5.66880" width="1.51619"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_ArbitN" source="ArbitN" minWidowLines="1"
+                       formatMask="NNNGNN0D0" spacing="0" alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="23.24168" y="5.66973" width="1.51619"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_RealcumN" source="RealcumN"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="14.19417" y="5.66973" width="1.48952"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_ReestN" source="ReestN" minWidowLines="1"
+                       formatMask="NNNGNN0D0" spacing="0" alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="16.01360" y="5.67097" width="1.49975"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_PropoN1" source="PropoN1"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="25.07785" y="5.65113" width="1.49913"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_Chefproj" source="CHEFPROJET"
+                       minWidowLines="1" spacing="0" alignment="left">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="11.33574" y="5.66973" width="2.74681"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_Propojh" source="PROPOJH"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="17.80201" y="5.65113" width="1.49913"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_dpg" source="Dpg" minWidowLines="1"
+                       spacing="0" alignment="left">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="9.31261" y="5.67004" width="1.26783"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_PropoN2" source="PropomoN1"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="26.71031" y="5.65113" width="1.50378"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_metier" source="METIER" minWidowLines="1"
+                       spacing="0" alignment="left">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="10.66323" y="5.67004" width="0.59810"
+                         height="0.37238"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                    </repeatingFrame>
+                    <frame name="M_1_FTR">
+                      <geometryInfo x="0.50726" y="6.13916" width="27.87241"
+                       height="0.74011"/>
+                      <generalLayout verticalElasticity="variable"/>
+                      <advancedLayout printObjectOnPage="firstPage"
+                       basePrintingOn="anchoringObject"/>
+                      <field name="F_ProjCode" source="ProjCode"
+                       minWidowLines="1" spacing="0" alignment="start">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="1.36922" y="6.35527" width="1.03001"
+                         height="0.37114"/>
+                        <advancedLayout printObjectOnPage="allPage"
+                         basePrintingOn="enclosingObject"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_ProjLib" source="ProjLib"
+                       minWidowLines="1" spacing="0" alignment="start">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="2.55023" y="6.35558" width="6.92020"
+                         height="0.37114"/>
+                        <advancedLayout printObjectOnPage="allPage"
+                         basePrintingOn="enclosingObject"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_NotifN" source="CS_Proj_NotifN"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="21.18165" y="6.39031" width="1.73633"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_PropomoN"
+                       source="CS_Proj_PropomoN" minWidowLines="1"
+                       formatMask="NNNGNN0D0" spacing="0" alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="19.36688" y="6.39031" width="1.75493"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_ArbitN" source="CS_Proj_ArbitN"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="22.95550" y="6.39186" width="1.78408"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_RealcumN"
+                       source="CS_Proj_RealcumN" minWidowLines="1"
+                       formatMask="NNNGNN0D0" spacing="0" alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="13.96318" y="6.39186" width="1.71462"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_ReestN" source="CS_Proj_ReestN"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="15.73671" y="6.39186" width="1.75524"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_PropoN1" source="CS_Proj_PropoN1"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="24.79104" y="6.37356" width="1.76485"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <field name="F_CS_Proj_Propojh" source="CS_Proj_Propojh"
+                       minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                       alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="17.55180" y="6.41728" width="1.76330"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <line name="B_2" arrow="none">
+                        <geometryInfo x="14.42951" y="6.24489" width="1.48146"
+                         height="0.00000"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="gray24" linePattern="solid"/>
+                        <points>
+                          <point x="14.42951" y="6.24489"/>
+                          <point x="15.91097" y="6.24489"/>
+                        </points>
+                      </line>
+                      <line name="B_3" arrow="none">
+                        <geometryInfo x="16.14661" y="6.24489" width="1.51712"
+                         height="0.00000"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="gray24" linePattern="solid"/>
+                        <points>
+                          <point x="16.14661" y="6.24489"/>
+                          <point x="17.66373" y="6.24489"/>
+                        </points>
+                      </line>
+                      <line name="B_4" arrow="none">
+                        <geometryInfo x="17.89937" y="6.24489" width="1.51681"
+                         height="0.00000"/>
+                        <visualSettings linePattern="solid"/>
+                        <points>
+                          <point x="17.89937" y="6.24489"/>
+                          <point x="19.41618" y="6.24489"/>
+                        </points>
+                      </line>
+                      <line name="B_6" arrow="none">
+                        <geometryInfo x="19.89181" y="6.24489" width="1.48177"
+                         height="0.00000"/>
+                        <visualSettings linePattern="solid"/>
+                        <points>
+                          <point x="19.89181" y="6.24489"/>
+                          <point x="21.37358" y="6.24489"/>
+                        </points>
+                      </line>
+                      <line name="B_7" arrow="none">
+                        <geometryInfo x="21.58287" y="6.24489" width="1.48177"
+                         height="0.00000"/>
+                        <visualSettings linePattern="solid"/>
+                        <points>
+                          <point x="21.58287" y="6.24489"/>
+                          <point x="23.06464" y="6.24489"/>
+                        </points>
+                      </line>
+                      <line name="B_8" arrow="none">
+                        <geometryInfo x="23.35609" y="6.24489" width="1.48146"
+                         height="0.00000"/>
+                        <visualSettings linePattern="solid"/>
+                        <points>
+                          <point x="23.35609" y="6.24489"/>
+                          <point x="24.83755" y="6.24489"/>
+                        </points>
+                      </line>
+                      <line name="B_9" arrow="none">
+                        <geometryInfo x="25.11413" y="6.24489" width="1.51712"
+                         height="0.00000"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="gray24" linePattern="solid"/>
+                        <points>
+                          <point x="25.11413" y="6.24489"/>
+                          <point x="26.63124" y="6.24489"/>
+                        </points>
+                      </line>
+                      <field name="F_CS_Proj_PropoN2"
+                       source="CS_proj_propomoN1" minWidowLines="1"
+                       formatMask="NNNGNN0D0" spacing="0" alignment="end">
+                        <font face="Courier New" size="8"/>
+                        <geometryInfo x="26.58566" y="6.37356" width="1.66874"
+                         height="0.37114"/>
+                        <visualSettings lineForegroundColor="white"/>
+                      </field>
+                      <line name="B_10" arrow="none">
+                        <geometryInfo x="26.85355" y="6.24489" width="1.51712"
+                         height="0.00000"/>
+                        <visualSettings fillPattern="transparent"
+                         fillBackgroundColor="gray24" linePattern="solid"/>
+                        <points>
+                          <point x="26.85355" y="6.24489"/>
+                          <point x="28.37067" y="6.24489"/>
+                        </points>
+                      </line>
+                    </frame>
+                  </frame>
+                </repeatingFrame>
+                <frame name="M_Proj_FTR">
+                  <geometryInfo x="0.42323" y="7.37474" width="28.01844"
+                   height="0.67035"/>
+                  <generalLayout verticalElasticity="variable"/>
+                  <advancedLayout printObjectOnPage="lastPage"
+                   basePrintingOn="anchoringObject"/>
+                  <visualSettings fillPattern="transparent"
+                   fillBackgroundColor="gray12" lineForegroundColor="white"/>
+                  <field name="F_CS_Appl_NotifN" source="CS_Appl_NotifN"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="21.18196" y="7.53566" width="1.75462"
+                     height="0.37145"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_PropomoN" source="CS_Appl_propomoN"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="19.34642" y="7.53566" width="1.78656"
+                     height="0.37145"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_ArbitN" source="CS_Appl_ArbitN"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="22.99705" y="7.53566" width="1.73726"
+                     height="0.37145"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_RealcumN" source="CS_Appl_RealcumN"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="13.88070" y="7.53535" width="1.78842"
+                     height="0.37145"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_ReestN" source="CS_Appl_ReestN"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="15.71625" y="7.53690" width="1.77540"
+                     height="0.37114"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_PropoN1" source="CS_Appl_PropoN1"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="24.79135" y="7.55396" width="1.78439"
+                     height="0.37114"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <text name="B_13" minWidowLines="1">
+                    <textSettings spacing="0"/>
+                    <geometryInfo x="0.56431" y="7.52977" width="1.32860"
+                     height="0.45207"/>
+                    <visualSettings lineForegroundColor="white"/>
+                    <textSegment>
+                      <font face="Courier New" size="8"/>
+                      <string>
+                      <![CDATA[* TOTAL ]]>
+                      </string>
+                    </textSegment>
+                  </text>
+                  <field name="F_AppliCode3" source="AppliCode"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="1.93849" y="7.53442" width="1.35527"
+                     height="0.36990"/>
+                    <advancedLayout printObjectOnPage="allPage"
+                     basePrintingOn="enclosingObject"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_AppliLib3" source="AppliLib"
+                   minWidowLines="1" spacing="0" alignment="start">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="3.48289" y="7.53969" width="8.50119"
+                     height="0.37145"/>
+                    <advancedLayout printObjectOnPage="allPage"
+                     basePrintingOn="enclosingObject"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_PropoN3" source="CS_Appl_PropomoN1"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="26.60644" y="7.55396" width="1.66781"
+                     height="0.37114"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                  <field name="F_CS_Appl_PropojhN" source="CS_Appl_Propojh"
+                   minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+                   alignment="end">
+                    <font face="Courier New" size="8"/>
+                    <geometryInfo x="17.53133" y="7.53566" width="1.78036"
+                     height="0.37145"/>
+                    <visualSettings lineForegroundColor="white"/>
+                  </field>
+                </frame>
+              </frame>
+            </repeatingFrame>
+          </frame>
+          <frame name="M_Appl_FTR">
+            <geometryInfo x="0.24681" y="8.79419" width="28.27672"
+             height="0.73298"/>
+            <advancedLayout printObjectOnPage="lastPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings lineWidth="1" fillPattern="transparent"
+             fillBackgroundColor="r100g100b50" linePattern="solid"/>
+            <field name="F_CS_Dep_NotifN" source="CS_Dep_NotifN"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="21.18165" y="8.97868" width="1.73695"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_CS_Dep_PropomoN" source="CS_Dep_PropomoN"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="19.34611" y="8.97868" width="1.77571"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_CS_Dep_ArbitN" source="CS_Dep_ArbitN"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="22.95550" y="8.97868" width="1.79121"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_CS_Dep_RealcumN" source="CS_Dep_RealcumN"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="13.86024" y="8.97899" width="1.80485"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_CS_Dep_ReestN" source="CS_Dep_ReestN"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="15.77764" y="8.97868" width="1.71524"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_CS_Dep_PropoN1" source="CS_Dep_PropoN1"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="24.79104" y="8.96038" width="1.80733"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_DepClient3" source="DepClient" minWidowLines="1"
+             spacing="0" alignment="left">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="4.10146" y="8.97744" width="6.46968"
+               height="0.37269"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <field name="F_CS_Dep_Propojh" source="CS_Dep_Propojh"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.51025" y="8.96038" width="1.79183"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+            <text name="B_1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.47780" y="8.97744" width="3.64970"
+               height="0.37269"/>
+              <generalLayout verticalElasticity="variable"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings lineForegroundColor="white"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[TOTAL DEPARTEMENT :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CS_Dep_PropoN2" source="CS_Dep_PropomoN1"
+             minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="26.63651" y="8.96038" width="1.70129"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+          </frame>
+        </repeatingFrame>
+        <frame name="M_Appl_FTR1">
+          <geometryInfo x="0.32866" y="10.44990" width="28.21533"
+           height="1.42441"/>
+          <advancedLayout printObjectOnPage="lastPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings lineWidth="1" fillPattern="transparent"
+           fillBackgroundColor="r100g100b0" linePattern="solid"/>
+          <text name="B_11" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.59283" y="10.91437" width="3.49188"
+             height="0.37269"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="firstPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[TOTAL DIRECTION :]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_Direction" source="P_PARAM6" minWidowLines="1"
+           spacing="0" alignment="left">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="4.06053" y="10.87065" width="1.56952"
+             height="0.37269"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_Tot_RealcumN1" source="CS_tot_realcum"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="13.63545" y="10.97638" width="2.02964"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_NotifN1" source="CS_tot_notif"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="21.16119" y="10.97607" width="1.79834"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_PropomoN1" source="CS_tot_propomo"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="19.38734" y="10.97607" width="1.75338"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_ArbitN1" source="CS_tot_arbit"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="22.95581" y="10.97607" width="1.83183"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_ReestN1" source="CS_tot_reest"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="15.75749" y="10.97607" width="1.81725"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_PropoN4" source="CS_tot_propoN1"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="24.83259" y="10.95778" width="1.80671"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_Propojh1" source="CS_tot_propojh"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="17.61319" y="10.95778" width="1.71338"
+             height="0.41734"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_CS_tot_PropoN3" source="CS_tot_propomoN1"
+           minWidowLines="1" formatMask="NNNGNN0D0" spacing="0"
+           alignment="end">
+            <font face="Courier New" size="8" bold="yes"/>
+            <geometryInfo x="26.66845" y="10.95778" width="1.73075"
+             height="0.37269"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <repeatingFrame name="R_2" source="G_3" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="5.63376" y="10.90414" width="2.22746"
+             height="0.45455"/>
+            <visualSettings lineForegroundColor="white"/>
+            <field name="F_1" source="clilib1" minWidowLines="1" spacing="0"
+             alignment="left">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="5.77794" y="10.90445" width="1.95957"
+               height="0.37269"/>
+              <visualSettings lineForegroundColor="white"/>
+            </field>
+          </repeatingFrame>
+        </frame>
+        <text name="B_Date2" minWidowLines="1">
+          <textSettings spacing="single"/>
+          <geometryInfo x="0.30789" y="0.40463" width="5.67345"
+           height="0.39688"/>
+          <generalLayout horizontalElasticity="expand"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[DATE : &F_DATE2 ]]>
+            </string>
+          </textSegment>
+        </text>
+        <frame name="M_1">
+          <geometryInfo x="8.76505" y="0.17642" width="8.77373"
+           height="1.94035"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings lineWidth="2" fillBackgroundColor="black"
+           linePattern="solid"/>
+          <text name="B_21" minWidowLines="1">
+            <textSettings justify="center" spacing="single"/>
+            <geometryInfo x="8.82737" y="0.41269" width="8.25004"
+             height="0.44121"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="8" bold="yes"/>
+              <string>
+              <![CDATA[Etat BIP : Suivi en JxH par Client (&F_Client)]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <field name="F_2" source="PhysicalPageNumber" visible="no"
+         minWidowLines="1" formatMask="NNNNN" spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="23.42772" y="1.41139" width="0.95622"
+           height="0.48710"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings lineForegroundColor="white"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="R_proeta2"/>
+        </field>
+        <field name="F_3" source="TotalPages" visible="no" minWidowLines="1"
+         formatMask="NNNNN" spacing="0" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="21.91711" y="1.41201" width="1.21884"
+           height="0.53361"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings lineForegroundColor="white"/>
+          <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+           incrementBy="1" resetAt="R_proeta2"/>
+        </field>
+        <text name="B_26" minWidowLines="1">
+          <textSettings justify="left" spacing="single"/>
+          <geometryInfo x="22.82620" y="0.39005" width="3.50738"
+           height="0.60306"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Page : &F_2 / &F_3]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_Client" source="CF_CLIENT" visible="no"
+         minWidowLines="1" formatMask="NNNNN" spacing="0" alignment="left">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="18.66336" y="0.65546" width="2.06468"
+           height="0.53361"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings lineForegroundColor="white"/>
+        </field>
+        <text name="B_NomEtat2" minWidowLines="1">
+          <textSettings spacing="single"/>
+          <geometryInfo x="0.30913" y="0.76771" width="8.12633"
+           height="0.39688"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[ETAT : Etat Suivi JH]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_DATE2" source="CurrentDate" visible="no"
+         minWidowLines="1" formatMask="DD/MM/YYYY HH24:MI" spacing="single"
+         alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="6.74812" y="1.52859" width="1.32550"
+           height="0.42013"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+        </field>
+        <text name="B_23" minWidowLines="1">
+          <textSettings justify="left" spacing="single"/>
+          <geometryInfo x="0.31750" y="1.49727" width="1.91461"
+           height="0.55687"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[Situation:]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_22" minWidowLines="1">
+          <textSettings justify="center" spacing="single"/>
+          <geometryInfo x="8.82737" y="1.49541" width="8.72009"
+           height="0.37052"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[DETAIL PAR REFERENTIEL APPLICATION/PROJET]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_4" source="CF_annee" minWidowLines="1" spacing="single"
+         alignment="left">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="2.32637" y="1.49665" width="3.93774"
+           height="0.37982"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+        </field>
+        <frame name="M_4">
+          <geometryInfo x="0.21177" y="2.71580" width="28.33936"
+           height="0.98723"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray24" lineForegroundColor="white"/>
+          <text name="B_Libelle1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.55625" y="2.83456" width="0.89018"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[Pro
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NotifN2" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="19.57462" y="2.83549" width="1.64889"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[PropCli
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ReserN1" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="21.51094" y="2.83549" width="1.55494"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[NOTIF.
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ArbitN1" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="23.13874" y="2.83580" width="1.65292"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[ARBIT.
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ReestN2" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="16.08522" y="2.83518" width="1.53076"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[REEST.
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PropoN1" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="24.52594" y="2.81688" width="2.11925"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[PropFour
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE1
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ConsoN1" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="13.84598" y="2.82184" width="1.83462"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[CONSO.
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NotifN1" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="2.28761" y="2.82897" width="1.32178"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[CA Pay.
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_ANNEE1" source="P_ANNEE1" visible="no"
+           minWidowLines="1" spacing="0" alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="7.51706" y="2.86866" width="1.52022"
+             height="0.41300"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <field name="F_ANNEE" source="P_ANNEE" visible="no"
+           minWidowLines="1" spacing="0" alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="5.83592" y="2.83518" width="1.52053"
+             height="0.41300"/>
+            <visualSettings lineForegroundColor="white"/>
+          </field>
+          <text name="B_chefproj" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="11.32458" y="2.83921" width="2.54899"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[Chef Projet
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PropoN2" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="17.31150" y="2.81688" width="2.11925"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[PropFour
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_Libelle3" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.46937" y="2.83673" width="0.69019"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[Ty
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NotifN3" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="3.90147" y="2.83115" width="2.88075"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[Libellé
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NotifN4" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="9.30641" y="2.82897" width="1.32178"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[DPG
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_PropoN3" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="26.20398" y="2.81688" width="2.11925"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[PropCli
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[&F_ANNEE1
+]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NotifN5" minWidowLines="1">
+            <textSettings justify="left" spacing="0"/>
+            <geometryInfo x="10.66757" y="2.84386" width="0.65763"
+             height="0.84987"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings lineForegroundColor="white"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[MET
+]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.97160" y="0.40587" width="4.12688" height="0.56400"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.12483" y="1.25233" width="5.82011" height="0.45827"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.53386" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_GLOBAL1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_GLOBAL1" source="P_GLOBAL" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+   l_annee0   VARCHAR2(10);
+   l_annee1   VARCHAR2(10);
+   l_dir      VARCHAR2(10);
+   p_perimcli VARCHAR2(1000);
+	 l_perimcli   VARCHAR2(1000);	  
+	 p_where_perim VARCHAR2(1000); 
+	 l_menu VARCHAR2(25); 
+	  
+begin
+   -- ================================================
+   -- Determiner l'annee de traitement N et N+1
+   -- ================================================
+   l_annee0 := to_char(add_months(sysdate,-1),'YYYY');
+   l_annee1 := to_char(to_number(l_annee0,'FM9999') + 1,'FM9999');
+   :P_ANNEE := l_annee0;
+   :P_ANNEE1 := l_annee1;
+   :p_where :=             ' and budg.annee(+) = ' || l_annee0 ;
+   :p_where := :p_where || ' and budg1.annee(+) = ' || l_annee1 ;
+   :p_where := :p_where || ' and conso.annee(+) = '  || l_annee0 ;
+	 
+ 	  /*CMA Fiche 1176 09/05/2011 le perimo est différent si l'utilisateur est dans le menu Client*/
+		l_menu := pack_global.lire_menutil(:P_global);
+		
+		if('MO'=l_menu)then
+			l_perimcli := pack_global.lire_perimcli(:P_global);
+		else
+			l_perimcli := pack_global.lire_perimo(:P_global);
+		end if;
+	 
+   -- 02/03/2001 : gestion des habilitations => direction ou département actif
+    BEGIN
+	   	select 'dir' into l_dir
+				from client_mo
+				where clicode=:p_param4;
+    EXCEPTION
+			WHEN NO_DATA_FOUND THEN   --départment
+				l_dir :='dpt'; 
+    END;
+
+		if length(l_perimcli) != 0 then	  	
+	  p_where_perim := ' AND (';
+		while (length(l_perimcli) != 0) loop 
+	   if (instr(l_perimcli,',') != 0) then
+	      p_perimcli := substr(l_perimcli,0,instr(l_perimcli,',')-1);
+	      l_perimcli := substr(l_perimcli,instr(l_perimcli,',')+1);
+	      p_where_perim := p_where_perim || 'DECODE('''||:P_PARAM6||''', ''OPER'', lb.clicode_oper, lb.clicode)  in (select clicode from vue_clicode_perimo where INSTR('''||p_perimcli||''',BDCLICODE)>0) or ';
+	   else
+	      p_perimcli := l_perimcli;
+	      l_perimcli := '';
+	      p_where_perim := p_where_perim || 'DECODE('''||:P_PARAM6||''', ''OPER'', lb.clicode_oper, lb.clicode)  in (select clicode from vue_clicode_perimo where INSTR('''||p_perimcli||''',BDCLICODE)>0) ';
+	   end if;  
+		END LOOP;
+	   p_where_perim := p_where_perim || ')';
+	  end if;
+		--srw.message(1,p_where_perim);  
+		:p_where := :p_where || p_where_perim;
+  -- IF NVL(LENGTH(:P_PARAM4), 0)!= 0  THEN
+	--:p_where := :p_where || ' and rtrim(ltrim(cm.clicode)) = ''' || rtrim(ltrim(:p_param4)) ||  '''' ;
+   --END IF;
+    --srw.message(1,:P_where);  
+  return (TRUE);
+end;
+]]>
+      </textSource>
+    </function>
+    <function name="cf_anneeformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_AnneeFormula return VARCHAR2 is
+   l_mois_annee  VARCHAR2(20);
+begin
+   -- ====================================================================
+   -- Determiner l'anne de traitement N qui est l'annee du mois precedent
+   -- ====================================================================
+   l_mois_annee := to_char(add_months(sysdate,-1),'MONTH YYYY');
+   return l_mois_annee;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_an1formula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_an1Formula return VARCHAR2 is
+   l_annee0  VARCHAR2(10);
+   l_annee1  VARCHAR2(10);
+begin
+   -- ================================================
+   -- Determiner l'annee de traitement N et N+1
+   -- ================================================
+   l_annee0 := to_char(add_months(sysdate,-1),'YYYY');
+   l_annee1 := substr(to_char(to_number(l_annee0,'FM9999') + 1,'FM9999'),3,2);
+   return l_annee1;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_clientformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_CLIENTFormula return Char is
+begin
+  IF :P_PARAM6 = 'OPER'Then
+  	return 'Opérationnel';
+  Else
+  	return 'Payeur';
+  End If;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

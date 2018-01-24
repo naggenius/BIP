@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="coutstmat" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="COUTSTMAT" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <comment>
+  <![CDATA[Edition desc outs standert par année et par plage de dpg  des logiciels et des frais d'environnement]]>
+  </comment>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+     cout.annee ANNEE  ,
+     cout.matricule MATRICULE , 
+     cout.branche BRANCHE, 
+     cout.dpg  DPG ,
+     cout.metier METIER ,
+     cout.pid  PID ,   
+    cout.libelle  LIBELLE 
+from
+   couts_std_rejets cout
+&P_WHERE
+order by  annee,dpg,metier,pid ]]>
+      </select>
+      <displayInfo x="1.53125" y="0.76038" width="0.69995" height="0.19995"/>
+      <group name="G_cout">
+        <displayInfo x="1.58215" y="2.80396" width="1.11926" height="1.45605"
+        />
+        <dataItem name="MATRICULE" datatype="vchar2" columnOrder="19"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Matricule">
+          <dataDescriptor expression="cout.matricule"
+           descriptiveExpression="MATRICULE" order="2" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="BRANCHE" datatype="vchar2" columnOrder="20" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Branche">
+          <dataDescriptor expression="cout.branche"
+           descriptiveExpression="BRANCHE" order="3" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ANNEE" oracleDatatype="number" columnOrder="14"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="cout.annee"
+           descriptiveExpression="ANNEE" order="1" oracleDatatype="number"
+           width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG" oracleDatatype="number" columnOrder="15"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg">
+          <dataDescriptor expression="cout.dpg" descriptiveExpression="DPG"
+           order="4" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="16" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor expression="cout.metier"
+           descriptiveExpression="METIER" order="5" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="PID" datatype="vchar2" columnOrder="17" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Pid">
+          <dataDescriptor expression="cout.pid" descriptiveExpression="PID"
+           order="6" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="18"
+         width="500" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle">
+          <dataDescriptor expression="cout.libelle"
+           descriptiveExpression="LIBELLE" order="7" width="500"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers gridSpacing="0.25"/>
+  <section name="header">
+    <body>
+      <location x="0.12500" y="0.18750"/>
+    </body>
+  </section>
+  <section name="main">
+    <body>
+      <location x="0.43750" y="0.37500"/>
+      <field name="F_DATE1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="0" alignment="left">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="0.48962" y="0.18750" width="1.00000" height="0.18750"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+      </field>
+      <frame name="M_1">
+        <geometryInfo x="1.83337" y="0.06250" width="4.29163" height="0.38538"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineWidth="2" fillBackgroundColor="r88g88b100"
+         linePattern="solid" lineForegroundColor="r0g50b75"/>
+        <text name="B_1" minWidowLines="1">
+          <textSettings justify="center" spacing="0"/>
+          <geometryInfo x="2.11462" y="0.17712" width="3.78125"
+           height="0.22913"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <textSegment>
+            <font face="Arial" size="9" bold="yes"/>
+            <string>
+            <![CDATA[LISTE DES ANOMALIES POUR LES ETATS EN KE ]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <text name="B_3" minWidowLines="1">
+        <textSettings justify="right" spacing="single"/>
+        <geometryInfo x="5.07288" y="0.16663" width="2.39746" height="0.21875"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Page : &<PageNumber> / &<TotalPages> ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.12500" y="0.19788" width="0.50000" height="0.18750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings lineForegroundColor="white"/>
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_prenom1" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="0.35413" y="1.25000" width="0.44800" height="0.21875"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[Année]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_tel1" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="5.28125" y="1.26038" width="1.41663" height="0.17712"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[Libellé]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_prenom2" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.71875" y="1.26038" width="0.44788" height="0.19800"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[DPG]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_prenom3" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="2.82288" y="1.25000" width="0.85425" height="0.17712"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[Code ligne BIP]]>
+          </string>
+        </textSegment>
+      </text>
+      <repeatingFrame name="R_cout" source="G_cout" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.18750" y="1.50073" width="7.28125" height="0.34302"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <field name="F_METIER" source="METIER" minWidowLines="1"
+         formatMask="NNNGNN0" spacing="0" alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="2.20837" y="1.55212" width="0.51038"
+           height="0.20825"/>
+        </field>
+        <field name="F_PID" source="PID" minWidowLines="1"
+         formatMask="NNNGNN0" spacing="0" alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="2.80212" y="1.54163" width="0.82288"
+           height="0.21875"/>
+        </field>
+        <field name="F_LIBELLE" source="LIBELLE" minWidowLines="1"
+         formatMask="NNNGNN0" spacing="0" alignment="start">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="4.50000" y="1.54163" width="2.91663"
+           height="0.25000"/>
+        </field>
+        <field name="F_ANNEE" source="ANNEE" minWidowLines="1"
+         formatMask="NNNN" spacing="0" alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="0.29163" y="1.56250" width="0.60425"
+           height="0.18750"/>
+        </field>
+        <field name="DPG" source="DPG" minWidowLines="1" formatMask="NNNNNNN"
+         spacing="0" alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="1.58337" y="1.56250" width="0.54163"
+           height="0.19788"/>
+        </field>
+        <field name="BRANCHE" source="BRANCHE" minWidowLines="1"
+         formatMask="NNNNNNN" spacing="0" alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="0.98962" y="1.55212" width="0.52075"
+           height="0.19788"/>
+        </field>
+        <field name="F_PID1" source="MATRICULE" minWidowLines="1"
+         formatMask="NNNGNN0" spacing="0" alignment="center">
+          <font face="Arial" size="9"/>
+          <geometryInfo x="3.69788" y="1.55212" width="0.75000"
+           height="0.19788"/>
+        </field>
+      </repeatingFrame>
+      <text name="B_prenom4" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="2.25000" y="1.26038" width="0.54163" height="0.19800"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[METIER]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_prenom5" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="1.01038" y="1.26038" width="0.51050" height="0.19800"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[Branche]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_prenom6" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="3.82288" y="1.23962" width="0.57300" height="0.21875"
+        />
+        <textSegment>
+          <font face="Arial" size="9" bold="yes" textColor="r0g50b75"/>
+          <string>
+          <![CDATA[Matricule]]>
+          </string>
+        </textSegment>
+      </text>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+	l_fin_requete VARCHAR2(200) ;
+ 
+begin
+
+  :p_where := ' ' ; 
+  
+  IF ( :P_PARAM6 IS NOT NULL AND  LENGTH(:P_PARAM6)>0  )  then  
+      	:p_where := 'where annee = ' || :P_PARAM6 ;
+  END IF;
+  
+   --  :P_NUMSEQ := pack_cout_standard_ke.insert_tmp_edition_etatke(:P_PARAM6); 
+  
+   --  --srw.message(1,:P_where); 
+    
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  
+  
+   DELETE FROM TMP_COUTKE_EDITION WHERE NUMSEQ = :P_NUMSEQ ; 
+  
+   COMMIT ; 
+  
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

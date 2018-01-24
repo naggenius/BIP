@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_fact_apsept" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings
+   xmlTag="&apos;Num_facture&apos;;&apos;Dpg_facture&apos;;&apos;Montant_facture_HT&apos;;&apos;Montant_facture_TTC&apos;;&apos;TVA_facture&apos;;&apos;Mois_a_comptabiliser&apos;;&apos;Code_comptable&apos;;&apos;Num_contrat&apos;;&apos;ID_ressource&apos;;&apos;Mois_de_prestation&apos;;&apos;Montant_HT&apos;;&apos;Date_facture&apos;;&apos;Date_env-enr-comptable&apos;;&apos;Date_de_saisie&apos;;&apos;Date_de_MAJ&apos;;&apos;Date_accord&apos;;&apos;Date_reception&apos;"
+   xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_perime" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT rpad(fact.numfact,16,' ') numfact,
+	rpad(nvl(to_char(fact.fdeppole),' '),8,' ') fdeppole,
+
+                DECODE ( fact.typfact , 'A' , rpad(nvl(to_char( (fact.fmontht * -1 ) ,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),13,' ')  ,
+                rpad(nvl(to_char(fact.fmontht,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),13,' ') )       fmontht,
+
+                DECODE( fact.typfact , 'A' , rpad(nvl(to_char( (fact.fmontttc*-1) ,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),13,' ') ,
+	rpad(nvl(to_char(fact.fmontttc,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),13,' ') )   fmontttc,
+
+	rpad(nvl(to_char(fact.ftva,'FM999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),10,' ') ftva,
+	rpad(nvl(to_char(fact.fmoiacompta,'DD/MM/YYYY'),' '),11,' ') fmoiacompta,
+	rpad(SUBSTR(nvl(fact.fcodcompta,' '),1,7),8,' ') fcodcompta,
+	rpad(nvl(fact.numcont,' '),16,' ') numcont,
+	rpad(nvl(to_char(lf.ident),' '),6,' ') ident,
+	rpad(nvl(to_char(lf.lmoisprest,'DD/MM/YYYY'),' '),11,' ') lmoisprest,
+
+                DECODE( fact.typfact , 'A' , 
+                  rpad(nvl(to_char(lf.lmontht * -1 ,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),13,' ')  ,
+                  rpad(nvl(to_char(lf.lmontht   ,'FM999999990D00','NLS_NUMERIC_CHARACTERS='',.,'),to_char(0,'FM0D00','NLS_NUMERIC_CHARACTERS='',.,')),13,' ')   
+                    )  lmontht,
+
+	rpad(to_char(fact.datfact,'DD/MM/YYYY'),11,' ') datfact,
+	rpad(nvl(to_char(fact.fenrcompta,'DD/MM/YYYY'),' '),11,' ') fenrcompta,
+	rpad(nvl(to_char(fact.fdatsai,'DD/MM/YYYY'),' '),11,' ') fdatsai,
+	rpad(nvl(to_char(fact.fdatmaj,'DD/MM/YYYY'),' '),11,' ') fdatmaj,
+	rpad(nvl(to_char(fact.faccsec,'DD/MM/YYYY'),' '),11,' ') faccsec,
+	rpad(nvl(to_char(fact.fdatrecep,'DD/MM/YYYY'),' '),11,' ') fdatrecep,
+
+    rpad(nvl(to_char(fact.typfact),' '),2,' ')    ftypfact,
+  	rpad(nvl(to_char(fact.fnumasn),' '),10,' ') 	ffnumasn,
+  	rpad(nvl(to_char(fact.fregcompta),' '),10,' ') 	ffregcompta,
+  	rpad(nvl(to_char(fact.fenvsec),' '),10,' ') 	ffenvsec,
+  	rpad(nvl(to_char(fact.fmodreglt),' '),3,' ') 	ffmodreglt,
+  	rpad(nvl(to_char(fact.fsocfour),' '),11,' ') 	ffsocfour,
+  	rpad(nvl(to_char(fact.fcoduser),' '),16,' ') 	ffcoduser,
+  	rpad(nvl(to_char(fact.llibanalyt),' '),44,' ') 	fllibanalyt,
+  	rpad(nvl(to_char(fact.fstatut1),' '),3,' ') 	ffstatut1,
+  	rpad(nvl(to_char(fact.fstatut2),' '),3,' ') 	ffstatut2,
+  	rpad(nvl(to_char(fact.fprovsdff1),' '),2,' ') 	ffprovsdff1,
+  	rpad(nvl(to_char(fact.fprovsdff2),' '),2,' ') 	ffprovsdff2,
+  	rpad(nvl(to_char(fact.fprovsegl1),' '),2,' ') 	ffprovsegl1,
+  	rpad(nvl(to_char(fact.fprovsegl2),' '),2,' ') 	ffprovsegl2,
+  	rpad(nvl(to_char(lf.lnum),' '),3,' ') 		flnum,
+  	rpad(nvl(to_char(fact.cav),' '),5,' ') 		fcav,
+  	rpad(nvl(to_char(lf.pid),' '),5,' ') 		fpid,
+  	rpad(nvl(to_char(lf.lprest),' '),4,' ') 		flprest,
+  	rpad(nvl(to_char(fact.fordrecheq),' '),33,' ') 	ffordrecheq,
+  	rpad(nvl(to_char(fact.fnom),' '),33,' ') 		ffnom,
+  	rpad(nvl(to_char(fact.fadresse1),' '),33,' ') 	ffadresse1, 
+  	rpad(nvl(to_char(fact.fadresse2),' '),33,' ') 	ffadresse2,
+  	rpad(nvl(to_char(fact.fadresse3),' '),33,' ') 	ffadresse3,
+  	rpad(nvl(to_char(fact.fcodepost),' '),6,' ') 	ffcodepost,
+  	rpad(nvl(to_char(fact.fburdistr),' '),27,' ') 	ffburdistr,
+  	rpad(nvl(to_char(lf.lcodcompta),' '),12,' ') 	flcodcompta,
+  	rpad(nvl(to_char(ca.clibrca),' '),17,' ') 	flibca,
+	rpad(nvl(to_char(ca2.codcamo),' '),7,' ')	dc_libca_fact,
+  	rpad(nvl(to_char(ca3.codcamo),' '),7,' ')	dc_libca_contrat,
+	rpad(nvl(to_char(s.soclib),' '),26,' ')	dc_soclib,
+	rpad(nvl(to_char(s.soccode),' '),5,' ')	dc_soccode
+	
+FROM     datdebex,
+	vue_dpg_perime VDP,
+	ligne_fact lf,
+	 facture fact,
+	 struct_info st,
+  	centre_activite ca,
+	contrat c,
+    struct_info st2,
+    centre_activite ca2,
+    struct_info st3,
+    centre_activite ca3,
+	societe s
+  	
+WHERE   fact.numfact = lf.numfact
+AND	fact.socfact = lf.socfact
+AND	fact.datfact = lf.datfact
+AND	fact.typfact = lf.typfact
+AND 	fact.fdeppole = st.codsg
+AND 	st.centractiv = ca.codcamo
+  and c.numcont=fact.numcont
+  and c.soccont=fact.soccont
+  and c.cav=fact.cav
+  
+  and c.codsg=st2.codsg
+  and st2.centractiv=ca2.codcamo
+  and lf.ldeppole=st3.codsg
+  and st3.centractiv=ca3.codcamo
+  
+  and s.soccode=fact.socfact
+AND	fact.socfact <> 'SG..'
+AND	trunc(fact.fdatrecep,'YEAR') = datdebex.datdebex
+AND     fact.fdeppole =VDP.codsg
+AND   INSTR(:P_PERIME, VDP.codbddpg) > 0
+
+
+;]]>
+      </select>
+      <displayInfo x="0.17712" y="0.00000" width="1.70825" height="0.32288"/>
+      <group name="G_numfact">
+        <displayInfo x="2.43237" y="0.30945" width="5.09070" height="8.63379"
+        />
+        <dataItem name="numfact" datatype="vchar2" columnOrder="12" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Numfact" breakOrder="none">
+          <xmlSettings xmlTag="Num_facture"/>
+          <dataDescriptor
+           expression="rpad ( fact.numfact , 16 , &apos; &apos; )"
+           descriptiveExpression="NUMFACT" order="1" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ftypfact" datatype="vchar2" columnOrder="30" width="2"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Typfact" breakOrder="none">
+          <xmlSettings xmlTag="Type_facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.typfact ) , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="FTYPFACT" order="18" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fmontht" datatype="vchar2" columnOrder="14" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Fmontht" breakOrder="none">
+          <xmlSettings xmlTag="Montant_facture_HT"/>
+          <dataDescriptor
+           expression="DECODE ( fact.typfact , &apos;A&apos; , rpad ( nvl ( to_char ( ( fact.fmontht * - 1 ) , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 13 , &apos; &apos; ) , rpad ( nvl ( to_char ( fact.fmontht , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 13 , &apos; &apos; ) )"
+           descriptiveExpression="FMONTHT" order="3" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fmontttc" datatype="vchar2" columnOrder="15"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Fmontttc" breakOrder="none">
+          <xmlSettings xmlTag="Montant_facture_TTC"/>
+          <dataDescriptor
+           expression="DECODE ( fact.typfact , &apos;A&apos; , rpad ( nvl ( to_char ( ( fact.fmontttc * - 1 ) , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 13 , &apos; &apos; ) , rpad ( nvl ( to_char ( fact.fmontttc , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 13 , &apos; &apos; ) )"
+           descriptiveExpression="FMONTTTC" order="4" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="flnum" datatype="vchar2" columnOrder="44" width="3"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Lnum" breakOrder="none">
+          <xmlSettings xmlTag="Num_ligne"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( lf.lnum ) , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="FLNUM" order="32" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lmontht" datatype="vchar2" columnOrder="22" width="13"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Lmontht" breakOrder="none">
+          <xmlSettings xmlTag="Montant_HT"/>
+          <dataDescriptor
+           expression="DECODE ( fact.typfact , &apos;A&apos; , rpad ( nvl ( to_char ( lf.lmontht * - 1 , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 13 , &apos; &apos; ) , rpad ( nvl ( to_char ( lf.lmontht , &apos;FM999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 13 , &apos; &apos; ) )"
+           descriptiveExpression="LMONTHT" order="11" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fdeppole" datatype="vchar2" columnOrder="13" width="8"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Fdeppole" breakOrder="none">
+          <xmlSettings xmlTag="Dpg_facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fdeppole ) , &apos; &apos; ) , 8 , &apos; &apos; )"
+           descriptiveExpression="FDEPPOLE" order="2" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_libca_fact" datatype="vchar2" columnOrder="57"
+         width="7" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Libca2" breakOrder="none">
+          <xmlSettings xmlTag="CA ligne facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ca2.codcamo ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="DC_LIBCA_FACT" order="45" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="flibca" datatype="vchar2" columnOrder="56" width="17"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Libca" breakOrder="none">
+          <xmlSettings xmlTag="Centre_activite_Facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ca.clibrca ) , &apos; &apos; ) , 17 , &apos; &apos; )"
+           descriptiveExpression="FLIBCA" order="44" width="17"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="flcodcompta" datatype="vchar2" columnOrder="55"
+         width="12" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Lcodcompta" breakOrder="none">
+          <xmlSettings xmlTag="Code_comptable_Ligne_Facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( lf.lcodcompta ) , &apos; &apos; ) , 12 , &apos; &apos; )"
+           descriptiveExpression="FLCODCOMPTA" order="43" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ftva" datatype="vchar2" columnOrder="16"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ftva" breakOrder="none">
+          <xmlSettings xmlTag="TVA_facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.ftva , &apos;FM999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) , to_char ( 0 , &apos;FM0D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.,&apos; ) ) , 10 , &apos; &apos; )"
+           descriptiveExpression="FTVA" order="5" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fmoiacompta" datatype="vchar2" columnOrder="17"
+         width="11" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Fmoiacompta" breakOrder="none">
+          <xmlSettings xmlTag="Mois_a_comptabiliser"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fmoiacompta , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FMOIACOMPTA" order="6" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datfact" datatype="vchar2" columnOrder="23" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Datfact" breakOrder="none">
+          <xmlSettings xmlTag="Date_facture"/>
+          <dataDescriptor
+           expression="rpad ( to_char ( fact.datfact , &apos;DD/MM/YYYY&apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="DATFACT" order="12" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fdatsai" datatype="vchar2" columnOrder="25" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Fdatsai" breakOrder="none">
+          <xmlSettings xmlTag="Date_de_saisie"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fdatsai , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FDATSAI" order="14" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fdatmaj" datatype="vchar2" columnOrder="26" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Fdatmaj" breakOrder="none">
+          <xmlSettings xmlTag="Date_de_MAJ"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fdatmaj , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FDATMAJ" order="15" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="faccsec" datatype="vchar2" columnOrder="27" width="11"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Faccsec" breakOrder="none">
+          <xmlSettings xmlTag="Date_accord"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.faccsec , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FACCSEC" order="16" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fdatrecep" datatype="vchar2" columnOrder="28"
+         width="11" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Fdatrecep" breakOrder="none">
+          <xmlSettings xmlTag="Date_reception"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fdatrecep , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FDATRECEP" order="17" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fenrcompta" datatype="vchar2" columnOrder="24"
+         width="11" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Fenrcompta" breakOrder="none">
+          <xmlSettings xmlTag="Date_env-enr-comptable"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fenrcompta , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FENRCOMPTA" order="13" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffnumasn" datatype="vchar2" columnOrder="31"
+         defaultWidth="110000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fnumasn" breakOrder="none">
+          <xmlSettings xmlTag="Num_asn"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fnumasn ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="FFNUMASN" order="19" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffregcompta" datatype="vchar2" columnOrder="32"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fregcompta" breakOrder="none">
+          <xmlSettings xmlTag="Date_regu_compta"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fregcompta ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="FFREGCOMPTA" order="20" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffenvsec" datatype="vchar2" columnOrder="33"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fenvsec" breakOrder="none">
+          <xmlSettings xmlTag="Date_reglement"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fenvsec ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="FFENVSEC" order="21" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffmodreglt" datatype="vchar2" columnOrder="34"
+         width="3" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fmodreglt" breakOrder="none">
+          <xmlSettings xmlTag="Mode_reglement"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fmodreglt ) , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="FFMODREGLT" order="22" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffcoduser" datatype="vchar2" columnOrder="36"
+         width="16" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fcoduser" breakOrder="none">
+          <xmlSettings xmlTag="Droit_facture"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fcoduser ) , &apos; &apos; ) , 16 , &apos; &apos; )"
+           descriptiveExpression="FFCODUSER" order="24" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffstatut1" datatype="vchar2" columnOrder="38"
+         width="3" defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fstatut1" breakOrder="none">
+          <xmlSettings xmlTag="Statut_cs1"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fstatut1 ) , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="FFSTATUT1" order="26" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffstatut2" datatype="vchar2" columnOrder="39"
+         width="3" defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fstatut2" breakOrder="none">
+          <xmlSettings xmlTag="Statut_cs2"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fstatut2 ) , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="FFSTATUT2" order="27" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="numcont" datatype="vchar2" columnOrder="19" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Numcont" breakOrder="none">
+          <xmlSettings xmlTag="Num_contrat"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( fact.numcont , &apos; &apos; ) , 16 , &apos; &apos; )"
+           descriptiveExpression="NUMCONT" order="8" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fcav" datatype="vchar2" columnOrder="45" width="5"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Cav" breakOrder="none">
+          <xmlSettings xmlTag="Num_avenant"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.cav ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="FCAV" order="33" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="20" width="6"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ident" breakOrder="none">
+          <xmlSettings xmlTag="ID_ressource"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( lf.ident ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="IDENT" order="9" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_libca_contrat" datatype="vchar2" columnOrder="58"
+         width="7" defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Libca3" breakOrder="none">
+          <xmlSettings xmlTag="CA DPG contrat"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( ca3.codcamo ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="DC_LIBCA_CONTRAT" order="46" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="lmoisprest" datatype="vchar2" columnOrder="21"
+         width="11" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Lmoisprest" breakOrder="none">
+          <xmlSettings xmlTag="Mois_de_prestation"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( lf.lmoisprest , &apos;DD/MM/YYYY&apos; ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="LMOISPREST" order="10" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fcodcompta" datatype="vchar2" columnOrder="18"
+         width="8" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Fcodcompta" breakOrder="none">
+          <xmlSettings xmlTag="Code_comptable_Contrat"/>
+          <dataDescriptor
+           expression="rpad ( SUBSTR ( nvl ( fact.fcodcompta , &apos; &apos; ) , 1 , 7 ) , 8 , &apos; &apos; )"
+           descriptiveExpression="FCODCOMPTA" order="7" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_soccode" datatype="vchar2" columnOrder="60"
+         width="5" defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Soccode" breakOrder="none">
+          <xmlSettings xmlTag="Soccode"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( s.soccode ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="DC_SOCCODE" order="48" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_soclib" datatype="vchar2" columnOrder="59"
+         width="26" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Soclib" breakOrder="none">
+          <xmlSettings xmlTag="Nom_societe"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( s.soclib ) , &apos; &apos; ) , 26 , &apos; &apos; )"
+           descriptiveExpression="DC_SOCLIB" order="47" width="26"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffsocfour" datatype="vchar2" columnOrder="35"
+         width="11" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fsocfour" breakOrder="none">
+          <xmlSettings xmlTag="Identifiant_agence"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fsocfour ) , &apos; &apos; ) , 11 , &apos; &apos; )"
+           descriptiveExpression="FFSOCFOUR" order="23" width="11"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fllibanalyt" datatype="vchar2" columnOrder="37"
+         width="44" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Llibanalyt" breakOrder="none">
+          <xmlSettings xmlTag="Libelle_analytique"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.llibanalyt ) , &apos; &apos; ) , 44 , &apos; &apos; )"
+           descriptiveExpression="FLLIBANALYT" order="25" width="44"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffprovsdff1" datatype="vchar2" columnOrder="40"
+         width="2" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fprovsdff1" breakOrder="none">
+          <xmlSettings xmlTag="Provenance_sdff1"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fprovsdff1 ) , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="FFPROVSDFF1" order="28" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffprovsdff2" datatype="vchar2" columnOrder="41"
+         width="2" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fprovsdff2" breakOrder="none">
+          <xmlSettings xmlTag="Provenance_sdff2"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fprovsdff2 ) , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="FFPROVSDFF2" order="29" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffprovsegl1" datatype="vchar2" columnOrder="42"
+         width="2" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fprovsegl1" breakOrder="none">
+          <xmlSettings xmlTag="Provenance_segl_cs1"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fprovsegl1 ) , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="FFPROVSEGL1" order="30" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffprovsegl2" datatype="vchar2" columnOrder="43"
+         width="2" defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fprovsegl2" breakOrder="none">
+          <xmlSettings xmlTag="Provenance_segl_cs2"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fprovsegl2 ) , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="FFPROVSEGL2" order="31" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="fpid" datatype="vchar2" columnOrder="46" width="5"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Pid" breakOrder="none">
+          <xmlSettings xmlTag="Identifiant_ligne_bip"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( lf.pid ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="FPID" order="34" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="flprest" datatype="vchar2" columnOrder="47" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Lprest" breakOrder="none">
+          <xmlSettings xmlTag="Code_prestation"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( lf.lprest ) , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="FLPREST" order="35" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffordrecheq" datatype="vchar2" columnOrder="48"
+         width="33" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fordrecheq" breakOrder="none">
+          <xmlSettings xmlTag="Ordre_cheque"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fordrecheq ) , &apos; &apos; ) , 33 , &apos; &apos; )"
+           descriptiveExpression="FFORDRECHEQ" order="36" width="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffnom" datatype="vchar2" columnOrder="49" width="33"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fnom" breakOrder="none">
+          <xmlSettings xmlTag="Nom"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fnom ) , &apos; &apos; ) , 33 , &apos; &apos; )"
+           descriptiveExpression="FFNOM" order="37" width="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffadresse1" datatype="vchar2" columnOrder="50"
+         width="33" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fadresse1" breakOrder="none">
+          <xmlSettings xmlTag="Adresse1"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fadresse1 ) , &apos; &apos; ) , 33 , &apos; &apos; )"
+           descriptiveExpression="FFADRESSE1" order="38" width="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffadresse2" datatype="vchar2" columnOrder="51"
+         width="33" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fadresse2" breakOrder="none">
+          <xmlSettings xmlTag="Adresse2"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fadresse2 ) , &apos; &apos; ) , 33 , &apos; &apos; )"
+           descriptiveExpression="FFADRESSE2" order="39" width="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffadresse3" datatype="vchar2" columnOrder="52"
+         width="33" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fadresse3" breakOrder="none">
+          <xmlSettings xmlTag="Adresse3"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fadresse3 ) , &apos; &apos; ) , 33 , &apos; &apos; )"
+           descriptiveExpression="FFADRESSE3" order="40" width="33"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffcodepost" datatype="vchar2" columnOrder="53"
+         width="6" defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Fcodepost" breakOrder="none">
+          <xmlSettings xmlTag="Code_postal"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fcodepost ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="FFCODEPOST" order="41" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ffburdistr" datatype="vchar2" columnOrder="54"
+         width="27" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Fburdistr" breakOrder="none">
+          <xmlSettings xmlTag="Bureau_distributeur"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( fact.fburdistr ) , &apos; &apos; ) , 27 , &apos; &apos; )"
+           descriptiveExpression="FFBURDISTR" order="42" width="27"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header">
+    <body>
+      <text name="B_1" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.12500" y="0.18750" width="7.31250" height="1.00000"
+        />
+        <textSegment>
+          <font face="Courier New" size="10"/>
+          <string>
+          <![CDATA['Num_facture';'Dpg_facture';'Montant_facture_HT';'Montant_facture_TTC';'TVA_facture';'Mois_a_comptabiliser';'Code_comptable';'Num_contrat';'ID_ressource';'Mois_de_prestation';'Montant_HT';'Date_facture';'Date_env-enr-comptable';'Date_de_saisie';'Date_de_MAJ';'Date_accord';'Date_reception']]>
+          </string>
+        </textSegment>
+      </text>
+    </body>
+  </section>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_numfact" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.06250" width="7.31250" height="0.81250"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_numfact" source="numfact" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.12500" y="0.12500" width="0.56250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fdeppole" source="fdeppole" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.75000" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fmontht" source="fmontht" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.12500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fmontttc" source="fmontttc" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.56250" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_ftva" source="ftva" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.00000" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fmoiacompta" source="fmoiacompta" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.37500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fcodcompta" source="fcodcompta" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.81250" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_numcont" source="numcont" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="3.18750" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_ident" source="ident" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="3.56250" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_lmoisprest" source="lmoisprest" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="3.93750" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_lmontht" source="lmontht" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.43750" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_datfact" source="datfact" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.93750" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fenrcompta" source="fenrcompta" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.37500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fdatsai" source="fdatsai" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="5.81250" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fdatmaj" source="fdatmaj" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.25000" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_faccsec" source="faccsec" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="6.62500" y="0.12500" width="0.31250"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_fdatrecep" source="fdatrecep" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="7.00000" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+  :P_PERIME:=PACK_GLOBAL.LIRE_PERIME(:P_GLOBAL);
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

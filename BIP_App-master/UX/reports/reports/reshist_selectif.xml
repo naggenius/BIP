@@ -1,0 +1,4215 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="reshist_selectif" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="RESHIST_SELECTIF" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="512"
+     precision="10" label="P Param1" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" label="P Param2" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" label="P Param3" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" label="P Param4" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" label="P Param5" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" label="P Param6 (MM/AAAA)" defaultWidth="0"
+     defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="10"
+     precision="10" label="P Param7 (Code DPG)" defaultWidth="0"
+     defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="5"
+     precision="10" label="P Param8 (Ident. Ress.)" defaultWidth="0"
+     defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" label="P Param9" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM10" datatype="character" width="100"
+     precision="10" label="P Param10" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     precision="10" label="P Where" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM11" datatype="character" width="100"
+     precision="10" label="P Param11" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM12" datatype="character" width="100"
+     precision="10" label="P Param12" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     initialValue="A173818;dirmenu;15456;0161612;01 ;01300160000;010000000,020000000,030000000,050000000,090000000;74;09078,17208,15678,11185,10209,03150;1"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE_1" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" initialValue="c:\donnees\liste.txt"
+     display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="Preview" display="yes"/>
+    <dataSource name="Q_ANNEE_TRAITEE">
+      <select>
+      <![CDATA[--   P_PARAM6 : Mois de traitement au format 'MM/AAAA'
+--  (Si année est vide, prendre Année dans datdebex!!!)
+SELECT
+      DECODE( SUBSTR(:P_PARAM6, 4, 4),
+                       NULL, TO_CHAR(datdebex, 'YYYY'),
+                      SUBSTR(:P_PARAM6, 4, 4)
+            ) dc_annee_traitee
+FROM 
+      datdebex]]>
+      </select>
+      <displayInfo x="20.26667" y="0.21177" width="3.73063" height="1.45510"/>
+      <group name="G_ANNEE_TRAITEE">
+        <displayInfo x="20.62944" y="2.61906" width="3.63265" height="1.09389"
+        />
+        <dataItem name="dc_annee_traitee" datatype="vchar2" columnOrder="26"
+         width="75" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dc Annee Traitee">
+          <dataDescriptor
+           expression="DECODE( SUBSTR(:P_PARAM6, 4, 4),                        NULL, TO_CHAR(datdebex, &apos;YYYY&apos;),                       SUBSTR(:P_PARAM6, 4, 4)             )"
+           descriptiveExpression="DC_ANNEE_TRAITEE" order="1" width="75"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_NBJOUR_OUVRE">
+      <select>
+      <![CDATA[--------------------------------------------------------------------------------
+--
+-- Chargement sous SQL/PLUSS : @G:\Honore\Dvlp\QueryReport\NbjOuvre.sql;
+-- Query  secondaire Etat $RESHIST
+-- Dans le cadre de $RESHIST: Détermination du nombre de jours ouvrés 
+-- de chacun des mois de l'année traitée
+--
+-- RAPPEL : PARAMETRES DU REPORT $RESHIST :
+--          P_PARAM6 : Mois de traitement 'MM/AAAA' (Si année est vide, prendre Année dans datdebex!!!)
+--          P_PARAM7 : Code DPG (CHAR(7) )
+--          P_PARAM8 : Code de la ressource NUMBER(5) dans la base Oracle
+-- 
+--------------------------------------------------------------------------------
+SELECT
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '01') dc_nbjour_ouvre_01,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '02') dc_nbjour_ouvre_02,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '03') dc_nbjour_ouvre_03,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '04') dc_nbjour_ouvre_04,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '05') dc_nbjour_ouvre_05,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '06') dc_nbjour_ouvre_06,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '07') dc_nbjour_ouvre_07,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '08') dc_nbjour_ouvre_08,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '09') dc_nbjour_ouvre_09,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '10') dc_nbjour_ouvre_10,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '11') dc_nbjour_ouvre_11,
+	pack_verif_reshist.f_nbjour_ouvre( SUBSTR(:P_PARAM6, 4, 4), '12') dc_nbjour_ouvre_12
+FROM   
+	dual]]>
+      </select>
+      <displayInfo x="14.41958" y="0.15875" width="4.33927" height="1.58750"/>
+      <group name="G_NBJOUR_OUVRE">
+        <displayInfo x="16.43559" y="4.65708" width="4.65119" height="6.30287"
+        />
+        <dataItem name="dc_nbjour_ouvre_01" oracleDatatype="number"
+         columnOrder="27" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dc Nbjour Ouvre 01">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;01&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_01" order="1"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_02" oracleDatatype="number"
+         columnOrder="28" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 02" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;02&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_02" order="2"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_03" oracleDatatype="number"
+         columnOrder="29" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 03" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;03&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_03" order="3"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_04" oracleDatatype="number"
+         columnOrder="30" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 04" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;04&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_04" order="4"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_05" oracleDatatype="number"
+         columnOrder="31" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 05" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;05&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_05" order="5"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_06" oracleDatatype="number"
+         columnOrder="32" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 06" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;06&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_06" order="6"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_07" oracleDatatype="number"
+         columnOrder="33" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 07" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;07&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_07" order="7"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_08" oracleDatatype="number"
+         columnOrder="34" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 08" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;08&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_08" order="8"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_09" oracleDatatype="number"
+         columnOrder="35" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 09" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;09&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_09" order="9"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_10" oracleDatatype="number"
+         columnOrder="36" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 10" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;10&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_10" order="10"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_11" oracleDatatype="number"
+         columnOrder="37" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 11" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;11&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_11" order="11"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nbjour_ouvre_12" oracleDatatype="number"
+         columnOrder="38" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Nbjour Ouvre 12" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_nbjour_ouvre ( SUBSTR ( : P_PARAM6 , 4 , 4 ) , &apos;12&apos; )"
+           descriptiveExpression="DC_NBJOUR_OUVRE_12" order="12"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_RESHIST">
+      <select>
+      <![CDATA[--------------------------------------------------------------------------------
+-- @G:\Honore\Dvlp\QueryReport\Reshist.sql; 
+-- Query  Etat $RESHIST
+-- Historique des Consommés des ressources
+-- PARAMETRES DU REPORT :
+--          P_PARAM6 : Mois de traitement 'MM/AAAA' (Si année est vide, prendre Année dans datdebex!!!)
+--          P_PARAM7 : Code DPG (CHAR(7) )
+--          P_PARAM8 : Code de la ressource NUMBER(5) dans la base 
+--DECODE( LEAST( bip.adatestatut, ADD_MONTHS(bex.cmensuelle, -1) ),
+--		  bip.adatestatut, bip.astatut,
+--		  ' '	
+--      )                                             
+--------------------------------------------------------------------------------
+(SELECT
+      pro.divsecgrou   dc_coddpg,
+      pro.tires        dc_tires,
+      pro.pid          dc_codproj,
+      NVL(pro.aist, ' ') dc_soustache,
+      NVL(to_number(lb.typproj),0) dc_type,
+      'avec' dc_test_conso,
+      MAX(pro.rnom)    dc_nomres,  
+      MAX(decode(pro.aistty,'FF',pro.factpno,pro.pnom))    dc_nomproj, 
+      MAX(str.sigdep)  dc_sigdep,
+      MAX(str.sigpole) dc_sigpole,
+      MAX(str.libdsg)    dc_libdsg,
+	---------------------------------------------------------------------------------
+	-- Consommations de la ressource par mois
+	---------------------------------------------------------------------------------
+DECODE( LEAST( '01', SUBSTR(:P_PARAM6, 1, 2) ),'01', pack_verif_reshist.f_conso_ress('01', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_01,
+DECODE( LEAST( '02', SUBSTR(:P_PARAM6, 1, 2) ),'02', pack_verif_reshist.f_conso_ress('02', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_02,
+DECODE( LEAST( '03', SUBSTR(:P_PARAM6, 1, 2) ),'03', pack_verif_reshist.f_conso_ress('03', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_03,
+DECODE( LEAST( '04', SUBSTR(:P_PARAM6, 1, 2) ),'04', pack_verif_reshist.f_conso_ress('04', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_04,
+DECODE( LEAST( '05', SUBSTR(:P_PARAM6, 1, 2) ),'05', pack_verif_reshist.f_conso_ress('05', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_05,
+DECODE( LEAST( '06', SUBSTR(:P_PARAM6, 1, 2) ),'06', pack_verif_reshist.f_conso_ress('06', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_06,
+DECODE( LEAST( '07', SUBSTR(:P_PARAM6, 1, 2) ),'07', pack_verif_reshist.f_conso_ress('07', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_07,
+DECODE( LEAST( '08', SUBSTR(:P_PARAM6, 1, 2) ),'08', pack_verif_reshist.f_conso_ress('08', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_08,
+DECODE( LEAST( '09', SUBSTR(:P_PARAM6, 1, 2) ),'09', pack_verif_reshist.f_conso_ress('09', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_09,
+DECODE( LEAST( '10', SUBSTR(:P_PARAM6, 1, 2) ),'10', pack_verif_reshist.f_conso_ress('10', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_10,
+DECODE( LEAST( '11', SUBSTR(:P_PARAM6, 1, 2) ),'11', pack_verif_reshist.f_conso_ress('11', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_11,
+DECODE( LEAST( '12', SUBSTR(:P_PARAM6, 1, 2) ),'12', pack_verif_reshist.f_conso_ress('12', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires, pro.pid, MAX(pro.aist)),0) dc_conso_12,
+pack_verif_reshist.f_societe_ress( :P_Param6,pro.tires)  dc_societe,
+DECODE( LEAST( '01', SUBSTR(:P_PARAM6, 1, 2) ),'01', pack_verif_reshist.f_conso_abs('01', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_01,
+DECODE( LEAST( '02', SUBSTR(:P_PARAM6, 1, 2) ),'02', pack_verif_reshist.f_conso_abs('02', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_02,
+DECODE( LEAST( '03', SUBSTR(:P_PARAM6, 1, 2) ),'03', pack_verif_reshist.f_conso_abs('03', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_03,
+DECODE( LEAST( '04', SUBSTR(:P_PARAM6, 1, 2) ),'04', pack_verif_reshist.f_conso_abs('04', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_04,
+DECODE( LEAST( '05', SUBSTR(:P_PARAM6, 1, 2) ),'05', pack_verif_reshist.f_conso_abs('05', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_05,
+DECODE( LEAST( '06', SUBSTR(:P_PARAM6, 1, 2) ),'06', pack_verif_reshist.f_conso_abs('06', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_06,
+DECODE( LEAST( '07', SUBSTR(:P_PARAM6, 1, 2) ),'07', pack_verif_reshist.f_conso_abs('07', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_07,
+DECODE( LEAST( '08', SUBSTR(:P_PARAM6, 1, 2) ),'08', pack_verif_reshist.f_conso_abs('08', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_08,
+DECODE( LEAST( '09', SUBSTR(:P_PARAM6, 1, 2) ),'09', pack_verif_reshist.f_conso_abs('09', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_09,
+DECODE( LEAST( '10', SUBSTR(:P_PARAM6, 1, 2) ),'10', pack_verif_reshist.f_conso_abs('10', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_10,
+DECODE( LEAST( '11', SUBSTR(:P_PARAM6, 1, 2) ),'11', pack_verif_reshist.f_conso_abs('11', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_11,
+DECODE( LEAST( '12', SUBSTR(:P_PARAM6, 1, 2) ),'12', pack_verif_reshist.f_conso_abs('12', SUBSTR(:P_PARAM6, 4, 4), pro.divsecgrou, pro.tires,pro.pid,  MAX(pro.aist)),0) dc_abs_12
+FROM
+      	struct_info str,
+	datdebex    bex,
+                ligne_bip lb,
+	proplus     pro
+WHERE
+     	--------------------------------------------------------------
+     	-- Jointure avec struct_info pour avoir les libellés DPG
+     	--------------------------------------------------------------
+     	pro.divsecgrou = str.codsg (+) 
+                ---------------------------------------------------------------
+                -- jointure avec ligne_bip pour avoir le type du projet
+               --------------------------------------------------------------------
+                AND pro.pid=lb.pid
+     	--------------------------------------------------------------
+     	-- Restriction suivant Parametres du report
+     	--------------------------------------------------------------
+	&P_WHERE
+GROUP BY
+      pro.divsecgrou,
+      pro.tires,
+      pro.pid,
+      NVL(pro.aist, ' '),
+      NVL(to_number(lb.typproj),0)
+)
+UNION
+(SELECT
+      situ.codsg   dc_coddpg,
+      situ.ident        dc_tires,
+      ''          dc_codproj,
+      '' dc_soustache,
+      0 dc_type,
+      'sans' dc_test_conso,
+      MAX(res.rnom)    dc_nomres,  
+      ''    dc_nomproj, 
+      MAX(str.sigdep)  dc_sigdep,
+      MAX(str.sigpole) dc_sigpole,
+      MAX(str.libdsg)    dc_libdsg,
+	---------------------------------------------------------------------------------
+	-- Ressources sans consommé
+	---------------------------------------------------------------------------------
+0 dc_conso_01,
+0 dc_conso_02,
+0 dc_conso_03,
+0 dc_conso_04,
+0 dc_conso_05,
+0 dc_conso_06,
+0 dc_conso_07,
+0 dc_conso_08,
+0 dc_conso_09,
+0 dc_conso_10,
+0 dc_conso_11,
+0 dc_conso_12,
+pack_verif_reshist.f_societe_ress( :P_Param6,situ.ident)  dc_societe,
+0 dc_abs_01,
+0 dc_abs_02,
+0 dc_abs_03,
+0 dc_abs_04,
+0 dc_abs_05,
+0 dc_abs_06,
+0 dc_abs_07,
+0 dc_abs_08,
+0 dc_abs_09,
+0 dc_abs_10,
+0 dc_abs_1,
+0 dc_abs_12
+FROM
+      	struct_info str,
+	datdebex    bex,
+        ressource res,
+        situ_ress situ
+WHERE
+     	--------------------------------------------------------------
+     	-- Jointure avec struct_info pour avoir les libellés DPG
+     	--------------------------------------------------------------
+        situ.codsg = str.codsg (+) 
+        AND situ.ident NOT IN (select p.tires from proplus p where p.tires=situ.ident and to_number(to_char(p.cdeb,'yyyy'))=to_number(SUBSTR(:P_PARAM6, 4, 4)) )
+        AND situ.ident=res.ident
+        --------------------------------------------------------------
+     	-- Restriction suivant Parametres du report
+     	--------------------------------------------------------------
+	&P_WHERE_1
+GROUP BY
+      situ.codsg,
+      situ.ident
+)
+ORDER BY 7,8,1,5,2,3,4]]>
+      </select>
+      <displayInfo x="1.77292" y="0.07938" width="4.92125" height="1.56115"/>
+      <group name="G_DPG">
+        <displayInfo x="9.58267" y="0.00000" width="4.09587" height="2.83021"
+        />
+        <dataItem name="dc_sigdep" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="57" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dc Sigdep">
+          <dataDescriptor expression="MAX ( str.sigdep )"
+           descriptiveExpression="DC_SIGDEP" order="9"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_sigpole" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="58" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dc Sigpole">
+          <dataDescriptor expression="MAX ( str.sigpole )"
+           descriptiveExpression="DC_SIGPOLE" order="10"
+           oracleDatatype="aFixedChar" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_coddpg" oracleDatatype="number" columnOrder="39"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dc Coddpg">
+          <dataDescriptor expression="pro.divsecgrou"
+           descriptiveExpression="DC_CODDPG" order="1" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_libdsg" datatype="vchar2" columnOrder="59"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dc Libdsg">
+          <dataDescriptor expression="MAX ( str.libdsg )"
+           descriptiveExpression="DC_LIBDSG" order="11" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_societe" datatype="vchar2" columnOrder="60"
+         width="4000" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Dc Societe" breakOrder="none">
+          <dataDescriptor
+           expression="pack_verif_reshist.f_societe_ress ( : P_Param6 , pro.tires )"
+           descriptiveExpression="DC_SOCIETE" order="24" width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_RESSOURCE">
+        <displayInfo x="0.37610" y="2.04329" width="5.76244" height="13.68227"
+        />
+        <dataItem name="dc_nomres" datatype="vchar2" columnOrder="43"
+         width="30" defaultWidth="300000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dc Nomres">
+          <dataDescriptor expression="MAX ( pro.rnom )"
+           descriptiveExpression="DC_NOMRES" order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_tires" oracleDatatype="number" columnOrder="40"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Dc Tires">
+          <dataDescriptor expression="pro.tires"
+           descriptiveExpression="DC_TIRES" order="2" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_01" oracleDatatype="number" columnOrder="61"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 01" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;01&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;01&apos; , pack_verif_reshist.f_conso_abs ( &apos;01&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_01" order="25"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_02" oracleDatatype="number" columnOrder="62"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 02" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;02&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;02&apos; , pack_verif_reshist.f_conso_abs ( &apos;02&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_02" order="26"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_03" oracleDatatype="number" columnOrder="63"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 03" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;03&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;03&apos; , pack_verif_reshist.f_conso_abs ( &apos;03&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_03" order="27"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_04" oracleDatatype="number" columnOrder="64"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 04" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;04&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;04&apos; , pack_verif_reshist.f_conso_abs ( &apos;04&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_04" order="28"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_05" oracleDatatype="number" columnOrder="65"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 05" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;05&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;05&apos; , pack_verif_reshist.f_conso_abs ( &apos;05&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_05" order="29"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_06" oracleDatatype="number" columnOrder="66"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 06" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;06&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;06&apos; , pack_verif_reshist.f_conso_abs ( &apos;06&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_06" order="30"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_07" oracleDatatype="number" columnOrder="67"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 07" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;07&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;07&apos; , pack_verif_reshist.f_conso_abs ( &apos;07&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_07" order="31"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_08" oracleDatatype="number" columnOrder="68"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 08" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;08&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;08&apos; , pack_verif_reshist.f_conso_abs ( &apos;08&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_08" order="32"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_09" oracleDatatype="number" columnOrder="69"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 09" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;09&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;09&apos; , pack_verif_reshist.f_conso_abs ( &apos;09&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_09" order="33"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_10" oracleDatatype="number" columnOrder="70"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 10" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;10&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;10&apos; , pack_verif_reshist.f_conso_abs ( &apos;10&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_10" order="34"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_11" oracleDatatype="number" columnOrder="71"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 11" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;11&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;11&apos; , pack_verif_reshist.f_conso_abs ( &apos;11&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_11" order="35"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_abs_12" oracleDatatype="number" columnOrder="72"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Abs 12" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;12&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;12&apos; , pack_verif_reshist.f_conso_abs ( &apos;12&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_ABS_12" order="36"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_TOT_RESS_CONSO_01" source="dc_conso_01"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 01">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_02" source="dc_conso_02"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 02">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_03" source="dc_conso_03"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 03">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_04" source="dc_conso_04"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 04">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_05" source="dc_conso_05"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 05">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_06" source="dc_conso_06"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 06">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_07" source="dc_conso_07"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 07">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_08" source="dc_conso_08"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 08">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_09" source="dc_conso_09"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 09">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_10" source="dc_conso_10"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 10">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_11" source="dc_conso_11"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 11">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_TOT_RESS_CONSO_12" source="dc_conso_12"
+         function="sum" width="40" precision="38" reset="G_RESSOURCE"
+         compute="report" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="40" defaultLabel="Cs Tot Ress Conso 12">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <formula name="CF_TOT_ABS_FACT" source="cf_tot_abs_factformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_TOT_ABS" source="cf_tot_absformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_SUM_TOT_RESS_CONSO"
+         source="cf_sum_tot_ress_consoformula" datatype="number" width="12"
+         precision="10" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="48" defaultLabel="Cf Sum Tot Ress Conso"
+         breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <dataItem name="dc_test_conso" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="74" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Test Conso" breakOrder="none">
+          <dataDescriptor expression="&apos;avec&apos;"
+           descriptiveExpression="DC_TEST_CONSO" order="6"
+           oracleDatatype="aFixedChar" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_ABS_FACT_12" source="cf_abs_fact_12formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_11" source="cf_abs_fact_11formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_10" source="cf_abs_fact_10formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_09" source="cf_abs_fact_09formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_08" source="cf_abs_fact_08formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_07" source="cf_abs_fact_07formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_06" source="cf_abs_fact_06formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_05" source="cf_abs_fact_05formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_04" source="cf_abs_fact_04formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_03" source="cf_abs_fact_03formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_02" source="cf_abs_fact_02formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_ABS_FACT_01" source="cf_abs_fact_01formula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <summary name="CS_2" source="CS_1" function="sum" width="12"
+         precision="10" reset="G_RESSOURCE" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="40" defaultLabel="Cs 2">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_PROJET">
+        <displayInfo x="4.05340" y="17.01850" width="3.83139" height="1.52797"
+        />
+        <dataItem name="dc_codproj" datatype="vchar2" columnOrder="41"
+         width="4" defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Dc Codproj">
+          <dataDescriptor expression="pro.pid"
+           descriptiveExpression="DC_CODPROJ" order="3" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_1" source="CF_TOT_SOUS_TACHE" function="sum"
+         width="12" precision="10" reset="G_PROJET" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="40"
+         defaultLabel="Cs 1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_SOUS_TACHE">
+        <displayInfo x="8.28694" y="11.77417" width="4.70421" height="7.17104"
+        />
+        <dataItem name="dc_soustache" datatype="vchar2" columnOrder="42"
+         width="6" defaultWidth="60000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Dc Soustache">
+          <dataDescriptor expression="NVL ( pro.aist , &apos; &apos; )"
+           descriptiveExpression="DC_SOUSTACHE" order="4" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_type" oracleDatatype="number" columnOrder="73"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dc Type" breakOrder="none">
+          <dataDescriptor expression="NVL ( to_number ( lb.typproj ) , 0 )"
+           descriptiveExpression="DC_TYPE" order="5" oracleDatatype="number"
+           width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_nomproj" datatype="vchar2" columnOrder="44"
+         width="30" defaultWidth="300000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Nomproj" breakOrder="none">
+          <dataDescriptor
+           expression="MAX ( decode ( pro.aistty , &apos;FF&apos; , pro.factpno , pro.pnom ) )"
+           descriptiveExpression="DC_NOMPROJ" order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_01" oracleDatatype="number" columnOrder="45"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 01" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;01&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;01&apos; , pack_verif_reshist.f_conso_ress ( &apos;01&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_01" order="12"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_02" oracleDatatype="number" columnOrder="46"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 02" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;02&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;02&apos; , pack_verif_reshist.f_conso_ress ( &apos;02&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_02" order="13"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_03" oracleDatatype="number" columnOrder="47"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 03" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;03&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;03&apos; , pack_verif_reshist.f_conso_ress ( &apos;03&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_03" order="14"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_04" oracleDatatype="number" columnOrder="48"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 04" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;04&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;04&apos; , pack_verif_reshist.f_conso_ress ( &apos;04&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_04" order="15"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_05" oracleDatatype="number" columnOrder="49"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 05" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;05&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;05&apos; , pack_verif_reshist.f_conso_ress ( &apos;05&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_05" order="16"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_06" oracleDatatype="number" columnOrder="50"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 06" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;06&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;06&apos; , pack_verif_reshist.f_conso_ress ( &apos;06&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_06" order="17"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_07" oracleDatatype="number" columnOrder="51"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 07" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;07&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;07&apos; , pack_verif_reshist.f_conso_ress ( &apos;07&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_07" order="18"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_08" oracleDatatype="number" columnOrder="52"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 08" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;08&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;08&apos; , pack_verif_reshist.f_conso_ress ( &apos;08&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_08" order="19"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_09" oracleDatatype="number" columnOrder="53"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 09" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;09&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;09&apos; , pack_verif_reshist.f_conso_ress ( &apos;09&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_09" order="20"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_10" oracleDatatype="number" columnOrder="54"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 10" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;10&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;10&apos; , pack_verif_reshist.f_conso_ress ( &apos;10&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_10" order="21"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_11" oracleDatatype="number" columnOrder="55"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 11" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;11&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;11&apos; , pack_verif_reshist.f_conso_ress ( &apos;11&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_11" order="22"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dc_conso_12" oracleDatatype="number" columnOrder="56"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Dc Conso 12" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( LEAST ( &apos;12&apos; , SUBSTR ( : P_PARAM6 , 1 , 2 ) ) , &apos;12&apos; , pack_verif_reshist.f_conso_ress ( &apos;12&apos; , SUBSTR ( : P_PARAM6 , 4 , 4 ) , pro.divsecgrou , pro.tires , pro.pid , MAX ( pro.aist ) ) , 0 )"
+           descriptiveExpression="DC_CONSO_12" order="23"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_TOT_SOUS_TACHE" source="cf_tot_sous_tacheformula"
+         datatype="number" width="12" precision="10" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="48"
+         defaultLabel="Cf Tot Sous Tache" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+    </dataSource>
+    <summary name="CS_TOT_GEN_O1" source="dc_conso_01" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O1">
+      <displayInfo x="13.22927" y="10.84802" width="4.15385" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O2" source="dc_conso_02" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O2">
+      <displayInfo x="13.23919" y="11.58875" width="3.64970" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O3" source="dc_conso_03" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O3">
+      <displayInfo x="13.33655" y="12.38250" width="3.64970" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O4" source="dc_conso_04" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O4">
+      <displayInfo x="13.52383" y="13.17625" width="3.64970" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O5" source="dc_conso_05" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O5">
+      <displayInfo x="13.52383" y="13.89063" width="3.64970" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O6" source="dc_conso_06" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O6">
+      <displayInfo x="13.52414" y="14.76375" width="3.64970" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O7" source="dc_conso_07" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O7">
+      <displayInfo x="13.59762" y="15.45177" width="3.64970" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O8" source="dc_conso_08" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O8">
+      <displayInfo x="13.70552" y="16.29823" width="3.22771" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_O9" source="dc_conso_09" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen O9">
+      <displayInfo x="19.51540" y="10.92708" width="3.22771" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_10" source="dc_conso_10" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen 10">
+      <displayInfo x="19.68345" y="12.01198" width="3.22771" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_11" source="dc_conso_11" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen 11">
+      <displayInfo x="19.78174" y="13.12323" width="3.22771" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN_12" source="dc_conso_12" function="sum"
+     width="40" precision="38" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen 12">
+      <displayInfo x="19.78174" y="14.02271" width="3.22771" height="0.50788"
+      />
+    </summary>
+    <summary name="CS_TOT_GEN" source="CF_TOT_SOUS_TACHE" function="sum"
+     width="12" precision="10" reset="report" compute="report"
+     defaultWidth="0" defaultHeight="0" columnFlags="40"
+     defaultLabel="Cs Tot Gen">
+      <displayInfo x="19.81119" y="15.16063" width="3.22771" height="0.50788"
+      />
+    </summary>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="8" gridSpacing="0.5"/>
+  <section name="header" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.69989" height="20.99996">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996" widthInChar="180"
+   heightInChar="60">
+    <body width="29.13311" height="17.95766">
+      <location x="0.50012" y="2.04236"/>
+      <repeatingFrame name="R_DPG" source="G_DPG" printDirection="down"
+       maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06201" y="0.00000" width="29.00691"
+         height="5.73112"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_NBJOUR_OUVRE" source="G_NBJOUR_OUVRE"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.16495" y="0.00000" width="28.37470"
+           height="2.10065"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="enclosingObject"/>
+          <frame name="M_MOIS">
+            <geometryInfo x="8.57994" y="1.22535" width="19.75879"
+             height="0.87530"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r75g100b88"/>
+            <text name="B_dc_nbjour_ouvre_1" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="10.19070" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[FEVR]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_2" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="11.68394" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[MARS]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_3" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="22.30965" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[OCTO]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_4" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="13.15455" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[AVRI]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_5" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="14.64934" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[MAI]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[---]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_6" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="25.43783" y="1.27775" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[DECE]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_7" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="16.13607" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[JUIN]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_8" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="23.88257" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[NOVE]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_9" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="17.59862" y="1.27744" width="0.97854"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[JUIL]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_12" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="27.03680" y="1.27744" width="1.12024"
+               height="0.82290"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[TOTAL]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[-----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_11" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="20.74137" y="1.26690" width="0.97854"
+               height="0.82445"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[SEPT]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_13" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="8.74489" y="1.29046" width="0.93080"
+               height="0.79933"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[JANV]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_dc_nbjour_ouvre_14" minWidowLines="1">
+              <textSettings justify="right" spacing="0"/>
+              <geometryInfo x="19.17278" y="1.29046" width="0.97854"
+               height="0.79933"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[AOUT]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[----]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <frame name="M_NBJ_OUVRE">
+            <geometryInfo x="0.24743" y="0.52555" width="28.04883"
+             height="0.52493"/>
+            <field name="F_dc_nbjour_ouvre_01" source="dc_nbjour_ouvre_01"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="8.33189" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_02" source="dc_nbjour_ouvre_02"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="9.81739" y="0.70042" width="1.32023"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_03" source="dc_nbjour_ouvre_03"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="11.30257" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_04" source="dc_nbjour_ouvre_04"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="12.78744" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_05" source="dc_nbjour_ouvre_05"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.27231" y="0.70042" width="1.31806"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_06" source="dc_nbjour_ouvre_06"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="15.75749" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_07" source="dc_nbjour_ouvre_07"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="17.24236" y="0.70042" width="1.31496"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_08" source="dc_nbjour_ouvre_08"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="18.80939" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_09" source="dc_nbjour_ouvre_09"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="20.37612" y="0.70042" width="1.31744"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_10" source="dc_nbjour_ouvre_10"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="21.94378" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_11" source="dc_nbjour_ouvre_11"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="23.51174" y="0.70042" width="1.32054"
+               height="0.35006"/>
+            </field>
+            <field name="F_dc_nbjour_ouvre_12" source="dc_nbjour_ouvre_12"
+             minWidowLines="1" formatMask="N0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="25.08002" y="0.70042" width="1.31992"
+               height="0.35006"/>
+            </field>
+            <text name="B_1" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="0.31068" y="0.71096" width="4.92838"
+               height="0.33889"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[NOMBRE  DE JOURS OUVRES :]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <frame name="M_2">
+            <geometryInfo x="0.24743" y="0.04372" width="12.47800"
+             height="0.43904"/>
+            <generalLayout horizontalElasticity="variable"/>
+            <text name="B_4" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="0.28990" y="0.13271" width="10.10512"
+               height="0.35006"/>
+              <textSegment>
+                <font face="Courier New" size="8" italic="yes"/>
+                <string>
+                <![CDATA[DPG : &F_P_PARAM7]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_P_PARAM7" source="P_PARAM7" visible="no"
+             minWidowLines="1" spacing="0" alignment="left">
+              <font face="Courier New" size="8" italic="yes"/>
+              <geometryInfo x="6.39713" y="0.05860" width="6.18598"
+               height="0.30293"/>
+              <generalLayout horizontalElasticity="variable"/>
+              <advancedLayout formatTrigger="f_p_param1formattrigger"/>
+            </field>
+          </frame>
+        </repeatingFrame>
+        <repeatingFrame name="R_RESSOURCE" source="G_RESSOURCE"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.10325" y="2.21072" width="28.89498"
+           height="3.45529"/>
+          <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="r_ressourceformattrigger"/>
+          <visualSettings fillBackgroundColor="green"/>
+          <repeatingFrame name="R_PROJET" source="G_PROJET"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.17642" y="2.75301" width="28.25750"
+             height="0.90196"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_projetformattrigger"/>
+            <visualSettings fillBackgroundColor="r100g88b75"/>
+            <repeatingFrame name="R_SOUS_TACHE" source="G_SOUS_TACHE"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="1.00738" y="2.75301" width="27.34128"
+               height="0.89018"/>
+              <generalLayout verticalElasticity="variable"
+               horizontalElasticity="variable"/>
+              <advancedLayout formatTrigger="r_sous_tacheformattrigger"/>
+              <visualSettings fillPattern="transparent"/>
+              <frame name="M_SOUS_TACHE">
+                <geometryInfo x="1.02257" y="2.77037" width="27.21291"
+                 height="0.35347"/>
+                <advancedLayout keepWithAnchoringObject="yes"
+                 formatTrigger="m_sous_tacheformattrigger"/>
+                <visualSettings fillBackgroundColor="r88g50b0"/>
+                <field name="F_dc_nomproj" source="dc_nomproj"
+                 minWidowLines="1" spacing="0" alignment="start">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="2.39861" y="2.77378" width="5.82073"
+                   height="0.35006"/>
+                  <advancedLayout printObjectOnPage="allPage"
+                   basePrintingOn="enclosingObject"/>
+                </field>
+                <field name="F_dc_soustache" source="dc_soustache"
+                 minWidowLines="1" spacing="0" alignment="start">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="1.03870" y="2.77378" width="1.21977"
+                   height="0.35006"/>
+                </field>
+                <field name="F_dc_conso_01" source="dc_conso_01"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="8.25097" y="2.77223" width="1.38038"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_01formattrigger"/>
+                </field>
+                <field name="F_dc_conso_02" source="dc_conso_02"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="9.72964" y="2.77161" width="1.41449"
+                   height="0.34975"/>
+                  <advancedLayout formatTrigger="f_dc_conso_02formattrigger"/>
+                </field>
+                <field name="F_dc_conso_03" source="dc_conso_03"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="11.23001" y="2.77223" width="1.39309"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_03formattrigger"/>
+                </field>
+                <field name="F_dc_conso_04" source="dc_conso_04"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="12.70868" y="2.77161" width="1.37821"
+                   height="0.34975"/>
+                  <advancedLayout formatTrigger="f_dc_conso_04formattrigger"/>
+                </field>
+                <field name="F_dc_conso_05" source="dc_conso_05"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="14.16596" y="2.77223" width="1.40612"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_05formattrigger"/>
+                </field>
+                <field name="F_dc_conso_06" source="dc_conso_06"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="15.66633" y="2.77223" width="1.39061"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_06formattrigger"/>
+                </field>
+                <field name="F_dc_conso_07" source="dc_conso_07"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="17.14500" y="2.77223" width="1.39712"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_07formattrigger"/>
+                </field>
+                <field name="F_dc_conso_08" source="dc_conso_08"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="18.64506" y="2.77223" width="1.46441"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_08formattrigger"/>
+                </field>
+                <field name="F_dc_conso_09" source="dc_conso_09"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="20.23101" y="2.77223" width="1.44580"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_09formattrigger"/>
+                </field>
+                <field name="F_dc_conso_10" source="dc_conso_10"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="21.79557" y="2.77223" width="1.44890"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_10formattrigger"/>
+                </field>
+                <field name="F_dc_conso_11" source="dc_conso_11"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="23.33873" y="2.77223" width="1.47309"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_11formattrigger"/>
+                </field>
+                <field name="F_dc_conso_12" source="dc_conso_12"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="24.94607" y="2.77223" width="1.43340"
+                   height="0.35006"/>
+                  <advancedLayout formatTrigger="f_dc_conso_12formattrigger"/>
+                </field>
+                <field name="F_CF_TOT_SOUS_TACHE" source="CF_TOT_SOUS_TACHE"
+                 minWidowLines="1" formatMask="NNN0D00" spacing="0"
+                 alignment="right">
+                  <font face="Courier New" size="8"/>
+                  <geometryInfo x="26.48893" y="2.77223" width="1.64362"
+                   height="0.35006"/>
+                  <advancedLayout
+                   formatTrigger="f_cf_tot_sous_tacheformattrigg"/>
+                </field>
+              </frame>
+            </repeatingFrame>
+            <field name="F_dc_codproj" source="dc_codproj" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="0.24650" y="2.76634" width="0.67159"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <field name="F_1" source="CS_1" visible="no" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="0.31719" y="3.36321" width="0.56462"
+               height="0.29177"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_3">
+            <geometryInfo x="0.21642" y="3.72070" width="28.09131"
+             height="0.50292"/>
+            <advancedLayout formatTrigger="m_3formattrigger"/>
+            <visualSettings fillPattern="transparent"/>
+            <text name="B_8" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="0.24123" y="3.77217" width="8.25872"
+               height="0.43191"/>
+              <advancedLayout formatTrigger="b_8formattrigger"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[Ss total JH productifs ou absences facturées]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_ABS_FACT_01" source="CF_ABS_FACT_01"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="8.36445" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_01formattrigger"/>
+            </field>
+            <field name="F_ABS_FACT_02" source="CF_ABS_FACT_02"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="9.83785" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_02formattrigger"/>
+            </field>
+            <field name="F_ABS_FACT_03" source="CF_ABS_FACT_03"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="11.31125" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_03formattrigger"/>
+            </field>
+            <field name="F_ABS_FACT_04" source="CF_ABS_FACT_04"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="12.74372" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger"/>
+            </field>
+            <field name="F_ABS_FACT_05" source="CF_ABS_FACT_05"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="14.25804" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0022"/>
+            </field>
+            <field name="F_ABS_FACT_06" source="CF_ABS_FACT_06"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="15.71098" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0024"/>
+            </field>
+            <field name="F_ABS_FACT_07" source="CF_ABS_FACT_07"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="17.26623" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0026"/>
+            </field>
+            <field name="F_ABS_FACT_08" source="CF_ABS_FACT_08"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="18.78056" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0028"/>
+            </field>
+            <field name="F_ABS_FACT_09" source="CF_ABS_FACT_09"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="20.33581" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0030"/>
+            </field>
+            <field name="F_ABS_FACT_10" source="CF_ABS_FACT_10"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="21.93199" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0032"/>
+            </field>
+            <field name="F_ABS_FACT_11" source="CF_ABS_FACT_11"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="23.40539" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0034"/>
+            </field>
+            <field name="F_ABS_FACT_12" source="CF_ABS_FACT_12"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="25.00157" y="3.82984" width="1.29946"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_abs_fact_1formattrigger0036"/>
+            </field>
+            <field name="F_CF_TOT_ABS_FACT" source="CF_TOT_ABS_FACT"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="26.54040" y="3.87201" width="1.64362"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"
+               formatTrigger="f_cf_tot_abs1formattrigger"/>
+            </field>
+          </frame>
+          <frame name="M_4">
+            <geometryInfo x="0.21642" y="4.24470" width="28.09131"
+             height="0.48152"/>
+            <advancedLayout formatTrigger="m_4formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_abs_15" source="dc_abs_01" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="8.32042" y="4.30702" width="1.36147"
+               height="0.31378"/>
+              <advancedLayout formatTrigger="f_abs_15formattrigger"/>
+            </field>
+            <text name="B_11" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="0.24092" y="4.29524" width="5.79438"
+               height="0.34417"/>
+              <advancedLayout formatTrigger="b_11formattrigger"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[Ss total T7 non facturées]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_abs_14" source="dc_abs_02" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="9.85676" y="4.29524" width="1.36147"
+               height="0.30634"/>
+              <advancedLayout formatTrigger="f_abs_14formattrigger"/>
+            </field>
+            <field name="F_abs_13" source="dc_abs_03" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="11.28024" y="4.29524" width="1.36147"
+               height="0.30634"/>
+              <advancedLayout formatTrigger="f_abs_13formattrigger"/>
+            </field>
+            <field name="F_abs_9" source="dc_abs_04" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="12.72325" y="4.29524" width="1.36147"
+               height="0.30634"/>
+              <advancedLayout formatTrigger="f_abs_9formattrigger"/>
+            </field>
+            <field name="F_abs_8" source="dc_abs_05" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="14.20626" y="4.29524" width="1.38627"
+               height="0.30634"/>
+              <advancedLayout formatTrigger="f_abs_8formattrigger"/>
+            </field>
+            <field name="F_abs_7" source="dc_abs_06" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="15.67966" y="4.29524" width="1.36147"
+               height="0.30634"/>
+              <advancedLayout formatTrigger="f_abs_7formattrigger"/>
+            </field>
+            <field name="F_abs_6" source="dc_abs_07" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="17.20453" y="4.29524" width="1.36147"
+               height="0.30634"/>
+              <advancedLayout formatTrigger="f_abs_6formattrigger"/>
+            </field>
+            <field name="F_abs_5" source="dc_abs_08" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="18.70894" y="4.29524" width="1.37976"
+               height="0.33052"/>
+              <advancedLayout formatTrigger="f_abs_5formattrigger"/>
+            </field>
+            <field name="F_abs_4" source="dc_abs_09" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="20.27473" y="4.29524" width="1.37976"
+               height="0.29828"/>
+              <advancedLayout formatTrigger="f_abs_4formattrigger"/>
+            </field>
+            <field name="F_abs_3" source="dc_abs_10" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="21.86099" y="4.29524" width="1.37976"
+               height="0.29828"/>
+              <advancedLayout formatTrigger="f_abs_3formattrigger"/>
+            </field>
+            <field name="F_abs_2" source="dc_abs_11" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="23.32447" y="4.29524" width="1.37976"
+               height="0.29828"/>
+              <advancedLayout formatTrigger="f_abs_2formattrigger"/>
+            </field>
+            <field name="F_abs_1" source="dc_abs_12" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="24.97212" y="4.29524" width="1.37976"
+               height="0.29828"/>
+              <advancedLayout formatTrigger="f_abs_1formattrigger"/>
+            </field>
+            <field name="F_CF_TOT_ABS1" source="CF_TOT_ABS" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="26.49947" y="4.33059" width="1.64362"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"
+               formatTrigger="f_cf_tot_abs1formattrigger0013"/>
+            </field>
+          </frame>
+          <frame name="M_TOT_RESS">
+            <geometryInfo x="0.14449" y="4.74855" width="28.78336"
+             height="0.76553"/>
+            <visualSettings fillBackgroundColor="r100g88b0"/>
+            <field name="F_CF_SUM_TOT_RESS_CONSO"
+             source="CF_SUM_TOT_RESS_CONSO" minWidowLines="1"
+             formatMask="NNN0D00" spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="26.48893" y="4.80033" width="1.64362"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"
+               formatTrigger="f_cf_sum_tot_ress_consoformatt"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_01" source="CS_TOT_RESS_CONSO_01"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="8.27236" y="4.79878" width="1.37821"
+               height="0.34975"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_01formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_02" source="CS_TOT_RESS_CONSO_02"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="9.77243" y="4.79878" width="1.40643"
+               height="0.34975"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_02formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_03" source="CS_TOT_RESS_CONSO_03"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="11.27280" y="4.79878" width="1.39123"
+               height="0.34975"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_03formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_04" source="CS_TOT_RESS_CONSO_04"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="12.70868" y="4.79878" width="1.39743"
+               height="0.34975"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_04formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_05" source="CS_TOT_RESS_CONSO_05"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="14.18735" y="4.79847" width="1.39309"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_05formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_06" source="CS_TOT_RESS_CONSO_06"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="15.66633" y="4.79878" width="1.40984"
+               height="0.35192"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_06formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_07" source="CS_TOT_RESS_CONSO_07"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="17.16639" y="4.79847" width="1.39464"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_07formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_08" source="CS_TOT_RESS_CONSO_08"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="18.66677" y="4.80095" width="1.46131"
+               height="0.34758"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_08formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_09" source="CS_TOT_RESS_CONSO_09"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="20.23101" y="4.80095" width="1.46379"
+               height="0.34758"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_09formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_10" source="CS_TOT_RESS_CONSO_10"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="21.79557" y="4.79878" width="1.46689"
+               height="0.35006"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_10formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_11" source="CS_TOT_RESS_CONSO_11"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="23.33873" y="4.80343" width="1.49293"
+               height="0.34510"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_11formattr"/>
+            </field>
+            <field name="F_CS_TOT_RESS_CONSO_12" source="CS_TOT_RESS_CONSO_12"
+             minWidowLines="1" formatMask="NNN0D00" spacing="0"
+             alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="24.96747" y="4.80343" width="1.43247"
+               height="0.34510"/>
+              <advancedLayout formatTrigger="f_cs_tot_ress_conso_12formattr"/>
+            </field>
+            <text name="B_6" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="0.24061" y="4.79878" width="5.79438"
+               height="0.34789"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[TOTAL RESSOURCE &F_dc_tires]]>
+                </string>
+              </textSegment>
+            </text>
+            <line name="B_5" arrow="none">
+              <geometryInfo x="0.18573" y="5.38293" width="28.12200"
+               height="0.00000"/>
+              <visualSettings linePattern="solid"/>
+              <points>
+                <point x="0.18573" y="5.38293"/>
+                <point x="28.30773" y="5.38293"/>
+              </points>
+            </line>
+          </frame>
+          <frame name="M_1">
+            <geometryInfo x="0.17735" y="2.21072" width="12.04516"
+             height="0.39377"/>
+            <advancedLayout keepWithAnchoringObject="yes"/>
+            <field name="F_dc_tires" source="dc_tires" minWidowLines="1"
+             spacing="0" alignment="right">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="2.15801" y="2.25382" width="0.90754"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <field name="F_dc_nomres" source="dc_nomres" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="3.29375" y="2.25382" width="3.28569"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <text name="B_2" minWidowLines="1">
+              <textSettings justify="left" spacing="0"/>
+              <geometryInfo x="0.22665" y="2.25444" width="2.03740"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="firstPage"
+               basePrintingOn="anchoringObject"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[RESSOURCE :]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_3" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="3.11950" y="2.25475" width="0.17177"
+               height="0.34975"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[-]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_dc_societe" source="dc_societe" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="6.69075" y="2.25382" width="1.88919"
+               height="0.35006"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+          </frame>
+          <field name="F_2" source="CS_2" visible="no" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="12.70000" y="2.25444" width="1.19931"
+             height="0.36463"/>
+          </field>
+        </repeatingFrame>
+      </repeatingFrame>
+      <frame name="M_TOT_GEN">
+        <geometryInfo x="0.00155" y="6.25791" width="28.17347"
+         height="3.26585"/>
+        <generalLayout pageBreakBefore="yes"/>
+        <repeatingFrame name="R_2" source="G_NBJOUR_OUVRE"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="1.27868" y="7.04515" width="25.10203"
+           height="0.50354"/>
+          <field name="F_nbjour_ouv_01" source="dc_nbjour_ouvre_01"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="2.72231" y="7.19770" width="1.65013"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_04" source="dc_nbjour_ouvre_04"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="8.65125" y="7.19770" width="1.66098"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_02" source="dc_nbjour_ouvre_02"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="4.70266" y="7.19770" width="1.65013"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_03" source="dc_nbjour_ouvre_03"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="6.68548" y="7.19770" width="1.64982"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_06" source="dc_nbjour_ouvre_06"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="12.62218" y="7.19801" width="1.65013"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_05" source="dc_nbjour_ouvre_05"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="10.63625" y="7.19801" width="1.65106"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_07" source="dc_nbjour_ouvre_07"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="14.52531" y="7.19801" width="1.65013"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_08" source="dc_nbjour_ouvre_08"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="16.41512" y="7.19801" width="1.65013"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_09" source="dc_nbjour_ouvre_09"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="18.31206" y="7.19832" width="1.65013"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_10" source="dc_nbjour_ouvre_10"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="20.20900" y="7.19832" width="1.64982"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_11" source="dc_nbjour_ouvre_11"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="22.02098" y="7.19832" width="1.64858"
+             height="0.35006"/>
+          </field>
+          <field name="F_nbjour_ouv_12" source="dc_nbjour_ouvre_12"
+           minWidowLines="1" formatMask="NNNGNN0D00" spacing="0"
+           alignment="right">
+            <font face="Courier New" size="8"/>
+            <geometryInfo x="24.08163" y="7.19863" width="1.65478"
+             height="0.35006"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_MOIS1">
+          <geometryInfo x="0.16650" y="7.93068" width="27.96511"
+           height="0.91901"/>
+          <text name="B_dc_nbjour_ouvre_26" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="5.39409" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[FEVR]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_25" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="7.36451" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[MARS]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_24" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="20.90198" y="8.02649" width="0.98258"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[OCTO]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_23" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="9.35323" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[AVRI]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_22" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="11.34566" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[MAI]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[---]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_21" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="24.78050" y="8.02680" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[DECE]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_20" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="13.30958" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[JUIN]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_19" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="22.78869" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[NOVE]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_18" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="15.20837" y="8.02649" width="0.98289"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[JUIL]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_17" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="26.96021" y="8.02649" width="1.12520"
+             height="0.82290"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[TOTAL]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[-----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_16" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="18.99915" y="8.01594" width="0.98289"
+             height="0.82445"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[SEPT]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_15" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="3.45095" y="8.03951" width="0.93483"
+             height="0.79933"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[JANV]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_dc_nbjour_ouvre_10" minWidowLines="1">
+            <textSettings justify="right" spacing="0"/>
+            <geometryInfo x="17.11678" y="8.03951" width="0.98289"
+             height="0.79933"/>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[AOUT]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="8"/>
+              <string>
+              <![CDATA[----]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <field name="F_CS_TOT_GEN_01" source="CS_TOT_GEN_O1" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="2.55116" y="9.07759" width="1.82128"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_01formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_04" source="CS_TOT_GEN_O4" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="8.49716" y="9.07759" width="1.81508"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_04formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_02" source="CS_TOT_GEN_O2" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="4.53740" y="9.07759" width="1.81477"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_02formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_03" source="CS_TOT_GEN_O3" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="6.51712" y="9.07759" width="1.81508"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_03formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_06" source="CS_TOT_GEN_O6" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="12.45691" y="9.07790" width="1.81508"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_06formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_05" source="CS_TOT_GEN_O5" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="10.47719" y="9.07790" width="1.81477"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_05formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_07" source="CS_TOT_GEN_O7" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="14.35509" y="9.07790" width="1.81508"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_07formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_08" source="CS_TOT_GEN_O8" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="16.25327" y="9.07790" width="1.81477"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_08formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_09" source="CS_TOT_GEN_O9" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="18.15393" y="9.07821" width="1.81229"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_09formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_10" source="CS_TOT_GEN_10" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="20.04932" y="9.07821" width="1.81229"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_10formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_11" source="CS_TOT_GEN_11" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="21.94750" y="9.07821" width="1.81167"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_11formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN_12" source="CS_TOT_GEN_12" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="23.92474" y="9.07852" width="1.81508"
+           height="0.35006"/>
+          <advancedLayout formatTrigger="f_cs_tot_gen_12formattrigger"/>
+        </field>
+        <field name="F_CS_TOT_GEN" source="CS_TOT_GEN" minWidowLines="1"
+         formatMask="NNNGNNNGNN0D00" spacing="0" alignment="right">
+          <font face="Courier New" size="8" bold="yes"/>
+          <geometryInfo x="25.90416" y="9.07852" width="2.14499"
+           height="0.35006"/>
+        </field>
+        <text name="B_9" minWidowLines="1">
+          <textSettings justify="left" spacing="0"/>
+          <geometryInfo x="0.14263" y="9.07852" width="2.40233"
+           height="0.35006"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[TOTAL GENERAL]]>
+            </string>
+          </textSegment>
+        </text>
+        <text name="B_10" minWidowLines="1">
+          <textSettings justify="left" spacing="0"/>
+          <geometryInfo x="0.20805" y="6.55960" width="1.95895"
+           height="0.35006"/>
+          <textSegment>
+            <font face="Courier New" size="8" italic="yes"/>
+            <string>
+            <![CDATA[DPG : / -]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_Page" minWidowLines="1">
+        <textSettings justify="left" spacing="single"/>
+        <geometryInfo x="22.99953" y="0.66725" width="1.45852"
+         height="0.50012"/>
+        <generalLayout verticalElasticity="variable"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[PAGE :]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Page" source="PageNumber" minWidowLines="1"
+       formatMask="NNNN" spacing="single" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="24.18643" y="0.66725" width="1.34720"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Slache" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="25.62138" y="0.71872" width="0.20557"
+         height="0.32494"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_TotalPage" source="TotalPages" minWidowLines="1"
+       formatMask="NNNN" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="25.87904" y="0.66725" width="1.27248"
+         height="0.50012"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Date" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.62787" y="0.71872" width="1.35217" height="0.39688"
+        />
+        <generalLayout horizontalElasticity="expand"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[DATE :]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_NomEtat" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.61051" y="1.40084" width="10.69206"
+         height="0.34913"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ETAT : Historique par ressources]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_Titre1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="10.34510" y="0.66725" width="5.75004"
+         height="0.49981"/>
+        <visualSettings fillBackgroundColor="r100g0b0"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[- HISTORIQUE PAR RESSOURCES -]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="2.02096" y="0.69360" width="4.92931" height="0.43749"
+        />
+      </field>
+      <repeatingFrame name="R_1" source="G_ANNEE_TRAITEE"
+       printDirection="down" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="22.70838" y="1.21140" width="3.78302"
+         height="0.54663"/>
+        <text name="B_Page1" minWidowLines="1">
+          <textSettings justify="left" spacing="single"/>
+          <geometryInfo x="22.83985" y="1.39991" width="1.33449"
+           height="0.35812"/>
+          <generalLayout horizontalElasticity="variable"/>
+          <textSegment>
+            <font face="Courier New" size="8"/>
+            <string>
+            <![CDATA[ANNEE :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_an1" source="dc_annee_traitee" minWidowLines="1"
+         spacing="single" alignment="left">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="24.17248" y="1.39991" width="1.15497"
+           height="0.35812"/>
+        </field>
+      </repeatingFrame>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000" pages="2">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.40587" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="1.25233" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.09879" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.94525" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.79171" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.63817" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="5.48463" width="2.90959" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P Param6 (MM/AAAA)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="6.33109" width="2.90959" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P Param7 (Code DPG)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="7.17755" width="3.06834" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P Param8 (Ident. Ress.)]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="1.99213" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="2.83859" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="3.68505" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="4.53151" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="5.37797" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="6.22443" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM8" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.81000" y="7.07089" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="3.83760" y="7.91549" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61888" y="8.07486" width="3.06834" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+      l_trim_p_mois_annee VARCHAR2(10);
+      l_p_code_dpg VARCHAR2(10);
+      l_p_ress VARCHAR2(10);
+      l_param VARCHAR2(10);
+      ------------------------------------------------------------------------
+      -- Conditions WHERE sur les différents paramètres
+      -----------------------------------------------------------------------
+      l_where_annee VARCHAR2(500) := '';
+      l_where_dpg VARCHAR2(1000) := '';
+      l_where_ress VARCHAR2(500) := '';
+      l_where_annee_1 VARCHAR2(500) := '';
+      l_where_dpg_1 VARCHAR2(1000) := '';
+      l_where_ress_1 VARCHAR2(500) := '';
+      ----------------------------------------------------------------------
+
+      l_fmt_ddmmyyyy CONSTANT VARCHAR2(10) := 'DD/MM/YYYY';
+      l_fmt_yyyy CONSTANT VARCHAR2(4) := 'YYYY';
+      
+      l_ch_01_01_annee VARCHAR2(10);
+      l_ch_31_12_annee VARCHAR2(10);
+
+      l_annee_traitee VARCHAR2(4) := '1900';
+
+      l_car_etoile CONSTANT VARCHAR2(1) := '*';   -- Caractère étoile
+      l_car_blanc  CONSTANT VARCHAR2(1) := ' ';   -- Caractère blanc
+
+      l_car_topage_ouvert CONSTANT VARCHAR2(1) := 'O';
+      l_car_topage_ferme  CONSTANT VARCHAR2(1) := 'F'; -- BPO : Modification de 'N' à 'F' car TOPFER = F pour fermé
+      l_car_like CONSTANT VARCHAR2(1) := '%';
+
+
+      l_ch_00 CONSTANT VARCHAR2(2) := '00'; 
+      l_ch_0000 CONSTANT VARCHAR2(4) := '0000'; 
+      l_ch_99 CONSTANT VARCHAR2(2) := '99'; 
+      l_ch_9999 CONSTANT VARCHAR2(4) := '9999'; 
+
+      l_codsg_inf  VARCHAR2(7);
+      l_codsg_sup  VARCHAR2(7);
+	
+      l_mois_annee_traitee VARCHAR2(7) := '01/1900';
+      l_mois_traite VARCHAR2(2) := '12';
+      l_derjour_du_mois_traite VARCHAR2(2) := '31';
+      l_date_inf_a_considerer VARCHAR2(10) := '01/01/1900';	
+      l_date_sup_a_considerer VARCHAR2(10) := '31/12/2999';  
+      
+      l_liste   VARCHAR2(500);
+
+begin
+
+/****************************************************************************
+*	TRAITEMENT PRELIMINAIRE SUR LES PARAMETRES
+* Pour le Menu HISTORIQUE, les paramètres envoyés par IE4 sont :
+*	P_PARAM6 = Date au format MM/AAAA à prendre en compte (Obligatoire)
+*	P_PARAM7 = Code DPG Sur 7 caractères (Optionnel)
+*	P_PARAM8 = Code Ressource (Optionnel)
+*	P_PARAM9 = Code Ressource (Optionnel) pour le menu Responsable etude/Mensuel/historique ressource selectif
+*	Ce sont les paramètres attendus par le Report!!!
+*
+* Pour le Menu MENSUELLE, les paramètres envoyés par IE4 sont :
+*	P_PARAM6 = Code DPG sur 7 caractères (normalement)
+*
+* CONSEQUENCE :
+*	Dans le cas de la MENSUELLE, fait en sorte que :
+*		P_PARAM7 soit égal à P_PARAM6**
+*		P_PARAM6 soit vide : Ainsi on prendra la date dans DATDEBEX 
+****************************************************************************/
+  	IF ( NVL(LENGTH(:P_PARAM6), 0) = 5 ) THEN
+		--srw.message(1, 'P_PARAM6 AVANT : ' || '[' || :P_PARAM6 || ']');
+		:P_PARAM7 := :P_PARAM6 || '**';
+		:P_PARAM6 := '';
+		--srw.message(1, 'P_PARAM6 APRES : ' || '[' || :P_PARAM6 || ']');
+		--srw.message(1, 'P_PARAM7 APRES : ' || '[' || :P_PARAM7 || ']');
+	ELSE
+		IF ( NVL(LENGTH(:P_PARAM6), 0) = 6 ) THEN
+			:P_PARAM7 := '0' || :P_PARAM6;
+		ELSIF (( NVL(LENGTH(:P_PARAM6), 0) = 7 ) AND (INSTR(:P_PARAM6, '/') = 0)) THEN
+			:P_PARAM7 := :P_PARAM6;
+		END IF;
+	END IF;
+
+
+/**********************************************************************************
+*	DEBUT DU TRAITEMENT PROPREMENT DIT 
+***********************************************************************************/
+	l_trim_p_mois_annee := ltrim(rtrim(:P_PARAM6)); /* format : MM/YYYY */
+
+  l_p_code_dpg := LPAD(:P_PARAM7, 7, '0');
+	
+		IF :P_PARAM8='Toute' THEN
+		-- cas existant dans Saisie des realises/Historique/Ressources
+ 		l_liste :=pack_global.lire_globaldata(:P_GLOBAL).chefprojet;
+--srw.message(1, '[liste] : ' || l_liste);
+			l_where_ress  := ' ((INSTR('''||l_liste||''',TO_CHAR(pro.cpident,''FM00000''))>0)
+		  		or(INSTR('''||l_liste||''',TO_CHAR(pro.tires,''FM00000''))>0))';
+--srw.message(1, '[liste] : ' || l_where_ress);
+		  l_where_ress_1  := ' ((INSTR('''||l_liste||''',TO_CHAR(situ.cpident,''FM00000''))>0)
+		  		or(INSTR('''||l_liste||''',TO_CHAR(situ.ident,''FM00000''))>0))';
+--srw.message(1, '[liste] : ' || l_where_ress_1);
+ ELSE
+ 	l_p_ress := :P_PARAM8; 
+	l_p_ress := l_p_ress || :P_PARAM9;
+      	------------------------------------------------------------------------
+      	-- Conditions WHERE sur ressource
+      	-----------------------------------------------------------------------
+	
+        if ( (NVL(LENGTH(l_p_ress), 0)!= 0) AND (l_p_ress != '00000') ) 
+ 				then 
+					l_where_ress  := ' pro.tires = ' || l_p_ress ;
+					l_where_ress_1  := ' situ.ident = ' || l_p_ress ;
+					--srw.message(1, '[liste] : ' || l_where_ress_1);
+        end if;
+ END IF;
+
+	      ------------------------------------------------------------------------
+      	-- Conditions WHERE sur Année
+      	-----------------------------------------------------------------------
+	
+	if ( NVL(LENGTH(l_trim_p_mois_annee), 0) = 7 ) AND (INSTR(l_trim_p_mois_annee, '/') > 0)
+        then
+             	----------------------------------------------------------------
+             	-- Cas année saisie au format MM/YYYY : On doit traiter année saisie!
+             	----------------------------------------------------------------
+		l_annee_traitee := substr(l_trim_p_mois_annee, 4, 4);
+		l_mois_traite   := substr(l_trim_p_mois_annee, 1, 2);
+	else
+             	----------------------------------------------------------------
+             	-- Cas année non saisie : On doit traiter date mensuelle de la table datdebex!
+		-- On positionne aussi P_PARAM6 avec MM/AAAA de datdebex pour que le 
+		-- Query de l'état fonctionne bien
+             	----------------------------------------------------------------	 
+  		SELECT TO_CHAR(moismens, 'MM/YYYY') INTO l_mois_annee_traitee FROM datdebex;
+
+		l_annee_traitee := substr(l_mois_annee_traitee, 4, 4);
+		l_mois_traite   := substr(l_mois_annee_traitee, 1, 2);
+			
+	--	SELECT TO_CHAR (datdebex,'YYYY') INTO l_annee_traitee FROM datdebex;
+
+
+		:P_PARAM6 := l_mois_annee_traitee; 
+	end if;
+
+l_derjour_du_mois_traite := TO_CHAR( LAST_DAY(TO_DATE('01' || '/' || l_mois_traite  || '/' || l_annee_traitee, 'DD/MM/YYYY')), 'DD' );
+	
+
+	l_date_inf_a_considerer := '01/01/' || l_annee_traitee;
+	l_date_sup_a_considerer := l_derjour_du_mois_traite || '/' || l_mois_traite || '/' || l_annee_traitee;
+
+	l_where_annee := ' pro.cdeb BETWEEN  TO_DATE( '''  ||  l_date_inf_a_considerer  || ''' , ' ;
+	l_where_annee := l_where_annee || ' ''' || l_fmt_ddmmyyyy || ''' ) ' ; 
+	l_where_annee := l_where_annee || ' AND   TO_DATE( '''  ||  l_date_sup_a_considerer || ''' , ' ;
+	l_where_annee := l_where_annee || ' ''' || l_fmt_ddmmyyyy || ''' ) ' ; 
+	
+	l_where_annee_1 := ' situ.datsitu <= TO_DATE( ''' ||  l_date_sup_a_considerer  || ''' , ' ;
+	l_where_annee_1 := l_where_annee_1 || ' ''' || l_fmt_ddmmyyyy || ''' ) ' ; 
+	l_where_annee_1 := l_where_annee_1 || ' AND (situ.datdep >= TO_DATE( ''' ||  l_date_inf_a_considerer || ''' , ' ;
+	l_where_annee_1 := l_where_annee_1 || ' ''' || l_fmt_ddmmyyyy || ''' ) ' ; 
+	l_where_annee_1 := l_where_annee_1 || ' OR situ.datdep IS NULL) ';
+
+	------------------------------------------------------------------------
+      	-- Conditions WHERE sur dpg
+      	-----------------------------------------------------------------------
+
+	IF ( (l_p_code_dpg IS NULL) 
+			OR 
+             l_p_code_dpg='*******'
+		OR  
+	     (l_p_code_dpg = l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc || l_car_blanc)
+	   ) THEN
+	       -----------------------------------------------------------------------------------------------------------------------------------------
+	     	 -- Si Code DPG vide ou égal à 7 étoiles, Considérer tous les DPG avec code topé à 'O'
+	     	 -- Modifié par DDI le 14/10/2005 - Fiche TD N°276 : Les historiques doivent toujours être complets. Même sur les DPG qui ont été fermés .
+		     -- l_where_dpg := ' str.topfer =   ''' || l_car_topage_ouvert || ''' )';
+		     -- l_where_dpg_1 := ' str.topfer =   ''' || l_car_topage_ouvert || ''' )';
+		     -----------------------------------------------------------------------------------------------------------------------------------------  
+		     l_where_dpg   := ' str.topfer =   ''' || l_car_topage_ouvert || ''' OR str.topfer =   ''' || l_car_topage_ferme || '''' ;
+		     l_where_dpg_1 := ' str.topfer =   ''' || l_car_topage_ouvert || ''' OR str.topfer =   ''' || l_car_topage_ferme || '''' ;
+
+	ELSE
+
+	  l_param := rtrim(rtrim(LPAD(l_p_code_dpg , 7, '0'),'*')) ;
+		l_where_dpg := ' TO_CHAR(pro.divsecgrou, ''FM0000000'') like ''' || l_param || '%'' ';
+		l_where_dpg_1 := ' TO_CHAR(situ.codsg, ''FM0000000'') like ''' || l_param || '%'' ';
+				
+	END IF;
+
+      	------------------------------------------------------------------------
+      	-- Condition WHERE finale 
+      	-----------------------------------------------------------------------
+	:P_WHERE := '';
+	:P_WHERE_1 := '';
+	
+	if ( NVL(LENGTH(l_where_ress), 0) != 0 ) then 
+		:P_WHERE := :P_WHERE || ' AND ( ' || l_where_ress || ' ) ';
+		:P_WHERE_1 := :P_WHERE_1 || ' AND ( ' || l_where_ress_1 || ' ) ';
+	end if;
+
+	if ( NVL(LENGTH(l_where_annee), 0) != 0 ) then 
+		:P_WHERE := :P_WHERE || ' AND ( ' || l_where_annee || ' ) ';
+		:P_WHERE_1 := :P_WHERE_1 || ' AND ( ' || l_where_annee_1 || ' ) ';
+	end if;
+	
+	if ( NVL(LENGTH(l_where_dpg), 0) != 0 ) then 
+		:P_WHERE := :P_WHERE || ' AND ( ' || l_where_dpg || ' ) ';
+		:P_WHERE_1 := :P_WHERE_1 || ' AND ( ' || l_where_dpg_1 || ' ) ';
+	end if;
+
+--	if ( NVL(LENGTH(:P_WHERE), 0) != 0 )
+--	then
+		--srw.message(1, '[P_WHERE] : ' || :P_WHERE);
+--	end if;
+	
+--	if ( NVL(LENGTH(:P_WHERE_1), 0) != 0 )
+--	then
+		--srw.message(1, '[P_WHERE_1] : ' || :P_WHERE_1);
+--	end if;
+	
+	return (TRUE) ;  
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_tot_sous_tacheformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOT_SOUS_TACHEFormula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :dc_conso_01 
+		+ :dc_conso_02 
+		+ :dc_conso_03 
+		+ :dc_conso_04 
+		+ :dc_conso_05 
+		+ :dc_conso_06 
+		+ :dc_conso_07 
+		+ :dc_conso_08 
+		+ :dc_conso_09 
+		+ :dc_conso_10 
+		+ :dc_conso_11 
+		+ :dc_conso_12 ;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_sum_tot_ress_consoformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_SUM_TOT_RESS_CONSOFormula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res :=  :CS_TOT_RESS_CONSO_01 
+		+ :CS_TOT_RESS_CONSO_02
+		+ :CS_TOT_RESS_CONSO_03
+		+ :CS_TOT_RESS_CONSO_04
+		+ :CS_TOT_RESS_CONSO_05
+		+ :CS_TOT_RESS_CONSO_06
+		+ :CS_TOT_RESS_CONSO_07
+		+ :CS_TOT_RESS_CONSO_08
+		+ :CS_TOT_RESS_CONSO_09
+		+ :CS_TOT_RESS_CONSO_10
+		+ :CS_TOT_RESS_CONSO_11
+		+ :CS_TOT_RESS_CONSO_12;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_sous_tacheformattrigger">
+      <textSource>
+      <![CDATA[function M_SOUS_TACHEFormatTrigger return boolean is
+begin
+
+  IF ( 	(:dc_conso_01 = 0) AND
+	(:dc_conso_02 = 0) AND
+	(:dc_conso_03 = 0) AND
+	(:dc_conso_04 = 0) AND
+	(:dc_conso_05 = 0) AND
+	(:dc_conso_06 = 0) AND
+	(:dc_conso_07 = 0) AND
+	(:dc_conso_08 = 0) AND
+	(:dc_conso_09 = 0) AND
+	(:dc_conso_10 = 0) AND
+	(:dc_conso_11 = 0) AND
+	(:dc_conso_12 = 0) 
+     )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+
+
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_01formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_01FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_01 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_02formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_02FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_02 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_03formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_03FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_03 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_04formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_04FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_04 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_05formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_05FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_05 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_06formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_06FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_06 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_07formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_07FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_07 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_08formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_08FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_08 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_09formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_09FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_09 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_10formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_10FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_10 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_11formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_11FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_11 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dc_conso_12formattrigger">
+      <textSource>
+      <![CDATA[function F_dc_conso_12FormatTrigger return boolean is
+begin
+  IF ( :dc_conso_12 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cf_tot_sous_tacheformattrigg">
+      <textSource>
+      <![CDATA[function F_CF_TOT_SOUS_TACHEFormatTrigg return boolean is
+begin
+  IF ( :CF_TOT_SOUS_TACHE = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_01formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_01FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_01 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_02formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_02FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_02 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_03formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_03FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_03 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_04formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_04FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_04 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_05formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_05FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_05 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_06formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_06FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_06 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_07formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_07FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_07 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_08formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_08FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_08 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_09formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_09FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_09 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_10formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_10FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_10 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_11formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_11FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_11 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_ress_conso_12formattr">
+      <textSource>
+      <![CDATA[function F_CS_TOT_RESS_CONSO_12FormatTr return boolean is
+begin
+  IF ( :CS_TOT_RESS_CONSO_12 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cf_sum_tot_ress_consoformatt">
+      <textSource>
+      <![CDATA[function F_CF_SUM_TOT_RESS_CONSOFormatT return boolean is
+begin
+  IF ( :CF_SUM_TOT_RESS_CONSO = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_01formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_01FormatTrigger return boolean is
+begin
+  	IF ( '01' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_02formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_02FormatTrigger return boolean is
+begin
+   	IF ( '02' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_03formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_03FormatTrigger return boolean is
+begin
+  	IF ( '03' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_04formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_04FormatTrigger return boolean is
+begin
+  	IF ( '04' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_05formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_05FormatTrigger return boolean is
+begin
+  	IF ( '05' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_06formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_06FormatTrigger return boolean is
+begin
+  	IF ( '06' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_12formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_12FormatTrigger return boolean is
+begin
+   	IF ( '12' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_11formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_11FormatTrigger return boolean is
+begin
+   	IF ( '11' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_10formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_10FormatTrigger return boolean is
+begin
+  	IF ( '10' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_09formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_09FormatTrigger return boolean is
+begin
+  	IF ( '09' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_08formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_08FormatTrigger return boolean is
+begin
+  	IF ( '08' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cs_tot_gen_07formattrigger">
+      <textSource>
+      <![CDATA[function F_CS_TOT_GEN_07FormatTrigger return boolean is
+begin
+  	IF ( '07' <= SUBSTR(:P_PARAM6, 1, 2) )
+	THEN RETURN (TRUE);
+	ELSE RETURN (FALSE);
+  	END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_projetformattrigger">
+      <textSource>
+      <![CDATA[function R_PROJETFormatTrigger return boolean is
+begin
+if :CS_1 =0  then
+   return (false);
+else
+	return (TRUE);
+end if;
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_ressourceformattrigger">
+      <textSource>
+      <![CDATA[function R_RESSOURCEFormatTrigger return boolean is
+begin
+  if :CS_2 =0  then
+   return (true);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_p_param1formattrigger">
+      <textSource>
+      <![CDATA[function F_P_PARAM1FormatTrigger return boolean is
+Text varchar2(100);
+begin
+
+	Text := :dc_libdsg ||' - '||to_char(:dc_coddpg, 'FM0000000') ;  
+	SRW.SET_FIELD_CHAR(0,Text); 
+	
+--  end if;
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_tot_absformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOT_ABSFormula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :dc_abs_01 
+		+ :dc_abs_02 
+		+ :dc_abs_03 
+		+ :dc_abs_04 
+		+ :dc_abs_05 
+		+ :dc_abs_06 
+		+ :dc_abs_07 
+		+ :dc_abs_08 
+		+ :dc_abs_09 
+		+ :dc_abs_10 
+		+ :dc_abs_11 
+		+ :dc_abs_12 ;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_01formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_01Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_01 - :dc_abs_01;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_02formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_02Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_02 - :dc_abs_02;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_03formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_03Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_03 - :dc_abs_03;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_04formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_04Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_04 - :dc_abs_04;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_05formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_05Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_05 - :dc_abs_05;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_06formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_06Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_06 - :dc_abs_06;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_07formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_07Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_07 - :dc_abs_07;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_08formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_08Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_08 - :dc_abs_08;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_09formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_09Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_09 - :dc_abs_09;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_10formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_10Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_10 - :dc_abs_10;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_11formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_11Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_11 - :dc_abs_11;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_abs_fact_12formula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_ABS_FACT_12Formula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CS_TOT_RESS_CONSO_12 - :dc_abs_12;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_01formattrigger">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_01FormatTrigger return boolean is
+begin
+  IF ( :CF_ABS_FACT_01 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_02formattrigger">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_02FormatTrigger return boolean is
+begin
+  IF ( :CF_ABS_FACT_02 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_03formattrigger">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_03FormatTrigger return boolean is
+begin
+  IF ( :CF_ABS_FACT_03 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FormatTrigger return boolean is
+begin
+  IF ( :CF_ABS_FACT_04 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0022">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0022 return boolean is
+begin
+  IF ( :CF_ABS_FACT_05 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0024">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0024 return boolean is
+begin
+  IF ( :CF_ABS_FACT_06 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0026">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0026 return boolean is
+begin
+  IF ( :CF_ABS_FACT_07 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0028">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0028 return boolean is
+begin
+  IF ( :CF_ABS_FACT_08 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0030">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0030 return boolean is
+begin
+  IF ( :CF_ABS_FACT_09 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0032">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0032 return boolean is
+begin
+  IF ( :CF_ABS_FACT_10 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0034">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0034 return boolean is
+begin
+  IF ( :CF_ABS_FACT_11 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_fact_1formattrigger0036">
+      <textSource>
+      <![CDATA[function F_ABS_FACT_1FORMATTRIGGER0036 return boolean is
+begin
+  IF ( :CF_ABS_FACT_12 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_tot_abs_factformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_TOT_ABS_FACTFormula return Number is
+	l_res NUMBER(15, 2) := 0;
+begin
+  	l_res := :CF_ABS_FACT_01 
+		+ :CF_ABS_FACT_02
+		+ :CF_ABS_FACT_03 
+		+ :CF_ABS_FACT_04 
+		+ :CF_ABS_FACT_05 
+		+ :CF_ABS_FACT_06 
+		+ :CF_ABS_FACT_07 
+		+ :CF_ABS_FACT_08 
+		+ :CF_ABS_FACT_09 
+		+ :CF_ABS_FACT_10 
+		+ :CF_ABS_FACT_11 
+		+ :CF_ABS_FACT_12 ;
+	return(l_res);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cf_tot_abs1formattrigger">
+      <textSource>
+      <![CDATA[function F_CF_TOT_ABS1FormatTrigger return boolean is
+begin
+  IF ( :CF_TOT_ABS_FACT = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_8formattrigger">
+      <textSource>
+      <![CDATA[function B_8FormatTrigger return boolean is
+begin
+  if :CS_2 =0  then
+   return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_sous_tacheformattrigger">
+      <textSource>
+      <![CDATA[function R_SOUS_TACHEFormatTrigger return boolean is
+begin
+	--differenciation des absences non facturees
+ IF (:dc_societe='SG..')AND (:dc_type=7)  THEN
+ srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='gray4';
+ srw.set_attr (0,srw.attr);
+ END IF;
+ 
+ IF (:dc_societe!='SG..')AND (:dc_type=7)AND (:dc_soustache not in ('SEMINA','FORFAC','DEMENA','CLUBUT','COLOQU'))  THEN
+ srw.attr.mask := SRW.BFCOLOR_ATTR;
+ srw.attr.bfcolor :='gray4';
+ srw.set_attr (0,srw.attr);
+  END IF;
+  return (true);
+  
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_cf_tot_abs1formattrigger0013">
+      <textSource>
+      <![CDATA[function F_CF_TOT_ABS1FORMATTRIGGER0013 return boolean is
+begin
+  IF ( :CF_TOT_ABS = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_1formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_1FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_12 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_2formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_2FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_11 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_3formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_3FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_10 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_4formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_4FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_09 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_5formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_5FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_08 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_6formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_6FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_07 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_7formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_7FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_06 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_8formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_8FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_05 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_9formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_9FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_04 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_13formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_13FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_03 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_14formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_14FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_02 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_11formattrigger">
+      <textSource>
+      <![CDATA[function B_11FormatTrigger return boolean is
+begin
+  if :CS_2 =0  then
+   return (FALSE);
+else
+  return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_abs_15formattrigger">
+      <textSource>
+      <![CDATA[function F_abs_15FormatTrigger return boolean is
+begin
+  IF ( :dc_abs_01 = 0 )
+  THEN
+	RETURN(FALSE);
+  ELSE
+  	return (TRUE);
+  END IF;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_4formattrigger">
+      <textSource>
+      <![CDATA[function M_4FormatTrigger return boolean is
+begin
+ if :dc_test_conso ='sans'  then
+   return (false);
+else
+	return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_3formattrigger">
+      <textSource>
+      <![CDATA[function M_3FormatTrigger return boolean is
+begin
+ if :dc_test_conso ='sans'  then
+   return (false);
+else
+	return (TRUE);
+end if;
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

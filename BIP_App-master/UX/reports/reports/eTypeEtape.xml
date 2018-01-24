@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eTypeEtape" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="ETYPEETAPE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select 
+JEU,
+ TYPETAP,
+ LIBTYET, 
+decode(TOP_IMMO,'O','Oui','N','Non') top_immo, 
+CHRONOLOGIE 
+from type_etape 
+where
+jeu like UPPER(decode(:p_param6,'*','%',:p_param6||'%'))
+ORDER BY jeu, CHRONOLoGIE
+]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_2">
+        <displayInfo x="1.45007" y="1.94995" width="1.09998" height="0.43066"
+        />
+        <dataItem name="JEU" datatype="vchar2" columnOrder="11" width="60"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jeu de types d&apos;étapes">
+          <dataDescriptor expression="JEU" descriptiveExpression="JEU"
+           order="1" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_1">
+        <displayInfo x="1.26746" y="3.13965" width="1.46521" height="1.62695"
+        />
+        <dataItem name="top_immo" datatype="vchar2" columnOrder="15" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Decode Top Immo O Oui N Non">
+          <xmlSettings xmlTag="DECODE_TOP_IMMO_O_OUI_N_NON_"/>
+          <dataDescriptor
+           expression="decode ( TOP_IMMO , &apos;O&apos; , &apos;Oui&apos; , &apos;N&apos; , &apos;Non&apos; )"
+           descriptiveExpression="TOP_IMMO" order="4" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPETAP" datatype="vchar2" columnOrder="12" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Code">
+          <dataDescriptor expression="TYPETAP" descriptiveExpression="TYPETAP"
+           order="2" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBTYET" datatype="vchar2" columnOrder="13" width="60"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Libellé">
+          <dataDescriptor expression="LIBTYET" descriptiveExpression="LIBTYET"
+           order="3" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHRONOLOGIE" oracleDatatype="number" columnOrder="14"
+         width="22" defaultWidth="40000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="N° chrono">
+          <dataDescriptor expression="CHRONOLOGIE"
+           descriptiveExpression="CHRONOLOGIE" order="5"
+           oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <placeholder name="CP_indice" datatype="number" width="20"
+         precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+         valueIfNull="1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </placeholder>
+        <summary name="CS_compteur" source="CP_indice" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_2_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.31250" height="0.81250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_2" source="G_2" printDirection="down"
+         minWidowRecords="1" columnMode="no" vertSpaceBetweenFrames="0.2500">
+          <geometryInfo x="0.00000" y="0.00000" width="7.31250"
+           height="0.81250"/>
+          <generalLayout verticalElasticity="variable"/>
+          <rectangle name="B_1">
+            <geometryInfo x="0.00000" y="0.00000" width="3.93750"
+             height="0.31250"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100" linePattern="transparent"
+             lineBackgroundColor="black"/>
+            <points>
+              <point x="0.00000" y="0.00000"/>
+              <point x="3.93750" y="0.31250"/>
+            </points>
+          </rectangle>
+          <field name="F_JEU" source="JEU" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="12" bold="yes" textColor="red"/>
+            <geometryInfo x="2.12500" y="0.06250" width="1.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_1_GRPFR">
+            <geometryInfo x="0.25000" y="0.50000" width="7.06250"
+             height="0.31250"/>
+            <generalLayout verticalElasticity="variable"/>
+            <repeatingFrame name="R_G_1" source="G_1" printDirection="down"
+             minWidowRecords="1" columnMode="no"
+             vertSpaceBetweenFrames="0.0312">
+              <geometryInfo x="0.25000" y="0.68750" width="7.06250"
+               height="0.12500"/>
+              <generalLayout verticalElasticity="expand"/>
+              <advancedLayout formatTrigger="r_g_1formattrigger"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="r100g88b100"/>
+              <field name="F_TYPETAP" source="TYPETAP" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="1.18750" y="0.68750" width="0.37500"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_LIBTYET" source="LIBTYET" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="2.87500" y="0.68750" width="4.43750"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+              <field name="F_TOP_IMMO" source="top_immo" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="1.87500" y="0.68750" width="0.68750"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+                <advancedLayout formatTrigger="f_top_immoformattrigger"/>
+              </field>
+              <field name="F_CHRONOLOGIE" source="CHRONOLOGIE"
+               minWidowLines="1" spacing="0" alignment="start">
+                <font face="Arial" size="8"/>
+                <geometryInfo x="0.25000" y="0.68750" width="0.81250"
+                 height="0.12500"/>
+                <generalLayout verticalElasticity="expand"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_G_1_HDR">
+              <geometryInfo x="0.25000" y="0.50000" width="3.62500"
+               height="0.18750"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <text name="B_TYPETAP" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="1.18750" y="0.50000" width="0.37500"
+                 height="0.18750"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Code]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_LIBTYET" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="2.87500" y="0.50000" width="1.00000"
+                 height="0.18750"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Libellé]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_TOP_IMMO" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="1.87500" y="0.50000" width="0.68750"
+                 height="0.18750"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[Top Immo]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_CHRONOLOGIE" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="0.25000" y="0.50000" width="0.81250"
+                 height="0.18750"/>
+                <textSegment>
+                  <font face="Arial" size="10" bold="yes" textColor="r0g0b50"
+                  />
+                  <string>
+                  <![CDATA[N° chrono]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+          </frame>
+          <text name="B_JEU" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="0.06250" width="2.06250"
+             height="0.18750"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <textSegment>
+              <font face="Arial" size="12" bold="yes"/>
+              <string>
+              <![CDATA[Jeu de types d'étapes :]]>
+              </string>
+            </textSegment>
+          </text>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="2.31250" y="0.43750" width="4.50000" height="0.31250"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+        <textSegment>
+          <font face="Arial" size="16" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[EDITION DES JEUX DE TYPES D'ETAPES]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="TotalPages" minWidowLines="1" spacing="single"
+       alignment="start">
+        <font face="Arial" size="8" textColor="r0g0b50"/>
+        <geometryInfo x="8.12500" y="0.18750" width="0.31250" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_2" source="PageNumber" minWidowLines="1" spacing="single"
+       alignment="end">
+        <font face="Arial" size="8" textColor="r0g0b50"/>
+        <geometryInfo x="7.75000" y="0.18750" width="0.25000" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_3" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="8.04163" y="0.18750" width="0.08337" height="0.16663"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+        <textSegment>
+          <font face="Arial" size="8" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_4" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="7.31250" y="0.18750" width="0.43750" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+        <textSegment>
+          <font face="Arial" size="8" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Page(s)]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_5" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.25000" y="0.18750" width="0.31250" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+        <textSegment>
+          <font face="Arial" size="8" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_3" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="start">
+        <font face="Arial" size="8" textColor="r0g0b50"/>
+        <geometryInfo x="0.56250" y="0.18750" width="1.06250" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r100g88b100"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="r_g_1formattrigger">
+      <textSource>
+      <![CDATA[function R_G_1FormatTrigger return boolean is
+begin
+ IF (:CS_compteur mod 2 = 0)
+   THEN
+      srw.set_background_fill_color('r88g75b88');
+ else
+ 	 srw.set_background_fill_color('white');
+       END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_top_immoformattrigger">
+      <textSource>
+      <![CDATA[function F_TOP_IMMOFormatTrigger return boolean is
+begin
+  If (:top_immo = 'Oui')then
+  		srw.set_font_weight(srw.bold_weight);
+  	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,4632 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="monprofil" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" beforeReportTrigger="beforereport"
+ afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="MONPROFIL" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" label="P Param1" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM2" datatype="character" width="200"
+     precision="10" label="P Param2" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM3" datatype="character" width="200"
+     precision="10" label="P Param3" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM4" datatype="character" width="200"
+     precision="10" label="P Param4" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM5" datatype="character" width="200"
+     precision="10" label="P Param5" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM6" datatype="character" width="200"
+     precision="10" label="P Param6" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="200"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="1024"
+     precision="10" label="P Param8" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_USER_ID" datatype="character" width="100"
+     precision="10" label="P Param9" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="200"
+     precision="10" label="P Param10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_USER_PRENOM" datatype="character" width="100"
+     precision="10" label="P Param11" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_USER_NOM" datatype="character" width="100"
+     precision="10" label="P Param12" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMCLI" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CHEF_PROJET" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DOS_PROJ" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PROJET" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_APP" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_FI" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="1024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MENUS" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_SSMENUS" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_SUIVINV" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" width="200"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CENTRE2FRAIS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DP" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_DA" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMMO" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <dataSource name="Q_CP">
+      <select>
+      <![CDATA[select distinct
+		situ.cpident "cp_cpident",
+		r_cp.rnom "cp_nom",
+		r_cp.rprenom "cp_prenom",
+		r.ident "cp_rident",
+		r.rnom "cp_rnom",
+		r.rprenom "cp_rprenom",
+		'' "cp_pid",
+		'' "cp_pid_lib"
+	from
+		situ_ress_full situ,
+		ressource r, ressource r_cp,
+		datdebex d
+	where
+		INSTR(:P_CHEF_PROJET, to_char(situ.cpident,'FM00000')) > 0
+	and situ.type_situ = 'N'
+	and (situ.datsitu IS NULL or situ.datsitu <= d.moismens)
+	and (situ.datdep IS NULL or situ.datdep >= d.datdebex)
+	and situ.ident = r.ident
+	and situ.cpident = r_cp.ident
+UNION
+	select distinct
+		bip.pcpi,
+		r_cp.rnom,
+		r_cp.rprenom,
+		0,
+		'',
+		'',
+		bip.pid,
+		bip.pnom
+	from
+		ligne_bip bip,
+		ressource r_cp
+	where
+		INSTR(:P_CHEF_PROJET, to_char(bip.pcpi,'FM00000')) > 0
+	and bip.adatestatut is null
+	and bip.pcpi = r_cp.ident]]>
+      </select>
+      <displayInfo x="1.24988" y="0.09375" width="0.69995" height="0.19995"/>
+      <group name="G_cp_cpident">
+        <displayInfo x="0.73816" y="0.61755" width="1.25635" height="1.11426"
+        />
+        <dataItem name="cp_cpident" oracleDatatype="number" columnOrder="42"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cpident">
+          <xmlSettings xmlTag="CPIDENT"/>
+          <dataDescriptor expression="situ.cpident"
+           descriptiveExpression="cp_cpident" order="1"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cp_nom" datatype="vchar2" columnOrder="48" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cp Nom">
+          <dataDescriptor expression="r_cp.rnom"
+           descriptiveExpression="cp_nom" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cp_prenom" datatype="vchar2" columnOrder="49"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cp Prenom">
+          <dataDescriptor expression="r_cp.rprenom"
+           descriptiveExpression="cp_prenom" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_CP">
+        <displayInfo x="0.52979" y="1.98096" width="1.68896" height="1.45605"
+        />
+        <dataItem name="cp_rident" oracleDatatype="number" columnOrder="43"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident1">
+          <xmlSettings xmlTag="IDENT1"/>
+          <dataDescriptor expression="r.ident"
+           descriptiveExpression="cp_rident" order="4" oracleDatatype="number"
+           width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cp_rnom" datatype="vchar2" columnOrder="44" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom1">
+          <xmlSettings xmlTag="RNOM1"/>
+          <dataDescriptor expression="r.rnom" descriptiveExpression="cp_rnom"
+           order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cp_rprenom" datatype="vchar2" columnOrder="45"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Rprenom1">
+          <xmlSettings xmlTag="RPRENOM1"/>
+          <dataDescriptor expression="r.rprenom"
+           descriptiveExpression="cp_rprenom" order="6" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cp_pid" datatype="vchar2" columnOrder="46" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="A">
+          <xmlSettings xmlTag="A"/>
+          <dataDescriptor expression="&apos;&apos;"
+           descriptiveExpression="cp_pid" order="7" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cp_pid_lib" datatype="vchar2" columnOrder="47"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="A1">
+          <xmlSettings xmlTag="A1"/>
+          <dataDescriptor expression="&apos;&apos;"
+           descriptiveExpression="cp_pid_lib" order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_CP_RIDENT" source="cp_rident" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8"
+         defaultLabel="Cs Num Cp Rident">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_NUM_CP_PID" source="cp_pid" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="0" defaultHeight="0" columnFlags="8"
+         defaultLabel="Cs Num Cp Pid">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_PERIME">
+      <select>
+      <![CDATA[-- Primetre Fournisseur
+SELECT
+	vue_dpg.codsg "perime_dpg",
+	s_info.libdsg "perime_dpg_lib"
+FROM
+	vue_dpg_perime vue_dpg,
+	struct_info s_info
+WHERE
+	INSTR(:P_PERIME, to_char(vue_dpg.codbddpg,'FM00000000000')) > 0
+and	vue_dpg.codsg = s_info.codsg (+)
+and          s_info.topfer='O']]>
+      </select>
+      <displayInfo x="2.57288" y="0.15613" width="1.26038" height="0.21875"/>
+      <group name="G_PERIME">
+        <displayInfo x="2.49170" y="0.67700" width="1.41455" height="0.77246"
+        />
+        <dataItem name="perime_dpg" oracleDatatype="number" columnOrder="52"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codsg">
+          <xmlSettings xmlTag="CODSG"/>
+          <dataDescriptor expression="vue_dpg.codsg"
+           descriptiveExpression="perime_dpg" order="1"
+           oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perime_dpg_lib" datatype="vchar2" columnOrder="53"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Perime Dpg Lib">
+          <dataDescriptor expression="s_info.libdsg"
+           descriptiveExpression="perime_dpg_lib" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_PERIME" source="perime_dpg" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Perime">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_PERIMO">
+      <select>
+      <![CDATA[-- perimetre MO
+SELECT
+	mo.clicode "perimo_clicode",
+	mo.clisigle "perimo_sigle",
+	mo.clilib "perimo_lib"
+FROM
+	vue_clicode_perimo vue_clicode,
+	client_mo mo
+	
+WHERE
+	INSTR(:P_PERIMMO, to_char(vue_clicode.bdclicode,'FM000000000')) > 0
+and vue_clicode.clicode = mo.clicode
+and mo.clitopf='O']]>
+      </select>
+      <displayInfo x="4.59375" y="0.16663" width="0.69995" height="0.19995"/>
+      <group name="G_PERIMO">
+        <displayInfo x="4.11462" y="0.62720" width="1.56250" height="0.94336"
+        />
+        <dataItem name="perimo_clicode" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="55" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Clicode">
+          <xmlSettings xmlTag="CLICODE"/>
+          <dataDescriptor expression="mo.clicode"
+           descriptiveExpression="perimo_clicode" order="1"
+           oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perimo_sigle" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="56" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Perimo Sigle">
+          <dataDescriptor expression="mo.clisigle"
+           descriptiveExpression="perimo_sigle" order="2"
+           oracleDatatype="aFixedChar" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perimo_lib" datatype="vchar2" columnOrder="57"
+         width="25" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Perimo Lib">
+          <dataDescriptor expression="mo.clilib"
+           descriptiveExpression="perimo_lib" order="3" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_PERIMO" source="perimo_clicode" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Perimo">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_RESSOURCES">
+      <select>
+      <![CDATA[select
+	r.ident "r_ident",
+	r.rnom "r_nom",
+	r.rprenom "r_prenom"
+from
+	ressource r
+where r.ident in(
+	select distinct
+		ress.ident 
+	from
+		ressource ress
+	where
+		INSTR(:P_CHEF_PROJET, to_char(ress.ident,'FM00000')) > 0
+MINUS
+	select distinct
+		situ.cpident
+	from
+		datdebex d, 
+		situ_ress_full situ
+	where situ.type_situ = 'N'
+	and (situ.datsitu IS NULL or situ.datsitu <= d.moismens)
+	and (situ.datdep IS NULL or situ.datdep >= d.moismens)		
+MINUS
+	select distinct
+		bip.pcpi
+	from
+		ligne_bip bip
+	where
+		bip.adatestatut is null)]]>
+      </select>
+      <displayInfo x="6.01038" y="0.19775" width="1.35620" height="0.19995"/>
+      <group name="G_RESS">
+        <displayInfo x="5.95618" y="0.67908" width="1.41882" height="0.94336"
+        />
+        <dataItem name="r_ident" oracleDatatype="number" columnOrder="59"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <xmlSettings xmlTag="IDENT"/>
+          <dataDescriptor expression="r.ident" descriptiveExpression="r_ident"
+           order="1" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r_nom" datatype="vchar2" columnOrder="60" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom">
+          <xmlSettings xmlTag="RNOM"/>
+          <dataDescriptor expression="r.rnom" descriptiveExpression="r_nom"
+           order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r_prenom" datatype="vchar2" columnOrder="61"
+         width="15" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Rprenom">
+          <xmlSettings xmlTag="RPRENOM"/>
+          <dataDescriptor expression="r.rprenom"
+           descriptiveExpression="r_prenom" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_RESS" source="r_ident" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Ress">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_DOS_PROJ">
+      <select>
+      <![CDATA[-- Dossiers Projets
+select
+	dpcode "dos_proj",
+	dplib "dos_proj_lib"
+from
+	dossier_projet
+&P_DP]]>
+      </select>
+      <displayInfo x="5.80212" y="2.02075" width="1.40625" height="0.19995"/>
+      <group name="G_dos_proj">
+        <displayInfo x="5.87793" y="2.72070" width="1.25464" height="0.77246"
+        />
+        <dataItem name="dos_proj" oracleDatatype="number" columnOrder="63"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dos Proj">
+          <dataDescriptor expression="dpcode" descriptiveExpression="dos_proj"
+           order="1" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dos_proj_lib" datatype="vchar2" columnOrder="64"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dos Proj Lib">
+          <dataDescriptor expression="dplib"
+           descriptiveExpression="dos_proj_lib" order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_DOS_PROJ" source="dos_proj" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Dos Proj">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_PROJETS">
+      <select>
+      <![CDATA[-- Projets
+select
+	icpi "proj",
+	ilibel "proj_lib"
+from
+	proj_info
+where
+	INSTR(:P_PROJET, icpi) > 0]]>
+      </select>
+      <displayInfo x="2.89722" y="1.97876" width="0.69995" height="0.19995"/>
+      <group name="G_PROJETS">
+        <displayInfo x="2.46887" y="2.43994" width="1.55334" height="0.77246"
+        />
+        <dataItem name="proj" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="66" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Proj">
+          <dataDescriptor expression="icpi" descriptiveExpression="proj"
+           order="1" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="proj_lib" datatype="vchar2" columnOrder="67"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Proj Lib">
+          <dataDescriptor expression="ilibel" descriptiveExpression="proj_lib"
+           order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_PROJET" source="proj" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Projet">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_APP">
+      <select>
+      <![CDATA[-- Projets
+select
+	airt "app",
+	alibel "app_lib"
+from
+	application
+where
+	INSTR(:P_APP, airt) > 0]]>
+      </select>
+      <displayInfo x="6.19788" y="3.90625" width="0.69995" height="0.19995"/>
+      <group name="G_app">
+        <displayInfo x="5.90491" y="4.60620" width="1.28589" height="0.77246"
+        />
+        <dataItem name="app" datatype="character" oracleDatatype="aFixedChar"
+         columnOrder="69" width="5" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="App">
+          <dataDescriptor expression="airt" descriptiveExpression="app"
+           order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="app_lib" datatype="vchar2" columnOrder="70" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="App Lib">
+          <dataDescriptor expression="alibel" descriptiveExpression="app_lib"
+           order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_APP" source="app" function="count" width="20"
+         precision="10" reset="report" compute="report" defaultWidth="0"
+         defaultHeight="0" columnFlags="8" defaultLabel="Cs Num App">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_CA_FI">
+      <select>
+      <![CDATA[select
+	es.codcamo "ca_fi",
+	nvl(ca.clibca,es.licoes) "ca_fi_lib",
+	es.niveau "ca_fi_niv",
+                nvl(to_char(ca.cdateferm),'ACTIF') "ca_fi_date_cess"
+from
+	centre_activite ca,
+	entite_structure es
+where
+	INSTR(:P_CA_FI, to_char(es.codcamo,'FM00000')) > 0
+and es.codcamo = ca.codcamo (+)]]>
+      </select>
+      <displayInfo x="0.33337" y="4.09375" width="0.69995" height="0.19995"/>
+      <group name="G_ca_fi">
+        <displayInfo x="0.04041" y="4.79370" width="1.54297" height="1.11426"
+        />
+        <dataItem name="ca_fi_date_cess_" datatype="vchar2" columnOrder="75"
+         width="8" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Fi Date Cess">
+          <dataDescriptor
+           expression="nvl ( to_char ( ca.cdateferm ) , &apos;ACTIF&apos; )"
+           descriptiveExpression="ca_fi_date_cess" order="4" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_fi_niv_" oracleDatatype="number" columnOrder="74"
+         width="22" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Fi Niv">
+          <dataDescriptor expression="es.niveau"
+           descriptiveExpression="ca_fi_niv" order="3" oracleDatatype="number"
+           width="22" precision="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_fi" oracleDatatype="number" columnOrder="72"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Cafi">
+          <xmlSettings xmlTag="CAFI"/>
+          <dataDescriptor expression="es.codcamo"
+           descriptiveExpression="ca_fi" order="1" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_fi_lib" datatype="vchar2" columnOrder="73"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Cafi Lib">
+          <xmlSettings xmlTag="CAFI_LIB"/>
+          <dataDescriptor expression="nvl ( ca.clibca , es.licoes )"
+           descriptiveExpression="ca_fi_lib" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_CA_FI" source="ca_fi" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Ca Fi">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_CA_PAYEUR">
+      <select>
+      <![CDATA[select
+	es.codcamo "ca_payeur",
+	nvl(ca.clibca,es.licoes) "ca_payeur_lib",
+	es.niveau "ca_payeur_niv",
+                nvl(to_char(ca.cdateferm),'ACTIF') "ca_payeur_date_cess"
+from
+	centre_activite ca,
+	entite_structure es
+where
+	INSTR(:P_CA_PAYEUR, to_char(es.codcamo,'FM00000')) > 0
+and es.codcamo = ca.codcamo (+)]]>
+      </select>
+      <displayInfo x="1.92700" y="4.20837" width="0.94800" height="0.19995"/>
+      <group name="G_CA_PAYEUR">
+        <displayInfo x="1.75903" y="4.90833" width="1.34509" height="1.11426"
+        />
+        <dataItem name="ca_payeur_date_cess_" datatype="vchar2"
+         columnOrder="80" width="8" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Payeur Date Cess">
+          <dataDescriptor
+           expression="nvl ( to_char ( ca.cdateferm ) , &apos;ACTIF&apos; )"
+           descriptiveExpression="ca_payeur_date_cess" order="4" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_payeur_niv_" oracleDatatype="number"
+         columnOrder="79" width="22" defaultWidth="30000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Ca Payeur Niv">
+          <dataDescriptor expression="es.niveau"
+           descriptiveExpression="ca_payeur_niv" order="3"
+           oracleDatatype="number" width="22" precision="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_PAYEUR" oracleDatatype="number" columnOrder="77"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Payeur">
+          <dataDescriptor expression="es.codcamo"
+           descriptiveExpression="ca_payeur" order="1" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CA_PAYEUR_LIB" datatype="vchar2" columnOrder="78"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Payeur Lib">
+          <dataDescriptor expression="nvl ( ca.clibca , es.licoes )"
+           descriptiveExpression="ca_payeur_lib" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_CA_PAYEUR" source="CA_PAYEUR" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Ca Payeur">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_CA_SUIVINV">
+      <select>
+      <![CDATA[-- CA suivi investissement
+select
+	es.codcamo "ca_suivinv",
+	nvl(ca.clibca,es.licoes) "ca_suivinv_lib",
+	es.niveau "ca_suivinv_niv",
+                nvl(to_char(ca.cdateferm),'ACTIF') "ca_suivinv_date_cess"
+from
+	centre_activite ca,
+	entite_structure es
+where
+	INSTR(:P_CA_SUIVINV, to_char(es.codcamo,'FM00000')) > 0
+and es.codcamo = ca.codcamo (+)]]>
+      </select>
+      <displayInfo x="1.25012" y="6.32288" width="0.97900" height="0.19995"/>
+      <group name="G_ca_suivinv">
+        <displayInfo x="0.87500" y="6.77283" width="1.71875" height="1.28516"
+        />
+        <dataItem name="ca_suivinv_date_cess_" datatype="vchar2"
+         columnOrder="85" width="8" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Suivinv Date Cess">
+          <dataDescriptor
+           expression="nvl ( to_char ( ca.cdateferm ) , &apos;ACTIF&apos; )"
+           descriptiveExpression="ca_suivinv_date_cess" order="4" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_suivinv" oracleDatatype="number" columnOrder="82"
+         width="22" defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Suivinv">
+          <dataDescriptor expression="es.codcamo"
+           descriptiveExpression="ca_suivinv" order="1"
+           oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_suivinv_lib" datatype="vchar2" columnOrder="83"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Suivinv Lib">
+          <dataDescriptor expression="nvl ( ca.clibca , es.licoes )"
+           descriptiveExpression="ca_suivinv_lib" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_suivinv_niv" oracleDatatype="number"
+         columnOrder="84" width="22" defaultWidth="30000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Ca Suivinv Niv">
+          <dataDescriptor expression="es.niveau"
+           descriptiveExpression="ca_suivinv_niv" order="3"
+           oracleDatatype="number" width="22" precision="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_CA_SUIVINV" source="ca_suivinv" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Ca Suivinv">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_MENUS">
+      <select>
+      <![CDATA[select lib as menus_lib
+from
+(
+select '                                                                                ' as lib from dual &P_MENUS
+)
+where
+length(trim(lib)) > 0]]>
+      </select>
+      <displayInfo x="3.84375" y="5.84375" width="0.69995" height="0.19995"/>
+      <group name="G_MENUS">
+        <displayInfo x="3.59253" y="6.54370" width="1.20251" height="0.77246"
+        />
+        <dataItem name="menus_lib" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="87" width="80"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Menus Lib">
+          <dataDescriptor expression="lib" descriptiveExpression="MENUS_LIB"
+           order="1" oracleDatatype="aFixedChar" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_MENUS" source="menus_lib" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Menus">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_SSMENUS">
+      <select>
+      <![CDATA[select lib as ssmenus_lib
+from
+(
+select '                                                                                ' as lib from dual &P_SSMENUS
+)
+where
+length(trim(lib)) > 0]]>
+      </select>
+      <displayInfo x="5.42712" y="5.81250" width="0.69995" height="0.19995"/>
+      <group name="G_ssmenus_lib">
+        <displayInfo x="5.13940" y="6.51245" width="1.27551" height="0.77246"
+        />
+        <dataItem name="ssmenus_lib" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="89" width="80"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ssmenus Lib">
+          <dataDescriptor expression="lib" descriptiveExpression="SSMENUS_LIB"
+           order="1" oracleDatatype="aFixedChar" width="80"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_SSMENUS" source="ssmenus_lib" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Ssmenus">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_CENTRE_FRAIS">
+      <select>
+      <![CDATA[select 
+         codcfrais,
+         libcfrais
+from centre_frais
+&P_WHERE
+order by codcfrais;]]>
+      </select>
+      <displayInfo x="7.71887" y="2.19800" width="1.37500" height="0.19995"/>
+      <group name="G_codcfrais">
+        <displayInfo x="7.83728" y="2.72083" width="1.12964" height="0.60156"
+        />
+        <dataItem name="codcfrais" oracleDatatype="number" columnOrder="91"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Codcfrais">
+          <dataDescriptor expression="codcfrais"
+           descriptiveExpression="CODCFRAIS" order="1" oracleDatatype="number"
+           width="22" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libcfrais" datatype="vchar2" columnOrder="92"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="Libcfrais" breakOrder="none">
+          <dataDescriptor expression="libcfrais"
+           descriptiveExpression="LIBCFRAIS" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+    <dataSource name="Q_CA_DA">
+      <select>
+      <![CDATA[select
+	es.codcamo "ca_da",
+	nvl(ca.clibca,es.licoes) "ca_da_lib",
+	es.niveau "ca_da_niv",
+                nvl(to_char(ca.cdateferm),'ACTIF') "ca_da_date_cess"
+from
+	centre_activite ca,
+	entite_structure es
+where
+	INSTR(:P_CA_DA, to_char(es.codcamo,'FM00000')) > 0
+and es.codcamo = ca.codcamo (+)]]>
+      </select>
+      <displayInfo x="3.42712" y="7.79163" width="0.69995" height="0.19995"/>
+      <group name="G_CA_DA">
+        <displayInfo x="3.17078" y="8.49158" width="1.69385" height="1.11426"
+        />
+        <dataItem name="ca_da_date_cess_" datatype="vchar2" columnOrder="96"
+         width="8" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Da Date Cess">
+          <dataDescriptor
+           expression="nvl ( to_char ( ca.cdateferm ) , &apos;ACTIF&apos; )"
+           descriptiveExpression="ca_da_date_cess" order="4" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_da_" oracleDatatype="number" columnOrder="93"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Da">
+          <dataDescriptor expression="es.codcamo"
+           descriptiveExpression="ca_da" order="1" oracleDatatype="number"
+           width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_da_lib_" datatype="vchar2" columnOrder="94"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Ca Da Lib">
+          <dataDescriptor expression="nvl ( ca.clibca , es.licoes )"
+           descriptiveExpression="ca_da_lib" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ca_da_niv_" oracleDatatype="number" columnOrder="95"
+         width="22" defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ca Da Niv">
+          <dataDescriptor expression="es.niveau"
+           descriptiveExpression="ca_da_niv" order="3" oracleDatatype="number"
+           width="22" precision="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_CA_DA" source="ca_da_" function="count"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Num Ca Da">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <dataSource name="Q_PERIMCLI">
+      <select>
+      <![CDATA[-- perimetre MCLI
+SELECT
+	mo.clicode "perimcli_clicode",
+	mo.clisigle "perimcli_sigle",
+	mo.clilib "perimcli_lib"
+FROM
+	vue_clicode_perimo vue_clicode,
+	client_mo mo
+	
+WHERE
+	INSTR(:P_PERIMCLI, to_char(vue_clicode.bdclicode,'FM000000000')) > 0
+and vue_clicode.clicode = mo.clicode
+and mo.clitopf='O']]>
+      </select>
+      <displayInfo x="7.78125" y="0.21875" width="1.28125" height="0.20837"/>
+      <group name="G_perimcli_clicode_">
+        <displayInfo x="7.67517" y="0.70911" width="1.50464" height="1.11426"
+        />
+        <dataItem name="perimcli_clicode_" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="98" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Perimcli Clicode">
+          <dataDescriptor expression="mo.clicode"
+           descriptiveExpression="perimcli_clicode" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perimcli_sigle_" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="99" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Perimcli Sigle">
+          <dataDescriptor expression="mo.clisigle"
+           descriptiveExpression="perimcli_sigle" order="2" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="perimcli_lib_" datatype="vchar2" columnOrder="100"
+         width="25" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Perimcli Lib">
+          <dataDescriptor expression="mo.clilib"
+           descriptiveExpression="perimcli_lib" order="3" width="25"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_NUM_PERIMCLI" source="perimcli_clicode_"
+         function="count" width="20" precision="10" reset="report"
+         compute="report" defaultWidth="0" defaultHeight="0" columnFlags="8"
+         defaultLabel="Cs Num Perimcli">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+    </dataSource>
+    <formula name="CF_DPG_DEFAUT_LIB" source="cf_dpg_defaut_libformula"
+     datatype="character" width="30" precision="10" defaultWidth="0"
+     defaultHeight="0" columnFlags="16" valueIfNull="DPG inconnu ou générique"
+     breakOrder="none">
+      <displayInfo x="3.12500" y="3.82288" width="1.77087" height="0.19995"/>
+    </formula>
+    <formula name="CF_CLIENT_DEFAUT_LIB" source="cf_client_defaut_libformula"
+     datatype="character" width="30" precision="10" defaultWidth="0"
+     defaultHeight="0" columnFlags="16"
+     valueIfNull="Client inconnu ou générique" breakOrder="none">
+      <displayInfo x="3.12500" y="4.15613" width="1.83337" height="0.19995"/>
+    </formula>
+    <formula name="CF_CLIENT_DEFAUT_SIGLE"
+     source="cf_client_defaut_sigleformula" datatype="character" width="8"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16"
+     breakOrder="none">
+      <displayInfo x="3.15625" y="4.42700" width="1.79175" height="0.19995"/>
+    </formula>
+    <formula name="CF_CENTRE2FRAIS_LIB" source="cf_centre2frais_libformula"
+     datatype="character" width="30" precision="10" defaultWidth="0"
+     defaultHeight="0" columnFlags="16" valueIfNull="** INCONNU **"
+     breakOrder="none">
+      <displayInfo x="3.15625" y="4.76038" width="1.83337" height="0.19995"/>
+    </formula>
+    <placeholder name="C_CA_INCONNUS" datatype="character" width="5000"
+     precision="500" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="3.58337" y="3.54163" width="1.29163" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_PROJ_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="3.76050" y="5.59375" width="1.23950" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_CP_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="3.77075" y="5.07300" width="1.23962" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_CF_INCONNUS" datatype="character" width="5000"
+     precision="500" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="3.77075" y="5.35425" width="1.22925" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_APP_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="4.93750" y="3.54163" width="1.16663" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_PERIMO_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.64575" y="7.21863" width="1.88550" height="0.22925"/>
+    </placeholder>
+    <placeholder name="C_PERIMCLI_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.65625" y="7.55200" width="1.91675" height="0.21887"/>
+    </placeholder>
+    <placeholder name="C_CA_DA_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.66663" y="5.71875" width="1.79175" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_DOS_PROJ_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.66663" y="6.01038" width="1.81250" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_DPG_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.66663" y="6.87500" width="1.85425" height="0.22913"/>
+    </placeholder>
+    <placeholder name="C_CA_FI_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.67712" y="6.29175" width="1.80200" height="0.19995"/>
+    </placeholder>
+    <placeholder name="C_CA_PAYEUR_INCONNUS" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0" columnFlags="16">
+      <displayInfo x="6.67712" y="6.58337" width="1.81250" height="0.19995"/>
+    </placeholder>
+  </data>
+  <layout>
+  <section name="main">
+    <body height="10.12500">
+      <location y="0.62500"/>
+      <frame name="M_DPG_DEFAUT_HDR2">
+        <geometryInfo x="0.00000" y="0.00000" width="0.00012" height="0.00012"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <frame name="M_DPG_DEFAUT_HDR3">
+          <geometryInfo x="0.00000" y="0.00000" width="0.00012"
+           height="0.00012"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <frame name="M_DPG_DEFAUT_HDR4">
+            <geometryInfo x="0.00000" y="0.00000" width="0.00012"
+             height="0.00012"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+          </frame>
+        </frame>
+      </frame>
+      <frame name="M_MENUS">
+        <geometryInfo x="0.06250" y="0.00000" width="7.37500" height="1.12500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="black" linePattern="solid"/>
+        <frame name="M_MENU">
+          <geometryInfo x="0.12830" y="0.06226" width="7.24670"
+           height="0.37524"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_MENU_HDR">
+            <geometryInfo x="0.25000" y="0.06311" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_37" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="0.06543" width="0.80835"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Menus]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_MENU" source="G_MENUS" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.56250" y="0.23486" width="5.43750"
+             height="0.20264"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_perime1formattrigger0005"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_MENU_LIB" source="menus_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="0.25000" width="4.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+        </frame>
+        <frame name="M_SSMENU">
+          <geometryInfo x="0.12830" y="0.50000" width="7.24670"
+           height="0.37500"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_SSMENU_HDR">
+            <geometryInfo x="0.25000" y="0.50061" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_36" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="0.50293" width="1.55835"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Sous Menus]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_SSMENU" source="G_ssmenus_lib"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.56250" y="0.67236" width="5.43750"
+             height="0.20264"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_menu1formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_SSMENU_LIB" source="ssmenus_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="0.68750" width="4.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+        </frame>
+        <text name="B_44" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.25000" y="0.93750" width="0.13538"
+           height="0.11975"/>
+          <visualSettings fillBackgroundColor="black"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[#NULL#]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <frame name="M_FOURNISSEUR">
+        <geometryInfo x="0.06250" y="1.25000" width="7.37500" height="2.62500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_fournisseurformattrigger"/>
+        <visualSettings linePattern="solid"/>
+        <frame name="M_PERIME">
+          <geometryInfo x="0.12830" y="1.31250" width="7.24670"
+           height="0.75000"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_perimeformattrigger"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_PERIME_HDR">
+            <geometryInfo x="0.25000" y="1.31311" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"
+             formatTrigger="m_perime_hdrformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_3" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="1.31543" width="2.43335"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Périmètre Fournisseur (DPG)]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_PERIME" source="G_PERIME"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="1.67212" width="5.75000"
+             height="0.20288"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_perime1formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_DPG" source="perime_dpg" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="1.68750" width="1.06250"
+               height="0.18750"/>
+              <advancedLayout formatTrigger="f_dpgformattrigger"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_DPG_LIB" source="perime_dpg_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.81250" y="1.68750" width="4.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_PERIME_TOUS">
+            <geometryInfo x="0.26001" y="1.87500" width="6.97998"
+             height="0.16663"/>
+            <generalLayout>
+              <conditionalFormat>
+                <formatException label="(:P_PERIMO = &apos;00000000000&apos;)"
+                  >
+                  <font face="Courier New" size="12"/>
+                  <formatVisualSettings fillForegroundColor="r75g100b100"
+                   borderPattern="solid"/>
+                <cond name="first" column="P_PERIMCLI" exception="1"
+                 lowValue="00000000000" conjunction="1"/>
+                </formatException>
+              </conditionalFormat>
+            </generalLayout>
+            <advancedLayout formatTrigger="m_1formattrigger"/>
+            <visualSettings fillBackgroundColor="r75g100b100"/>
+            <text name="B_5" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="2.37500" y="1.87500" width="0.33337"
+               height="0.16663"/>
+              <advancedLayout formatTrigger="b_5formattrigger"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_DPG_INCONNUS" source="C_DPG_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.25330" y="1.50000" width="6.68750"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <frame name="M_PERIME_DEFAUT">
+          <geometryInfo x="0.12500" y="2.31250" width="7.31250"
+           height="0.37500"/>
+          <advancedLayout formatTrigger="m_perime_defautformattrigger"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_DPG_DEFAUT_HDR">
+            <geometryInfo x="0.26440" y="2.31311" width="6.98560"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_7" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="2.31543" width="3.55835"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Entité fournisseur (DPG) par défaut]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <rectangle name="B_8">
+            <geometryInfo x="0.26001" y="2.50000" width="6.98999"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <points>
+              <point x="0.26001" y="2.50000"/>
+              <point x="6.98999" y="0.18750"/>
+            </points>
+          </rectangle>
+          <field name="F_DPG_DEFAUT" source="P_PARAM2" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="2.50000" width="1.06250"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="f_dpg_defautformattrigger"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <field name="F_DPG_DEFAUT_LIB" source="CF_DPG_DEFAUT_LIB"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="1.81250" y="2.50000" width="3.00000"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="f_dpg_defaut_libformattrigger"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <frame name="M_PERIME1">
+          <geometryInfo x="0.12500" y="2.81250" width="7.24670"
+           height="0.75000"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_PERIME_HDR1">
+            <geometryInfo x="0.24670" y="2.81311" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_33" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75085" y="2.81543" width="2.43335"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Périmètre Client du rôle ME]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_perimo_INCONNUS1" source="C_PERIMO_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="3.00000" width="6.56250"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <repeatingFrame name="R_2" source="G_PERIMO" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="3.18750" width="6.81250"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="r_2formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_MO_CLICODE" source="perimo_clicode"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="3.18750" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <field name="F_MO_SIGLE" source="perimo_sigle" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="2.00000" y="3.18750" width="1.37500"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <field name="F_MO_LIB" source="perimo_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="3.50000" y="3.18750" width="3.25000"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_PERIME_TOUS1">
+            <geometryInfo x="0.25671" y="3.37500" width="6.97998"
+             height="0.16663"/>
+            <generalLayout>
+              <conditionalFormat>
+                <formatException label="BACKGROUND">
+                  <font size="0"/>
+                <cond name="first" column="P_PERIMCLI" exception="1"
+                 lowValue="BACKGROUND" conjunction="1"/>
+                </formatException>
+              </conditionalFormat>
+            </generalLayout>
+            <advancedLayout formatTrigger="m_perime_tous1formattrigger"/>
+            <visualSettings fillBackgroundColor="r75g100b100"/>
+            <text name="B_32" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="2.37170" y="3.37500" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+        <rectangle name="B_59">
+          <geometryInfo x="0.12500" y="3.62500" width="7.25000"
+           height="0.12500"/>
+          <points>
+            <point x="0.12500" y="3.62500"/>
+            <point x="7.25000" y="0.12500"/>
+          </points>
+        </rectangle>
+      </frame>
+      <frame name="M_CLIENT">
+        <geometryInfo x="0.06250" y="4.06250" width="7.31250" height="2.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_clientformattrigger"/>
+        <visualSettings fillBackgroundColor="r75g100b100" linePattern="solid"/>
+        <frame name="M_PERIMO">
+          <geometryInfo x="0.12500" y="4.12500" width="7.25000"
+           height="0.37500"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_perimoformattrigger"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_PERIMO_HDR">
+            <geometryInfo x="0.25415" y="4.12561" width="6.99585"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_4" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="4.12793" width="1.99585"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Périmètre Client]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+        <frame name="M_MO_DEFAUT">
+          <geometryInfo x="0.12500" y="4.83337" width="7.25000"
+           height="0.37500"/>
+          <advancedLayout formatTrigger="m_mo_defaut1formattrigger"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_MO_DEFAUT_HDR">
+            <geometryInfo x="0.25415" y="4.83398" width="6.99585"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_10" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="4.83630" width="3.55835"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Entité client par défaut]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <rectangle name="B_9">
+            <geometryInfo x="0.24976" y="5.02087" width="7.00024"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <points>
+              <point x="0.24976" y="5.02087"/>
+              <point x="7.00024" y="0.18750"/>
+            </points>
+          </rectangle>
+          <field name="F_MO_DEFAUT" source="P_PARAM4" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="5.02087" width="1.06250"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <field name="F_MO_DEFAUT_SIGLE" source="CF_CLIENT_DEFAUT_SIGLE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="1.87500" y="5.02087" width="1.12500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <field name="F_MO_DEFAUT_LIB" source="CF_CLIENT_DEFAUT_LIB"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="3.12500" y="5.02087" width="2.75146"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <text name="B_42" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.31250" y="5.27087" width="0.13538"
+           height="0.11975"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"
+            />
+            <string>
+            <![CDATA[#NULL#]]>
+            </string>
+          </textSegment>
+        </text>
+        <frame name="M_PERIME2">
+          <geometryInfo x="0.12500" y="5.31250" width="7.18750"
+           height="0.87500"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_PERIME_HDR2">
+            <geometryInfo x="0.24670" y="5.31311" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_58" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75085" y="5.31543" width="2.68665"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Périmètre Client du menu client]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_perimcli_INCONNUS" source="C_PERIMCLI_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="5.50000" width="6.12500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <repeatingFrame name="R_PERIMCLI" source="G_perimcli_clicode_"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="5.68750" width="6.56250"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="r_perimcliformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_CLI_CLICODE" source="perimcli_clicode_"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="5.68750" width="1.18750"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <field name="F_CLI_SIGLE" source="perimcli_sigle_"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.93750" y="5.68750" width="1.68750"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <field name="F_CLI_LIB" source="perimcli_lib_" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="3.81250" y="5.68750" width="2.37500"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_PERIME_TOUS2">
+            <geometryInfo x="0.25671" y="5.87500" width="6.97998"
+             height="0.16663"/>
+            <generalLayout>
+              <conditionalFormat>
+                <formatException label="BACKGROUND">
+                  <font size="0"/>
+                <cond name="first" column="P_PERIMCLI" exception="1"
+                 lowValue="BACKGROUND" conjunction="1"/>
+                </formatException>
+              </conditionalFormat>
+            </generalLayout>
+            <advancedLayout formatTrigger="m_perime_tous2formattrigger"/>
+            <visualSettings fillBackgroundColor="r75g100b100"/>
+            <text name="B_43" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="2.37170" y="5.87500" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+        <rectangle name="B_6">
+          <geometryInfo x="0.12500" y="6.31250" width="7.18750"
+           height="0.12500"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <points>
+            <point x="0.12500" y="6.31250"/>
+            <point x="7.18750" y="0.12500"/>
+          </points>
+        </rectangle>
+      </frame>
+      <frame name="M_ORDON">
+        <geometryInfo x="0.06250" y="6.70837" width="7.37476" height="0.72913"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_ordonformattrigger"/>
+        <visualSettings fillBackgroundColor="r75g100b100" linePattern="solid"/>
+        <frame name="M_ORDON_HDR">
+          <geometryInfo x="0.25415" y="6.77148" width="6.99585"
+           height="0.18689"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="r88g100b100"/>
+          <text name="B_12" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75415" y="6.77380" width="3.55835"
+             height="0.14136"/>
+            <visualSettings fillBackgroundColor="r75g100b100"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Centres de frais (ordonnancement)]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <repeatingFrame name="R_1" source="G_codcfrais" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.25000" y="7.12500" width="7.00000"
+           height="0.25000"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <field name="F_CF" source="codcfrais" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.68750" y="7.14587" width="1.06250"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <field name="F_LIB_CENTRE_FRAIS" source="libcfrais"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="1.81250" y="7.14587" width="4.93750"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </repeatingFrame>
+        <field name="F_CF_INCONNUS" source="C_CF_INCONNUS" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier New" size="10" bold="yes"/>
+          <geometryInfo x="0.68750" y="6.95837" width="6.68750"
+           height="0.18750"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+        </field>
+      </frame>
+      <frame name="M_CA_SUIVINV">
+        <geometryInfo x="0.06250" y="7.50000" width="7.37500" height="1.31250"
+        />
+        <generalLayout pageBreakBefore="yes" verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_ca_suivinvformattrigger"/>
+        <visualSettings linePattern="solid"/>
+        <frame name="M_CA_SUIVINV_HDR">
+          <geometryInfo x="0.25000" y="7.56311" width="7.00000"
+           height="0.49939"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="r88g100b100"/>
+          <text name="B_25" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75415" y="7.56543" width="2.80835"
+             height="0.14136"/>
+            <visualSettings fillBackgroundColor="r75g100b100"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[CA Suivi des Investissements]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <repeatingFrame name="R_CA_SUIVINV" source="G_ca_suivinv"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.25000" y="8.25000" width="7.00000"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="r_ca_suivinvformattrigger"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray4"/>
+          <field name="F_CA_SUIVINV" source="ca_suivinv" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.25000" y="8.25000" width="0.62500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <field name="F_CA_SUIVINV_LIB" source="ca_suivinv_lib"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.87500" y="8.25000" width="3.25000"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <field name="F_CA_SUIVINV_NIV" source="ca_suivinv_niv"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="4.56250" y="8.25000" width="0.25000"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="r75g100b100"/>
+          </field>
+          <text name="B_55" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.12500" y="8.25000" width="0.50000"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Niv :]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_56" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.87500" y="8.25000" width="1.43750"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="b_56formattrigger"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Cessation activ :]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_CA_SUIVINV_DATE_CESS" source="ca_suivinv_date_cess_"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="6.31250" y="8.25000" width="0.93750"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="f_ca_suivinv_date_cessformattr"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_CA_SUIVINV_TOUS">
+          <geometryInfo x="0.24976" y="8.43750" width="7.00330"
+           height="0.16663"/>
+          <advancedLayout formatTrigger="m_ca_suivinv_tousformattrigger"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray4"/>
+          <text name="B_57" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.93750" y="8.43750" width="0.33337"
+             height="0.16663"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Tous]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+        <frame name="M_CP_ESPACE1">
+          <geometryInfo x="0.31250" y="8.68750" width="6.37500"
+           height="0.06250"/>
+        </frame>
+        <text name="B_11" minWidowLines="1">
+          <textSettings justify="end" spacing="0"/>
+          <geometryInfo x="3.18750" y="7.56250" width="4.06250"
+           height="0.62500"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <textSegment>
+            <font face="Courier New" size="8" textColor="r0g50b88"/>
+            <string>
+            <![CDATA[(Les ES indiqués ci-dessous sont une simple traduction des données paramétrées, et ne sont pas forcément interprétés par tous les traitements de la BIP)]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_CA_INCONNUS" source="C_CA_INCONNUS" minWidowLines="1"
+         spacing="0" alignment="start">
+          <font face="Courier New" size="10" bold="yes"/>
+          <geometryInfo x="0.25000" y="8.06250" width="7.00000"
+           height="0.18750"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+        </field>
+      </frame>
+      <frame name="M_CP">
+        <geometryInfo x="0.06250" y="8.87500" width="7.37500" height="2.62500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_cpformattrigger"/>
+        <visualSettings fillBackgroundColor="gray4" linePattern="solid"/>
+        <frame name="M_CP_CADRE">
+          <geometryInfo x="0.12500" y="8.93750" width="7.31250"
+           height="1.87500"/>
+          <generalLayout verticalElasticity="variable"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <repeatingFrame name="R_CP" source="G_cp_cpident"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.18750" y="9.31250" width="7.12500"
+             height="1.43750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <frame name="M_CP_DESC">
+              <geometryInfo x="0.25000" y="9.31250" width="6.56250"
+               height="0.18750"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillBackgroundColor="r88g100b100"/>
+              <field name="F_CP_IDENT" source="cp_cpident" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="0.68750" y="9.31250" width="1.06250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+              <field name="F_CP_NOM" source="cp_nom" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="1.87500" y="9.31250" width="2.43750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+              <field name="F_CP_PRENOM" source="cp_prenom" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="4.31250" y="9.31250" width="1.43750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+            </frame>
+            <repeatingFrame name="R_CP_PID" source="G_CP"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="2.25000" y="9.68750" width="4.62500"
+               height="0.25000"/>
+              <generalLayout verticalElasticity="variable"/>
+              <advancedLayout formatTrigger="r_cp_pidformattrigger"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray4"/>
+              <field name="F_CP_PID" source="cp_pid" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="2.37500" y="9.68750" width="0.50000"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+              <field name="F_CP_PID_LIB" source="cp_pid_lib" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="3.00000" y="9.68750" width="3.81250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_CP_RESS_HDR">
+              <geometryInfo x="1.06250" y="10.18750" width="5.81250"
+               height="0.18750"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="anchoringObject"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="r88g100b100"/>
+              <text name="B_17" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="1.25000" y="10.18750" width="2.00000"
+                 height="0.16663"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="10" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Ressources Rattachées :]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_19" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="3.25000" y="10.18750" width="0.25000"
+                 height="0.16663"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="10" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Nom]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_20" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="5.50000" y="10.18750" width="0.50000"
+                 height="0.16663"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="10" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Prénom]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+            <repeatingFrame name="R_CP_RESS" source="G_CP"
+             printDirection="down" minWidowRecords="1" columnMode="no">
+              <geometryInfo x="2.25000" y="10.37500" width="4.62500"
+               height="0.25000"/>
+              <advancedLayout formatTrigger="r_cp_ressformattrigger"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="gray4"/>
+              <field name="F_CP_RIDENT" source="cp_rident" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="2.37500" y="10.37500" width="0.50000"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+              <field name="F_CP_RNOM" source="cp_rnom" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="2.93750" y="10.37500" width="2.43750"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+              <field name="F_CP_RPRENOM" source="cp_rprenom" minWidowLines="1"
+               spacing="0" alignment="start">
+                <font face="Courier New" size="10" bold="yes"/>
+                <geometryInfo x="5.43750" y="10.37500" width="1.31250"
+                 height="0.18750"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+              </field>
+            </repeatingFrame>
+            <frame name="M_CP_PID_HDR">
+              <geometryInfo x="1.06250" y="9.50000" width="5.81250"
+               height="0.18750"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+              <visualSettings fillPattern="transparent"
+               fillBackgroundColor="r88g100b100"/>
+              <text name="B_16" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="2.37500" y="9.50000" width="0.33337"
+                 height="0.16663"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="10" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Code]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_15" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="3.00000" y="9.50000" width="0.58337"
+                 height="0.16663"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="10" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Libellé]]>
+                  </string>
+                </textSegment>
+              </text>
+              <text name="B_14" minWidowLines="1">
+                <textSettings spacing="0"/>
+                <geometryInfo x="1.25000" y="9.50000" width="1.00000"
+                 height="0.16663"/>
+                <visualSettings fillBackgroundColor="gray4"/>
+                <textSegment>
+                  <font face="Courier New" size="10" bold="yes"
+                   textColor="r0g50b88"/>
+                  <string>
+                  <![CDATA[Lignes BIP :]]>
+                  </string>
+                </textSegment>
+              </text>
+            </frame>
+          </repeatingFrame>
+          <frame name="M_CP_HDR">
+            <geometryInfo x="0.18750" y="8.93811" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_13" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.69165" y="8.94043" width="1.99585"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Codes Chefs de projets]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_CP_INCONNUS" source="C_CP_INCONNUS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.18750" y="9.12500" width="7.25000"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <frame name="M_RESS">
+          <geometryInfo x="0.12500" y="10.87500" width="7.25000"
+           height="0.37500"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <repeatingFrame name="R_RESS" source="G_RESS" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.50000" y="11.06250" width="6.31250"
+             height="0.18750"/>
+            <advancedLayout formatTrigger="r_ressformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_RESS" source="r_ident" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="11.06250" width="1.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_RESS_NOM" source="r_nom" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.81250" y="11.06250" width="3.25000"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_RESS_PRENOM" source="r_prenom" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="5.12500" y="11.06250" width="1.56250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_CP_HDR1">
+            <geometryInfo x="0.25000" y="10.87561" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_21" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="10.87793" width="1.99585"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Codes Ressources]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+        <frame name="M_CP_ESPACE">
+          <geometryInfo x="0.43750" y="11.31250" width="6.37500"
+           height="0.12500"/>
+        </frame>
+      </frame>
+      <frame name="M_PROJET">
+        <geometryInfo x="0.06250" y="11.62476" width="7.37500"
+         height="2.52112"/>
+        <generalLayout pageBreakBefore="yes" verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_projetformattrigger"/>
+        <visualSettings fillBackgroundColor="r75g100b100" linePattern="solid"/>
+        <frame name="M_DOS_PROJ">
+          <geometryInfo x="0.12500" y="11.68726" width="7.12805"
+           height="0.75024"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_dos_projformattrigger"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <frame name="M_DOS_PROJ_HDR">
+            <geometryInfo x="0.25000" y="11.68811" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_22" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="11.69043" width="1.99585"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Dossiers Projets]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_39" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.25000" y="11.75000" width="0.13538"
+               height="0.11975"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[#NULL#]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_DOS_PROJ_INCONNUS" source="C_DOS_PROJ_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="11.87500" width="6.62500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+          <repeatingFrame name="R_DOS_PROJ" source="G_dos_proj"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.50000" y="12.06250" width="5.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_dos_projformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_DOS_PROJ" source="dos_proj" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="12.06250" width="1.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_DOS_PROJ_LIB" source="dos_proj_lib"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.81250" y="12.06250" width="4.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_DOS_PROJ_TOUS">
+            <geometryInfo x="0.24976" y="12.25000" width="7.00330"
+             height="0.16663"/>
+            <advancedLayout formatTrigger="m_ca_fi_tous3formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <text name="B_30" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.75000" y="12.25000" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+        </frame>
+        <frame name="M_PROJETS">
+          <geometryInfo x="0.12500" y="12.52087" width="7.12805"
+           height="0.66663"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_projetsformattrigger"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <frame name="M_PROJ_HDR">
+            <geometryInfo x="0.25000" y="12.52148" width="7.00000"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="12.52380" width="0.62085"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Projets]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_PROJ" source="G_PROJETS"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.50000" y="12.89587" width="5.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_projformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_PROJ" source="proj" minWidowLines="1" spacing="0"
+             alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="12.89587" width="1.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_PROJ_LIB" source="proj_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.81250" y="12.89587" width="4.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+          <field name="F_PROJ_INCONNUS" source="C_PROJ_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="12.70837" width="6.62500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <frame name="M_APP">
+          <geometryInfo x="0.12500" y="13.27087" width="7.12805"
+           height="0.72913"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_appformattrigger"/>
+          <visualSettings fillBackgroundColor="gray4"/>
+          <frame name="M_APP_HDR">
+            <geometryInfo x="0.25415" y="13.27148" width="6.99585"
+             height="0.18689"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_24" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="13.27380" width="1.05835"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Applications]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_APP" source="G_app" printDirection="down"
+           minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.50000" y="13.64587" width="5.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_appformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_PROJ1" source="app" minWidowLines="1" spacing="0"
+             alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.62500" y="13.64587" width="1.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_PROJ_LIB1" source="app_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.81250" y="13.64587" width="4.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_APP_TOUS">
+            <geometryInfo x="0.24976" y="13.83337" width="7.00330"
+             height="0.16663"/>
+            <advancedLayout formatTrigger="m_ca_fi_tous1formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <text name="B_28" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.75000" y="13.83337" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_APP_INCONNUS" source="C_APP_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.62500" y="13.45837" width="6.62500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <text name="B_38" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.18750" y="14.02087" width="0.13538"
+           height="0.11975"/>
+          <visualSettings fillBackgroundColor="r75g100b100"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"
+            />
+            <string>
+            <![CDATA[#NULL#]]>
+            </string>
+          </textSegment>
+        </text>
+        <frame name="M_PROJ_TOUS">
+          <geometryInfo x="0.24976" y="13.08337" width="7.00330"
+           height="0.16663"/>
+          <advancedLayout formatTrigger="m_ca_fi_tous2formattrigger"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="gray4"/>
+          <text name="B_29" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.75000" y="13.08337" width="0.33337"
+             height="0.16663"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"
+               textColor="r0g50b88"/>
+              <string>
+              <![CDATA[Tous]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+      <frame name="M_CA">
+        <geometryInfo x="0.06250" y="14.27087" width="7.37500"
+         height="4.22974"/>
+        <generalLayout verticalElasticity="variable"/>
+        <advancedLayout formatTrigger="m_caformattrigger"/>
+        <visualSettings linePattern="solid"/>
+        <frame name="M_CA_FI">
+          <geometryInfo x="0.12500" y="14.33337" width="7.18750"
+           height="1.29163"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_ca_fiformattrigger"/>
+          <frame name="M_CA_FI_HDR">
+            <geometryInfo x="0.25439" y="14.33398" width="6.99255"
+             height="0.47852"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_2" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="14.33630" width="2.12085"
+               height="0.16370"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[CAFI (CA initiateurs)]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_45" minWidowLines="1">
+              <textSettings justify="end" spacing="0"/>
+              <geometryInfo x="3.12939" y="14.33398" width="4.06250"
+               height="0.47852"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="8" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[(Les ES indiqués ci-dessous sont une simple traduction des données paramétrées, et ne sont pas forcément interprétés par tous les traitements de la BIP)]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_CA_FI" source="G_ca_fi"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="15.02087" width="6.93750"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_app1formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_CA_FI" source="ca_fi" minWidowLines="1" spacing="0"
+             alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.25000" y="15.02087" width="0.81250"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_CA_FI_LIB" source="ca_fi_lib" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.06250" y="15.02087" width="3.00000"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_CA_FI_NIV" source="ca_fi_niv_" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="4.50000" y="15.06250" width="0.43750"
+               height="0.14587"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <text name="B_49" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.06250" y="15.06250" width="0.50000"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Niv :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CA_FI_DATE_CESS" source="ca_fi_date_cess_"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="6.50000" y="15.06250" width="0.68750"
+               height="0.12500"/>
+              <advancedLayout formatTrigger="f_ca_fi_date_cessformattrigger"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <text name="B_52" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.93750" y="15.06250" width="1.43750"
+               height="0.12500"/>
+              <advancedLayout formatTrigger="b_52formattrigger"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Cessation activ :]]>
+                </string>
+              </textSegment>
+            </text>
+          </repeatingFrame>
+          <frame name="M_CA_FI_TOUS">
+            <geometryInfo x="0.25000" y="15.20837" width="7.00000"
+             height="0.16663"/>
+            <advancedLayout formatTrigger="m_ca_fi_tousformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <text name="B_27" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.75000" y="15.20837" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <frame name="M_CA_SUIVI_ESPACE2">
+            <geometryInfo x="0.37500" y="15.39587" width="6.37500"
+             height="0.12500"/>
+          </frame>
+          <field name="F_CA_FI_INCONNUS" source="C_CA_FI_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.25000" y="14.83337" width="7.06250"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <frame name="M_CA_PAYEUR">
+          <geometryInfo x="0.12500" y="15.70837" width="7.25000"
+           height="1.29163"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_ca_payeurformattrigger"/>
+          <frame name="M_CA_PAYEUR_HDR">
+            <geometryInfo x="0.25439" y="15.70898" width="6.99561"
+             height="0.49939"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_23" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="15.71130" width="0.87085"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[CA Payeur]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_31" minWidowLines="1">
+              <textSettings justify="end" spacing="0"/>
+              <geometryInfo x="3.12939" y="15.70898" width="4.06250"
+               height="0.47852"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="8" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[(Les ES indiqués ci-dessous sont une simple traduction des données paramétrées, et ne sont pas forcément interprétés par tous les traitements de la BIP)]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_CA_PAYEUR" source="G_CA_PAYEUR"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="16.39587" width="7.00000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_ca_fi1formattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_CA_PAYEUR" source="CA_PAYEUR" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.25000" y="16.39587" width="0.81250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_CA_PAYEUR_LIB" source="CA_PAYEUR_LIB"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.06250" y="16.39587" width="3.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_CA_PAYEUR_NIV" source="ca_payeur_niv_"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="4.56250" y="16.43750" width="0.37500"
+               height="0.14587"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <text name="B_50" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.12500" y="16.43750" width="0.50000"
+               height="0.12500"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Niv :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CA_PAYEUR_DATE_CESS" source="ca_payeur_date_cess_"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="6.37500" y="16.43750" width="0.87500"
+               height="0.12500"/>
+              <advancedLayout formatTrigger="f_ca_payeur_date_cessformattri"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <text name="B_53" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.93750" y="16.43750" width="1.43750"
+               height="0.12500"/>
+              <advancedLayout formatTrigger="b_53formattrigger"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Cessation activ :]]>
+                </string>
+              </textSegment>
+            </text>
+          </repeatingFrame>
+          <frame name="M_CA_PAYEUR_TOUS">
+            <geometryInfo x="0.25000" y="16.58337" width="7.00000"
+             height="0.16663"/>
+            <advancedLayout formatTrigger="m_ca_payeur_tousformattrigger"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <text name="B_26" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.75000" y="16.58337" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <frame name="M_CA_SUIVI_ESPACE3">
+            <geometryInfo x="0.56250" y="16.77087" width="6.37500"
+             height="0.12500"/>
+          </frame>
+          <field name="F_CA_PAYEUR_INCONNUS" source="C_CA_PAYEUR_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.25000" y="16.20837" width="7.12500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <text name="B_18" minWidowLines="1">
+          <textSettings spacing="0"/>
+          <geometryInfo x="0.12500" y="17.02148" width="0.13538"
+           height="0.11975"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"
+            />
+            <string>
+            <![CDATA[#NULL#]]>
+            </string>
+          </textSegment>
+        </text>
+        <frame name="M_CA_DA">
+          <geometryInfo x="0.12500" y="17.08398" width="7.25000"
+           height="1.16663"/>
+          <generalLayout verticalElasticity="variable"/>
+          <advancedLayout formatTrigger="m_ca_daformattrigger"/>
+          <frame name="M_CA_DA_HDR">
+            <geometryInfo x="0.25439" y="17.08459" width="6.99255"
+             height="0.49939"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="anchoringObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r88g100b100"/>
+            <text name="B_48" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.75415" y="17.08691" width="6.05835"
+               height="0.14136"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[CADA]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_46" minWidowLines="1">
+              <textSettings justify="end" spacing="0"/>
+              <geometryInfo x="3.12939" y="17.08459" width="4.06250"
+               height="0.47852"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+              <textSegment>
+                <font face="Courier New" size="8" textColor="r0g50b88"/>
+                <string>
+                <![CDATA[(Les ES indiqués ci-dessous sont une simple traduction des données paramétrées, et ne sont pas forcément interprétés par tous les traitements de la BIP)]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_CA_DA" source="G_CA_DA"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.25000" y="17.77148" width="7.00000"
+             height="0.22913"/>
+            <generalLayout verticalElasticity="variable"/>
+            <advancedLayout formatTrigger="r_ca_daformattrigger0012"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <field name="F_CA_DA" source="ca_da_" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="0.25000" y="17.77148" width="0.81250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_CA_DA_LIB" source="ca_da_lib_" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="1.06250" y="17.77148" width="3.06250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <field name="F_CA_DA_NIV" source="ca_da_niv_" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="4.56250" y="17.81311" width="0.31250"
+               height="0.14587"/>
+              <visualSettings fillBackgroundColor="r75g100b100"/>
+            </field>
+            <text name="B_51" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.12500" y="17.81311" width="0.50000"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Niv :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CA_DA_DATE_CESS" source="ca_da_date_cess_"
+             minWidowLines="1" spacing="0" alignment="start">
+              <font face="Courier New" size="10" bold="yes"/>
+              <geometryInfo x="6.31250" y="17.81311" width="0.93750"
+               height="0.12500"/>
+              <advancedLayout formatTrigger="f_ca_da_date_cessformattrigger"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+            </field>
+            <text name="B_54" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="4.87500" y="17.81311" width="1.43750"
+               height="0.12500"/>
+              <advancedLayout formatTrigger="b_54formattrigger"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"/>
+                <string>
+                <![CDATA[Cessation activ :]]>
+                </string>
+              </textSegment>
+            </text>
+          </repeatingFrame>
+          <frame name="M_CA_DA_TOUS">
+            <geometryInfo x="0.25000" y="18.02148" width="7.00000"
+             height="0.16663"/>
+            <advancedLayout formatTrigger="m_ca_da_tousformattrigger0010"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray4"/>
+            <text name="B_47" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="1.75000" y="18.02148" width="0.33337"
+               height="0.16663"/>
+              <visualSettings fillBackgroundColor="gray4"/>
+              <textSegment>
+                <font face="Courier New" size="10" bold="yes"
+                 textColor="r0g50b88"/>
+                <string>
+                <![CDATA[Tous]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <field name="F_CA_DA_INCONNUS" source="C_CA_DA_INCONNUS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.25000" y="17.58398" width="7.12500"
+             height="0.18750"/>
+            <visualSettings fillBackgroundColor="gray4"/>
+          </field>
+        </frame>
+        <frame name="M_CA_SUIVI_ESPACE1">
+          <geometryInfo x="0.56250" y="18.33398" width="6.37500"
+           height="0.12500"/>
+        </frame>
+      </frame>
+      <text name="B_40" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.68750" y="8.81250" width="0.13538" height="0.11975"
+        />
+        <textSegment>
+          <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"/>
+          <string>
+          <![CDATA[#NULL#]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_41" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.25000" y="7.43750" width="0.13538" height="0.11975"
+        />
+        <visualSettings fillBackgroundColor="r75g100b100"/>
+        <textSegment>
+          <font face="Courier New" size="8" bold="yes" textColor="r0g50b88"/>
+          <string>
+          <![CDATA[#NULL#]]>
+          </string>
+        </textSegment>
+      </text>
+    </body>
+    <margin>
+      <field name="F_NUM_PAGE" source="PageNumber" visible="no"
+       minWidowLines="1" spacing="0" alignment="start">
+        <font face="Courier New" size="8" textColor="r0g50b88"/>
+        <geometryInfo x="0.00000" y="0.00000" width="0.25000" height="0.18750"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="r75g100b100" linePattern="solid"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_DATE" source="CurrentDate" visible="no" minWidowLines="1"
+       formatMask="DD/MM/RR" spacing="0" alignment="start">
+        <font face="Courier New" size="8" textColor="r0g50b88"/>
+        <geometryInfo x="1.62500" y="0.00000" width="0.12500" height="0.18750"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="r75g100b100" linePattern="solid"/>
+      </field>
+      <frame name="M_1">
+        <geometryInfo x="1.81250" y="0.06250" width="4.81250" height="0.31250"
+        />
+        <visualSettings fillPattern="transparent"
+         fillBackgroundColor="r88g100b100" linePattern="solid"/>
+        <text name="B_HDR1" minWidowLines="1">
+          <textSettings justify="center" spacing="single"/>
+          <geometryInfo x="1.87500" y="0.12500" width="4.68750"
+           height="0.25000"/>
+          <visualSettings fillBackgroundColor="gray16"/>
+          <textSegment>
+            <font face="Courier New" size="10" bold="yes"
+             textColor="r0g50b100"/>
+            <string>
+            <![CDATA[Profil de &P_USER_NOM &P_USER_PRENOM (&P_USER_ID)]]>
+            </string>
+          </textSegment>
+        </text>
+      </frame>
+      <field name="F_TOTAL_PAGE" source="TotalPages" visible="no"
+       minWidowLines="1" spacing="0" alignment="start">
+        <font face="Courier New" size="8" textColor="r0g50b88"/>
+        <geometryInfo x="0.00000" y="0.18750" width="0.25000" height="0.18750"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="r75g100b100" linePattern="solid"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_34" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="6.93750" y="0.12500" width="1.02087" height="0.18750"
+        />
+        <visualSettings fillBackgroundColor="r75g100b100"/>
+        <textSegment>
+          <font face="Courier New" size="8" textColor="r0g50b88"/>
+          <string>
+          <![CDATA[Page &F_NUM_PAGE / &F_TOTAL_PAGE]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_35" minWidowLines="1">
+        <textSettings spacing="0"/>
+        <geometryInfo x="0.31250" y="0.12500" width="0.72913" height="0.14587"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <visualSettings fillBackgroundColor="r75g100b100"/>
+        <textSegment>
+          <font face="Courier New" size="8" textColor="r0g50b88"/>
+          <string>
+          <![CDATA[Le &F_DATE]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.00000" y="1.53467" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[Nom P Param6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.00000" y="2.10754" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[menus P Param8]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM8" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.00000" y="2.39917" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[ssmenus P Param9]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.45837" y="1.49268" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.46887" y="1.75305" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM8" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.45837" y="2.03418" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.02075" y="3.50317" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P_Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.43750" y="3.44031" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_7" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.01038" y="1.79517" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[Prenom P Param7]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM9" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.44788" y="2.30505" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_8" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.00000" y="2.64905" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[CA_suivinv P Param10]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM10" source="P_PARAM10" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.38550" y="2.57581" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_9" pageNumber="1" minWidowLines="1">
+    <textSettings justify="end" spacing="single"/>
+    <geometryInfo x="0.00000" y="2.96155" width="1.36462" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[Centre2Frais Param11]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM11" source="P_PARAM11" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.38550" y="2.88831" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	l_global pack_global.GlobalData;
+	tmp varchar2(5000);
+	lib	varchar2(255);
+	l_menu VARCHAR2(25);
+	pos integer;
+begin
+	
+	l_global := pack_global.lire_globaldata(:P_GLOBAL);
+	
+	:P_PERIME := l_global.perime;
+	:P_PARAM4 := l_global.direction1;
+	--srw.message(1,'PERIM_MO_DEFAUT : ' || :P_PARAM4);
+  :p_user_nom := :P_PARAM6;
+  :p_user_prenom := :P_PARAM7;
+  
+  :p_user_id := l_global.idarpege;  
+  
+  :P_PARAM2 := l_global.codpole;
+  :P_PERIMCLI := l_global.perimcli;
+  
+  /* QC 1187 suite fiche 1176 */
+  :P_PERIMMO := l_global.perimo;
+  
+  :P_CHEF_PROJET := l_global.chefprojet;
+  --srw.message(1,'CP : ' || :P_CHEF_PROJET);
+  :P_APP := l_global.appli;
+  :P_DOS_PROJ := l_global.doss_proj;
+  --srw.message(2,'dossier projet : ' || :P_DOS_PROJ);
+  :P_PROJET := l_global.projet;
+  :P_CA_FI := l_global.ca_fi;
+  :P_CA_PAYEUR := l_global.ca_payeur;
+  :P_CA_DA := l_global.ca_da;
+  
+  :P_CA_SUIVINV := :P_PARAM10;
+  :P_CENTRE2FRAIS := :P_PARAM5;
+  
+  --:P_PARAM11 := '35,82';  
+  if ((:P_PARAM11 = '') or (:P_PARAM11 is null))	then
+      :P_WHERE := ' where 1=0 ';
+  else    	
+  		tmp := :P_PARAM11;
+  		tmp := REPLACE(tmp,',',''',''');
+  		tmp := ''''||tmp||'''';
+  		:P_WHERE := ' where to_char(codcfrais) in ('||tmp||') '; 
+  end if ;
+  
+  --srw.message(1,:P_WHERE);
+  
+  
+  if :P_DOS_PROJ = 'TOUS' or :P_DOS_PROJ is null then
+  	:P_DP :=  '';
+  else
+  		tmp := :P_DOS_PROJ;
+  		tmp := REPLACE(tmp,',',''',''');
+  		tmp := ''''||tmp||'''';
+  		:P_DP :=  ' WHERE to_char(dpcode,''FM00000'') in ('||tmp||') ';	
+  		
+  end if;
+
+
+  -- construction des requetes liées aux menus
+  tmp := :P_PARAM8;
+  IF (length(tmp) > 0) THEN
+    tmp := REPLACE(:P_PARAM8,'''','''''');
+    :P_MENUS := ' UNION select ''';
+	  LOOP
+	  	pos := instr(tmp,';');
+	  	if (pos <= 0)
+	  	then
+				:P_MENUS := :P_MENUS || tmp || ''' from dual';  		
+	  		exit;
+	  	end if;
+	  	-- ajout p_menus
+	  	
+	  	:P_MENUS := :P_MENUS || substr(tmp,0,pos-1) || ''' from dual';
+	  	
+	  	--on reduit tmp
+	  	tmp := substr(tmp,pos+1,length(tmp));  	  	
+	  	:P_MENUS := :P_MENUS || ' UNION select ''';
+	  END LOOP;
+  END IF ;
+   --srw.message(1,'p_menu : '||:P_MENUS);
+  tmp := :P_PARAM9;
+  if (length(tmp) > 0)
+  then 
+		tmp := REPLACE(:P_PARAM9,'''','''''');
+  	
+	  :P_SSMENUS := ' UNION select ''';
+	  LOOP
+	  	pos := instr(tmp,';');
+	  	
+	  	if (pos <= 0)
+	  	then
+				:P_SSMENUS := :P_SSMENUS || tmp || ''' from dual';  		
+	  		exit;
+	  	end if;
+	  	
+	  	:P_SSMENUS := :P_SSMENUS || substr(tmp,0,pos-1) || ''' from dual';
+	  	
+	  	--on reduit tmp
+	  	tmp := substr(tmp,pos+1,length(tmp));  	  	
+	  	:P_SSMENUS := :P_SSMENUS || ' UNION select ''';
+	  	
+	  	--srw.message(1,'p_sous_menu : '||:P_SSMENUS);
+	  END LOOP;
+  end if;
+  
+  --srw.message(1,'p_perim_cli : '||:P_PERIMCLI);
+  return (TRUE);
+  
+  
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_perime1formattrigger">
+      <textSource>
+      <![CDATA[function R_PERIME1FormatTrigger return boolean is
+	reste	NUMBER;
+begin
+	if (:P_PERIME = '00000000000')
+  then
+		return (FALSE);  	
+	end if;
+  
+	
+	reste := mod(:CS_NUM_PERIME,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_1formattrigger">
+      <textSource>
+      <![CDATA[function M_1FormatTrigger return boolean is
+begin
+  if (:P_PERIME = '00000000000')
+  then
+		return (TRUE);  	
+	end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_perimoformattrigger">
+      <textSource>
+      <![CDATA[function M_PERIMOFormatTrigger return boolean is
+begin
+  if (:P_PERIMCLI = '099988888') or (:P_PERIMCLI = '') or (:P_PERIMCLI is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_perime_defautformattrigger">
+      <textSource>
+      <![CDATA[function M_PERIME_DEFAUTFormatTrigger return boolean is
+begin
+  if (:P_PARAM2 = '0000000' ) or (:P_PARAM2 = '') or (:P_PARAM2 is null)
+  then
+  	return (FALSE);	
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_mo_defaut1formattrigger">
+      <textSource>
+      <![CDATA[function M_MO_DEFAUT1FormatTrigger return boolean is
+begin
+  if (:P_PARAM4 = '88888') or (:P_PARAM4 = '') or (:P_PARAM4 is null)
+  then
+  	return (FALSE);	
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_cp_ressformattrigger">
+      <textSource>
+      <![CDATA[function R_CP_RESSFormatTrigger return boolean is
+reste number;
+begin
+  if (:cp_rident = 0)
+  then
+  	return (FALSE);	
+  end if;
+  
+  reste := mod(:CS_NUM_CP_RIDENT,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_cp_pidformattrigger">
+      <textSource>
+      <![CDATA[function R_CP_PIDFormatTrigger return boolean is
+reste number;
+begin
+	
+  if (:cp_rident <> 0)
+  then
+  	return (FALSE);	
+  end if;
+  
+  	reste := mod(:CS_NUM_CP_PID,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_ressformattrigger">
+      <textSource>
+      <![CDATA[function R_RESSFormatTrigger return boolean is
+reste number;
+begin
+  reste := mod(:CS_NUM_RESS,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_dpg_defaut_libformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_DPG_DEFAUT_LIBFormula return CHAR is
+lib struct_info.libdsg%TYPE;
+begin
+  if 	( (:P_PARAM2 = '') or (:P_PARAM2 is null))
+	then
+			return null ;
+  else		
+  	BEGIN
+		select libdsg into lib
+		from struct_info
+		where :P_PARAM2 = codsg;
+		
+  	EXCEPTION
+  		WHEN NO_DATA_FOUND THEN
+  			return 'DPG inconnu ou générique' ;
+		END;
+	  return lib;
+  end if;	  
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_client_defaut_sigleformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_CLIENT_DEFAUT_SIGLEFormula return Char is
+sigle client_mo.clisigle%TYPE;
+begin
+  if 	((:P_PARAM4 = '88888') or (:P_PARAM4 = '') or (:P_PARAM4 is null))
+	then
+			return null ;
+  else	
+  	begin
+	     select clisigle into sigle
+	     from client_mo
+	     where :P_PARAM4 = clicode;
+	  
+	  EXCEPTION
+  		WHEN NO_DATA_FOUND THEN
+  			return null ;
+		END;
+	  
+	  return sigle;
+	     
+	end if ;  
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_client_defaut_libformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_CLIENT_DEFAUT_LIBFormula return Char is
+lib client_mo.clilib%TYPE;
+begin
+  if 	((:P_PARAM4 = '88888') or (:P_PARAM4 = '') or (:P_PARAM4 is null))
+	then
+			return null ;
+  else
+  	 begin
+		    select clilib into lib
+		    from client_mo
+		    where :P_PARAM4 = clicode;
+		    
+		 EXCEPTION
+  		WHEN NO_DATA_FOUND THEN
+  			return null ;
+	  	END;  
+		  
+		return lib;
+	end if;	  
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_centre2frais_libformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_CENTRE2FRAIS_LIBFormula return Char is
+lib centre_frais.libcfrais%TYPE;
+begin
+	  if (:P_CENTRE2FRAIS is null or :P_CENTRE2FRAIS='')
+		then
+			return null ;
+		else	
+			select libcfrais into lib
+			from centre_frais
+			where codcfrais = :P_CENTRE2FRAIS;
+	
+			return lib;
+		end if;
+  
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_dos_projformattrigger">
+      <textSource>
+      <![CDATA[function R_DOS_PROJFormatTrigger return boolean is
+reste number;
+begin
+		if (upper(:P_DOS_PROJ) = 'TOUS')
+  then
+  	return (FALSE);
+  end if;
+	
+  reste := mod(:CS_NUM_DOS_PROJ,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_projformattrigger">
+      <textSource>
+      <![CDATA[function R_PROJFormatTrigger return boolean is
+reste number;
+begin
+		if (upper(:P_PROJET) = 'TOUS')
+  then
+  	return (FALSE);
+  end if;
+	
+  reste := mod(:CS_NUM_PROJET,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_appformattrigger">
+      <textSource>
+      <![CDATA[function R_APPFormatTrigger return boolean is
+reste number;
+begin
+		if (upper(:P_APP) = 'TOUS')
+  then
+  	return (FALSE);
+  end if;
+	
+  reste := mod(:CS_NUM_APP,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_ca_fi1formattrigger">
+      <textSource>
+      <![CDATA[function R_CA_FI1FormatTrigger return boolean is
+reste number;
+begin
+  if (upper(:P_CA_PAYEUR) = 'TOUS')
+  then
+  	return (FALSE);
+  end if;
+	
+	
+  reste := mod(:CS_NUM_CA_PAYEUR,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_fi_tousformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_FI_TOUSFormatTrigger return boolean is
+begin
+  if (upper(:P_CA_FI) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_payeur_tousformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_PAYEUR_TOUSFormatTrigger return boolean is
+begin
+  if (upper(:P_CA_PAYEUR) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_fi_tous1formattrigger">
+      <textSource>
+      <![CDATA[function M_CA_FI_TOUS1FormatTrigger return boolean is
+begin
+  if (upper(:P_APP) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_fi_tous2formattrigger">
+      <textSource>
+      <![CDATA[function M_CA_FI_TOUS2FormatTrigger return boolean is
+begin
+  if (upper(:P_PROJET) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_fi_tous3formattrigger">
+      <textSource>
+      <![CDATA[function M_CA_FI_TOUS3FormatTrigger return boolean is
+begin
+  if (upper(:P_DOS_PROJ) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_dos_projformattrigger">
+      <textSource>
+      <![CDATA[function M_DOS_PROJFormatTrigger return boolean is
+begin
+  if (:P_DOS_PROJ = '') or (:P_DOS_PROJ is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_projetsformattrigger">
+      <textSource>
+      <![CDATA[function M_PROJETSFormatTrigger return boolean is
+begin
+  if (:P_PROJET = '') or (:P_PROJET is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_appformattrigger">
+      <textSource>
+      <![CDATA[function M_APPFormatTrigger return boolean is
+begin
+  if (:P_APP = '') or (:P_APP is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_payeurformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_PAYEURFormatTrigger return boolean is
+begin
+  if (:P_CA_PAYEUR = '') or (:P_CA_PAYEUR is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_fiformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_FIFormatTrigger return boolean is
+begin
+  if (:P_CA_FI = '') or (:P_CA_FI is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_perime1formattrigger0005">
+      <textSource>
+      <![CDATA[function R_PERIME1FORMATTRIGGER0005 return boolean is
+	reste	NUMBER;
+begin
+	
+	reste := mod(:CS_NUM_MENUS,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_menu1formattrigger">
+      <textSource>
+      <![CDATA[function R_MENU1FormatTrigger return boolean is
+	reste	NUMBER;
+begin
+	
+	reste := mod(:CS_NUM_SSMENUS,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_caformattrigger">
+      <textSource>
+      <![CDATA[function M_CAFormatTrigger return boolean is
+begin
+    if ((:P_CA_FI = '') or (:P_CA_FI is null)) and
+    	  ((:P_CA_PAYEUR = '') or (:P_CA_PAYEUR is null)) and
+    	  ((:P_CA_DA = '') or (:P_CA_DA is null))
+  	then
+  		return (FALSE);
+  	end if;
+
+  	return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_clientformattrigger">
+      <textSource>
+      <![CDATA[function M_CLIENTFormatTrigger return boolean is
+begin
+  
+    if ((:P_PERIMCLI = '099988888') or (:P_PERIMCLI = '') or (:P_PERIMCLI is null))
+    	and ((:P_PARAM4 = '88888') or (:P_PARAM4 = '') or (:P_PARAM4 is null))
+    then
+    	return (FALSE) ;
+    end if ;		
+  	return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_projetformattrigger">
+      <textSource>
+      <![CDATA[function M_PROJETFormatTrigger return boolean is
+begin
+    if ((:P_APP = '') or (:P_APP is null)) and
+    	((:P_DOS_PROJ = '') or (:P_DOS_PROJ is null)) and
+    	((:P_PROJET = '') or (:P_PROJET is null))
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_perimeformattrigger">
+      <textSource>
+      <![CDATA[function M_PERIMEFormatTrigger return boolean is
+begin
+  	if (:P_PERIME = '') or (:P_PERIME is null) 
+  then
+		return (FALSE);  	
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_fournisseurformattrigger">
+      <textSource>
+      <![CDATA[function M_FOURNISSEURFormatTrigger return boolean is
+begin
+    	if ((:P_PERIME = '00000000000') or (:P_PERIME = '') or (:P_PERIME is null)) 
+    		and ((:P_PARAM2 = '0000000') or (:P_PARAM2 = '') or (:P_PARAM2 is null)) 
+			then
+				return(FALSE);
+			end if ;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_cpformattrigger">
+      <textSource>
+      <![CDATA[function M_CPFormatTrigger return boolean is
+begin
+   if (:P_CHEF_PROJET = '') or (:P_CHEF_PROJET is null)
+   	then
+   		return (FALSE);
+   	end if ;	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_suivinvformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_SUIVINVFormatTrigger return boolean is
+begin
+     if (:P_CA_SUIVINV = '') or (:P_CA_SUIVINV is null)
+   	then
+   		return (FALSE);
+   	end if ;	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_ca_suivinvformattrigger">
+      <textSource>
+      <![CDATA[function R_CA_SUIVINVFormatTrigger return boolean is
+  	reste	NUMBER;
+begin
+	reste := mod(:CS_NUM_CA_SUIVINV,2);
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ordonformattrigger">
+      <textSource>
+      <![CDATA[function M_ORDONFormatTrigger return boolean is
+begin
+   if ((:P_PARAM11 = '') or (:P_PARAM11 is null))	then
+  		
+  		return (FALSE);
+  		
+  	end if;
+
+   return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_app1formattrigger">
+      <textSource>
+      <![CDATA[function R_APP1FormatTrigger return boolean is
+reste number;
+begin
+	if (upper(:P_CA_FI) = 'TOUS')
+  then
+  	return (FALSE);
+  end if;
+	
+  reste := mod(:CS_NUM_CA_FI,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dpg_defaut_libformattrigger">
+      <textSource>
+      <![CDATA[function F_DPG_DEFAUT_LIBFormatTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_5formattrigger">
+      <textSource>
+      <![CDATA[function B_5FormatTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dpg_defautformattrigger">
+      <textSource>
+      <![CDATA[function F_DPG_DEFAUTFormatTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_dpgformattrigger">
+      <textSource>
+      <![CDATA[function F_DPGFormatTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="g_perimegroupfilter">
+      <textSource>
+      <![CDATA[function G_PERIMEGroupFilter return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_perime_hdrformattrigger">
+      <textSource>
+      <![CDATA[function M_PERIME_HDRFormatTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="beforereport">
+      <textSource>
+      <![CDATA[function BeforeReport return boolean is
+virgules NUMBER;
+i NUMBER;
+pos NUMBER;
+pos1 NUMBER;
+c_ident VARCHAR(5000);
+num NUMBER;
+begin
+	/*
+	* Récupération des chefs de projet inconnus
+	*
+	*/
+  virgules := ( (LENGTH(:P_CHEF_PROJET) - LENGTH(REPLACE(:P_CHEF_PROJET,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+  	i:=0;
+  	While i < virgules+1
+      Loop
+      	if (virgules=0) then
+      			c_ident := :P_CHEF_PROJET;
+        elsif (i=0)then
+        		pos := INSTR( :P_CHEF_PROJET, ',', 1, 1);
+        		c_ident := substr( :P_CHEF_PROJET, 1, pos-1);
+        elsif (i=virgules) then
+        		pos := INSTR( :P_CHEF_PROJET, ',', 1, i);
+        			c_ident := substr( :P_CHEF_PROJET, pos+1, LENGTH(:P_CHEF_PROJET)-1);
+        else
+        		pos := INSTR( :P_CHEF_PROJET, ',', 1, i);
+        		pos1 := INSTR( :P_CHEF_PROJET, ',', 1, i+1);
+        		c_ident := substr( :P_CHEF_PROJET, pos+1, pos1-pos-1);
+        end if;
+        
+        select count(*) into num
+        from ressource res
+        where INSTR(c_ident, to_char(res.ident,'FM00000')) > 0;
+
+        if(num=0 or LENGTH(c_ident)>5)then
+
+        	if(:C_CP_INCONNUS='' or :C_CP_INCONNUS is null)then
+        		:C_CP_INCONNUS := :C_CP_INCONNUS || c_ident;
+        	else
+        		:C_CP_INCONNUS := :C_CP_INCONNUS || ', ' || c_ident;
+        	end if;
+        end if;
+        
+        i := i + 1 ;
+      End loop ;
+  if(:C_CP_INCONNUS is not null and (LENGTH(:C_CP_INCONNUS)<>0))then
+		:C_CP_INCONNUS := :C_CP_INCONNUS || '   Ressource(s) inconnue(s)';
+  end if;
+  /*
+	* Récupération des centres de frais inconnus
+	*
+	*/
+  virgules := ( (LENGTH(:P_PARAM11) - LENGTH(REPLACE(:P_PARAM11,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+  	i:=0;
+  	While i < virgules+1
+      Loop
+      	if (virgules=0) then
+      			c_ident := :P_PARAM11;
+        elsif (i=0)then
+        		pos := INSTR( :P_PARAM11, ',', 1, 1);
+        		c_ident := substr( :P_PARAM11, 1, pos-1);
+        elsif (i=virgules) then
+        		pos := INSTR( :P_PARAM11, ',', 1, i);
+        			c_ident := substr( :P_PARAM11, pos+1, LENGTH(:P_PARAM11)-1);
+        else
+        		pos := INSTR( :P_PARAM11, ',', 1, i);
+        		pos1 := INSTR( :P_PARAM11, ',', 1, i+1);
+        		c_ident := substr( :P_PARAM11, pos+1, pos1-pos-1);
+        end if;
+        
+        select count(*) into num
+        from centre_frais cf
+        where to_char(cf.codcfrais) = c_ident;
+
+        if(num=0 or LENGTH(c_ident)>3)then
+
+        	if(:C_CF_INCONNUS='' or :C_CF_INCONNUS is null)then
+        		:C_CF_INCONNUS := :C_CF_INCONNUS || c_ident;
+        	else
+        		:C_CF_INCONNUS := :C_CF_INCONNUS || ', ' || c_ident;
+        	end if;
+        end if;
+        
+        i := i + 1 ;
+      End loop ;
+  if(:C_CF_INCONNUS is not null and (LENGTH(:C_CF_INCONNUS)<>0))then
+		:C_CF_INCONNUS := :C_CF_INCONNUS || '   Centre(s) de frais inconnu(s)';
+  end if;
+  /*
+	* Récupération des CA inconnus
+	*
+	*/
+  virgules := ( (LENGTH(:P_PARAM10) - LENGTH(REPLACE(:P_PARAM10,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+  	i:=0;
+  	While i < virgules+1
+      Loop
+      	if (virgules=0) then
+      			c_ident := :P_PARAM10;
+        elsif (i=0)then
+        		pos := INSTR( :P_PARAM10, ',', 1, 1);
+        		c_ident := substr( :P_PARAM10, 1, pos-1);
+        elsif (i=virgules) then
+        		pos := INSTR( :P_PARAM10, ',', 1, i);
+        			c_ident := substr( :P_PARAM10, pos+1, LENGTH(:P_PARAM10)-1);
+        else
+        		pos := INSTR( :P_PARAM10, ',', 1, i);
+        		pos1 := INSTR( :P_PARAM10, ',', 1, i+1);
+        		c_ident := substr( :P_PARAM10, pos+1, pos1-pos-1);
+        end if;
+        
+        select count(*) into num
+				from
+					centre_activite ca,
+					entite_structure es
+				where
+					INSTR(c_ident, to_char(es.codcamo,'FM00000')) > 0
+					and es.codcamo = ca.codcamo (+);
+
+        if(num=0 or LENGTH(c_ident)>5)then
+
+        	if(:C_CA_INCONNUS='' or :C_CA_INCONNUS is null)then
+        		:C_CA_INCONNUS := :C_CA_INCONNUS || c_ident;
+        	else
+        		:C_CA_INCONNUS := :C_CA_INCONNUS || ', ' || c_ident;
+        	end if;
+        end if;
+        
+        i := i + 1 ;
+      End loop ;
+  if(:C_CA_INCONNUS is not null and (LENGTH(:C_CA_INCONNUS)<>0))then
+		:C_CA_INCONNUS := :C_CA_INCONNUS || '   Elément(s) de structure inconnu(s) ou de niveau trop élevé';
+  end if;
+  /*
+	* Récupération des projets inconnus
+	*
+	*/
+  virgules := ( (LENGTH(:P_PROJET) - LENGTH(REPLACE(:P_PROJET,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+  	i:=0;
+  	While i < virgules+1
+      Loop
+      	if (virgules=0) then
+      			c_ident := :P_PROJET;
+        elsif (i=0)then
+        		pos := INSTR( :P_PROJET, ',', 1, 1);
+        		c_ident := substr( :P_PROJET, 1, pos-1);
+        elsif (i=virgules) then
+        		pos := INSTR( :P_PROJET, ',', 1, i);
+        			c_ident := substr( :P_PROJET, pos+1, LENGTH(:P_PROJET)-1);
+        else
+        		pos := INSTR( :P_PROJET, ',', 1, i);
+        		pos1 := INSTR( :P_PROJET, ',', 1, i+1);
+        		c_ident := substr( :P_PROJET, pos+1, pos1-pos-1);
+        end if;
+        
+       select count(*) into num
+			 from
+    			proj_info
+			 where
+    			INSTR(c_ident, icpi) > 0;
+
+        if(num=0 or LENGTH(c_ident)>5)then
+
+        	if(:C_PROJ_INCONNUS='' or :C_PROJ_INCONNUS is null)then
+        		:C_PROJ_INCONNUS := :C_PROJ_INCONNUS || c_ident;
+        	else
+        		:C_PROJ_INCONNUS := :C_PROJ_INCONNUS || ', ' || c_ident;
+        	end if;
+        end if;
+        
+        i := i + 1 ;
+      End loop ;
+  if(:C_PROJ_INCONNUS is not null and (LENGTH(:C_PROJ_INCONNUS)<>0))then
+		:C_PROJ_INCONNUS := :C_PROJ_INCONNUS || '   Projet(s) inconnu(s)';
+  end if;
+  /*
+	* Récupération des applications inconnues
+	*
+	*/
+  virgules := ( (LENGTH(:P_APP) - LENGTH(REPLACE(:P_APP,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+  	i:=0;
+  	While i < virgules+1
+      Loop
+      	if (virgules=0) then
+      			c_ident := :P_APP;
+        elsif (i=0)then
+        		pos := INSTR( :P_APP, ',', 1, 1);
+        		c_ident := substr( :P_APP, 1, pos-1);
+        elsif (i=virgules) then
+        		pos := INSTR( :P_APP, ',', 1, i);
+        			c_ident := substr( :P_APP, pos+1, LENGTH(:P_APP)-1);
+        else
+        		pos := INSTR( :P_APP, ',', 1, i);
+        		pos1 := INSTR( :P_APP, ',', 1, i+1);
+        		c_ident := substr( :P_APP, pos+1, pos1-pos-1);
+        end if;
+        
+				select count(*) into num
+				from
+    			application
+				where
+    			INSTR(c_ident, airt) > 0;
+
+        if(num=0 or LENGTH(c_ident)>5)then
+
+        	if(:C_APP_INCONNUS='' or :C_APP_INCONNUS is null)then
+        		:C_APP_INCONNUS := :C_APP_INCONNUS || c_ident;
+        	else
+        		:C_APP_INCONNUS := :C_APP_INCONNUS || ', ' || c_ident;
+        	end if;
+        end if;
+        
+        i := i + 1 ;
+      End loop ;
+  if(:C_APP_INCONNUS is not null and (LENGTH(:C_APP_INCONNUS)<>0))then
+		:C_APP_INCONNUS := :C_APP_INCONNUS || '   Application(s) inconnue(s)';
+  end if;
+  /*
+	* Récupération des dossiers projet inconnus
+	*
+	*/
+	if (:P_DOS_PROJ != 'TOUS' and :P_DOS_PROJ is not null) then
+	  virgules := ( (LENGTH(:P_DOS_PROJ) - LENGTH(REPLACE(:P_DOS_PROJ,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+		  	While i < virgules+1
+		      Loop
+		      	if(virgules=0) then
+		      		c_ident := :P_DOS_PROJ;
+		        elsif (i=0) then
+		        		pos := INSTR( :P_DOS_PROJ, ',', 1, 1);
+		        		c_ident := substr( :P_DOS_PROJ, 1, pos-1);
+		        elsif (i=virgules) then
+		        		pos := INSTR( :P_DOS_PROJ, ',', 1, i);
+		        		c_ident := substr( :P_DOS_PROJ, pos+1, LENGTH(:P_DOS_PROJ)-1);
+		        else
+		        		pos := INSTR( :P_DOS_PROJ, ',', 1, i);
+		        		pos1 := INSTR( :P_DOS_PROJ, ',', 1, i+1);
+		        		c_ident := substr( :P_DOS_PROJ, pos+1, pos1-pos-1);
+		        end if;
+					select
+						count(*) into num
+					from
+		    		dossier_projet
+					WHERE to_char(DPCODE,'FM00000') = c_ident;
+		        if(num=0 or LENGTH(c_ident)>5)then
+		
+		        	if(:C_DOS_PROJ_INCONNUS='' or :C_DOS_PROJ_INCONNUS is null)then
+		        		:C_DOS_PROJ_INCONNUS := :C_DOS_PROJ_INCONNUS || c_ident;
+		        	else
+		        		:C_DOS_PROJ_INCONNUS := :C_DOS_PROJ_INCONNUS || ', ' || c_ident;
+		        	end if;
+		        end if;
+		        
+		        i := i + 1 ;
+		      End loop ;
+	  if(:C_DOS_PROJ_INCONNUS is not null and (LENGTH(:C_DOS_PROJ_INCONNUS)<>0))then
+			:C_DOS_PROJ_INCONNUS := :C_DOS_PROJ_INCONNUS || '   Dossier(s) projet inconnu(s)';
+	  end if;
+	end if;
+	/*
+	* Récupération des CADA inconnus
+	*
+	*/
+	if (:P_CA_DA != 'TOUS' and :P_CA_DA is not null) then
+	  virgules := ( (LENGTH(:P_CA_DA) - LENGTH(REPLACE(:P_CA_DA,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+	  	While i < virgules+1
+	      Loop
+	      	if(virgules=0) then
+		      		c_ident := :P_CA_DA;
+		      elsif (i=0)then
+	        		pos := INSTR( :P_CA_DA, ',', 1, 1);
+	        		c_ident := substr( :P_CA_DA, 1, pos-1);
+	        elsif (i=virgules) then
+	        		pos := INSTR( :P_CA_DA, ',', 1, i);
+	        			c_ident := substr( :P_CA_DA, pos+1, LENGTH(:P_CA_DA)-1);
+	        else
+	        		pos := INSTR( :P_CA_DA, ',', 1, i);
+	        		pos1 := INSTR( :P_CA_DA, ',', 1, i+1);
+	        		c_ident := substr( :P_CA_DA, pos+1, pos1-pos-1);
+	        end if;
+	        
+					select count(*) into num
+					from
+						centre_activite ca,
+						entite_structure es
+					where
+						INSTR(c_ident, to_char(es.codcamo,'FM00000')) > 0
+						and es.codcamo = ca.codcamo (+);
+	
+	        if(num=0 or LENGTH(c_ident)>5)then
+	
+	        	if(:C_CA_DA_INCONNUS='' or :C_CA_DA_INCONNUS is null)then
+	        		:C_CA_DA_INCONNUS := :C_CA_DA_INCONNUS || c_ident;
+	        	else
+	        		:C_CA_DA_INCONNUS := :C_CA_DA_INCONNUS || ', ' || c_ident;
+	        	end if;
+	        end if;
+	        
+	        i := i + 1 ;
+	      End loop ;
+	  if(:C_CA_DA_INCONNUS is not null and (LENGTH(:C_CA_DA_INCONNUS)<>0))then
+			:C_CA_DA_INCONNUS := :C_CA_DA_INCONNUS || '   Elément(s) de structure inconnu(s) ou de niveau trop élevé';
+	  end if;
+	end if;
+	/*
+	* Récupération des CAFI inconnus
+	*
+	*/
+	if (:P_CA_FI != 'TOUS' and :P_CA_FI is not null) then
+	  virgules := ( (LENGTH(:P_CA_FI) - LENGTH(REPLACE(:P_CA_FI,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+	  	While i < virgules+1
+	      Loop
+	      	if(virgules=0) then
+		      		c_ident := :P_CA_FI;
+		      elsif (i=0)then
+	        		pos := INSTR( :P_CA_FI, ',', 1, 1);
+	        		c_ident := substr( :P_CA_FI, 1, pos-1);
+	        elsif (i=virgules) then
+	        		pos := INSTR( :P_CA_FI, ',', 1, i);
+	        			c_ident := substr( :P_CA_FI, pos+1, LENGTH(:P_CA_FI)-1);
+	        else
+	        		pos := INSTR( :P_CA_FI, ',', 1, i);
+	        		pos1 := INSTR( :P_CA_FI, ',', 1, i+1);
+	        		c_ident := substr( :P_CA_FI, pos+1, pos1-pos-1);
+	        end if;
+	        
+					select count(*) into num
+					from
+						centre_activite ca,
+						entite_structure es
+					where
+						INSTR(c_ident, to_char(es.codcamo,'FM00000')) > 0
+						and es.codcamo = ca.codcamo (+);
+	
+	        if(num=0 or LENGTH(c_ident)>5)then
+	
+	        	if(:C_CA_FI_INCONNUS='' or :C_CA_FI_INCONNUS is null)then
+	        		:C_CA_FI_INCONNUS := :C_CA_FI_INCONNUS || c_ident;
+	        	else
+	        		:C_CA_FI_INCONNUS := :C_CA_FI_INCONNUS || ', ' || c_ident;
+	        	end if;
+	        end if;
+	        
+	        i := i + 1 ;
+	      End loop ;
+	  if(:C_CA_FI_INCONNUS is not null and (LENGTH(:C_CA_FI_INCONNUS)<>0))then
+			:C_CA_FI_INCONNUS := :C_CA_FI_INCONNUS || '   Elément(s) de structure inconnu(s) ou de niveau trop élevé';
+	  end if;
+	end if;
+	/*
+	* Récupération des CA Payeurs inconnus
+	*
+	*/
+	if (:P_CA_PAYEUR != 'TOUS' and :P_CA_PAYEUR is not null) then
+	  virgules := ( (LENGTH(:P_CA_PAYEUR) - LENGTH(REPLACE(:P_CA_PAYEUR,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+	  	While i < virgules+1
+	      Loop
+	      	if(virgules=0) then
+		      		c_ident := :P_CA_PAYEUR;
+		      elsif (i=0)then
+	        		pos := INSTR( :P_CA_PAYEUR, ',', 1, 1);
+	        		c_ident := substr( :P_CA_PAYEUR, 1, pos-1);
+	        elsif (i=virgules) then
+	        		pos := INSTR( :P_CA_PAYEUR, ',', 1, i);
+	        			c_ident := substr( :P_CA_PAYEUR, pos+1, LENGTH(:P_CA_PAYEUR)-1);
+	        else
+	        		pos := INSTR( :P_CA_PAYEUR, ',', 1, i);
+	        		pos1 := INSTR( :P_CA_PAYEUR, ',', 1, i+1);
+	        		c_ident := substr( :P_CA_PAYEUR, pos+1, pos1-pos-1);
+	        end if;
+	        
+					select count(*) into num
+					from
+						centre_activite ca,
+						entite_structure es
+					where
+						INSTR(c_ident, to_char(es.codcamo,'FM00000')) > 0
+						and es.codcamo = ca.codcamo (+);
+	
+	        if(num=0 or LENGTH(c_ident)>5)then
+	
+	        	if(:C_CA_PAYEUR_INCONNUS='' or :C_CA_PAYEUR_INCONNUS is null)then
+	        		:C_CA_PAYEUR_INCONNUS := :C_CA_PAYEUR_INCONNUS || c_ident;
+	        	else
+	        		:C_CA_PAYEUR_INCONNUS := :C_CA_PAYEUR_INCONNUS || ', ' || c_ident;
+	        	end if;
+	        end if;
+	        
+	        i := i + 1 ;
+	      End loop ;
+	  if(:C_CA_PAYEUR_INCONNUS is not null and (LENGTH(:C_CA_PAYEUR_INCONNUS)<>0))then
+			:C_CA_PAYEUR_INCONNUS := :C_CA_PAYEUR_INCONNUS || '   Elément(s) de structure inconnu(s) ou de niveau trop élevé';
+	  end if;
+	end if;
+	
+	/*
+	* Récupération des DPG PERIM ME inconnus
+	*
+	*/
+
+	if (:P_PERIME != '00000000000' and :P_PERIME is not null) then
+	  virgules := ( (LENGTH(:P_PERIME) - LENGTH(REPLACE(:P_PERIME,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+	  	While i < virgules+1
+	      Loop
+	      	if (virgules=0) then
+	      			c_ident := :P_PERIME;
+	        elsif (i=0)then
+	        		pos := INSTR( :P_PERIME, ',', 1, 1);
+	        		c_ident := substr( :P_PERIME, 1, pos-1);
+	        elsif (i=virgules) then
+	        		pos := INSTR( :P_PERIME, ',', 1, i);
+	        			c_ident := substr( :P_PERIME, pos+1, LENGTH(:P_PERIME)-1);
+	        else
+	        		pos := INSTR( :P_PERIME, ',', 1, i);
+	        		pos1 := INSTR( :P_PERIME, ',', 1, i+1);
+	        		c_ident := substr( :P_PERIME, pos+1, pos1-pos-1);
+	        end if;
+	        
+	        select count(*) into num
+	        from vue_dpg_perime perime
+	        where INSTR(c_ident, to_char(perime.codbddpg,'FM00000000000')) > 0;
+	        if(num=0 or LENGTH(c_ident)>11)then
+	
+	        	if(:C_DPG_INCONNUS='' or :C_DPG_INCONNUS is null)then
+	        		:C_DPG_INCONNUS := :C_DPG_INCONNUS || c_ident;
+	        	else
+	        		:C_DPG_INCONNUS := :C_DPG_INCONNUS || ', ' || c_ident;
+	        	end if;
+	        end if;
+	        
+	        i := i + 1 ;
+	      End loop ;
+	  if(:C_DPG_INCONNUS is not null and (LENGTH(:C_DPG_INCONNUS)<>0))then
+			:C_DPG_INCONNUS := :C_DPG_INCONNUS || '   DPG inconnu(s)';
+	  end if;
+	end if;
+	
+	/*
+	* Récupération des DPG PERIM MO inconnus
+	*
+	*/
+	if (:P_PERIMMO != '000000000' AND :P_PERIMMO is not null) then
+	  virgules := ( (LENGTH(:P_PERIMMO) - LENGTH(REPLACE(:P_PERIMMO,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+	  	While i < virgules+1
+	      Loop
+	      	if (virgules=0) then
+	      			c_ident := :P_PERIMMO;
+	        elsif (i=0)then
+	        		pos := INSTR( :P_PERIMMO, ',', 1, 1);
+	        		c_ident := substr( :P_PERIMMO, 1, pos-1);
+	        elsif (i=virgules) then
+	        		pos := INSTR( :P_PERIMMO, ',', 1, i);
+	        			c_ident := substr( :P_PERIMMO, pos+1, LENGTH(:P_PERIMCLI)-1);
+	        else
+	        		pos := INSTR( :P_PERIMMO, ',', 1, i);
+	        		pos1 := INSTR( :P_PERIMMO, ',', 1, i+1);
+	        		c_ident := substr( :P_PERIMMO, pos+1, pos1-pos-1);
+	        end if;
+	        
+	        select count(*) into num
+	        from vue_clicode_perimo perimo
+	        where INSTR(c_ident, to_char(perimo.bdclicode,'FM000000000')) > 0;
+	
+	        if(num=0 or LENGTH(c_ident)>9)then
+	
+	        	if(:C_PERIMO_INCONNUS='' or :C_PERIMO_INCONNUS is null)then
+	        		:C_PERIMO_INCONNUS := :C_PERIMO_INCONNUS || c_ident;
+	        	else
+	        		:C_PERIMO_INCONNUS := :C_PERIMO_INCONNUS || ', ' || c_ident;
+	        	end if;
+	        end if;
+	        
+	        i := i + 1 ;
+	      End loop ;
+	  if(:C_PERIMO_INCONNUS is not null and (LENGTH(:C_PERIMO_INCONNUS)<>0))then
+			:C_PERIMO_INCONNUS := :C_PERIMO_INCONNUS || '   Client(s) inconnu(s)';
+	  end if;
+	end if;
+	
+	/*
+	* Récupération des DPG PERIM CLI inconnus
+	*
+	*/
+	if (:P_PERIMCLI != '000000000' AND :P_PERIMCLI is not null) then
+	  virgules := ( (LENGTH(:P_PERIMCLI) - LENGTH(REPLACE(:P_PERIMCLI,',',NULL)) ) / NVL(LENGTH(','),1) ) ;
+	  	i:=0;
+	  	While i < virgules+1
+	      Loop
+	      	if (virgules=0) then
+	      			c_ident := :P_PERIMCLI;
+	        elsif (i=0)then
+	        		pos := INSTR( :P_PERIMCLI, ',', 1, 1);
+	        		c_ident := substr( :P_PERIMCLI, 1, pos-1);
+	        elsif (i=virgules) then
+	        		pos := INSTR( :P_PERIMCLI, ',', 1, i);
+	        			c_ident := substr( :P_PERIMCLI, pos+1, LENGTH(:P_PERIMCLI)-1);
+	        else
+	        		pos := INSTR( :P_PERIMCLI, ',', 1, i);
+	        		pos1 := INSTR( :P_PERIMCLI, ',', 1, i+1);
+	        		c_ident := substr( :P_PERIMCLI, pos+1, pos1-pos-1);
+	        end if;
+	        
+	        select count(*) into num
+	        from vue_clicode_perimo perimo
+	        where INSTR(c_ident, to_char(perimo.bdclicode,'FM000000000')) > 0;
+	
+	        if(num=0 or LENGTH(c_ident)>9)then
+	
+	        	if(:C_PERIMCLI_INCONNUS='' or :C_PERIMCLI_INCONNUS is null)then
+	        		:C_PERIMCLI_INCONNUS := :C_PERIMCLI_INCONNUS || c_ident;
+	        	else
+	        		:C_PERIMCLI_INCONNUS := :C_PERIMCLI_INCONNUS || ', ' || c_ident;
+	        	end if;
+	        end if;
+	        
+	        i := i + 1 ;
+	      End loop ;
+	  if(:C_PERIMCLI_INCONNUS is not null and (LENGTH(:C_PERIMCLI_INCONNUS)<>0))then
+			:C_PERIMCLI_INCONNUS := :C_PERIMCLI_INCONNUS || '   Client(s) inconnu(s)';
+	  end if;
+	end if;
+	
+	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_da_tousformattrigger0010">
+      <textSource>
+      <![CDATA[function M_CA_DA_TOUSFORMATTRIGGER0010 return boolean is
+begin
+  if (upper(:P_CA_DA) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_ca_daformattrigger0012">
+      <textSource>
+      <![CDATA[function R_CA_DAFORMATTRIGGER0012 return boolean is
+reste number;
+begin
+	if (upper(:P_CA_DA) = 'TOUS')
+  then
+  	return (FALSE);
+  end if;
+	
+  reste := mod(:CS_NUM_CA_DA,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_daformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_DAFormatTrigger return boolean is
+begin
+  if (:P_CA_DA = '') or (:P_CA_DA is null)
+  then
+  	return (FALSE);
+  end if;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_ca_suivinv_tousformattrigger">
+      <textSource>
+      <![CDATA[function M_CA_SUIVINV_TOUSFormatTrigger return boolean is
+begin
+  if (upper(:P_CA_SUIVINV) = 'TOUS')
+  then
+  	return (TRUE);
+  end if;
+  return (false);
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+--	srw.message(1,'requete menus : select lib as menus_lib
+--from (select as lib from dual '||:P_MENUS||') where length(trim(lib)) > 0');
+	
+return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_52formattrigger">
+      <textSource>
+      <![CDATA[function B_52FormatTrigger return boolean is
+begin
+  if (:ca_fi_niv_=0)then
+  	return (TRUE);
+  end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_ca_fi_date_cessformattrigger">
+      <textSource>
+      <![CDATA[function F_CA_FI_DATE_CESSFormatTrigger return boolean is
+begin
+  if (:ca_fi_niv_ = 0)then
+  	return (TRUE);
+  	END IF;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_53formattrigger">
+      <textSource>
+      <![CDATA[function B_53FormatTrigger return boolean is
+begin
+  if (:ca_payeur_niv_ = 0) then
+  	return (TRUE);
+  	end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_ca_payeur_date_cessformattri">
+      <textSource>
+      <![CDATA[function F_CA_PAYEUR_DATE_CESSFormatTri return boolean is
+begin
+  if (:ca_payeur_niv_ = 0) then
+  	return (TRUE);
+  	end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_54formattrigger">
+      <textSource>
+      <![CDATA[function B_54FormatTrigger return boolean is
+begin
+  if (:ca_da_niv_ = 0) then
+  	return(TRUE);
+  	end if;
+	
+
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_ca_da_date_cessformattrigger">
+      <textSource>
+      <![CDATA[function F_CA_DA_DATE_CESSFormatTrigger return boolean is
+begin
+  if (:ca_da_niv_ = 0)then
+  	return(TRUE);
+  	end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_56formattrigger">
+      <textSource>
+      <![CDATA[function B_56FormatTrigger return boolean is
+begin
+  if (:ca_suivinv_niv = 0)then
+  	return(TRUE);
+  	end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="f_ca_suivinv_date_cessformattr">
+      <textSource>
+      <![CDATA[function F_CA_SUIVINV_DATE_CESSFormatTr return boolean is
+begin
+  if(:ca_suivinv_niv = 0)then
+  	return (TRUE);
+  	end if;
+  return (FALSE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_perime_tous1formattrigger">
+      <textSource>
+      <![CDATA[function M_PERIME_TOUS1FormatTrigger return boolean is
+begin
+
+  if (:P_PERIMMO = '000000000')           
+  then
+		return (TRUE);  	
+	end if;
+  return (FALSE);
+
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_2formattrigger">
+      <textSource>
+      <![CDATA[function R_2FormatTrigger return boolean is
+	reste	number;
+begin
+	
+  	if (:P_PERIMMO = '000000000') or (:P_PERIMMO is null) or (:P_PERIMMO = '')
+  	then
+			return (FALSE);  	
+  	end if;
+
+	reste := mod(:CS_NUM_PERIMO,2);
+	--reste:=1;
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="m_perime_tous2formattrigger">
+      <textSource>
+      <![CDATA[function M_PERIME_TOUS2FormatTrigger return boolean is
+begin
+
+  if (:P_PERIMCLI = '000000000')
+  then
+		return (TRUE);  	
+	end if;
+  return (FALSE);
+    
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_perimcliformattrigger">
+      <textSource>
+      <![CDATA[function R_PERIMCLIFormatTrigger return boolean is
+reste number;
+begin
+
+    if (:P_PERIMCLI = '000000000') or (:P_PERIMCLI is null) or (:P_PERIMCLI = '')
+  	then
+			return (FALSE);  	
+    end if;
+    	
+    		reste := mod(:CS_NUM_PERIMCLI,2);
+
+	if reste=1 then
+		-- manip pour alterner les couleurs
+    srw.attr.mask := SRW.BFCOLOR_ATTR;
+		srw.attr.bfcolor :='white';
+		srw.set_attr (0,srw.attr);
+	end if;
+	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" templateName="rwbeige"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

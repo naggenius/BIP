@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_SuiviDpCopi" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="X_SUIVIDPCOPI" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NUMSEQ" datatype="number" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT  
+
+
+nvl(to_char(tcs.annee),' ')      ANNEE, 
+nvl(tcs.clisigle,' ')          CLISIGLE, 
+nvl(trim(tcs.metier),' ')          METIER, 
+nvl(tcs.DP_COPI,' ')   DP_COPI, 
+nvl(tcs.LIB_DP_COPI   ,' ')    LIBELLE, 
+nvl(trim(tcs.LIBELLE_FOUR_COPI),' ')    LIBELLE_FOUR_COPI,
+                                       
+
+                                  
+
+nvl(to_char(sum(tcs.jh_arbdecides), 'FM99999999999990'),to_char(0, 'FM99999999999900')) JH_ARBDECIDES,
+nvl(to_char(sum(tcs.EU_ARBDECIDES), 'FM9999999990D000'),to_char(0, 'FM9999999990D000'))EU_ARBDECIDES,
+nvl(to_char(sum(tcs.JH_CANTDECIDES), 'FM99999999999990'),to_char(0, 'FM99999999999900')) JH_CANTDECIDES,
+nvl(to_char(sum(tcs.EU_CANTDECIDES), 'FM9999999990D000'),to_char(0, 'FM9999999990D000')) EU_CANTDECIDES,
+nvl(to_char(sum(tcs.JH_REALISES), 'FM99999999999990'),to_char(0, 'FM99999999999900')) JH_REALISES, 
+nvl(to_char(sum(tcs.EU_REALISES), 'FM9999999990D000'),to_char(0, 'FM9999999990D000')) EU_REALISES,
+nvl(to_char(sum(tcs.JH_EXTRAPOLES), 'FM99999999999990'),to_char(0, 'FM99999999999900')) JH_EXTRAPOLES, 
+nvl(to_char(sum(tcs.EU_EXTRAPOLES), 'FM9999999990D000'),to_char(0, 'FM9999999990D000')) EU_EXTRAPOLES,
+nvl(to_char(sum(tcs.JH_REESTIMES), 'FM99999999999990'),to_char(0, 'FM99999999999900')) JH_REESTIMES,
+nvl(to_char(sum(tcs.EU_REESTIMES), 'FM9999999990D000'),to_char(0, 'FM9999999990D000')) EU_REESTIMES
+
+from tmp_copi_synthese_etats tcs
+where
+tcs.numseq = :p_numseq
+group by  tcs.annee, tcs.clisigle, trim(tcs.metier), tcs.DP_COPI, tcs.LIB_DP_COPI , trim(tcs.LIBELLE_FOUR_COPI)
+]]>
+      </select>
+      <displayInfo x="2.31250" y="1.28137" width="0.71875" height="0.19995"/>
+      <group name="G_ANNEE">
+        <displayInfo x="1.82068" y="2.91650" width="1.71301" height="4.01953"
+        />
+        <dataItem name="ANNEE" datatype="vchar2" columnOrder="11" width="40"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor
+           expression="nvl ( to_char ( tcs.annee ) , &apos; &apos; )"
+           descriptiveExpression="ANNEE" order="1" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DP_COPI" datatype="vchar2" columnOrder="12" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dp Copi">
+          <dataDescriptor expression="nvl ( tcs.DP_COPI , &apos; &apos; )"
+           descriptiveExpression="DP_COPI" order="4" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="13" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="nvl ( tcs.LIB_DP_COPI , &apos; &apos; )"
+           descriptiveExpression="LIBELLE" order="5" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="14" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor
+           expression="nvl ( trim ( tcs.metier ) , &apos; &apos; )"
+           descriptiveExpression="METIER" order="3" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE_FOUR_COPI" datatype="vchar2" columnOrder="15"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle Four Copi">
+          <dataDescriptor
+           expression="nvl ( trim ( tcs.LIBELLE_FOUR_COPI ) , &apos; &apos; )"
+           descriptiveExpression="LIBELLE_FOUR_COPI" order="6" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_ARBDECIDES" datatype="vchar2" columnOrder="16"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Arbdecides">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.jh_arbdecides ) , &apos;FM99999999999990&apos; ) , to_char ( 0 , &apos;FM99999999999900&apos; ) )"
+           descriptiveExpression="JH_ARBDECIDES" order="7" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_ARBDECIDES" datatype="vchar2" columnOrder="17"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Arbdecides">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.EU_ARBDECIDES ) , &apos;FM9999999990D000&apos; ) , to_char ( 0 , &apos;FM9999999990D000&apos; ) )"
+           descriptiveExpression="EU_ARBDECIDES" order="8" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_CANTDECIDES" datatype="vchar2" columnOrder="18"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Cantdecides">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.JH_CANTDECIDES ) , &apos;FM99999999999990&apos; ) , to_char ( 0 , &apos;FM99999999999900&apos; ) )"
+           descriptiveExpression="JH_CANTDECIDES" order="9" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_CANTDECIDES" datatype="vchar2" columnOrder="19"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Cantdecides">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.EU_CANTDECIDES ) , &apos;FM9999999990D000&apos; ) , to_char ( 0 , &apos;FM9999999990D000&apos; ) )"
+           descriptiveExpression="EU_CANTDECIDES" order="10" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_REALISES" datatype="vchar2" columnOrder="20"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Realises">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.JH_REALISES ) , &apos;FM99999999999990&apos; ) , to_char ( 0 , &apos;FM99999999999900&apos; ) )"
+           descriptiveExpression="JH_REALISES" order="11" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_REALISES" datatype="vchar2" columnOrder="21"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Realises">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.EU_REALISES ) , &apos;FM9999999990D000&apos; ) , to_char ( 0 , &apos;FM9999999990D000&apos; ) )"
+           descriptiveExpression="EU_REALISES" order="12" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_EXTRAPOLES" datatype="vchar2" columnOrder="22"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Extrapoles">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.JH_EXTRAPOLES ) , &apos;FM99999999999990&apos; ) , to_char ( 0 , &apos;FM99999999999900&apos; ) )"
+           descriptiveExpression="JH_EXTRAPOLES" order="13" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_EXTRAPOLES" datatype="vchar2" columnOrder="23"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Extrapoles">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.EU_EXTRAPOLES ) , &apos;FM9999999990D000&apos; ) , to_char ( 0 , &apos;FM9999999990D000&apos; ) )"
+           descriptiveExpression="EU_EXTRAPOLES" order="14" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_REESTIMES" datatype="vchar2" columnOrder="24"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Reestimes">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.JH_REESTIMES ) , &apos;FM99999999999990&apos; ) , to_char ( 0 , &apos;FM99999999999900&apos; ) )"
+           descriptiveExpression="JH_REESTIMES" order="15" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_REESTIMES" datatype="vchar2" columnOrder="25"
+         width="15" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Reestimes">
+          <dataDescriptor
+           expression="nvl ( to_char ( sum ( tcs.EU_REESTIMES ) , &apos;FM9999999990D000&apos; ) , to_char ( 0 , &apos;FM9999999990D000&apos; ) )"
+           descriptiveExpression="EU_REESTIMES" order="16" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLISIGLE" datatype="vchar2" columnOrder="26" width="8"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Clisigle">
+          <dataDescriptor expression="nvl ( tcs.clisigle , &apos; &apos; )"
+           descriptiveExpression="CLISIGLE" order="2" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_REAL_ARB" source="cf_1formula" datatype="character"
+         width="20" precision="10" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="16" defaultLabel="Cf Real Arb" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+        <formula name="CF_REAL_ARB_CANT" source="cf_real_arb_cantformula"
+         datatype="character" width="20" precision="10" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="16"
+         defaultLabel="Cf Real Arb Cant" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_ANNEE_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.50000" height="0.31250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_ANNEE" source="G_ANNEE"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="7.50000"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_ANNEE" source="ANNEE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DP_COPI" source="DP_COPI" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.25000" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBELLE" source="LIBELLE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.56250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.87500" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBELLE_FOUR_COPI" source="LIBELLE_FOUR_COPI"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.18750" y="0.18750" width="0.75000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_ARBDECIDES" source="JH_ARBDECIDES"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.93750" y="0.18750" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_ARBDECIDES" source="EU_ARBDECIDES"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="2.50000" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_CANTDECIDES" source="JH_CANTDECIDES"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="2.93750" y="0.18750" width="0.50000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_CANTDECIDES" source="EU_CANTDECIDES"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.43750" y="0.18750" width="0.50000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_REALISES" source="JH_REALISES" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.93750" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_REALISES" source="EU_REALISES" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="4.31250" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_EXTRAPOLES" source="JH_EXTRAPOLES"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="4.68750" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_EXTRAPOLES" source="EU_EXTRAPOLES"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.12500" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_REESTIMES" source="JH_REESTIMES" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.56250" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_REESTIMES" source="EU_REESTIMES" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.00000" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CLISIGLE" source="CLISIGLE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.43750" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CF_REAL_ARB" source="CF_REAL_ARB" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.81250" y="0.18750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CF_REAL_ARB_CANT" source="CF_REAL_ARB_CANT"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="7.12500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_ANNEE_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.50000"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_ANNEE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Annee]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DP_COPI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.25000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Dp Copi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.87500" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE_FOUR_COPI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="0.75000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Libelle Four Copi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_ARBDECIDES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.93750" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Jh Arbdecides]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_ARBDECIDES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.50000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Eu
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Arbdecides]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_CANTDECIDES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.00000" width="0.50000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Cantdecides]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_CANTDECIDES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.43750" y="0.00000" width="0.50000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Eu
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Cantdecides]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_REALISES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.93750" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Realises]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_REALISES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.31250" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Eu
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Realises]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_EXTRAPOLES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.68750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Extrapoles]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_EXTRAPOLES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.12500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Eu
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Extrapoles]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_REESTIMES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.56250" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Reestimes]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_REESTIMES" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.00000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Eu
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Reestimes]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CLISIGLE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.43750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Clisigle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CF_REAL_ARB" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.81250" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Cf Real
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Arb]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CF_REAL_ARB_CANT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.12500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Cf Real
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Arb Cant]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+
+begin
+  
+  :P_NUMSEQ := pack_cout_standard_ke.INSERT_TMP_COPI_SYNTHESE( :P_PARAM7,:P_PARAM6 ,null,3); 
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_1formula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_1Formula return char is
+begin
+	if (:EU_ARBDECIDES <> 0)
+  then
+  	return(lpad(nvl(to_char((:EU_REALISES/:EU_ARBDECIDES)*100, 'FM990D00'),to_char(0, 'FM990D00')),6,' '));
+	else
+		return(lpad(to_char(0, 'FM990D00'),6,' '));
+	end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_real_arb_cantformula" returnType="character">
+      <textSource>
+      <![CDATA[function CF_REAL_ARB_CANTFormula return char is
+begin
+		if ((:EU_ARBDECIDES+:EU_CANTDECIDES) <> 0)
+		then
+     return(lpad(nvl(to_char((:EU_REALISES/(:EU_ARBDECIDES+:EU_CANTDECIDES))*100, 'FM990D00'),to_char(0, 'FM990D00')),6,' '));
+		else
+			 return(lpad(to_char(0, 'FM990D00'),6,' '));
+	end if;
+		 
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+  
+  
+  DELETE FROM TMP_COPI_SYNTHESE_ETATS WHERE NUMSEQ = :P_NUMSEQ ; 
+  
+  COMMIT ; 
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+
+
+</head>
+
+
+<body>
+
+<!-- Data Area Generated by Reports Developer -->
+<rw:dataArea id="MGANNEEGRPFR21">
+<table>
+<caption>  </caption>
+ <!-- Header -->
+ <thead>
+  <tr>
+   <th <rw:id id="HBANNEE21" asArray="no"/>> Annee </th>
+   <th <rw:id id="HBDPCOPI21" asArray="no"/>> Dp Copi </th>
+   <th <rw:id id="HBLIBELLE21" asArray="no"/>> Libelle </th>
+   <th <rw:id id="HBMETIER21" asArray="no"/>> Metier </th>
+   <th <rw:id id="HBLIBELLEFOURCOPI21" asArray="no"/>> Libelle Four Copi </th>
+   <th <rw:id id="HBJHARBDECIDES21" asArray="no"/>> Jh Arbdecides </th>
+   <th <rw:id id="HBEUARBDECIDES21" asArray="no"/>> Eu
+Arbdecides </th>
+   <th <rw:id id="HBJHCANTDECIDES21" asArray="no"/>> Jh
+Cantdecides </th>
+   <th <rw:id id="HBEUCANTDECIDES21" asArray="no"/>> Eu
+Cantdecides </th>
+   <th <rw:id id="HBJHREALISES21" asArray="no"/>> Jh
+Realises </th>
+   <th <rw:id id="HBEUREALISES21" asArray="no"/>> Eu
+Realises </th>
+   <th <rw:id id="HBJHEXTRAPOLES21" asArray="no"/>> Jh
+Extrapoles </th>
+   <th <rw:id id="HBEUEXTRAPOLES21" asArray="no"/>> Eu
+Extrapoles </th>
+   <th <rw:id id="HBJHREESTIMES21" asArray="no"/>> Jh
+Reestimes </th>
+   <th <rw:id id="HBEUREESTIMES21" asArray="no"/>> Eu
+Reestimes </th>
+   <th <rw:id id="HBCLISIGLE21" asArray="no"/>> Clisigle </th>
+   <th <rw:id id="HBCFREALARB21" asArray="no"/>> Cf Real
+Arb </th>
+   <th <rw:id id="HBCFREALARBCANT21" asArray="no"/>> Cf Real
+Arb Cant </th>
+  </tr>
+ </thead>
+ <!-- Body -->
+ <tbody>
+  <rw:foreach id="RGANNEE211" src="G_ANNEE">
+   <tr>
+    <td <rw:headers id="HFANNEE21" src="HBANNEE21"/>><rw:field id="FANNEE21" src="ANNEE" nullValue="&nbsp;"> F_ANNEE </rw:field></td>
+    <td <rw:headers id="HFDPCOPI21" src="HBDPCOPI21"/>><rw:field id="FDPCOPI21" src="DP_COPI" nullValue="&nbsp;"> F_DP_COPI </rw:field></td>
+    <td <rw:headers id="HFLIBELLE21" src="HBLIBELLE21"/>><rw:field id="FLIBELLE21" src="LIBELLE" nullValue="&nbsp;"> F_LIBELLE </rw:field></td>
+    <td <rw:headers id="HFMETIER21" src="HBMETIER21"/>><rw:field id="FMETIER21" src="METIER" nullValue="&nbsp;"> F_METIER </rw:field></td>
+    <td <rw:headers id="HFLIBELLEFOURCOPI21" src="HBLIBELLEFOURCOPI21"/>><rw:field id="FLIBELLEFOURCOPI21" src="LIBELLE_FOUR_COPI" nullValue="&nbsp;"> F_LIBELLE_FOUR_COPI </rw:field></td>
+    <td <rw:headers id="HFJHARBDECIDES21" src="HBJHARBDECIDES21"/>><rw:field id="FJHARBDECIDES21" src="JH_ARBDECIDES" nullValue="&nbsp;"> F_JH_ARBDECIDES </rw:field></td>
+    <td <rw:headers id="HFEUARBDECIDES21" src="HBEUARBDECIDES21"/>><rw:field id="FEUARBDECIDES21" src="EU_ARBDECIDES" nullValue="&nbsp;"> F_EU_ARBDECIDES </rw:field></td>
+    <td <rw:headers id="HFJHCANTDECIDES21" src="HBJHCANTDECIDES21"/>><rw:field id="FJHCANTDECIDES21" src="JH_CANTDECIDES" nullValue="&nbsp;"> F_JH_CANTDECIDES </rw:field></td>
+    <td <rw:headers id="HFEUCANTDECIDES21" src="HBEUCANTDECIDES21"/>><rw:field id="FEUCANTDECIDES21" src="EU_CANTDECIDES" nullValue="&nbsp;"> F_EU_CANTDECIDES </rw:field></td>
+    <td <rw:headers id="HFJHREALISES21" src="HBJHREALISES21"/>><rw:field id="FJHREALISES21" src="JH_REALISES" nullValue="&nbsp;"> F_JH_REALISES </rw:field></td>
+    <td <rw:headers id="HFEUREALISES21" src="HBEUREALISES21"/>><rw:field id="FEUREALISES21" src="EU_REALISES" nullValue="&nbsp;"> F_EU_REALISES </rw:field></td>
+    <td <rw:headers id="HFJHEXTRAPOLES21" src="HBJHEXTRAPOLES21"/>><rw:field id="FJHEXTRAPOLES21" src="JH_EXTRAPOLES" nullValue="&nbsp;"> F_JH_EXTRAPOLES </rw:field></td>
+    <td <rw:headers id="HFEUEXTRAPOLES21" src="HBEUEXTRAPOLES21"/>><rw:field id="FEUEXTRAPOLES21" src="EU_EXTRAPOLES" nullValue="&nbsp;"> F_EU_EXTRAPOLES </rw:field></td>
+    <td <rw:headers id="HFJHREESTIMES21" src="HBJHREESTIMES21"/>><rw:field id="FJHREESTIMES21" src="JH_REESTIMES" nullValue="&nbsp;"> F_JH_REESTIMES </rw:field></td>
+    <td <rw:headers id="HFEUREESTIMES21" src="HBEUREESTIMES21"/>><rw:field id="FEUREESTIMES21" src="EU_REESTIMES" nullValue="&nbsp;"> F_EU_REESTIMES </rw:field></td>
+    <td <rw:headers id="HFCLISIGLE21" src="HBCLISIGLE21"/>><rw:field id="FCLISIGLE21" src="CLISIGLE" nullValue="&nbsp;"> F_CLISIGLE </rw:field></td>
+    <td <rw:headers id="HFCFREALARB21" src="HBCFREALARB21"/>><rw:field id="FCFREALARB21" src="CF_REAL_ARB" nullValue="&nbsp;"> F_CF_REAL_ARB </rw:field></td>
+    <td <rw:headers id="HFCFREALARBCANT21" src="HBCFREALARBCANT21"/>><rw:field id="FCFREALARBCANT21" src="CF_REAL_ARB_CANT" nullValue="&nbsp;"> F_CF_REAL_ARB_CANT </rw:field></td>
+   </tr>
+  </rw:foreach>
+ </tbody>
+</table>
+</rw:dataArea> <!-- id="MGANNEEGRPFR21" -->
+<!-- End of Data Area Generated by Reports Developer -->
+
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

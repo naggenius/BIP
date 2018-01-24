@@ -1,0 +1,14 @@
+--adding 2 new columns in LIGNE_BIP table
+
+ALTER TABLE BIP.LIGNE_BIP ADD (LINEAXISBUSINESS1 varchar2(40), LINEAXISBUSINESS2  varchar2(12));
+
+COMMENT ON COLUMN BIP.LIGNE_BIP.LINEAXISBUSINESS1 IS  'business axis line 1';
+
+COMMENT ON COLUMN BIP.LIGNE_BIP.LINEAXISBUSINESS2 IS  'business axis line 2';
+
+--New temp table to load data from CSV file.
+
+create table BIP.PID (PID VARCHAR2(4) NOT NULL );
+ALTER TABLE BIP.PID ADD (INFO1 VARCHAR2(30), INFO2 VARCHAR2(30)); 
+
+  

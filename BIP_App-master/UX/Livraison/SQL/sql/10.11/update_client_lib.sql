@@ -1,0 +1,12 @@
+update CLIENT_MO set CLILIB='BDDF' where CLICODE='10000';
+update CLIENT_MO set CLILIB='BDDF/DIR' where CLICODE='10040';
+update CLIENT_MO set CLILIB='PAEN/MUE' where CLICODE='10050';
+update CLIENT_MO set CLILIB='BDDF/AUD' where CLICODE='10090';
+update CLIENT_MO set CLILIB='BDDF/NBP' where CLICODE='10200';
+update CLIENT_MO set CLILIB='BDDF/NBP/Hors IT' where CLICODE='10299';
+update CLIENT_MO set CLILIB='BDDF/DAI' where CLICODE='10300';
+
+
+ /
+ 
+exit;

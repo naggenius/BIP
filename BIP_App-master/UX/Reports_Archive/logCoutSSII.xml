@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="coutKE" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" afterReportTrigger="afterreport">
+  <xmlSettings xmlTag="COUTKE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0" encoding="&Encoding"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="1000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="15"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_REQUETE_AND" datatype="number" width="1"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select
+ ANNEE      ,
+  DPG_HAUT ,
+  DPG_BAS    ,
+  DATE_LOG   ,
+  USER_LOG   ,
+  NOM_TABLE  ,
+  COLONNE     ,
+  VALEUR_PREC ,
+  VALEUR_NOUV ,
+  TYPE_ACTION  ,
+  COMMENTAIRE ,
+  METIER      ,
+  NIVEAU      
+FROM COUT_STD2_LOG cout 
+ &P_WHERE 
+order by  ANNEE,DPG_BAS, DPG_HAUT, metier,niveau, DATE_LOG]]>
+      </select>
+      <displayInfo x="2.36487" y="0.82275" width="0.69995" height="0.19995"/>
+      <group name="G_ANNEE1">
+        <displayInfo x="2.00220" y="1.88733" width="1.38318" height="1.11426"
+        />
+        <dataItem name="ANNEE1" oracleDatatype="number" columnOrder="14"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <xmlSettings xmlTag="ANNEE"/>
+          <dataDescriptor expression="ANNEE" descriptiveExpression="ANNEE"
+           order="1" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_BAS1" oracleDatatype="number" columnOrder="12"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Bas">
+          <xmlSettings xmlTag="DPG_BAS"/>
+          <dataDescriptor expression="DPG_BAS" descriptiveExpression="DPG_BAS"
+           order="3" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DPG_HAUT1" oracleDatatype="number" columnOrder="13"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dpg Haut">
+          <xmlSettings xmlTag="DPG_HAUT"/>
+          <dataDescriptor expression="DPG_HAUT"
+           descriptiveExpression="DPG_HAUT" order="2" oracleDatatype="number"
+           width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="18" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor expression="METIER" descriptiveExpression="METIER"
+           order="12" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NIVEAU" datatype="vchar2" columnOrder="31" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Niveau">
+          <dataDescriptor expression="NIVEAU" descriptiveExpression="NIVEAU"
+           order="13" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+      <group name="G_DATE_LOG">
+        <displayInfo x="1.92468" y="4.29724" width="1.54395" height="2.82324"
+        />
+        <dataItem name="DATE_LOG" datatype="date" oracleDatatype="date"
+         columnOrder="19" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Date Log">
+          <dataDescriptor expression="DATE_LOG"
+           descriptiveExpression="DATE_LOG" order="4" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="USER_LOG" datatype="vchar2" columnOrder="20"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="User Log">
+          <dataDescriptor expression="USER_LOG"
+           descriptiveExpression="USER_LOG" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_ACTION" oracleDatatype="number" columnOrder="21"
+         width="22" defaultWidth="30000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Type Action">
+          <dataDescriptor expression="TYPE_ACTION"
+           descriptiveExpression="TYPE_ACTION" order="10"
+           oracleDatatype="number" width="22" scale="-127"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NOM_TABLE" datatype="vchar2" columnOrder="26"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Nom Table">
+          <dataDescriptor expression="NOM_TABLE"
+           descriptiveExpression="NOM_TABLE" order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COLONNE" datatype="vchar2" columnOrder="27" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Colonne">
+          <dataDescriptor expression="COLONNE" descriptiveExpression="COLONNE"
+           order="7" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VALEUR_PREC" datatype="vchar2" columnOrder="28"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Valeur Prec">
+          <dataDescriptor expression="VALEUR_PREC"
+           descriptiveExpression="VALEUR_PREC" order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="VALEUR_NOUV" datatype="vchar2" columnOrder="29"
+         width="30" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Valeur Nouv">
+          <dataDescriptor expression="VALEUR_NOUV"
+           descriptiveExpression="VALEUR_NOUV" order="9" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="COMMENTAIRE" datatype="vchar2" columnOrder="30"
+         width="200" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Commentaire">
+          <dataDescriptor expression="COMMENTAIRE"
+           descriptiveExpression="COMMENTAIRE" order="11" width="200"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_compteur" source="CP_indice" function="sum"
+         width="20" precision="10" reset="report" compute="report"
+         defaultWidth="120000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Compteur">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <placeholder name="CP_indice" datatype="number" width="20"
+         precision="10" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="16" defaultLabel="Cp Indice" valueIfNull="1">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </placeholder>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main" width="11.00000" height="8.50000"
+   orientation="landscape">
+    <body width="10.62500" height="7.00000">
+      <location x="0.18750" y="1.25000"/>
+      <frame name="M_G_ANNEE1_GRPFR">
+        <webSettings>
+        <![CDATA[#NULL#]]>
+        </webSettings>
+        <geometryInfo x="0.00000" y="0.00000" width="10.62500"
+         height="1.56250"/>
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillPattern="transparent"
+         fillBackgroundColor="r100g100b100"/>
+        <repeatingFrame name="R_G_ANNEE1" source="G_ANNEE1"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <webSettings>
+          <![CDATA[#NULL#]]>
+          </webSettings>
+          <geometryInfo x="0.00000" y="0.00000" width="10.62500"
+           height="1.43750"/>
+          <generalLayout pageProtect="yes" verticalElasticity="variable"/>
+          <visualSettings fillPattern="transparent"
+           fillBackgroundColor="TextColor"/>
+          <rectangle name="B_6">
+            <geometryInfo x="0.00000" y="0.12500" width="5.12500"
+             height="0.62500"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r75g100b100" linePattern="solid"/>
+            <points>
+              <point x="0.00000" y="0.12500"/>
+              <point x="5.12500" y="0.62500"/>
+            </points>
+          </rectangle>
+          <field name="F_ANNEE1" source="ANNEE1" minWidowLines="1" spacing="0"
+           alignment="end">
+            <font face="Arial" size="14" bold="yes" textColor="red"/>
+            <geometryInfo x="1.87500" y="0.18750" width="0.93750"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <field name="F_DPG_BAS1" source="DPG_BAS1" minWidowLines="1"
+           spacing="0" alignment="end">
+            <font face="Arial" size="14" bold="yes" textColor="red"/>
+            <geometryInfo x="1.87500" y="0.43750" width="0.87500"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <frame name="M_G_DATE_LOG_GRPFR">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="0.87500" width="9.56250"
+             height="0.37500"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="r100g100b100" linePattern="solid"/>
+          </frame>
+          <frame name="M_G_DATE_LOG_HDR">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="0.87500" width="10.62500"
+             height="0.18750"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="gray16" linePattern="solid"/>
+            <text name="B_DATE_LOG" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="0.00000" y="0.87500" width="0.68750"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[Date Log]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_USER_LOG" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="1.00000" y="0.87500" width="0.75000"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="custom6"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[User]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_NOM_TABLE" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="2.06250" y="0.87500" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[Nom Table]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_COLONNE" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="3.62500" y="0.87500" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[Colonne]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_VALEUR_PREC" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="5.18750" y="0.87500" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[Valeur Prec]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_VALEUR_NOUV" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="6.68750" y="0.87500" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[Valeur Nouv]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_COMMENTAIRE" minWidowLines="1">
+              <textSettings justify="center" spacing="0"/>
+              <geometryInfo x="8.68750" y="0.87500" width="1.31250"
+               height="0.18750"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+              <textSegment>
+                <font face="Arial" size="10" bold="yes" textColor="r0g0b50"/>
+                <string>
+                <![CDATA[Commentaire]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_G_DATE_LOG" source="G_DATE_LOG"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <webSettings>
+            <![CDATA[#NULL#]]>
+            </webSettings>
+            <geometryInfo x="0.00000" y="1.06250" width="10.62500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout formatTrigger="r_g_codbrformattrigger"/>
+            <visualSettings fillPattern="transparent" linePattern="solid"/>
+            <field name="F_DATE_LOG" source="DATE_LOG" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="0.00000" y="1.06250" width="0.68750"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_USER_LOG" source="USER_LOG" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="1.00000" y="1.06250" width="0.75000"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+            </field>
+            <field name="F_NOM_TABLE" source="NOM_TABLE" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="2.06250" y="1.06250" width="1.37500"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+            </field>
+            <field name="F_COLONNE" source="COLONNE" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="3.68750" y="1.06250" width="1.31250"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+            </field>
+            <field name="F_VALEUR_PREC" source="VALEUR_PREC" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="5.18750" y="1.06250" width="1.31250"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+            </field>
+            <field name="F_VALEUR_NOUV" source="VALEUR_NOUV" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="6.68750" y="1.06250" width="1.31250"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+            </field>
+            <field name="F_COMMENTAIRE" source="COMMENTAIRE" minWidowLines="1"
+             spacing="0" alignment="center">
+              <font face="Arial" size="9"/>
+              <geometryInfo x="8.37500" y="1.06250" width="2.12500"
+               height="0.18750"/>
+              <generalLayout verticalElasticity="expand"/>
+              <visualSettings fillBackgroundColor="TextColor"/>
+            </field>
+          </repeatingFrame>
+          <text name="B_ANNEE1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="0.18750" width="1.68750"
+             height="0.25000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="custom6"/>
+            <textSegment>
+              <font face="Arial" size="14" bold="yes"/>
+              <string>
+              <![CDATA[Année création :]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DPG_BAS1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.12500" y="0.43750" width="1.00000"
+             height="0.25000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="TextColor"/>
+            <textSegment>
+              <font face="Arial" size="14" bold="yes"/>
+              <string>
+              <![CDATA[Dpg Bas :]]>
+              </string>
+            </textSegment>
+          </text>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="end">
+            <font face="Arial" size="14" bold="yes" textColor="red"/>
+            <geometryInfo x="3.93750" y="0.18750" width="1.06250"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <field name="F_DPG_HAUT1" source="DPG_HAUT1" minWidowLines="1"
+           spacing="0" alignment="end">
+            <font face="Arial" size="14" bold="yes" textColor="red"/>
+            <geometryInfo x="3.93750" y="0.43750" width="1.06250"
+             height="0.25000"/>
+            <generalLayout verticalElasticity="expand"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+          </field>
+          <text name="B_DPG_HAUT1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.43750" width="1.06250"
+             height="0.25000"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="TextColor"/>
+            <textSegment>
+              <font face="Arial" size="14" bold="yes"/>
+              <string>
+              <![CDATA[Dpg Haut :]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.18750" width="0.81250"
+             height="0.18750"/>
+            <advancedLayout printObjectOnPage="allPage"
+             basePrintingOn="enclosingObject"/>
+            <visualSettings fillBackgroundColor="TextColor"/>
+            <textSegment>
+              <font face="Arial" size="14" bold="yes"/>
+              <string>
+              <![CDATA[Metier :]]>
+              </string>
+            </textSegment>
+          </text>
+        </repeatingFrame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="2.62500" y="0.47913" width="5.50000" height="0.52087"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <textSegment>
+          <font face="Arial" size="14" bold="yes" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[LOG DES COUTS STANDARDS 
+]]>
+          </string>
+        </textSegment>
+        <textSegment>
+          <font face="Arial" size="14" bold="yes" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[MATERIEL ET ENVIRONNEMENTS]]>
+          </string>
+        </textSegment>
+      </text>
+      <rectangle name="B_2">
+        <geometryInfo x="3.18750" y="0.31250" width="4.31250" height="0.81250"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings linePattern="solid" lineForegroundColor="r0g0b75"
+         lineBackgroundColor="black"/>
+        <points>
+          <point x="3.18750" y="0.31250"/>
+          <point x="4.31250" y="0.81250"/>
+        </points>
+      </rectangle>
+      <text name="B_3" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="0.12500" y="0.07288" width="0.43750" height="0.17712"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Arial" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Date:]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_1" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="center">
+        <font face="Arial" size="10" textColor="r0g0b50"/>
+        <geometryInfo x="0.50000" y="0.06250" width="1.18750" height="0.25000"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+      </field>
+      <text name="B_4" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="9.71875" y="0.11462" width="0.42834" height="0.16785"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Courier New" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[Page:]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_2" source="PageNumber" minWidowLines="1" spacing="single"
+       alignment="end">
+        <font face="Courier New" size="10" textColor="r0g0b50"/>
+        <geometryInfo x="10.12500" y="0.12500" width="0.25000"
+         height="0.18750"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_5" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="10.37500" y="0.12500" width="0.18750"
+         height="0.18750"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <textSegment>
+          <font face="Courier New" size="10" textColor="r0g0b50"/>
+          <string>
+          <![CDATA[/]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_3" source="TotalPages" minWidowLines="1" spacing="single"
+       alignment="start">
+        <font face="Courier New" size="10" textColor="r0g0b50"/>
+        <geometryInfo x="10.56250" y="0.12500" width="0.37500"
+         height="0.18750"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings lineBackgroundColor="black"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+ 
+	   
+	  
+
+	 :P_REQUETE_AND  := 0 ; 
+	 
+	 :p_where := '' ; 
+   
+   IF(  (:P_PARAM6 IS NOT NULL  AND  LENGTH(:P_PARAM6) >0)
+   	    OR 
+   	    (:P_PARAM7 IS NOT NULL AND LENGTH(:P_PARAM7) >0)
+   	    OR
+   	    (:P_PARAM8 IS NOT NULL AND LENGTH(:P_PARAM8) >0)
+   	    OR 
+   	    (:P_PARAM9 IS NOT NULL AND LENGTH(:P_PARAM9) >0)
+   	    OR 
+   	    (:P_PARAM10 IS NOT NULL AND LENGTH(:P_PARAM10) >0)
+   	  ) THEN 	   	  
+  		 :p_where := ' WHERE  ' ;   
+   END IF ; 	 
+ 
+      
+  IF(:P_PARAM6 IS NOT NULL AND LENGTH(:P_PARAM6) >0) THEN 
+  		 :p_where := :p_where ||'    DATE_LOG >= TO_DATE(''' || :P_PARAM6 ||''' ) '  ;  	    	
+  		 :P_REQUETE_AND  := 1 ; 
+    END IF ; 
+  
+   
+   IF( :P_PARAM10 IS NOT NULL AND LENGTH(:P_PARAM10) >0 ) THEN    	
+   	IF(:P_REQUETE_AND  = 0) THEN 
+   	:p_where := :p_where || '  DATE_LOG <= TO_DATE(''' || :P_PARAM10 ||'''  ) '  ; 
+   		:P_REQUETE_AND  := 1 ;    		
+   	ELSE 
+   		:p_where :=  :p_where || ' AND DATE_LOG <= TO_DATE(''' || :P_PARAM10 ||'''  ) '  ; 
+    END IF ; 
+   	 
+   END IF ; 
+    
+       
+   IF( :P_PARAM7 IS NOT NULL AND LENGTH(:P_PARAM7) >0 ) THEN    	
+   	IF(:P_REQUETE_AND  = 0) THEN
+   		:p_where :=  :p_where || ' dpg_bas = TO_NUMBER(' || :P_PARAM7 || ')'  ; 
+   		:P_REQUETE_AND  := 1 ;    		
+   	ELSE
+   		:p_where :=  :p_where || ' AND dpg_bas = TO_NUMBER(' || :P_PARAM7 || ')'  ; 
+    END IF ; 
+   	 
+   END IF ; 
+
+  IF( (:P_PARAM8 IS NOT NULL) AND (LENGTH(:P_PARAM8) >0) ) THEN
+  		IF(:P_REQUETE_AND  = 0) THEN
+  			:p_where :=  :p_where || ' dpg_haut =  TO_NUMBER(' || :P_PARAM8 || ')'  ;  
+  			:P_REQUETE_AND  := 1 ;   
+  		ELSE
+  			:p_where :=  :p_where || ' AND dpg_haut =  TO_NUMBER(' || :P_PARAM8 || ')'  ;  
+  		END IF ; 
+  END IF ; 
+  
+  IF( (:P_PARAM9 IS NOT NULL) AND (LENGTH(:P_PARAM9) >0) ) THEN
+  		IF(:P_REQUETE_AND  = 0) THEN
+  			:p_where :=  :p_where ||  ' USER_LOG  =  UPPER(''' || :P_PARAM9 || ''')'  ;     	  			
+  		ELSE
+  			:p_where :=  :p_where ||  ' AND USER_LOG  = UPPER(''' || :P_PARAM9 || ''')'  ;  
+  		END IF ; 
+  END IF ; 
+  
+   ----srw.message(1,:P_where);  
+ RETURN TRUE ; 
+ 
+end;]]>
+      </textSource>
+    </function>
+    <function name="afterreport">
+      <textSource>
+      <![CDATA[function AfterReport return boolean is
+begin
+ 
+   
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_g_codbrformattrigger">
+      <textSource>
+      <![CDATA[function R_G_CODBRFormatTrigger return boolean is
+begin
+ IF (:CS_compteur mod 2 = 0)
+   THEN
+      srw.set_background_fill_color('r88g75b88');
+ else
+ 	 srw.set_background_fill_color('white');
+       END IF;
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#ffffff"/>
+    <color index="191" displayName="custom6" value="#93065d"/>
+    <color index="192" displayName="Background2" value="#e4c1d6"/>
+    <color index="193" displayName="Background3" value="#c982ae"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="masterDetail" versionFlags2="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

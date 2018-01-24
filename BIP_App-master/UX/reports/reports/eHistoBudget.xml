@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eHistoBudget" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" unitOfMeasurement="centimeter"
+ designInCharacterUnits="yes">
+  <characterMode includeBitmappedObjects="yes" includeBorders="yes"/>
+  <xmlSettings xmlTag="EHISTOBUDGET" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="7"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="500"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_LIBTYP" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_NumSeq" datatype="number" precision="10"
+     initialValue="0" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="5"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_DP" datatype="character" width="255"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_P" datatype="character" width="255"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_A" datatype="character" width="255"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_TITRE_ETAT" datatype="character" width="40"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DPG" datatype="character" width="120"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ORDER" datatype="character" width="100"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_UNION" datatype="character" width="150"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="PRINTJOB" initialValue="No"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Landscape"/>
+    <systemParameter name="DECIMAL" initialValue=","/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt" display="yes"
+    />
+    <systemParameter name="DESNAME" display="yes"/>
+    <systemParameter name="DESTYPE" initialValue="Preview" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select  nvl(l.AIRT,'0') airt, nvl(a.alibel,'0') appli_libelle,
+           nvl(b.ANNEE,0) annee,
+           nvl(sum(b.BPMONTME),0) propo_me, 
+           nvl(sum(b.BPMONTMO),0) propo_mo, 
+           nvl(sum(b.BNMONT),0) notifie, 
+           nvl(sum(b.ANMONT),0) arbitre, 
+           nvl(sum(b.REESTIME),0) reestime,
+           nvl(sum(c.CUSAG),0) conso_annee
+FROM budget b,ligne_bip l, consomme c, application a
+WHERE l.pid = b.pid (+)
+               and l.PID = c.PID (+)
+               and b.annee = c.annee
+               and l.airt = a.airt
+               and ( (a.airt = :P_param7) OR (:P_param7 is null) )
+               &P_WHERE
+ group by l.AIRT, a.alibel, b.ANNEE
+ &P_ORDER
+ &P_UNION]]>
+      </select>
+      <comment>
+      <![CDATA[Cette edition a deux laoyouts. Leurs donnees sont casiment le meme. La seconde edition est une synthese de la premiere.
+Dans la premiere, on n'a pas les totaux pour le departement pole.]]>
+      </comment>
+      <displayInfo x="1.42534" y="1.08490" width="2.64573" height="0.82010"/>
+      <group name="G_APPLI">
+        <displayInfo x="0.61857" y="2.88417" width="4.22424" height="5.00063"
+        />
+        <dataItem name="airt" datatype="vchar2" columnOrder="35" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Airt">
+          <dataDescriptor expression="nvl ( l.AIRT , &apos;0&apos; )"
+           descriptiveExpression="AIRT" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="appli_libelle" datatype="vchar2" columnOrder="43"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Appli Libelle">
+          <dataDescriptor expression="nvl ( a.alibel , &apos;0&apos; )"
+           descriptiveExpression="APPLI_LIBELLE" order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <summary name="CS_total_arbitre" source="arbitre" function="sum"
+         precision="8" reset="G_APPLI" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="8" defaultLabel="Cs Dp Reestjh"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_total_notifie" source="notifie" function="sum"
+         precision="8" reset="G_APPLI" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="8" defaultLabel="Cs Dp Facint"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_total_propo_mo" source="propo_mo" function="sum"
+         precision="8" reset="G_APPLI" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="8" defaultLabel="Cs Dp Consojh"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_total_propo_me" source="propo_me" function="sum"
+         precision="8" reset="G_APPLI" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="8" defaultLabel="Cs Dp Cumuljh"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_total_reestime" source="reestime" function="sum"
+         precision="8" reset="G_APPLI" compute="report" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="8" defaultLabel="Cs Dp Propojh"
+         valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_total_conso_annee" source="conso_annee"
+         function="sum" precision="8" reset="G_APPLI" compute="report"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Dp Notifjh" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+        <summary name="CS_total_conso_total" source="CF_CONS_TOT"
+         function="maximum" precision="8" reset="G_APPLI" compute="report"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="8"
+         defaultLabel="Cs Dp Arbitjh" valueIfNull="0">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </summary>
+      </group>
+      <group name="G_ANNEE">
+        <displayInfo x="0.96180" y="8.90364" width="3.54025" height="5.86879"
+        />
+        <dataItem name="annee" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="nvl ( b.ANNEE , 0 )"
+           descriptiveExpression="ANNEE" order="3" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="propo_me" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propo Me">
+          <dataDescriptor expression="nvl ( sum ( b.BPMONTME ) , 0 )"
+           descriptiveExpression="PROPO_ME" order="4" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="propo_mo" oracleDatatype="number" columnOrder="38"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Propo Mo">
+          <dataDescriptor expression="nvl ( sum ( b.BPMONTMO ) , 0 )"
+           descriptiveExpression="PROPO_MO" order="5" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="notifie" oracleDatatype="number" columnOrder="39"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Notifie">
+          <dataDescriptor expression="nvl ( sum ( b.BNMONT ) , 0 )"
+           descriptiveExpression="NOTIFIE" order="6" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="arbitre" oracleDatatype="number" columnOrder="40"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Arbitre">
+          <dataDescriptor expression="nvl ( sum ( b.ANMONT ) , 0 )"
+           descriptiveExpression="ARBITRE" order="7" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="reestime" oracleDatatype="number" columnOrder="41"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Reestime">
+          <dataDescriptor expression="nvl ( sum ( b.REESTIME ) , 0 )"
+           descriptiveExpression="REESTIME" order="8" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="conso_annee" oracleDatatype="number" columnOrder="42"
+         width="22" defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Conso Annee">
+          <dataDescriptor expression="nvl ( sum ( c.CUSAG ) , 0 )"
+           descriptiveExpression="CONSO_ANNEE" order="9"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <formula name="CF_CONS_TOT" source="cf_cons_totformula"
+         datatype="number" width="20" precision="10" defaultWidth="0"
+         defaultHeight="0" columnFlags="16" breakOrder="none">
+          <displayInfo x="0.00000" y="0.00000" width="0.00000"
+           height="0.00000"/>
+        </formula>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+    <rulers numberOfSnapPoints="4" gridSpacing="0.5"/>
+  <section name="header" width="20.99996" height="29.69989" widthInChar="180"
+   heightInChar="60">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="trailer" width="20.99996" height="29.69989" widthInChar="180"
+   heightInChar="60">
+    <body width="20.99996" height="29.69989">
+      <location x="0.00000" y="0.00000"/>
+    </body>
+  </section>
+  <section name="main" width="20.99996" height="29.69989" widthInChar="180"
+   heightInChar="60">
+    <body width="19.80003" height="28.16758">
+      <location x="0.50012" y="0.53237"/>
+      <repeatingFrame name="R_AIRT" source="G_APPLI" printDirection="down"
+       maxRecordsPerPage="1" minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.16030" y="2.32203" width="19.21464"
+         height="5.10046"/>
+        <generalLayout verticalElasticity="variable"/>
+        <frame name="M_APPLI">
+          <geometryInfo x="0.39377" y="3.22430" width="18.98117"
+           height="3.33189"/>
+          <generalLayout verticalElasticity="variable"
+           horizontalElasticity="variable"/>
+          <frame name="M_ENTETE_TABLEAU">
+            <geometryInfo x="0.59252" y="3.22430" width="18.78242"
+             height="1.35713"/>
+            <visualSettings fillPattern="transparent"
+             fillBackgroundColor="darkgray" linePattern="solid"/>
+            <text name="B_CONSO" minWidowLines="1">
+              <textSettings justify="end" spacing="0"/>
+              <geometryInfo x="14.67042" y="3.55575" width="1.92329"
+               height="1.02567"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Consommé]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_ARBITRE" minWidowLines="1">
+              <textSettings justify="end" spacing="single"/>
+              <geometryInfo x="9.86948" y="3.55575" width="1.92329"
+               height="1.02567"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Arbitré]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_PROPO_MO" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="5.24960" y="3.33127" width="1.99461"
+               height="0.75282"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Proposé
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Client]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_REESTIME" minWidowLines="1">
+              <textSettings justify="end" spacing="single"/>
+              <geometryInfo x="12.20608" y="3.55575" width="1.92329"
+               height="1.02567"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Réestimé]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_NOTIFIE" minWidowLines="1">
+              <textSettings justify="end" spacing="single"/>
+              <geometryInfo x="7.41505" y="3.55575" width="1.92329"
+               height="1.02567"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Notifié]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_PROPO_ME" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="2.49163" y="3.33127" width="2.11026"
+               height="1.06071"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Proposé
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Fournisseur]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_ANNEE" minWidowLines="1">
+              <textSettings spacing="single"/>
+              <geometryInfo x="0.72833" y="3.55575" width="1.50347"
+               height="1.02567"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Année]]>
+                </string>
+              </textSegment>
+            </text>
+            <text name="B_CONSO_ORI" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="17.43149" y="3.22430" width="1.94345"
+               height="1.35713"/>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[Consommé
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[depuis
+]]>
+                </string>
+              </textSegment>
+              <textSegment>
+                <font face="Courier New" size="8"/>
+                <string>
+                <![CDATA[l'origine]]>
+                </string>
+              </textSegment>
+            </text>
+          </frame>
+          <repeatingFrame name="R_ANNEE_APPLI" source="G_ANNEE"
+           printDirection="down" minWidowRecords="1" columnMode="no">
+            <geometryInfo x="0.59252" y="4.60499" width="18.78242"
+             height="0.84181"/>
+            <advancedLayout formatTrigger="r_annee_appliformattrigger"/>
+            <visualSettings linePattern="solid"/>
+            <field name="F_ANNEE1" source="annee" minWidowLines="1"
+             spacing="0" alignment="start">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="0.72833" y="4.89490" width="1.50347"
+               height="0.33052"/>
+            </field>
+            <field name="F_propose_me1" source="propo_me" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="2.36668" y="4.89490" width="2.15863"
+               height="0.33052"/>
+            </field>
+            <field name="F_propose_mo1" source="propo_mo" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="4.79196" y="4.89521" width="2.15863"
+               height="0.33052"/>
+            </field>
+            <field name="F_notifie1" source="notifie" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="7.21723" y="4.89521" width="2.15863"
+               height="0.33052"/>
+            </field>
+            <field name="F_reestime1" source="reestime" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="12.05322" y="4.89241" width="2.15863"
+               height="0.33052"/>
+            </field>
+            <field name="F_arbitre1" source="arbitre" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="9.62794" y="4.89521" width="2.15863"
+               height="0.33052"/>
+            </field>
+            <field name="F_consomme1" source="conso_annee" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="14.47850" y="4.89552" width="2.15863"
+               height="0.33052"/>
+            </field>
+            <field name="F_consomme_origine1" source="CF_CONS_TOT"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8"/>
+              <geometryInfo x="16.74999" y="4.89552" width="2.50000"
+               height="0.33052"/>
+            </field>
+          </repeatingFrame>
+          <frame name="M_TOTAL_APPLI">
+            <geometryInfo x="0.59252" y="5.63904" width="18.78242"
+             height="0.75716"/>
+            <visualSettings linePattern="solid"/>
+            <text name="B_TOTAL_APPLI1" minWidowLines="1">
+              <textSettings spacing="0"/>
+              <geometryInfo x="0.72833" y="5.92460" width="1.50347"
+               height="0.40928"/>
+              <textSegment>
+                <font face="Courier New" size="8" bold="yes"/>
+                <string>
+                <![CDATA[TOTAL :]]>
+                </string>
+              </textSegment>
+            </text>
+            <field name="F_CS_total_reestime1" source="CS_total_reestime"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="12.05105" y="5.92460" width="2.15863"
+               height="0.39315"/>
+            </field>
+            <field name="F_CS_total_notifie1" source="CS_total_notifie"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="7.22468" y="5.92460" width="2.15863"
+               height="0.39315"/>
+            </field>
+            <field name="F_CS_total_arbitre1" source="CS_total_arbitre"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="9.62329" y="5.92460" width="2.15863"
+               height="0.39315"/>
+            </field>
+            <field name="F_CS_total_propo_mo1" source="CS_total_propo_mo"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="4.79692" y="5.92491" width="2.15863"
+               height="0.39315"/>
+            </field>
+            <field name="F_CS_total_propo_me1" source="CS_total_propo_me"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="2.36916" y="5.92646" width="2.15863"
+               height="0.38509"/>
+              <advancedLayout printObjectOnPage="allPage"
+               basePrintingOn="enclosingObject"/>
+            </field>
+            <field name="F_CS_total_conso1" source="CS_total_conso_annee"
+             minWidowLines="1" formatMask="NGNNNGNN0D00" spacing="0"
+             alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="14.47881" y="5.92460" width="2.15863"
+               height="0.39315"/>
+            </field>
+            <field name="F_CS_total_conso_origine1"
+             source="CS_total_conso_total" minWidowLines="1"
+             formatMask="NGNNNGNN0D00" spacing="0" alignment="end">
+              <font face="Courier New" size="8" bold="yes"/>
+              <geometryInfo x="16.74999" y="5.93948" width="2.50000"
+               height="0.39315"/>
+            </field>
+          </frame>
+        </frame>
+        <text name="B_1" minWidowLines="1">
+          <textSettings spacing="single"/>
+          <geometryInfo x="1.35403" y="2.47365" width="2.85533"
+           height="0.43656"/>
+          <textSegment>
+            <font face="Courier New" size="8" bold="yes"/>
+            <string>
+            <![CDATA[Application :]]>
+            </string>
+          </textSegment>
+        </text>
+        <field name="F_AIRT" source="airt" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="4.24625" y="2.47365" width="1.21295"
+           height="0.48276"/>
+        </field>
+        <field name="F_APPLI_LIBEL" source="appli_libelle" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="8"/>
+          <geometryInfo x="5.65826" y="2.47365" width="12.84170"
+           height="0.49392"/>
+        </field>
+      </repeatingFrame>
+      <text name="B_Date2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.37269" y="0.32680" width="1.33387" height="0.39688"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[DATE : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE2" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/YYYY HH24:MI" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="1.74687" y="0.32339" width="3.15299" height="0.43749"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+      </field>
+      <text name="B_Titre1" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="5.23534" y="0.31874" width="9.34796" height="0.38137"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <visualSettings fillBackgroundColor="red"/>
+        <textSegment>
+          <font face="Courier New" size="10" bold="yes"/>
+          <string>
+          <![CDATA[HISTORIQUE DES CONSOMMES ET BUDGETS]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_P2" source="PageNumber" visible="no" minWidowLines="1"
+       formatMask="NNNN" spacing="single" alignment="right">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="16.41109" y="0.56431" width="0.80429"
+         height="0.50012"/>
+        <generalLayout horizontalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <field name="F_PT2" source="TotalPages" visible="no" minWidowLines="1"
+       formatMask="NNNN" spacing="single" alignment="left">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="17.31119" y="0.56431" width="0.99994"
+         height="0.38323"/>
+        <generalLayout horizontalElasticity="variable"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <pageNumbering header="yes" main="yes" trailer="yes" startAt="1"
+         incrementBy="1" resetAt="report"/>
+      </field>
+      <text name="B_Page2" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="14.51260" y="0.31874" width="4.53740"
+         height="0.50012"/>
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="anchoringObject"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[Page : &F_P2 / &F_PT2]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_NomEtat2" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="0.35564" y="0.87747" width="1.21171" height="0.39688"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <textSegment>
+          <font face="Courier New" size="8"/>
+          <string>
+          <![CDATA[ETAT : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_TITRE_ETAT" source="P_TITRE_ETAT" minWidowLines="1"
+       spacing="single" alignment="start">
+        <font face="Courier New" size="8"/>
+        <geometryInfo x="1.50750" y="0.90878" width="4.86761" height="0.30262"
+        />
+      </field>
+      <field name="F_DPG" source="P_DPG" minWidowLines="1" spacing="single"
+       alignment="center">
+        <font face="Courier New" size="10" bold="yes"/>
+        <geometryInfo x="7.22561" y="0.85669" width="5.11876" height="0.31750"
+        />
+        <advancedLayout printObjectOnPage="allPage"
+         basePrintingOn="enclosingObject"/>
+        <visualSettings fillBackgroundColor="red"/>
+      </field>
+      <text name="B_2" minWidowLines="1">
+        <textSettings justify="center" spacing="single"/>
+        <geometryInfo x="0.26262" y="1.48487" width="19.36657"
+         height="0.55687"/>
+        <textSegment>
+          <font face="Courier New" size="8" textColor="red"/>
+          <string>
+          <![CDATA[ATTENTION : Cet état prend en compte votre périmètre RTFE sur les DPGs]]>
+          </string>
+        </textSegment>
+      </text>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.00000" height="10.00000">
+    <rulers numberOfSnapPoints="4"/>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.81837" y="0.02635" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.03764" y="0.40897" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="0.91281" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="1.65385" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="2.39489" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="3.13593" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.23168" y="0.80615" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.23168" y="1.54719" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.23168" y="2.28823" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.23168" y="3.02927" width="5.08000" height="0.67128"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="3.78458" y="5.78042" width="5.95313" height="0.66135"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="6.00863" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.20532" y="3.79016" width="5.02698" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="4.23168" y="4.76529" width="5.02698" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="4.19013" width="2.18684" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[DPG]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.61764" y="5.11256" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Application]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+ 
+      l_where_dpg 	VARCHAR2(1000) := '';
+      l_p_code_dpg 	VARCHAR2(10);
+      l_perim_me		VARCHAR2(1000) := '';
+      code_dpg 			VARCHAR2(10) := '';
+      v_annee       budget.annee%type;
+
+BEGIN
+	
+	-- On vire tous les espaces
+	code_dpg := RTRIM(LTRIM(:P_PARAM6));
+	
+	-- Initialisation de P_WHERE
+	l_perim_me := pack_global.lire_perime(:P_GLOBAL);	
+	
+	:P_WHERE :=' AND l.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR('''|| l_perim_me ||''', codbddpg) > 0 )'; 
+
+			begin -- Block de Test
+  				 -- CAS : pas de données retournées
+					 SELECT nvl(b.ANNEE,0) annee into v_annee
+					 FROM budget b,ligne_bip l, consomme c, application a
+					 WHERE ROWNUM=1
+					 AND l.pid = b.pid (+)
+           AND l.PID = c.PID (+)
+           AND b.annee = c.annee
+           AND l.airt = a.airt
+           AND ( (a.airt = :P_param7) OR (:P_param7 is null) )
+           AND l.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR(''|| l_perim_me ||'', codbddpg) > 0 )
+           AND l.CODSG >= to_number(''|| replace(NVL(code_dpg,'*******'),'*','0') || '')
+           AND l.CODSG <= to_number(''|| replace(NVL(code_dpg,'*******'),'*','9') || '');
+				  	
+		 exception
+					when others then v_annee:=0;
+	   end; -- Fin du block de Test
+	
+		 ----srw.message(1, '[ANNEE] : ' || v_annee);
+	
+		 if (v_annee is null or v_annee=0) then
+		  
+		  :P_UNION := ' UNION SELECT ''0'',''0'',0,0,0,0,0,0,0 from dual order by 1,2,3 ';
+		  ----srw.message(1, '[UNION] : ' || :P_UNION);
+		  :P_ORDER := '';				
+	   
+	   else
+	
+		  :P_ORDER := 'order by l.AIRT, a.alibel, b.ANNEE';
+		  :P_UNION := '';	
+	
+	   end if;
+	-----------------------------------------------------------------------
+ 	-- Conditions WHERE sur dpg
+ 	-----------------------------------------------------------------------
+ 	IF LPAD(code_dpg, 7, '*')='*******' OR code_dpg IS NULL THEN
+	  l_where_dpg := '';
+	  :P_DPG := 'POUR LE DPG : '|| code_dpg;
+ 	ELSE
+ 		:P_DPG := 'POUR LE DPG : '|| code_dpg;
+ 		----srw.message(1, '[P_DPG] : ' || :P_DPG);
+	  l_where_dpg := ' l.CODSG >= to_number('''|| replace(code_dpg,'*','0') || ''')';
+	  l_where_dpg := l_where_dpg || ' AND l.CODSG <= to_number('''|| replace(code_dpg,'*','9') || ''')'; 	  
+	END IF;
+	   
+	if ( NVL(LENGTH(l_where_dpg), 0) != 0 ) then 
+		:P_WHERE := :P_WHERE || ' AND ( ' || l_where_dpg || ' ) ';
+		:P_ORDER := :P_ORDER;
+		:P_UNION := :P_UNION;
+	end if;
+	
+	if ( NVL(LENGTH(:P_WHERE), 0) != 0 )
+	then
+		--srw.message(1, '[P_WHERE] : ' || :P_WHERE);
+	end if;
+ 	 	 	
+  RETURN TRUE; 
+  	
+end;]]>
+      </textSource>
+    </function>
+    <function name="r_annee_appliformattrigger">
+      <textSource>
+      <![CDATA[function R_ANNEE_APPLIFormatTrigger return boolean is
+begin
+
+  -- Généré automatiquement à partir de Report Builder.
+  if (mod(:annee,2) = '1')
+  then
+    srw.set_foreground_fill_color('gray8');
+    srw.set_fill_pattern('solid');
+  end if;
+
+
+
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="cf_cons_totformula" returnType="number">
+      <textSource>
+      <![CDATA[function CF_CONS_TOTFormula return Number is
+    conso_total NUMBER;
+    code_dpg VARCHAR2(10);
+    l_perim_me		VARCHAR2(1000) := '';
+begin
+	
+	  code_dpg := NVL(RTRIM(LTRIM(:P_PARAM6)),'*******') ;
+	  l_perim_me := pack_global.lire_perime(:P_GLOBAL);
+	  
+--		--srw.message(1, '[AIRT] : ' || :AIRT);
+--		--srw.message(1, '[ANNEE] : ' || :ANNEE);
+	
+  	select nvl(sum(c.XCUSAG),0)
+    into conso_total 
+    FROM ligne_bip l, consomme c
+    WHERE l.PID = c.PID (+)
+    AND l.airt = :AIRT
+    AND l.CODSG >= to_number(replace(code_dpg,'*','0'))
+	  AND l.CODSG <= to_number(replace(code_dpg,'*','9')) 
+    and ( (c.ANNEE = :ANNEE) OR (c.ANNEE <> :ANNEE and :ANNEE=(select max(annee) from consomme where pid=c.pid and annee<:ANNEE) ) )
+	  AND l.codsg IN (SELECT codsg FROM vue_dpg_perime where INSTR( l_perim_me , codbddpg) > 0 ); 
+
+--		--srw.message(1, '[conso_total] : ' || conso_total);
+
+	return conso_total;
+	
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0" charPromptMustSplit="0"
+   charPromptMaySplit="0" minFieldResizeRate="0" minFontPoints="0"
+   templateName=""/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

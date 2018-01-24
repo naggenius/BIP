@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_param_ligne_bip" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="T01503188" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="number" width="4" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIME" datatype="character" width="1024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_param6" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIMO" datatype="character" width="1024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE1" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_A" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_dp" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_habili_P" datatype="character" width="256"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_HAB" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MOIS" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MOISMENS" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT c.CPID,  c.ROWCPID, p.AFFICHE, p.CLIB_PID , p.NUM_ORDER
+FROM CHAMP_LIGNE_BIP c, PARAMETRE_LIGNE_BIP p
+WHERE c.IDCPID=p.IDCPID
+ &P_WHERE
+ORDER BY c.IDCPID
+]]>
+      </select>
+      <displayInfo x="0.28796" y="0.05225" width="0.76038" height="0.23950"/>
+      <group name="G_CPID">
+        <displayInfo x="1.23975" y="0.07043" width="2.84070" height="11.36816"
+        />
+        <dataItem name="CPID" datatype="vchar2" columnOrder="26" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cpid">
+          <dataDescriptor expression="c.CPID" descriptiveExpression="CPID"
+           order="1" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ROWCPID" datatype="vchar2" columnOrder="27" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Rowcpid">
+          <dataDescriptor expression="c.ROWCPID"
+           descriptiveExpression="ROWCPID" order="2" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AFFICHE" datatype="vchar2" columnOrder="28" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Affiche">
+          <dataDescriptor expression="p.AFFICHE"
+           descriptiveExpression="AFFICHE" order="3" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLIB_PID" datatype="vchar2" columnOrder="29"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Clib Pid">
+          <dataDescriptor expression="p.CLIB_PID"
+           descriptiveExpression="CLIB_PID" order="4" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="NUM_ORDER" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="50000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Num Order">
+          <dataDescriptor expression="p.NUM_ORDER"
+           descriptiveExpression="NUM_ORDER" order="5" oracleDatatype="number"
+           width="22" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" orientation="portrait"/>
+  <section name="main">
+    <body width="8.00000">
+      <location x="0.25000"/>
+    </body>
+    <margin>
+      <frame name="M_G_CPID_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="5.56250" height="0.37500"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <visualSettings fillPattern="solid" fillForegroundColor="gray16"
+         lineForegroundColor="darkblue"/>
+        <repeatingFrame name="R_G_CPID" source="G_CPID" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.18750" width="5.56250"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_CPID" source="CPID" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="0.00000" y="0.18750" width="1.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ROWCPID" source="ROWCPID" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="1.62500" y="0.18750" width="0.56250"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AFFICHE" source="AFFICHE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="2.31250" y="0.18750" width="0.75000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CLIB_PID" source="CLIB_PID" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="3.18750" y="0.18750" width="1.50000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_NUM_ORDER" source="NUM_ORDER" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="4.81250" y="0.18750" width="0.75000"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CPID_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="5.56250"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillPattern="solid" fillForegroundColor="darkblue"/>
+          <text name="B_CPID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="1.50000"
+             height="0.18750"/>
+            <visualSettings fillForegroundColor="red"/>
+            <textSegment>
+              <font face="Arial" size="10" italic="yes" textColor="yellow"/>
+              <string>
+              <![CDATA[Cpid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ROWCPID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.62500" y="0.00000" width="0.56250"
+             height="0.18750"/>
+            <visualSettings fillForegroundColor="red"/>
+            <textSegment>
+              <font face="Arial" size="10" italic="yes" textColor="yellow"/>
+              <string>
+              <![CDATA[Rowcpid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AFFICHE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.31250" y="0.00000" width="0.75000"
+             height="0.18750"/>
+            <visualSettings fillForegroundColor="red"/>
+            <textSegment>
+              <font face="Arial" size="10" italic="yes" textColor="yellow"/>
+              <string>
+              <![CDATA[Affiche]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CLIB_PID" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.18750" y="0.00000" width="1.50000"
+             height="0.18750"/>
+            <visualSettings fillForegroundColor="red"/>
+            <textSegment>
+              <font face="Arial" size="10" italic="yes" textColor="yellow"/>
+              <string>
+              <![CDATA[Clib Pid]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_NUM_ORDER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.81250" y="0.00000" width="0.75000"
+             height="0.18750"/>
+            <visualSettings fillForegroundColor="red"/>
+            <textSegment>
+              <font face="Arial" size="10" italic="yes" textColor="yellow"/>
+              <string>
+              <![CDATA[Num Order]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+      <text name="B_PAGENUM1_SEC2" minWidowLines="1" templateSection="main">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="3.37500" y="10.43750" width="2.02087"
+         height="0.16663"/>
+        <visualSettings lineWidth="1"/>
+        <textSegment>
+          <font face="Arial" size="10"/>
+          <string>
+          <![CDATA[Page &<PhysicalPageNumber>]]>
+          </string>
+        </textSegment>
+      </text>
+      <text name="B_DATE1_SEC2" minWidowLines="1" templateSection="main">
+        <textSettings spacing="0"/>
+        <geometryInfo x="1.43750" y="0.75000" width="0.93750" height="0.16663"
+        />
+        <textSegment>
+          <font face="Arial" size="10" italic="yes"/>
+          <string>
+          <![CDATA[Report run on:]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_DATE1_SEC2" source="CurrentDate" minWidowLines="1"
+       formatMask="fmMonth DD, RRRR HH:fmMI AM" spacing="0" alignment="start"
+       templateSection="main">
+        <font face="Arial" size="10" italic="yes"/>
+        <geometryInfo x="2.39575" y="0.75000" width="1.70837" height="0.16663"
+        />
+        <generalLayout horizontalElasticity="variable"/>
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+l_param VARCHAR2(50);
+l_userid VARCHAR2(1024);
+l_count  NUMBER;
+begin
+  	  	
+
+    -- Initialisation des paramètres	  
+ 	  :P_WHERE := ' ';   
+ 
+  
+	  -- Informations pour le lancement par les autres menus 	
+		l_userid :=pack_global.lire_globaldata(:P_GLOBAL).idarpege;
+		
+		
+		
+		:P_WHERE :=' AND UPPER(USERID)= '''|| UPPER(l_userid) || ''' '; 
+
+
+  
+    SELECT COUNT(*) INTO l_count FROM  PARAMETRE_LIGNE_BIP WHERE UPPER(USERID)=UPPER(l_userid);
+   
+
+  	IF( l_count = 0 )THEN
+		
+	      INSERT INTO PARAMETRE_LIGNE_BIP(USERID, IDCPID, AFFICHE, CLIB_PID, NUM_ORDER) (SELECT UPPER(l_userid) , IDCPID, 'VRAI', CPID, IDCPID FROM CHAMP_LIGNE_BIP);
+	      
+	      COMMIT;
+		
+  	END IF;	
+  	
+	  --srw.message(1,:P_WHERE);
+		
+    
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

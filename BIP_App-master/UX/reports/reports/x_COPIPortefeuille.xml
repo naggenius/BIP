@@ -1,0 +1,2393 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_COPIPortefeuille" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T02203840" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_PARAM6" datatype="character" width="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select canParse="no">
+      <![CDATA[/* Formatted on 2009/08/13 11:27 (Formatter Plus v4.8.8) */
+SELECT distinct  TO_DATE (:p_param6) date_copi, dpc.dp_copi dp_copi,
+         dpc.libelle libelle, dpc.clicode, dpc.dpcode dosproj,
+         dp.dplib dosproj_lib, ctd.libelle type_demande, bud.annee annee,
+         decode(bud.CATEGORIE_DEPENSE,'P',cf.libelle_four_copi,'Sans Objet') four_copi, bud.metier metier,
+         decode(bud.CATEGORIE_DEPENSE,'P','Prestation','M','Matériel','L','Logiciel','A','Autre') Catégorie_depense,
+         (SELECT SUM (jh_arbdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'P'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                             jh_engage_preced,
+           (SELECT SUM (jh_arbdecides)
+              FROM budget_copi bud1
+             WHERE bud1.date_copi < TO_DATE (:p_param6)
+               AND bud.categorie_depense = 'P'
+               AND bud.categorie_depense = bud1.categorie_depense
+               AND bud.dp_copi = bud1.dp_copi
+               AND bud.annee = bud1.annee
+               AND bud.metier = bud1.metier
+               AND bud.code_four_copi = bud1.code_four_copi
+               AND bud.code_type_demande = bud1.code_type_demande)
+         * pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                         'GT1') eu_engage_preced,
+         (SELECT SUM (jh_cantdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'P'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                           jh_cantonne_preced,
+           (SELECT SUM (jh_cantdecides)
+              FROM budget_copi bud1
+             WHERE bud1.date_copi < TO_DATE (:p_param6)
+               AND bud.categorie_depense = 'P'
+               AND bud.categorie_depense = bud1.categorie_depense
+               AND bud.dp_copi = bud1.dp_copi
+               AND bud.annee = bud1.annee
+               AND bud.metier = bud1.metier
+               AND bud.code_four_copi = bud1.code_four_copi
+               AND bud.code_type_demande = bud1.code_type_demande)
+         * pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                           'GT1'
+                                                         ) eu_cantonne_preced,
+         (SELECT SUM (jh_arbdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'L'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                           logi_engage_preced,
+         (SELECT SUM (jh_arbdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'M'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                           mate_engage_preced,
+         (SELECT SUM (jh_arbdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'A'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                           autr_engage_preced,
+         (SELECT SUM (jh_cantdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'L'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                         logi_cantonne_preced,
+         (SELECT SUM (jh_cantdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'M'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                         mate_cantonne_preced,
+         (SELECT SUM (jh_cantdecides)
+            FROM budget_copi bud1
+           WHERE bud1.date_copi < TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'A'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                         autr_cantonne_preced,
+         (SELECT jh_arbdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'P'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) jh_demande,
+           (SELECT jh_arbdemandes
+              FROM budget_copi bud1
+             WHERE bud1.date_copi = TO_DATE (:p_param6)
+               AND bud.categorie_depense = 'P'
+               AND bud.categorie_depense = bud1.categorie_depense
+               AND bud.dp_copi = bud1.dp_copi
+               AND bud.annee = bud1.annee
+               AND bud.metier = bud1.metier
+               AND bud.code_four_copi = bud1.code_four_copi
+               AND bud.code_type_demande = bud1.code_type_demande)
+         * pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                          'GT1'
+                                                         ) eu_demande,
+         (SELECT jh_cantdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'P'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                              jh_cant_demande,
+           (SELECT jh_cantdemandes
+              FROM budget_copi bud1
+             WHERE bud1.date_copi = TO_DATE (:p_param6)
+               AND bud.categorie_depense = 'P'
+               AND bud.categorie_depense = bud1.categorie_depense
+               AND bud.dp_copi = bud1.dp_copi
+               AND bud.annee = bud1.annee
+               AND bud.metier = bud1.metier
+               AND bud.code_four_copi = bud1.code_four_copi
+               AND bud.code_type_demande = bud1.code_type_demande)
+         * pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                        'GT1'
+                                                         ) eu_cant_demande,
+         (SELECT jh_arbdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'L'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) logi_demande,
+         (SELECT jh_cantdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi =TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'L'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                            logi_cant_demande,
+         (SELECT jh_arbdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'M'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) mate_demande,
+         (SELECT jh_cantdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'M'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                            mate_cant_demande,
+         (SELECT jh_arbdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi =TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'A'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) autr_demande,
+         (SELECT jh_cantdemandes
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'A'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                            autr_cant_demande,
+         (SELECT jh_arbdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'P'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) jh_decide,
+           (SELECT jh_arbdecides
+              FROM budget_copi bud1
+             WHERE bud1.date_copi = TO_DATE (:p_param6)
+               AND bud.categorie_depense = 'P'
+               AND bud.categorie_depense = bud1.categorie_depense
+               AND bud.dp_copi = bud1.dp_copi
+               AND bud.annee = bud1.annee
+               AND bud.metier = bud1.metier
+               AND bud.code_four_copi = bud1.code_four_copi
+               AND bud.code_type_demande = bud1.code_type_demande)
+         * pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                           'GT1'
+                                                         ) eu_decide,
+         (SELECT jh_cantdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'P'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                               jh_cant_decide,
+           (SELECT jh_cantdecides
+              FROM budget_copi bud1
+             WHERE bud1.date_copi = TO_DATE (:p_param6)
+               AND bud.categorie_depense = 'P'
+               AND bud.categorie_depense = bud1.categorie_depense
+               AND bud.dp_copi = bud1.dp_copi
+               AND bud.annee = bud1.annee
+               AND bud.metier = bud1.metier
+               AND bud.code_four_copi = bud1.code_four_copi
+               AND bud.code_type_demande = bud1.code_type_demande)
+         * pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                          'GT1'
+                                                         ) eu_cant_decide,
+         (SELECT jh_arbdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'L'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) logi_decide,
+         (SELECT jh_cantdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'L'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                             logi_cant_decide,
+         (SELECT jh_arbdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'M'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) mate_decide,
+         (SELECT jh_cantdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'M'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                             mate_cant_decide,
+         (SELECT jh_arbdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'A'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande) autr_decide,
+         (SELECT jh_cantdecides
+            FROM budget_copi bud1
+           WHERE bud1.date_copi = TO_DATE (:p_param6)
+             AND bud.categorie_depense = 'A'
+             AND bud.categorie_depense = bud1.categorie_depense
+             AND bud.dp_copi = bud1.dp_copi
+             AND bud.annee = bud1.annee
+             AND bud.metier = bud1.metier
+             AND bud.code_four_copi = bud1.code_four_copi
+             AND bud.code_type_demande = bud1.code_type_demande)
+                                                             autr_cant_decide,
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'P','2',bud.CATEGORIE_DEPENSE) jh_previsio_demande,
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'P','2',bud.CATEGORIE_DEPENSE)* pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                          'GT1'
+                                                         )
+                                                          eu_previsio_demande,
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'P','1',bud.CATEGORIE_DEPENSE) jh_previsio_decide,
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'P','1',bud.CATEGORIE_DEPENSE)* pack_cout_standard_ke.recherche_simple_coutke (bud.annee,
+                                                          bud.metier,
+                                                          bud.code_four_copi,
+                                                         'GT1'
+                                                         )
+                                                          eu_previsio_decide,
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'L','2',bud.CATEGORIE_DEPENSE) logi_previsio_demande,  
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'L','1',bud.CATEGORIE_DEPENSE) logi_previsio_decide,   
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'M','2',bud.CATEGORIE_DEPENSE) mate_previsio_demande,  
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'M','1',bud.CATEGORIE_DEPENSE) mate_previsio_decide,
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'A','2',bud.CATEGORIE_DEPENSE) autr_previsio_demande,  
+pack_copi_Budget.f_x_portefeuille_copi(bud.dp_copi,:p_param6,bud.metier,bud.annee,bud.code_four_copi,bud.code_type_demande,
+                                    'A','1',bud.CATEGORIE_DEPENSE) autr_previsio_decide  ,
+         ss.code_ss, ss.libelle, dpc.domaine, d.libelle, dpc.axe_strategique,
+         dpc.type_financement, dpc.quote_part, dpc.etape
+    FROM budget_copi bud,
+         dossier_projet_copi dpc,
+         dossier_projet dp,
+         domaine d,
+         sous_systeme ss,
+         copi_type_demande ctd,
+         copi_four cf
+   WHERE dpc.dp_copi = bud.dp_copi
+     AND dpc.dpcode = dp.dpcode
+     AND ss.code_ss = d.code_ss
+     AND d.code_d = dpc.domaine
+     AND ctd.code_type_demande = bud.code_type_demande
+     AND cf.code_four_copi = bud.code_four_copi
+
+
+ORDER BY dp_copi, date_copi, annee, metier, four_copi, type_demande]]>
+      </select>
+      <displayInfo x="1.04163" y="0.17712" width="0.69995" height="0.19995"/>
+      <group name="G_DATE_COPI">
+        <displayInfo x="0.60291" y="0.79407" width="2.05676" height="10.17188"
+        />
+        <dataItem name="DATE_COPI" datatype="date" oracleDatatype="date"
+         columnOrder="12" width="9" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Date Copi">
+          <dataDescriptor expression="DATE_COPI"
+           descriptiveExpression="DATE_COPI" order="1" oracleDatatype="date"
+           width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DP_COPI" datatype="vchar2" columnOrder="13" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dp Copi">
+          <dataDescriptor expression="DP_COPI" descriptiveExpression="DP_COPI"
+           order="2" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE" datatype="vchar2" columnOrder="14" width="50"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libelle">
+          <dataDescriptor expression="LIBELLE" descriptiveExpression="LIBELLE"
+           order="3" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CLICODE" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="15" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Clicode">
+          <dataDescriptor expression="CLICODE" descriptiveExpression="CLICODE"
+           order="4" oracleDatatype="aFixedChar" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DOSPROJ" oracleDatatype="number" columnOrder="64"
+         width="22" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Dosproj">
+          <dataDescriptor expression="DOSPROJ" descriptiveExpression="DOSPROJ"
+           order="5" oracleDatatype="number" width="22" precision="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DOSPROJ_LIB" datatype="vchar2" columnOrder="65"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Dosproj Lib">
+          <dataDescriptor expression="DOSPROJ_LIB"
+           descriptiveExpression="DOSPROJ_LIB" order="6" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_DEMANDE" datatype="vchar2" columnOrder="66"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Type Demande">
+          <dataDescriptor expression="TYPE_DEMANDE"
+           descriptiveExpression="TYPE_DEMANDE" order="7" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ANNEE" oracleDatatype="number" columnOrder="16"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Annee">
+          <dataDescriptor expression="ANNEE" descriptiveExpression="ANNEE"
+           order="8" oracleDatatype="number" width="22" precision="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="FOUR_COPI" datatype="vchar2" columnOrder="67"
+         width="50" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Four Copi">
+          <dataDescriptor expression="FOUR_COPI"
+           descriptiveExpression="FOUR_COPI" order="9" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="METIER" datatype="vchar2" columnOrder="17" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Metier">
+          <dataDescriptor expression="METIER" descriptiveExpression="METIER"
+           order="10" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CATÉGORIE_DEPENSE" datatype="vchar2" columnOrder="70"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Catégorie Depense">
+          <dataDescriptor expression="CATÉGORIE_DEPENSE"
+           descriptiveExpression="CATÉGORIE_DEPENSE" order="11" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_ENGAGE_PRECED" oracleDatatype="number"
+         columnOrder="18" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Jh Engage Preced">
+          <dataDescriptor expression="JH_ENGAGE_PRECED"
+           descriptiveExpression="JH_ENGAGE_PRECED" order="12"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_ENGAGE_PRECED" oracleDatatype="number"
+         columnOrder="19" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Eu Engage Preced">
+          <dataDescriptor expression="EU_ENGAGE_PRECED"
+           descriptiveExpression="EU_ENGAGE_PRECED" order="13"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_CANTONNE_PRECED" oracleDatatype="number"
+         columnOrder="20" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Cantonne Preced">
+          <dataDescriptor expression="JH_CANTONNE_PRECED"
+           descriptiveExpression="JH_CANTONNE_PRECED" order="14"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_CANTONNE_PRECED" oracleDatatype="number"
+         columnOrder="21" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Cantonne Preced">
+          <dataDescriptor expression="EU_CANTONNE_PRECED"
+           descriptiveExpression="EU_CANTONNE_PRECED" order="15"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_ENGAGE_PRECED" oracleDatatype="number"
+         columnOrder="22" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Engage Preced">
+          <dataDescriptor expression="LOGI_ENGAGE_PRECED"
+           descriptiveExpression="LOGI_ENGAGE_PRECED" order="16"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_ENGAGE_PRECED" oracleDatatype="number"
+         columnOrder="23" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Engage Preced">
+          <dataDescriptor expression="MATE_ENGAGE_PRECED"
+           descriptiveExpression="MATE_ENGAGE_PRECED" order="17"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_ENGAGE_PRECED" oracleDatatype="number"
+         columnOrder="24" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Engage Preced">
+          <dataDescriptor expression="AUTR_ENGAGE_PRECED"
+           descriptiveExpression="AUTR_ENGAGE_PRECED" order="18"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_CANTONNE_PRECED" oracleDatatype="number"
+         columnOrder="25" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Cantonne Preced">
+          <dataDescriptor expression="LOGI_CANTONNE_PRECED"
+           descriptiveExpression="LOGI_CANTONNE_PRECED" order="19"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_CANTONNE_PRECED" oracleDatatype="number"
+         columnOrder="26" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Cantonne Preced">
+          <dataDescriptor expression="MATE_CANTONNE_PRECED"
+           descriptiveExpression="MATE_CANTONNE_PRECED" order="20"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_CANTONNE_PRECED" oracleDatatype="number"
+         columnOrder="27" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Cantonne Preced">
+          <dataDescriptor expression="AUTR_CANTONNE_PRECED"
+           descriptiveExpression="AUTR_CANTONNE_PRECED" order="21"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_DEMANDE1" oracleDatatype="number" columnOrder="36"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Demande1">
+          <dataDescriptor expression="JH_DEMANDE"
+           descriptiveExpression="JH_DEMANDE" order="22"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_DEMANDE1" oracleDatatype="number" columnOrder="37"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Demande1">
+          <dataDescriptor expression="EU_DEMANDE"
+           descriptiveExpression="EU_DEMANDE" order="23"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_CANT_DEMANDE" oracleDatatype="number"
+         columnOrder="28" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Jh Cant Demande">
+          <dataDescriptor expression="JH_CANT_DEMANDE"
+           descriptiveExpression="JH_CANT_DEMANDE" order="24"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_CANT_DEMANDE" oracleDatatype="number"
+         columnOrder="29" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Eu Cant Demande">
+          <dataDescriptor expression="EU_CANT_DEMANDE"
+           descriptiveExpression="EU_CANT_DEMANDE" order="25"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_DEMANDE" oracleDatatype="number" columnOrder="30"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Demande">
+          <dataDescriptor expression="LOGI_DEMANDE"
+           descriptiveExpression="LOGI_DEMANDE" order="26"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_CANT_DEMANDE" oracleDatatype="number"
+         columnOrder="31" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Cant Demande">
+          <dataDescriptor expression="LOGI_CANT_DEMANDE"
+           descriptiveExpression="LOGI_CANT_DEMANDE" order="27"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_DEMANDE" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Demande">
+          <dataDescriptor expression="MATE_DEMANDE"
+           descriptiveExpression="MATE_DEMANDE" order="28"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_CANT_DEMANDE" oracleDatatype="number"
+         columnOrder="33" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Cant Demande">
+          <dataDescriptor expression="MATE_CANT_DEMANDE"
+           descriptiveExpression="MATE_CANT_DEMANDE" order="29"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_DEMANDE" oracleDatatype="number" columnOrder="34"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Demande">
+          <dataDescriptor expression="AUTR_DEMANDE"
+           descriptiveExpression="AUTR_DEMANDE" order="30"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_CANT_DEMANDE" oracleDatatype="number"
+         columnOrder="35" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Cant Demande">
+          <dataDescriptor expression="AUTR_CANT_DEMANDE"
+           descriptiveExpression="AUTR_CANT_DEMANDE" order="31"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_DECIDE" oracleDatatype="number" columnOrder="68"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Decide">
+          <dataDescriptor expression="JH_DECIDE"
+           descriptiveExpression="JH_DECIDE" order="32"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_DECIDE" oracleDatatype="number" columnOrder="69"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Decide">
+          <dataDescriptor expression="EU_DECIDE"
+           descriptiveExpression="EU_DECIDE" order="33"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_CANT_DECIDE" oracleDatatype="number"
+         columnOrder="38" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Jh Cant Decide">
+          <dataDescriptor expression="JH_CANT_DECIDE"
+           descriptiveExpression="JH_CANT_DECIDE" order="34"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_CANT_DECIDE" oracleDatatype="number"
+         columnOrder="39" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Eu Cant Decide">
+          <dataDescriptor expression="EU_CANT_DECIDE"
+           descriptiveExpression="EU_CANT_DECIDE" order="35"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_DECIDE" oracleDatatype="number" columnOrder="40"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Decide">
+          <dataDescriptor expression="LOGI_DECIDE"
+           descriptiveExpression="LOGI_DECIDE" order="36"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_CANT_DECIDE" oracleDatatype="number"
+         columnOrder="41" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Logi Cant Decide">
+          <dataDescriptor expression="LOGI_CANT_DECIDE"
+           descriptiveExpression="LOGI_CANT_DECIDE" order="37"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_DECIDE" oracleDatatype="number" columnOrder="42"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Decide">
+          <dataDescriptor expression="MATE_DECIDE"
+           descriptiveExpression="MATE_DECIDE" order="38"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_CANT_DECIDE" oracleDatatype="number"
+         columnOrder="43" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Mate Cant Decide">
+          <dataDescriptor expression="MATE_CANT_DECIDE"
+           descriptiveExpression="MATE_CANT_DECIDE" order="39"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_DECIDE" oracleDatatype="number" columnOrder="44"
+         width="22" defaultWidth="20000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Decide">
+          <dataDescriptor expression="AUTR_DECIDE"
+           descriptiveExpression="AUTR_DECIDE" order="40"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_CANT_DECIDE" oracleDatatype="number"
+         columnOrder="45" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Autr Cant Decide">
+          <dataDescriptor expression="AUTR_CANT_DECIDE"
+           descriptiveExpression="AUTR_CANT_DECIDE" order="41"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_PREVISIO_DEMANDE" datatype="vchar2"
+         columnOrder="46" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Jh Previsio Demande">
+          <dataDescriptor expression="JH_PREVISIO_DEMANDE"
+           descriptiveExpression="JH_PREVISIO_DEMANDE" order="42" width="4000"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_PREVISIO_DEMANDE" oracleDatatype="number"
+         columnOrder="47" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Previsio Demande">
+          <dataDescriptor expression="EU_PREVISIO_DEMANDE"
+           descriptiveExpression="EU_PREVISIO_DEMANDE" order="43"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="JH_PREVISIO_DECIDE" datatype="vchar2" columnOrder="48"
+         width="4000" defaultWidth="20000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Jh Previsio Decide">
+          <dataDescriptor expression="JH_PREVISIO_DECIDE"
+           descriptiveExpression="JH_PREVISIO_DECIDE" order="44" width="4000"
+          />
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="EU_PREVISIO_DECIDE" oracleDatatype="number"
+         columnOrder="49" width="22" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Eu Previsio Decide">
+          <dataDescriptor expression="EU_PREVISIO_DECIDE"
+           descriptiveExpression="EU_PREVISIO_DECIDE" order="45"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_PREVISIO_DEMANDE" datatype="vchar2"
+         columnOrder="50" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Previsio Demande">
+          <dataDescriptor expression="LOGI_PREVISIO_DEMANDE"
+           descriptiveExpression="LOGI_PREVISIO_DEMANDE" order="46"
+           width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LOGI_PREVISIO_DECIDE" datatype="vchar2"
+         columnOrder="51" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Logi Previsio Decide">
+          <dataDescriptor expression="LOGI_PREVISIO_DECIDE"
+           descriptiveExpression="LOGI_PREVISIO_DECIDE" order="47"
+           width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_PREVISIO_DEMANDE" datatype="vchar2"
+         columnOrder="52" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Previsio Demande">
+          <dataDescriptor expression="MATE_PREVISIO_DEMANDE"
+           descriptiveExpression="MATE_PREVISIO_DEMANDE" order="48"
+           width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="MATE_PREVISIO_DECIDE" datatype="vchar2"
+         columnOrder="53" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Mate Previsio Decide">
+          <dataDescriptor expression="MATE_PREVISIO_DECIDE"
+           descriptiveExpression="MATE_PREVISIO_DECIDE" order="49"
+           width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_PREVISIO_DEMANDE" datatype="vchar2"
+         columnOrder="54" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Previsio Demande">
+          <dataDescriptor expression="AUTR_PREVISIO_DEMANDE"
+           descriptiveExpression="AUTR_PREVISIO_DEMANDE" order="50"
+           width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AUTR_PREVISIO_DECIDE" datatype="vchar2"
+         columnOrder="55" width="4000" defaultWidth="20000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Autr Previsio Decide">
+          <dataDescriptor expression="AUTR_PREVISIO_DECIDE"
+           descriptiveExpression="AUTR_PREVISIO_DECIDE" order="51"
+           width="4000"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_SS" datatype="vchar2" columnOrder="56" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ss">
+          <dataDescriptor expression="CODE_SS" descriptiveExpression="CODE_SS"
+           order="52" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE1" datatype="vchar2" columnOrder="57"
+         width="40" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle1">
+          <xmlSettings xmlTag="SOUS_SYSTEME_LIB"/>
+          <dataDescriptor expression="LIBELLE" descriptiveExpression="LIBELLE"
+           order="53" width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DOMAINE" datatype="vchar2" columnOrder="58" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Domaine">
+          <dataDescriptor expression="DOMAINE" descriptiveExpression="DOMAINE"
+           order="54" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBELLE2" datatype="vchar2" columnOrder="59"
+         width="100" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Libelle2">
+          <xmlSettings xmlTag="DOMAINE_LIB"/>
+          <dataDescriptor expression="LIBELLE" descriptiveExpression="LIBELLE"
+           order="55" width="100"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="AXE_STRATEGIQUE" oracleDatatype="number"
+         columnOrder="60" width="22" defaultWidth="40000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Axe Strategique">
+          <dataDescriptor expression="AXE_STRATEGIQUE"
+           descriptiveExpression="AXE_STRATEGIQUE" order="56"
+           oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_FINANCEMENT" oracleDatatype="number"
+         columnOrder="61" width="22" defaultWidth="40000"
+         defaultHeight="10000" columnFlags="1" defaultLabel="Type Financement">
+          <dataDescriptor expression="TYPE_FINANCEMENT"
+           descriptiveExpression="TYPE_FINANCEMENT" order="57"
+           oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="QUOTE_PART" oracleDatatype="number" columnOrder="62"
+         width="22" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Quote Part">
+          <dataDescriptor expression="QUOTE_PART"
+           descriptiveExpression="QUOTE_PART" order="58"
+           oracleDatatype="number" width="22" scale="2" precision="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ETAPE" oracleDatatype="number" columnOrder="63"
+         width="22" defaultWidth="40000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Etape">
+          <dataDescriptor expression="ETAPE" descriptiveExpression="ETAPE"
+           order="59" oracleDatatype="number" width="22" precision="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_DATE_COPI_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.37500" height="1.18750"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_DATE_COPI" source="G_DATE_COPI"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.68750" width="7.37500"
+           height="0.50000"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_DATE_COPI" source="DATE_COPI" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.68750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_CANT_DEMANDE" source="JH_CANT_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_PREVISIO_DEMANDE" source="JH_PREVISIO_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.93750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TYPE_FINANCEMENT" source="TYPE_FINANCEMENT"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="1.06250" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DP_COPI" source="DP_COPI" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.43750" y="0.68750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_CANT_DEMANDE" source="EU_CANT_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.37500" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_PREVISIO_DEMANDE" source="EU_PREVISIO_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.50000" y="0.93750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_QUOTE_PART" source="QUOTE_PART" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.68750" y="1.06250" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBELLE" source="LIBELLE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.81250" y="0.68750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_DEMANDE" source="LOGI_DEMANDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.75000" y="0.81250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_PREVISIO_DECIDE" source="JH_PREVISIO_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.00000" y="0.93750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ETAPE" source="ETAPE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.18750" y="1.06250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CLICODE" source="CLICODE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.18750" y="0.68750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_CANT_DEMANDE" source="LOGI_CANT_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.31250" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_PREVISIO_DECIDE" source="EU_PREVISIO_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.50000" y="0.93750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DOSPROJ" source="DOSPROJ" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.50000" y="1.06250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ANNEE" source="ANNEE" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.56250" y="0.68750" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_METIER" source="METIER" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.87500" y="0.68750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_DEMANDE" source="MATE_DEMANDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.75000" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_ENGAGE_PRECED" source="JH_ENGAGE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.25000" y="0.68750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_CANT_DEMANDE" source="MATE_CANT_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.12500" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_PREVISIO_DEMANDE" source="LOGI_PREVISIO_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.00000" y="0.93750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DOSPROJ_LIB" source="DOSPROJ_LIB" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.87500" y="1.06250" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_TYPE_DEMANDE" source="TYPE_DEMANDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.37500" y="1.06250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_ENGAGE_PRECED" source="EU_ENGAGE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.68750" y="0.68750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_DEMANDE" source="AUTR_DEMANDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.56250" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_PREVISIO_DECIDE" source="LOGI_PREVISIO_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.56250" y="0.93750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_FOUR_COPI" source="FOUR_COPI" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="1.06250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_CANT_DEMANDE" source="AUTR_CANT_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.93750" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_PREVISIO_DEMANDE" source="MATE_PREVISIO_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.12500" y="0.93750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_DECIDE" source="JH_DECIDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.37500" y="1.06250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_CANTONNE_PRECED" source="JH_CANTONNE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.12500" y="0.68750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_DEMANDE1" source="JH_DEMANDE1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.37500" y="0.81250" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_PREVISIO_DECIDE" source="MATE_PREVISIO_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.68750" y="0.93750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_DECIDE" source="EU_DECIDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.81250" y="1.06250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_CANTONNE_PRECED" source="EU_CANTONNE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.62500" y="0.68750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_DEMANDE1" source="EU_DEMANDE1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.87500" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_ENGAGE_PRECED" source="LOGI_ENGAGE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.12500" y="0.68750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_JH_CANT_DECIDE" source="JH_CANT_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.31250" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_PREVISIO_DEMANDE" source="AUTR_PREVISIO_DEMANDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.25000" y="0.93750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_ENGAGE_PRECED" source="MATE_ENGAGE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.62500" y="0.68750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_EU_CANT_DECIDE" source="EU_CANT_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.68750" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_PREVISIO_DECIDE" source="AUTR_PREVISIO_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.81250" y="0.93750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_ENGAGE_PRECED" source="AUTR_ENGAGE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.12500" y="0.68750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_DECIDE" source="LOGI_DECIDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.06250" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_CANT_DECIDE" source="LOGI_CANT_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.43750" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_CODE_SS" source="CODE_SS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.37500" y="0.93750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LOGI_CANTONNE_PRECED" source="LOGI_CANTONNE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.62500" y="0.68750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_DECIDE" source="MATE_DECIDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.87500" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBELLE1" source="LIBELLE1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.75000" y="0.93750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_CANTONNE_PRECED" source="MATE_CANTONNE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.18750" y="0.68750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_MATE_CANT_DECIDE" source="MATE_CANT_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.25000" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_DOMAINE" source="DOMAINE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.18750" y="0.93750" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_CANTONNE_PRECED" source="AUTR_CANTONNE_PRECED"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.75000" y="0.68750" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_DECIDE" source="AUTR_DECIDE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.68750" y="0.81250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBELLE2" source="LIBELLE2" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.56250" y="0.93750" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AUTR_CANT_DECIDE" source="AUTR_CANT_DECIDE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.06250" y="0.81250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_AXE_STRATEGIQUE" source="AXE_STRATEGIQUE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="7.00000" y="0.93750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_DATE_COPI_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.37500"
+           height="0.68750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_DATE_COPI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Date Copi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DP_COPI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.43750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dp Copi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.81250" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CLICODE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Clicode]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ANNEE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.56250" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Annee]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_METIER" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.87500" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Metier]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_ENGAGE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.25000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Engage
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_ENGAGE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Engage
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_CANTONNE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.12500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Cantonne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_CANTONNE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.62500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Cantonne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_ENGAGE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.12500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Engage
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_ENGAGE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.62500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate Engage
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_ENGAGE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.12500" y="0.00000" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr Engage
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_CANTONNE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.62500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Cantonne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_CANTONNE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.18750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate Cantonne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_CANTONNE_PRECED" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.75000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr Cantonne
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Preced]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_CANT_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_CANT_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.37500" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.18750" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_CANT_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.75000" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_CANT_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.12500" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.56250" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_CANT_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_DEMANDE1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.37500" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Demande1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_DEMANDE1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.87500" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_CANT_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.31250" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_CANT_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.68750" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.06250" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_CANT_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.43750" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_CANT_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.25000" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.68750" y="0.18750" width="0.25000"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_CANT_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.06250" y="0.18750" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr Cant
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_PREVISIO_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.37500" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_PREVISIO_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.50000" y="0.37500" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_PREVISIO_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00000" y="0.37500" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_PREVISIO_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.50000" y="0.37500" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_PREVISIO_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.00000" y="0.37500" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LOGI_PREVISIO_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.56250" y="0.37500" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Logi Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_PREVISIO_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.12500" y="0.37500" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_MATE_PREVISIO_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.68750" y="0.37500" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mate Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_PREVISIO_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.25000" y="0.37500" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AUTR_PREVISIO_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.81250" y="0.37500" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Autr Previsio
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_SS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.37500" y="0.37500" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Code Ss]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.75000" y="0.37500" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DOMAINE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.18750" y="0.37500" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Domaine]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBELLE2" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.56250" y="0.37500" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Libelle2]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_AXE_STRATEGIQUE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="7.00000" y="0.37500" width="0.37500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Axe
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Strategique]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPE_FINANCEMENT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.56250" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Type Financement]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_QUOTE_PART" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.68750" y="0.56250" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Quote Part]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ETAPE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.56250" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Etape]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DOSPROJ" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.50000" y="0.56250" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dosproj]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DOSPROJ_LIB" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.87500" y="0.56250" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Dosproj Lib]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_TYPE_DEMANDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.37500" y="0.56250" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Type Demande]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_FOUR_COPI" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.93750" y="0.56250" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Four Copi]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_JH_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.37500" y="0.56250" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Jh Decide]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_EU_DECIDE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.81250" y="0.56250" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Eu Decide]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

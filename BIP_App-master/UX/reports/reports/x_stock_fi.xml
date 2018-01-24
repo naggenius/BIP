@@ -1,0 +1,1469 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_stock_fi" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="X_STOCK_FI" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="32000"
+     initialValue="from stock_fi s,ligne_bip lb, synthese_fin_ress sfr where s.ident= sfr.ident(+) and s.pid = sfr.pid(+) and s.codcamo = sfr.codcamo(+) and s.cafi = sfr.cafi(+) and s.PID = lb.PID(+)"
+     label="P Where" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_DOSS_PROJ" datatype="character" width="5024"
+     precision="10" label="P Doss Proj" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_APPLI" datatype="character" width="5000"
+     precision="10" label="P Appli" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PROJET" datatype="character" width="5000"
+     precision="10" label="P Projet" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_CA_FI" datatype="character" width="5024"
+     precision="10" label="P Ca Fi" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_MENU" datatype="character" precision="10"
+     label="P Menu" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="32000"
+     precision="10" label="P Global" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="5024"
+     precision="10" label="P Param7" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="5024"
+     precision="10" label="P Param8" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="5024"
+     precision="10" label="P Param9" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM10" datatype="character" width="5024"
+     precision="10" label="P Param10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM11" datatype="character" width="5024"
+     precision="10" label="P Param11" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="5024"
+     precision="10" label="P Ca Payeur" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_FROM" datatype="character" width="32000"
+     precision="10" initialValue="()" label="P From" defaultWidth="0"
+     defaultHeight="0" display="no"/>
+    <userParameter name="P_FROM2" datatype="character" width="32000"
+     precision="10" initialValue="()" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIM_CAFI" datatype="character" width="5024"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_SMENUS_GES" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM0" datatype="character" width="40"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PERIM_ME" datatype="character" width="5024"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default" display="yes"/>
+    <systemParameter name="ORIENTATION" initialValue="Default" display="yes"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select        rpad(nvl(s.pid ,' '),4,' ')            pid        ,
+        rpad(nvl(to_char(s.cdeb,'MM/YYYY'),' '),7,' ')     cdeb        ,
+        rpad(nvl(s.typproj,' '),2,' ')            typproj         ,
+        rpad(nvl(s.metier,' '),3,' ')            metier        ,    
+        rpad(nvl(s.pnom,' '),30,' ')            pnom        ,
+        lpad(nvl(to_char(s.codsg),' '),7,'0')        codsg         ,
+        lpad(nvl(to_char(s.dpcode ),' '),5,'0')        dpcode         ,
+        rpad(nvl(s.icpi,' '),5,' ')            icpi         ,
+        lpad(nvl(to_char(s.cafi),' '),6,'0')        cafi         ,
+        lpad(nvl(to_char(s.codsgress),' '),7,'0')        codsgress     ,
+        rpad(nvl(s.libdsg,' '),30,' ')            libdsg        ,        
+        lpad(nvl(to_char(s.codcamo),' '),6,'0')        codcamo         ,
+        rpad(nvl(s.clibrca,' '),16,' ')            clibrca         ,
+        lpad(nvl(to_char(s.ident),' '),5,'0')        ident         ,
+        
+        DECODE(:P_PARAM0,'fournisseur', 
+                             DECODE( pack_habilitation.isDpgMe(s.codsgress,:P_PERIM_ME), 'O', 
+                                        rpad(nvl(s.rnom,' '),30,' ') ,
+                                        DECODE(  pack_habilitation.isPerimCafi( s.cafi  ,:P_PERIM_CAFI) ,'N',
+                                                RPAD(' ',30,' ')
+                                                ,rpad(nvl(s.rnom,' '),30,' ')   ) )
+                         , ' ' )   rnom        ,      
+        
+        
+        rpad(nvl(s.rtype,' '),1,' ')            rtype        ,
+        rpad(nvl(s.prestation,' '),3,' ')             prestation        ,
+                           
+        DECODE(:P_PARAM0,'fournisseur', 
+                             DECODE( pack_habilitation.isDpgMe(s.codsgress,:P_PERIM_ME), 'O', 
+                                        rpad(nvl(s.niveau,' '),2,' ') ,
+                                        DECODE(  pack_habilitation.isPerimCafi( s.cafi  ,:P_PERIM_CAFI) ,'N',
+                                                '  '
+                                                ,rpad(nvl(s.niveau,' '),2,' ')   ) )
+                         , '  ' )   niveau ,        
+       
+        
+                           
+        rpad(nvl(s.soccode,' '),4,' ')            soccode         ,
+        lpad (NVL (TO_CHAR(s.coutftht, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')         coutftht    ,
+        lpad (NVL (TO_CHAR(s.coutft, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')        coutft     ,
+        lpad (NVL (TO_CHAR(s.coutenv, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')        coutenv    ,
+        lpad (NVL (TO_CHAR(sfr.d_consojh_im, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')      consojhimmo_dec,
+        lpad (NVL (TO_CHAR(sfr.d_consojh_ni, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')      nconsojhimmo_dec,    
+        lpad (NVL (TO_CHAR(sfr.d_consoft , 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')        consoft_dec,
+        lpad (NVL (TO_CHAR(sfr.d_consoenv_im, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')     consoenvimmo_dec,
+        lpad (NVL (TO_CHAR(sfr.d_consoenv_ni, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')     nconsoenvimmo_dec,
+--
+        lpad (NVL (TO_CHAR(NVL(sfr.consojh_im,0) - NVL(sfr.d_consojh_im,0), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')    consojhimmo_N,
+        lpad (NVL (TO_CHAR(NVL(sfr.consojh_ni,0) - NVL(sfr.d_consojh_ni,0), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')    nconsojhimmo_N,
+        lpad (NVL (TO_CHAR(NVL(sfr.consoft,0) - NVL(sfr.d_consoft,0), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')        consoft_N,
+        lpad (NVL (TO_CHAR(NVL(sfr.consoenv_im,0) - NVL(sfr.d_consoenv_im,0), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')    consoenvimmo_N,
+        lpad (NVL (TO_CHAR(NVL(sfr.consoenv_ni,0) -NVL(sfr.d_consoenv_ni,0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')    nconsoenvimmo_N,
+--
+        lpad (NVL (TO_CHAR( NVL(sfr.consojh_im,0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')  consojhimmo_tot,
+        lpad (NVL (TO_CHAR( NVL(sfr.consojh_ni,0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')  nconsojhimmo_tot,
+        lpad (NVL (TO_CHAR(NVL(sfr.consoft,0.00) , 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')         consoft_tot,
+        lpad (NVL (TO_CHAR( NVL(sfr.consoenv_im,0.00) , 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')          consoenvimmo_tot ,
+        lpad (NVL (TO_CHAR( NVL(sfr.consoenv_ni,0.00) , 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')          nconsoenvimmo_tot,
+--
+        lpad (NVL (TO_CHAR(NVL(s.consojhimmo,0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') consojhimmo,
+        lpad (NVL (TO_CHAR(NVL(s.nconsojhimmo,0.00), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')   nconsojhimmo,
+        lpad (NVL (TO_CHAR(s.consoft, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')        consoft,
+        lpad (NVL (TO_CHAR(s.consoenvimmo, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')     consoenvimmo,
+        lpad (NVL (TO_CHAR(s.nconsoenvimmo, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')     nconsoenvimmo,
+        lpad (NVL (TO_CHAR(s.a_consojhimmo, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')         a_consojhimmo,
+        lpad (NVL (TO_CHAR(s.a_nconsojhimmo, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')         a_nconsojhimmo,
+        lpad (NVL (TO_CHAR(s.a_consoft, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')        a_consoft,
+        lpad (NVL (TO_CHAR(s.a_consoenvimmo, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')    a_consoenvimmo,
+        lpad (NVL (TO_CHAR(s.a_nconsoenvimmo, 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')    a_nconsoenvimmo,
+        CHR(13)
+&P_WHERE
+order by s.pid, s.cdeb, s.ident, s.cafi
+]]>
+      </select>
+      <displayInfo x="2.27075" y="0.16675" width="0.69995" height="0.19995"/>
+      <group name="G_pid">
+        <displayInfo x="1.43103" y="0.84351" width="2.40234" height="9.31738"
+        />
+        <dataItem name="pid" datatype="vchar2" columnOrder="73" width="4"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rpad Nvl S Pid 3">
+          <xmlSettings xmlTag="ligne"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.pid , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="PID" order="1" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cdeb" datatype="vchar2" columnOrder="74" width="7"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rpad Nvl S Cdeb 10">
+          <xmlSettings xmlTag="mois"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( to_char ( s.cdeb , &apos;MM/YYYY&apos; ) , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="CDEB" order="2" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="typproj" datatype="vchar2" columnOrder="30" width="2"
+         defaultWidth="20000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Typproj" breakOrder="none">
+          <xmlSettings xmlTag="Type ligne"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.typproj , &apos; &apos; ) , 2 , &apos; &apos; )"
+           descriptiveExpression="TYPPROJ" order="3" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="metier" datatype="vchar2" columnOrder="31" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Metier" breakOrder="none">
+          <xmlSettings xmlTag="Métier"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.metier , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="METIER" order="4" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="pnom" datatype="vchar2" columnOrder="32" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Pnom" breakOrder="none">
+          <xmlSettings xmlTag="Libellé"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.pnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="PNOM" order="5" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsg" datatype="vchar2" columnOrder="33" width="7"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg" breakOrder="none">
+          <xmlSettings xmlTag="Pôle ME"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.codsg ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSG" order="6" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="dpcode" datatype="vchar2" columnOrder="34" width="5"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Dpcode" breakOrder="none">
+          <xmlSettings xmlTag="Dossier projet"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.dpcode ) , &apos; &apos; ) , 5 , &apos;0&apos; )"
+           descriptiveExpression="DPCODE" order="7" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="icpi" datatype="vchar2" columnOrder="35" width="5"
+         defaultWidth="50000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Icpi" breakOrder="none">
+          <xmlSettings xmlTag="Projet Pxxxx"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.icpi , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="ICPI" order="8" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cafi" datatype="vchar2" columnOrder="36" width="6"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Cafi" breakOrder="none">
+          <xmlSettings xmlTag="CAFI ress"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.cafi ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CAFI" order="9" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsgress" datatype="vchar2" columnOrder="37"
+         width="7" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsgress" breakOrder="none">
+          <xmlSettings xmlTag="DPG ress"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.codsgress ) , &apos; &apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSGRESS" order="10" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdsg" datatype="vchar2" columnOrder="38" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Libdsg" breakOrder="none">
+          <xmlSettings xmlTag="LibelleDPG"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.libdsg , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBDSG" order="11" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codcamo" datatype="vchar2" columnOrder="39" width="6"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codcamo" breakOrder="none">
+          <xmlSettings xmlTag="CAMO"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.codcamo ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODCAMO" order="12" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="clibrca" datatype="vchar2" columnOrder="40" width="16"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Clibrca" breakOrder="none">
+          <xmlSettings xmlTag="Lib MO"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.clibrca , &apos; &apos; ) , 16 , &apos; &apos; )"
+           descriptiveExpression="CLIBRCA" order="13" width="16"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ident" datatype="vchar2" columnOrder="41" width="5"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Ident">
+          <xmlSettings xmlTag="Code ressource"/>
+          <dataDescriptor
+           expression="lpad ( nvl ( to_char ( s.ident ) , &apos; &apos; ) , 5 , &apos;0&apos; )"
+           descriptiveExpression="IDENT" order="14" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rnom1" datatype="vchar2" columnOrder="77" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom1">
+          <xmlSettings xmlTag="Nom ressource"/>
+          <dataDescriptor
+           expression="DECODE ( : P_PARAM0 , &apos;fournisseur&apos; , DECODE ( pack_habilitation.isDpgMe ( s.codsgress , : P_PERIM_ME ) , &apos;O&apos; , rpad ( nvl ( s.rnom , &apos; &apos; ) , 30 , &apos; &apos; ) , DECODE ( pack_habilitation.isPerimCafi ( s.cafi , : P_PERIM_CAFI ) , &apos;N&apos; , RPAD ( &apos; &apos; , 30 , &apos; &apos; ) , rpad ( nvl ( s.rnom , &apos; &apos; ) , 30 , &apos; &apos; ) ) ) , &apos; &apos; )"
+           descriptiveExpression="RNOM" order="15" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rtype" datatype="vchar2" columnOrder="43" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rtype" breakOrder="none">
+          <xmlSettings xmlTag="Type ressource"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.rtype , &apos; &apos; ) , 1 , &apos; &apos; )"
+           descriptiveExpression="RTYPE" order="16" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prestation" datatype="vchar2" columnOrder="44"
+         width="3" defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Prestation" breakOrder="none">
+          <xmlSettings xmlTag="Qualification"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.prestation , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="PRESTATION" order="17" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="niveau" datatype="vchar2" columnOrder="42" width="2"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Rnom" breakOrder="none">
+          <dataDescriptor
+           expression="DECODE ( : P_PARAM0 , &apos;fournisseur&apos; , DECODE ( pack_habilitation.isDpgMe ( s.codsgress , : P_PERIM_ME ) , &apos;O&apos; , rpad ( nvl ( s.niveau , &apos; &apos; ) , 2 , &apos; &apos; ) , DECODE ( pack_habilitation.isPerimCafi ( s.cafi , : P_PERIM_CAFI ) , &apos;N&apos; , &apos;  &apos; , rpad ( nvl ( s.niveau , &apos; &apos; ) , 2 , &apos; &apos; ) ) ) , &apos;  &apos; )"
+           descriptiveExpression="NIVEAU" order="18" width="2"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soccode" datatype="vchar2" columnOrder="45" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Soccode" breakOrder="none">
+          <xmlSettings xmlTag="Société"/>
+          <dataDescriptor
+           expression="rpad ( nvl ( s.soccode , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCODE" order="19" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutftht" datatype="vchar2" columnOrder="46"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutftht" breakOrder="none">
+          <xmlSettings xmlTag="Cout ress HT"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.coutftht , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTFTHT" order="20" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutft" datatype="vchar2" columnOrder="47" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutft" breakOrder="none">
+          <xmlSettings xmlTag="Cout ress HTR"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.coutft , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTFT" order="21" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="coutenv" datatype="vchar2" columnOrder="48" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Coutenv" breakOrder="none">
+          <xmlSettings xmlTag="Coût env IMMO"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.coutenv , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="COUTENV" order="22" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_dec" datatype="vchar2" columnOrder="64"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consojhimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sfr.d_consojh_im , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_DEC" order="23" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_dec" datatype="vchar2" columnOrder="65"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsojhimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sfr.d_consojh_ni , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_DEC" order="24" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_dec" datatype="vchar2" columnOrder="49"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoft Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sfr.d_consoft , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_DEC" order="25" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_dec" datatype="vchar2" columnOrder="50"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoenvimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sfr.d_consoenv_im , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_DEC" order="26" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_dec" datatype="vchar2" columnOrder="51"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsoenvimmo Dec" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo dec N-1"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( sfr.d_consoenv_ni , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_DEC" order="27" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_N" datatype="vchar2" columnOrder="66"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consojhimmo N" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo année N"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consojh_im , 0 ) - NVL ( sfr.d_consojh_im , 0 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_N" order="28" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_N" datatype="vchar2" columnOrder="67"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsojhimmo N" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo année N"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consojh_ni , 0 ) - NVL ( sfr.d_consojh_ni , 0 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_N" order="29" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_N" datatype="vchar2" columnOrder="52"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoft N" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT année N"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consoft , 0 ) - NVL ( sfr.d_consoft , 0 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_N" order="30" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_N" datatype="vchar2" columnOrder="53"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoenvimmo N" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo année N"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consoenv_im , 0 ) - NVL ( sfr.d_consoenv_im , 0 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_N" order="31" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_N" datatype="vchar2" columnOrder="54"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsoenvimmo N" breakOrder="none">
+          <xmlSettings xmlTag="Consommé ENV non immo année N"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consoenv_ni , 0 ) - NVL ( sfr.d_consoenv_ni , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_N" order="32" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_tot" datatype="vchar2" columnOrder="68"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consojhimmo Tot" breakOrder="none">
+          <xmlSettings xmlTag="Total Conso jh immo"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consojh_im , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_TOT" order="33" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_tot" datatype="vchar2" columnOrder="69"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsojhimmo Tot" breakOrder="none">
+          <xmlSettings xmlTag="Total Conso jh non immo"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consojh_ni , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_TOT" order="34" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_tot" datatype="vchar2" columnOrder="55"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoft Tot" breakOrder="none">
+          <xmlSettings xmlTag="Total Conso FT"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consoft , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_TOT" order="35" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_tot" datatype="vchar2" columnOrder="56"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoenvimmo Tot" breakOrder="none">
+          <xmlSettings xmlTag="Total Conso env immo"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consoenv_im , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_TOT" order="36" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_tot" datatype="vchar2" columnOrder="57"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsoenvimmo Tot" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo total"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( sfr.consoenv_ni , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_TOT" order="37" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo" datatype="vchar2" columnOrder="70"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( s.consojhimmo , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO" order="38" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo" datatype="vchar2" columnOrder="71"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( NVL ( s.nconsojhimmo , 0.00 ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO" order="39" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft" datatype="vchar2" columnOrder="58" width="13"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoft" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.consoft , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT" order="40" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo" datatype="vchar2" columnOrder="59"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Consoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.consoenvimmo , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO" order="41" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo" datatype="vchar2" columnOrder="60"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Nconsoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo du mois"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.nconsoenvimmo , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO" order="42" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_consojhimmo" datatype="vchar2" columnOrder="75"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="A Consojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="conso jh RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.a_consojhimmo , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_CONSOJHIMMO" order="43" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_nconsojhimmo" datatype="vchar2" columnOrder="76"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="0" defaultLabel="A Nconsojhimmo" breakOrder="none">
+          <xmlSettings xmlTag="conso jh non immo RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.a_nconsojhimmo , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_NCONSOJHIMMO" order="44" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_consoft" datatype="vchar2" columnOrder="61"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="A Consoft" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.a_consoft , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_CONSOFT" order="45" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_consoenvimmo" datatype="vchar2" columnOrder="62"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="A Consoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.a_consoenvimmo , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_CONSOENVIMMO" order="46" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="a_nconsoenvimmo" datatype="vchar2" columnOrder="63"
+         width="13" defaultWidth="90000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="A Nconsoenvimmo" breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo RA"/>
+          <dataDescriptor
+           expression="lpad ( NVL ( TO_CHAR ( s.a_nconsoenvimmo , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="A_NCONSOENVIMMO" order="47" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CHR_13" datatype="vchar2" columnOrder="72" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Chr 13" breakOrder="none">
+          <xmlSettings xmlTag=""/>
+          <dataDescriptor expression="CHR ( 13 )"
+           descriptiveExpression="CHR(13)" order="48" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      <filter type="plsql" plsqlFilter="g_pidgroupfilter" numberOfRecords="0"
+      />
+      </group>
+    </dataSource>
+    <dataSource name="Q_2">
+      <select>
+      <![CDATA[select 'Le nombre de CA est trop grand Merci de contacter la MO BIP' erreur from dual]]>
+      </select>
+      <displayInfo x="4.36450" y="1.11450" width="0.69995" height="0.19995"/>
+      <group name="G_erreur">
+        <displayInfo x="5.81067" y="3.05420" width="1.09998" height="0.43066"
+        />
+        <dataItem name="erreur" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="78" width="59"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Le Nombre De Ca Est Trop Grand">
+          <xmlSettings xmlTag=""/>
+          <dataDescriptor
+           expression="&apos;Le nombre de CA est trop grand Merci de contacter la MO BIP&apos;"
+           descriptiveExpression="ERREUR" order="1"
+           oracleDatatype="aFixedChar" width="59"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      <filter type="plsql" plsqlFilter="g_erreur_groupfilter"
+       numberOfRecords="0"/>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_pid_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="1.43750" height="0.25000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_pid" source="G_pid" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.12500" width="1.43750"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_codcamo" source="codcamo" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="0.00000" y="0.12500" width="0.50000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_cafi" source="cafi" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10"/>
+            <geometryInfo x="0.75000" y="0.12500" width="0.68750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_pid_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="1.43750"
+           height="0.12500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_codcamo" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.50000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[Codcamo]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_cafi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.00000" width="0.68750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="10"/>
+              <string>
+              <![CDATA[Cafi]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <field name="PF_P_GLOBAL1" source="P_GLOBAL" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM1" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM2" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.45081" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM3" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.78406" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM4" source="P_PARAM10" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.11731" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM5" source="P_PARAM11" pageNumber="1"
+   minWidowLines="1" spacing="0" alignment="start">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="2.45056" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_GLOBAL1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.54138" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Global]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param7]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.49280" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param8]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.82605" width="0.60388" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param9]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM4" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.15930" width="0.67676" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param10]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM5" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="2.49255" width="0.67676" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[P Param11]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+	
+	l_global pack_global.GlobalData;
+	l_doss_proj VARCHAR2(5000);
+	chaine_doss_proj VARCHAR2(5000);
+	l_projet VARCHAR2(5000);
+	chaine_projet VARCHAR2(5000);
+	l_application VARCHAR2(5000);
+	chaine_application VARCHAR2(5000);
+	l_ca_fi VARCHAR2(5000); 
+	chaine_ca_fi VARCHAR2(5000);
+	l_ca_payeur VARCHAR2(5000); 
+	chaine_ca_payeur VARCHAR2(5000);			
+	l_compteur NUMBER;
+	l_compteur2 NUMBER;
+	
+	l_ssoumenu					VARCHAR2(100);
+
+begin
+
+	:P_PERIM_ME := pack_global.lire_perime(:P_GLOBAL);
+	:P_PERIM_CAFI := pack_global.lire_ca_fi(:P_GLOBAL);
+	
+	l_ssoumenu := Pack_Global.lire_globaldata(:P_GLOBAL).sousmenus;
+	IF ( INSTR(l_ssoumenu,'ges') > 0 ) THEN
+		:P_SMENUS_GES := 'O';
+	ELSE
+		:P_SMENUS_GES := 'N';
+	END IF;
+	
+	 -- Informations pour l'habilitation par référentiels
+	l_global := pack_global.lire_globaldata(:P_GLOBAL);
+
+  :P_APPLI := l_global.appli;
+  :P_APPLI := REPLACE(:P_APPLI,',',''',''');
+  
+	:P_DOSS_PROJ := l_global.doss_proj;
+  
+  :P_PROJET := l_global.projet;
+  :P_PROJET := REPLACE(:P_PROJET,',',''',''');
+  
+  :P_CA_FI := l_global.ca_fi; 
+  :P_CA_PAYEUR := l_global.ca_payeur;
+  
+  :P_MENU := l_global.menutil;
+    --srw.message(1,'ANTOINE : '||:P_CA_FI);  
+   --srw.message(1,'ANTOINE : '||:P_CA_PAYEUR);  
+
+  --srw.message(1,':P_MENU : '||:P_MENU);  
+	
+  l_doss_proj := 'VIDE';
+	l_projet := 'VIDE';
+	l_application := 'VIDE';
+	l_ca_fi := 'VIDE';
+	chaine_doss_proj := 'VIDE';
+	chaine_projet := 'VIDE';
+	chaine_application := 'VIDE';
+	chaine_ca_fi := 'VIDE';
+
+IF(:P_MENU = 'REF') THEN
+		
+  -- Dossier Projet :
+	if(:P_PARAM7 = 'Pas de limitation') then
+		chaine_doss_proj := 'VIDE';
+	elsif(:P_PARAM7 = 'TOUS')	then
+		if(:P_DOSS_PROJ IS NOT NULL AND :P_DOSS_PROJ <> 'TOUS' ) then
+  		chaine_doss_proj := :P_DOSS_PROJ; -- seulement les dossiers projets actifs
+		else
+			chaine_doss_proj := 'VIDE';
+		end if;	
+	else
+		chaine_doss_proj := :P_PARAM7;
+	end if;	
+  
+  --srw.message(1,'chaine_doss_proj : '||chaine_doss_proj);
+  
+  -- Projet :
+	if(:P_PARAM8 = 'Pas de limitation') then
+		chaine_projet := 'VIDE';
+	elsif(:P_PARAM8 = 'TOUS')	then
+		if(:P_PROJET IS NOT NULL AND :P_PROJET <> 'TOUS' ) then
+  		chaine_projet := :P_PROJET; -- seulement les projets actifs
+		else
+			chaine_projet := 'VIDE';	
+		end if;	
+	else
+		chaine_projet := :P_PARAM8;
+	end if;	
+
+	--srw.message(1,'chaine_projet : '||chaine_projet);
+
+	-- application :
+	if(:P_PARAM9 = 'Pas de limitation') then
+		chaine_application := 'VIDE';
+	elsif(:P_PARAM9 = 'TOUS')	then
+		if(:P_APPLI IS NOT NULL AND :P_APPLI <> 'TOUS' ) then
+  		chaine_application := :P_APPLI; -- seulement les applications actifs
+		else
+			chaine_application := 'VIDE';	
+		end if;	
+	else
+		chaine_application := :P_PARAM9;
+	end if;	
+
+	--srw.message(1,'chaine_application : '||chaine_application);
+
+  -- CAFI
+ 	if(:p_param10 = 'Pas de limitation') then
+		chaine_ca_fi := '';
+	elsif(trim(upper(:p_param10)) = 'TOUS')	then
+		if(:P_CA_FI IS NOT NULL AND trim(upper(:P_CA_FI)) <> 'TOUS' ) then
+  		chaine_ca_fi := :P_CA_FI;
+		else
+			chaine_ca_fi := '';	
+		end if;	
+	else
+		chaine_ca_fi := :p_param10;
+	end if;	
+
+	--srw.message(1,'chaine_ca_fi : '||chaine_ca_fi);
+
+  -- CA_PAYEUR
+	if(:p_param11 = 'Pas de limitation') then
+		chaine_ca_payeur := '';
+	elsif(trim(upper(:p_param11)) = 'TOUS')	then
+		if(:P_CA_PAYEUR IS NOT NULL AND trim(upper(:P_CA_PAYEUR)) <> 'TOUS' ) then
+  		chaine_ca_payeur := :P_CA_PAYEUR;
+		else
+			chaine_ca_payeur := '';	
+		end if;	
+	else
+		chaine_ca_payeur := :p_param11;
+	end if;	
+	
+	--srw.message(1,'chaine_ca_payeur : '||chaine_ca_payeur);
+		
+	if(chaine_doss_proj <> 'VIDE') then
+		l_doss_proj := ' and s.DPCODE IN (' || chaine_doss_proj ||') ';
+	end if;
+	
+	if(chaine_projet <> 'VIDE') then 	
+		l_projet := ' and s.ICPI IN ('''||chaine_projet||''') ';
+	end if;
+	
+	if(chaine_application <> 'VIDE') then
+		l_application := ' and lb.AIRT IN ('''||chaine_application||''') ';
+	end if;
+	
+	
+
+	:p_from :='(';
+	  l_compteur := 1 ;
+
+     
+     
+       
+     while (length(chaine_ca_payeur) != 0 and length(:p_from) < 30000) loop
+     
+     if (instr(chaine_ca_payeur,',') != 0) then
+          l_ca_payeur := substr(chaine_ca_payeur,0,instr(chaine_ca_payeur,',')-1);
+          chaine_ca_payeur := substr(chaine_ca_payeur,instr(chaine_ca_payeur,',')+1);
+     else
+        l_ca_payeur := chaine_ca_payeur;
+        chaine_ca_payeur := '';
+     end if;
+
+     if (l_compteur != 1) then
+        :p_from := :p_from || 'UNION';
+
+     end if;
+     
+    if  (pack_global.recherche_niveau(l_ca_payeur) != 99) then	
+     
+     if (pack_global.recherche_niveau(l_ca_payeur) = 0) then
+   
+    -- dans le cas de la facturation interne les mois pris en compte sont decembre N-1 à novembre N
+    
+             	:p_from := :p_from||'(
+                            select codcamo 
+							from centre_activite
+							where 
+							codcamo IN ('|| l_ca_payeur || ')
+--PPM 58986 : Bascule FI (modification de l année civile du 12/N-1 au 11/N par 01/N au 12/N)							
+							AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))				 		         												
+							)';	  
+							
+									    
+     elsif (pack_global.recherche_niveau(l_ca_payeur) = 1) then
+            	
+             :p_from := :p_from||'(						 		        
+						     select codcamo 
+						     from centre_activite
+							 where 
+								 CANIV1 IN ('|| l_ca_payeur || ')
+							AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+							)';	    
+							
+							  
+           elsif (pack_global.recherche_niveau(l_ca_payeur) = 2) then
+             :p_from := :p_from||' (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+														CANIV2 IN ('|| l_ca_payeur|| ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+											)';
+						
+            elsif (pack_global.recherche_niveau(l_ca_payeur) = 3) then
+              :p_from := :p_from||' (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+												 			CANIV3 IN ('|| l_ca_payeur || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';	 
+												
+													
+                elsif (pack_global.recherche_niveau(l_ca_payeur) = 4) then       
+                :p_from :=:p_from|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV4 IN ('|| l_ca_payeur || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+												
+									elsif (pack_global.recherche_niveau(l_ca_payeur) = 5) then       
+                :p_from :=:p_from|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV5 IN ('|| l_ca_payeur || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+												
+												elsif (pack_global.recherche_niveau(l_ca_payeur) = 6) then       
+                :p_from :=:p_from|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV6 IN ('|| l_ca_payeur || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+													
+                
+						end if;  
+                			         	
+                  
+            	--srw.message(1,'longueur from ' || length(:p_from));      
+        l_compteur := l_compteur+1;
+        end if; 
+      END LOOP;      
+    
+    	:p_from := :p_from || ')';
+    	
+
+    	
+			--srw.message(1,':p_from : '||:p_from);				
+		 
+ -- debut cafi mutli niveau
+  :p_from2 :='(';
+	  l_compteur2 := 1 ;
+    
+         while (length(chaine_ca_fi) != 0 and length(:p_from2) < 30000) loop
+     
+     if (instr(chaine_ca_fi,',') != 0) then
+          l_ca_fi := substr(chaine_ca_fi,0,instr(chaine_ca_fi,',')-1);
+          chaine_ca_fi := substr(chaine_ca_fi,instr(chaine_ca_fi,',')+1);
+     else
+        l_ca_fi := chaine_ca_fi;
+        chaine_ca_fi := '';
+     end if;
+
+     if (l_compteur2 != 1) then
+        :p_from2 := :p_from2 || 'UNION';
+
+     end if;
+     
+     	
+      if (pack_global.recherche_niveau(l_ca_fi) != 99) then
+      	
+     if (pack_global.recherche_niveau(l_ca_fi) = 0) then
+   
+    -- dans le cas de la facturation interne les mois pris en compte sont decembre N-1 à novembre N
+    
+             	:p_from2 := :p_from2||'(
+                            select codcamo 
+							from centre_activite
+							where 
+							codcamo IN ('|| l_ca_fi || ')
+							AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))				 		         												
+							)';	  
+							
+									    
+     elsif (pack_global.recherche_niveau(l_ca_fi) = 1) then
+            	
+             :p_from2 := :p_from2||'(						 		        
+						     select codcamo 
+						     from centre_activite
+							 where 
+								 CANIV1 IN ('|| l_ca_fi || ')
+							AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+						)';	    
+							
+							  
+           elsif (pack_global.recherche_niveau(l_ca_fi) = 2) then
+             :p_from2 := :p_from2||' (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+														CANIV2 IN ('|| l_ca_fi|| ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+												)';
+						
+            elsif (pack_global.recherche_niveau(l_ca_fi) = 3) then
+              :p_from2 := :p_from2||' (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+												 			CANIV3 IN ('|| l_ca_fi || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+											)';	 
+												
+													
+                elsif (pack_global.recherche_niveau(l_ca_fi) = 4) then       
+                :p_from2 :=:p_from2|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV4 IN ('|| l_ca_fi || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+													)';
+												
+												elsif (pack_global.recherche_niveau(l_ca_fi) = 5) then       
+                :p_from2 :=:p_from2|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV5 IN ('|| l_ca_fi || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+											)';
+												
+												elsif (pack_global.recherche_niveau(l_ca_fi) = 6) then       
+                :p_from2 :=:p_from2|| '
+					 		         (						 		        
+						 		        select codcamo 
+													from centre_activite
+													where 
+																CANIV6 IN ('|| l_ca_fi || ')
+												AND (cdateferm is null or cdateferm between to_date(''01/''||to_number(to_char(sysdate,''YYYY'')),''MM/YYYY'') and
+last_day(to_date(''12/''||to_char(sysdate,''YYYY''),''MM/YYYY'')))
+											)';
+								end if;      
+            	--srw.message(1,'longueur from2 ' || length(:p_from2));      
+        l_compteur2 := l_compteur2+1;
+              end if; 
+      END LOOP;      
+    
+    	:p_from2 := :p_from2 || ')';
+    	
+
+    	
+			--srw.message(1,':p_from2 : '||:p_from2);	
+    
+    
+ -- fin cafi multi niveau	
+	
+		
+		
+		
+		
+			
+			
+			if ((:p_from = '()' and :p_from2 = '()') or ((length(:p_from)+length(:p_from2) >= 30000 ))) then
+    		:p_where := 'from stock_fi s,ligne_bip lb, synthese_fin_ress sfr
+												where s.ident= sfr.ident(+)
+												and s.pid = sfr.pid(+)
+												and s.codcamo = sfr.codcamo(+)
+												and s.cafi = sfr.cafi(+)
+												and s.PID = lb.PID(+)
+											 ';
+			elsif (:p_from <> '()' and :p_from2 = '()') then
+				
+					:p_where := 'from stock_fi s,
+												ligne_bip lb, 
+												synthese_fin_ress sfr,
+												'||:p_from|| ' liste_ca
+										 where s.ident= sfr.ident(+)
+												and s.pid = sfr.pid(+)
+												and s.codcamo = sfr.codcamo(+)
+												and s.codcamo = liste_ca.CODCAMO
+												and s.cafi = sfr.cafi(+)
+												and s.PID = lb.PID(+)
+											 ';
+					elsif (:p_from = '()' and :p_from2 <> '()') then
+									
+					:p_where := 'from stock_fi s,
+												ligne_bip lb, 
+												synthese_fin_ress sfr,
+												'||:p_from2|| ' liste_ca_fi
+										 where s.ident= sfr.ident(+)
+												and s.pid = sfr.pid(+)
+												and s.codcamo = sfr.codcamo(+)
+												and s.cafi = liste_ca_fi.CODCAMO
+												and s.cafi = sfr.cafi(+)
+												and s.PID = lb.PID(+)
+											 ';
+				
+							elsif (:p_from <> '()' and :p_from2 <> '()') then
+				
+				
+				:p_where := 'from stock_fi s,
+												ligne_bip lb, 
+												synthese_fin_ress sfr,
+												'||:p_from|| ' liste_ca,
+												'||:p_from2|| ' liste_ca_fi
+										 where s.ident= sfr.ident(+)
+												and s.pid = sfr.pid(+)
+												and s.codcamo = sfr.codcamo(+)
+												and s.codcamo = liste_ca.CODCAMO
+												and s.cafi = sfr.cafi(+)
+												and s.cafi = liste_ca_fi.CODCAMO
+												and s.PID = lb.PID(+)
+											 ';
+											 											 											 
+			end if;	
+
+
+		--srw.message(1,'l_ca_fi : '||l_ca_fi);		
+		--srw.message(1,'l_projet : '||l_projet);		
+		--srw.message(1,'l_doss_proj : '||l_doss_proj);
+		--srw.message(1,'l_application : '||l_application);	
+			
+		
+		if(l_doss_proj <> 'VIDE') then
+			:p_where := :p_where||l_doss_proj;
+		end if;
+		
+		if(l_projet <> 'VIDE') then
+			:p_where := :p_where||l_projet;
+		end if;
+		
+		if(l_application <> 'VIDE') then
+			:p_where := :p_where||l_application;
+		end if;
+ 			 			
+ 		--srw.message(1,NVL(substr(:P_WHERE,-100),'vide'));
+		
+END IF;
+	
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="g_pidgroupfilter">
+      <textSource>
+      <![CDATA[function G_pidGroupFilter return boolean is
+begin
+  if (length(:p_from)<30000)then
+    return (TRUE);
+  else           
+  	 return (FALSe);
+  end if;
+end;]]>
+      </textSource>
+    </function>
+    <function name="g_erreur_groupfilter">
+      <textSource>
+      <![CDATA[function G_erreur_GroupFilter return boolean is
+begin
+  if (length(:p_from)>=30000)then
+    return (TRUE);
+  else           
+  	 return (FALSe);
+  end if;
+end;
+
+
+]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+
+
+</head>
+
+
+<body>
+
+<!-- Data Area Generated by Reports Developer -->
+<rw:dataArea id="MGpidGRPFR55">
+<table>
+<caption>  </caption>
+ <!-- Header -->
+ <thead>
+  <tr>
+   <th <rw:id id="HBjhimmoantoine55" asArray="no"/>> Jhimmoantoine </th>
+  </tr>
+ </thead>
+ <!-- Body -->
+ <tbody>
+  <rw:foreach id="RGpid551" src="G_pid">
+   <tr>
+    <td <rw:headers id="HFjhimmoantoine55" src="HBjhimmoantoine55"/>><rw:field id="Fjhimmoantoine55" src="jhimmoantoine" nullValue="&nbsp;"> F_jhimmoantoine </rw:field></td>
+   </tr>
+  </rw:foreach>
+ </tbody>
+ <!-- Report Level Summary -->
+ <tr>
+  <td <rw:headers id="HFCS155" src="HBjhimmoantoine55"/>>Cs 1 <rw:field id="FCS155" src="CS_1" nullValue="&nbsp;"> F_CS_1 </rw:field></td>
+ </tr>
+</table>
+</rw:dataArea> <!-- id="MGpidGRPFR55" -->
+<!-- End of Data Area Generated by Reports Developer -->
+
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

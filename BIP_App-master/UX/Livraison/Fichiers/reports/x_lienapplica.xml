@@ -1,0 +1,1093 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="07062007_x_test_extract_liencaapp" DTDVersion="9.0.2.0.10"
+ unitOfMeasurement="centimeter">
+  <xmlSettings xmlTag="07062007_X_TEST_EXTRACT_LIENCAAPP" xmlPrologType="text"
+  >
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_GLOBAL" datatype="character" width="2048"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM1" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM2" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM3" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM4" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM5" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM6" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM7" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM8" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PARAM9" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_TITRE_ETAT" datatype="character" width="100"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="1000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT" initialValue="bip180.prt"/>
+    <systemParameter name="DESTYPE" initialValue="Preview"/>
+    <dataSource name="Q_REQ">
+      <select>
+      <![CDATA[((((((((((SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO10),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA10,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI10,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL10,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO10 = ca.CODCAMO
+AND	a.CODCAMO10 = q.CODCAMO10
+AND q.CODCAMO10 <> 0)
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO9),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA9,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI9,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL9,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO9 = ca.CODCAMO
+AND	a.CODCAMO9 = q.CODCAMO9
+AND q.CODCAMO9 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO8),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA8,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI8,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL8,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO8 = ca.CODCAMO
+AND	a.CODCAMO8 = q.CODCAMO8
+AND q.CODCAMO8 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO7),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA7,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI7,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL7,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO7 = ca.CODCAMO
+AND	a.CODCAMO7 = q.CODCAMO7
+AND q.CODCAMO7 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO6),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA6,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI6,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL6,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO6 = ca.CODCAMO
+AND	a.CODCAMO6 = q.CODCAMO6
+AND q.CODCAMO6 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO5),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA5,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI5,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL5,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO5 = ca.CODCAMO
+AND	a.CODCAMO5 = q.CODCAMO5
+AND q.CODCAMO5 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO4),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA4,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI4,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL4,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO4 = ca.CODCAMO
+AND	a.CODCAMO4 = q.CODCAMO4
+AND q.CODCAMO4 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO3),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA3,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI3,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL3,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO3 = ca.CODCAMO
+AND	a.CODCAMO3 = q.CODCAMO3
+AND q.CODCAMO3 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO2),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA2,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI2,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL2,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO2 = ca.CODCAMO
+AND	a.CODCAMO2 = q.CODCAMO2
+AND q.CODCAMO2 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO1),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA1,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI1,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL1,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO1 = ca.CODCAMO
+AND	a.CODCAMO1 = q.CODCAMO1
+AND q.CODCAMO1 <> 0))
+UNION
+(SELECT
+	LPAD(NVL(TO_CHAR(a.AIRT),' '),5,' ') CODE_APPLICATION,
+	RPAD(NVL(a.ALIBEL,''), 50,' ') LIB_APPLICATION,
+	RPAD(NVL(a.ALIBME,''), 50,' ') SERVICE_FOURNISSEUR,
+	RPAD(NVL(a.ALIBMO,''), 50,' ') SERVICE_CLIENT,
+	RPAD(NVL(a.LICODAPCA,''), 1,' ') TOP_PRODUIT,
+	LPAD(NVL(TO_CHAR(a.CODCAMO1),' '),6,'0') CODE_CA,
+	RPAD(NVL(a.TYPACTCA1,''), 20,' ') TYPE_CA,
+	RPAD(NVL(ca.CLIBCA,''), 30,' ') LIB_CA,
+	RPAD(NVL(TO_CHAR(ca.CDFAIN),''),1,' ') ETAT_CA,
+	RPAD(NVL(TO_CHAR(a.DATVALLI1,'dd/mm/yyyy'), ' '), 10, ' ') DATE_VALIDITE_CA,
+	RPAD(NVL(a.RESPVAL1,''), 40,' ') RESPONSABLE_VALIDATION_CA
+FROM APPLICATION a, CENTRE_ACTIVITE ca,	 
+	 (SELECT
+	  		app.AIRT,
+	  		app.CODCAMO1,
+	  		app.CODCAMO2,
+	  		app.CODCAMO3,
+	  		app.CODCAMO4,
+	  		app.CODCAMO5,
+			app.CODCAMO6,
+			app.CODCAMO7,
+			app.CODCAMO8,
+			app.CODCAMO9,
+			app.CODCAMO10
+	  FROM APPLICATION app) q
+WHERE
+	a.AIRT = q.AIRT
+AND	a.CODCAMO1 = ca.CODCAMO
+AND	a.CODCAMO1 = q.CODCAMO1
+AND q.CODCAMO1 = 0
+AND q.CODCAMO2 = 0
+AND q.CODCAMO3 = 0
+AND q.CODCAMO4 = 0
+AND q.CODCAMO5 = 0
+AND q.CODCAMO6 = 0
+AND q.CODCAMO7 = 0
+AND q.CODCAMO8 = 0
+AND q.CODCAMO9 = 0
+AND q.CODCAMO10 = 0)]]>
+      </select>
+      <displayInfo x="7.85813" y="1.00552" width="1.77788" height="0.50788"/>
+      <group name="G_CODE_APPLICATION">
+        <displayInfo x="5.91034" y="2.59860" width="6.15001" height="7.17104"
+        />
+        <dataItem name="CODE_APPLICATION" datatype="vchar2" columnOrder="31"
+         width="5" defaultWidth="50000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Application">
+          <xmlSettings xmlTag="Code-application"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( a.AIRT ) , &apos; &apos; ) , 5 , &apos; &apos; )"
+           descriptiveExpression="CODE_APPLICATION" order="1" width="5"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_APPLICATION" datatype="vchar2" columnOrder="32"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Lib Application">
+          <xmlSettings xmlTag="Lib-application"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.ALIBEL , &apos;&apos; ) , 50 , &apos; &apos; )"
+           descriptiveExpression="LIB_APPLICATION" order="2" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SERVICE_FOURNISSEUR" datatype="vchar2"
+         columnOrder="23" width="50" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Service Fournisseur">
+          <xmlSettings xmlTag="Service-fournisseur"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.ALIBME , &apos;&apos; ) , 50 , &apos; &apos; )"
+           descriptiveExpression="SERVICE_FOURNISSEUR" order="3" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="SERVICE_CLIENT" datatype="vchar2" columnOrder="24"
+         width="50" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="Service Client">
+          <xmlSettings xmlTag="Service-client"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.ALIBMO , &apos;&apos; ) , 50 , &apos; &apos; )"
+           descriptiveExpression="SERVICE_CLIENT" order="4" width="50"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TOP_PRODUIT" datatype="vchar2" columnOrder="25"
+         width="1" defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Top Produit">
+          <xmlSettings xmlTag="Top-produit"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.LICODAPCA , &apos;&apos; ) , 1 , &apos; &apos; )"
+           descriptiveExpression="TOP_PRODUIT" order="5" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="CODE_CA" datatype="vchar2" columnOrder="26" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Code Ca5">
+          <xmlSettings xmlTag="Code-CA"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( a.CODCAMO10 ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CODE_CA" order="6" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="TYPE_CA" datatype="vchar2" columnOrder="33" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Type Ca">
+          <xmlSettings xmlTag="Type-activité"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.TYPACTCA10 , &apos;&apos; ) , 20 , &apos; &apos; )"
+           descriptiveExpression="TYPE_CA" order="7" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_CA" datatype="vchar2" columnOrder="27" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Lib Ca5">
+          <xmlSettings xmlTag="Lib-CA"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( ca.CLIBCA , &apos;&apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIB_CA" order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ETAT_CA" datatype="vchar2" columnOrder="28" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Etat Ca5">
+          <xmlSettings xmlTag="Etat-CA"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( ca.CDFAIN ) , &apos;&apos; ) , 1 , &apos; &apos; )"
+           descriptiveExpression="ETAT_CA" order="9" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="DATE_VALIDITE_CA" datatype="vchar2" columnOrder="29"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Date Validite Ca5">
+          <xmlSettings xmlTag="Date-validite-CA"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( a.DATVALLI10 , &apos;dd/mm/yyyy&apos; ) , &apos; &apos; ) , 10 , &apos; &apos; )"
+           descriptiveExpression="DATE_VALIDITE_CA" order="10" width="10"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RESPONSABLE_VALIDATION_CA" datatype="vchar2"
+         columnOrder="30" width="40" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="1"
+         defaultLabel="Responsable Validation Ca5">
+          <xmlSettings xmlTag="Responsable-validation-CA"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.RESPVAL10 , &apos;&apos; ) , 40 , &apos; &apos; )"
+           descriptiveExpression="RESPONSABLE_VALIDATION_CA" order="11"
+           width="40"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="header" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="trailer" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+    </body>
+  </section>
+  <section name="main" width="29.69989" height="20.99996"
+   orientation="landscape">
+    <body width="27.15989" height="15.91996">
+      <location x="1.27000" y="2.54000"/>
+      <frame name="M_G_CODSG_GRPFR">
+        <geometryInfo x="0.12495" y="0.00000" width="26.92611"
+         height="0.87499"/>
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_CODSG" source="G_CODE_APPLICATION"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.24929" y="0.43687" width="26.68767"
+           height="0.43718"/>
+          <generalLayout verticalElasticity="expand"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <field name="F_CODE_APPLICATION" source="CODE_APPLICATION"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="0.24929" y="0.43687" width="1.35558"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="variable"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_APPLICATION" source="LIB_APPLICATION"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="1.66967" y="0.43687" width="3.99790"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_SERVICE_FOURNISSEUR" source="SERVICE_FOURNISSEUR"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="5.99126" y="0.43687" width="3.06121"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_SERVICE_CLIENT" source="SERVICE_CLIENT"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="9.79630" y="0.43687" width="1.69199"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_TOP_PRODUIT" source="TOP_PRODUIT" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="12.10438" y="0.43687" width="0.35967"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_CODE_CA1" source="CODE_CA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="13.16974" y="0.43687" width="1.32085"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_LIB_CA1" source="LIB_CA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="14.97707" y="0.43687" width="2.50279"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_ETAT_CA1" source="ETAT_CA" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="18.15331" y="0.43687" width="0.50447"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_DATE_VALIDITE_CA1" source="DATE_VALIDITE_CA"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="19.08814" y="0.43687" width="2.20452"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+          <field name="F_RESPONSABLE_VALIDATION_CA1"
+           source="RESPONSABLE_VALIDATION_CA" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="10" bold="yes"/>
+            <geometryInfo x="21.39404" y="0.43687" width="3.71109"
+             height="0.43718"/>
+            <generalLayout verticalElasticity="expand"/>
+            <visualSettings fillBackgroundColor="red"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_CODSG_HDR">
+          <geometryInfo x="0.24929" y="0.00000" width="26.79123"
+           height="0.43687"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <visualSettings fillBackgroundColor="red"/>
+          <text name="B_CODE_DOSSIER_PROJET" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.24929" y="0.00000" width="1.31310"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[AIRT]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_APPLICATION" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.68641" y="0.00000" width="1.31341"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[ALIBEL]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_SERVICE_FOURNISSEUR" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.05792" y="0.00000" width="1.13140"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_ME]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_SERVICE_CLIENT" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="9.73801" y="0.00000" width="1.07063"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_MO]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RNOM1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="11.98500" y="0.00000" width="0.69670"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[TOP]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_CODE_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="13.17749" y="0.00000" width="0.51687"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[CA]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="14.98482" y="0.00000" width="1.14629"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[LB_CA]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ETAT_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="17.91395" y="0.00000" width="0.90010"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Etat]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_DATE_VALIDITE_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="19.16038" y="0.00000" width="1.27899"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[Date_Val]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RESPONSABLE_VALIDATION_CA1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="21.26847" y="0.00000" width="1.90810"
+             height="0.43687"/>
+            <visualSettings fillBackgroundColor="red"/>
+            <textSegment>
+              <font face="Courier New" size="10" bold="yes"/>
+              <string>
+              <![CDATA[RESP_VAL]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm width="10.16000" height="10.16000">
+  <text name="PB_TITRE1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="3.60691" y="0.18510" width="2.43334" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Report Parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_TITRE2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="2.82618" y="0.56772" width="3.99448" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Enter values for the parameters]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESTYPE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="1.19869" width="1.13698" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Destype]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESNAME" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="2.12452" width="1.29573" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desname]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_DESFORMAT" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.05036" width="1.37511" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Desformat]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_MODE" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="3.97619" width="0.81948" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[Mode]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_DESTYPE" source="DESTYPE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="0.96490" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESNAME" source="DESNAME" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="1.89074" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_DESFORMAT" source="DESFORMAT" pageNumber="1"
+   minWidowLines="1" spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="2.81657" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_MODE" source="MODE" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="3.74241" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM8" source="P_PARAM8" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="6.51991" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM8" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="6.75370" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM8]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="4.66824" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_PARAM7" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="5.59408" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="4.90203" width="2.18684" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM6]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_PARAM7" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="5.82786" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM7]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_PARAM9" source="P_PARAM9" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="7.44575" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_PARAM9" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="7.67953" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_PARAM9]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.85750" y="8.37282" width="6.66874" height="0.84677"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <text name="PB_GLOBAL" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.40618" y="8.60661" width="1.68424" height="0.37920"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8"/>
+      <string>
+      <![CDATA[P_GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

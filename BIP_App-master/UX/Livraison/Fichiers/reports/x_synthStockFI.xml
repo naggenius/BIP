@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_synthStockFI" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T01302812" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_DOSS_PROJ" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_APPLI" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_PROJET" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_CAFI" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MENU" datatype="character" precision="10"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT
+                RPAD(NVL(TO_CHAR(a.cdeb,'MMYYYY'),' '),6,' ') 	cdeb		,
+                LPAD(NVL(TO_CHAR(a.cafi),' '),6,'0')		cafi 		,
+                RPAD(NVL(a.rtype,' '),1,' ')			rtype		,
+                RPAD(NVL(a.soccode,' '),4,' ')			soccode 	,
+-- Conso décembre
+		LPAD (NVL (TO_CHAR(MAX(d.consojhimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')   	consojhimmo_dec,
+ 		LPAD (NVL (TO_CHAR(MAX(d.nconsojhimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	nconsojhimmo_dec,	
+		LPAD (NVL (TO_CHAR(MAX(d.consoft) , 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		consoft_dec,
+		LPAD (NVL (TO_CHAR(MAX(d.consoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	consoenvimmo_dec,
+		LPAD (NVL (TO_CHAR(MAX(d.nconsoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	nconsoenvimmo_dec,
+-- Conso du mois
+		LPAD (NVL (TO_CHAR(MAX(NVL(a.consojhimmo_N,0) - NVL(d.consojhimmo,0)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')	consojhimmo_MOIS,
+		LPAD (NVL (TO_CHAR(MAX(NVL(a.nconsojhimmo_N,0) - NVL(d.nconsojhimmo,0)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')	nconsojhimmo_MOIS,
+		LPAD (NVL (TO_CHAR(MAX(NVL(a.consoft_N,0) - NVL(d.consoft,0)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		consoft_MOIS,
+		LPAD (NVL (TO_CHAR(MAX(NVL(a.consoenvimmo_N,0) - NVL(d.consoenvimmo,0)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')	consoenvimmo_MOIS,
+		LPAD (NVL (TO_CHAR(MAX(NVL(a.nconsoenvimmo_N,0) -NVL(d.nconsoenvimmo,0.00)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')	nconsoenvimmo_MOIS,
+-- Conso pour le ra
+		LPAD (NVL (TO_CHAR(SUM(NVL(ra.a_consojhimmo,0.00)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') consojhimmo_ra,
+		LPAD (NVL (TO_CHAR(SUM(NVL(ra.a_nconsojhimmo,0.00)), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')   nconsojhimmo_ra,
+		LPAD (NVL (TO_CHAR(SUM(ra.a_consoft), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ')		consoft_ra,
+		LPAD (NVL (TO_CHAR(SUM(ra.a_consoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	consoenvimmo_ra,
+		LPAD (NVL (TO_CHAR(SUM(ra.a_nconsoenvimmo), 'FM9999999990D00','NLS_NUMERIC_CHARACTERS='',.'), '0,00'), 13, ' ') 	nconsoenvimmo_ra
+FROM  STOCK_FI ra,
+--
+(SELECT s1.cdeb, s1.cafi, s1.rtype, s1.soccode,
+       SUM(NVL(s1.consojhimmo,0))   consojhimmo_N,
+       SUM(NVL(s1.nconsojhimmo,0))  nconsojhimmo_N,
+       SUM(NVL(s1.consoft,0)) 	    consoft_N,
+       SUM(NVL(s1.consoenvimmo,0))  consoenvimmo_N,
+       SUM(NVL(s1.nconsoenvimmo,0)) nconsoenvimmo_N
+FROM STOCK_FI s1
+GROUP BY  cdeb, cafi, rtype, soccode) a,
+--
+(SELECT s1.cdeb, s1.cafi, s1.rtype, s1.soccode,
+       SUM(NVL(s1.consojhimmo,0))   consojhimmo,
+       SUM(NVL(s1.nconsojhimmo,0))  nconsojhimmo,
+       SUM(NVL(s1.consoft,0)) 	    consoft,
+       SUM(NVL(s1.consoenvimmo,0))  consoenvimmo,
+       SUM(NVL(s1.nconsoenvimmo,0)) nconsoenvimmo
+FROM STOCK_FI s1,DATDEBEX 
+WHERE s1.cdeb < DATDEBEX.DATDEBEX
+GROUP BY cdeb, cafi, rtype, soccode) d
+WHERE a.cdeb = d.cdeb(+)
+AND a.cafi = d.cafi(+)
+AND a.rtype= d.rtype(+)
+AND a.soccode = d.soccode(+)
+AND a.cdeb = ra.cdeb(+)
+AND a.cafi = ra.cafi(+)
+AND a.rtype= ra.rtype(+)
+AND a.soccode = ra.soccode(+)
+&P_WHERE
+GROUP BY RPAD(NVL(TO_CHAR(a.cdeb,'MMYYYY'),' '),6,' '),
+                LPAD(NVL(TO_CHAR(a.cafi),' '),6,'0'),
+                RPAD(NVL(a.rtype,' '),1,' '),
+                RPAD(NVL(a.soccode,' '),4,' ') 	
+ORDER BY cdeb, cafi, rtype, soccode;	]]>
+      </select>
+      <displayInfo x="2.63489" y="0.12500" width="0.69995" height="0.19995"/>
+      <group name="G_cdeb">
+        <displayInfo x="4.86853" y="0.46863" width="2.37097" height="8.80469"
+        />
+        <dataItem name="cdeb" datatype="vchar2" columnOrder="24" width="6"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Mois">
+          <xmlSettings xmlTag="Mois"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( TO_CHAR ( a.cdeb , &apos;MMYYYY&apos; ) , &apos; &apos; ) , 6 , &apos; &apos; )"
+           descriptiveExpression="CDEB" order="1" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="cafi" datatype="vchar2" columnOrder="11" width="6"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Cafi ress">
+          <xmlSettings xmlTag="CAFI ress"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( a.cafi ) , &apos; &apos; ) , 6 , &apos;0&apos; )"
+           descriptiveExpression="CAFI" order="2" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rtype" datatype="vchar2" columnOrder="12" width="1"
+         defaultWidth="10000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Type ressource">
+          <xmlSettings xmlTag="Type ressource"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.rtype , &apos; &apos; ) , 1 , &apos; &apos; )"
+           descriptiveExpression="RTYPE" order="3" width="1"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="soccode" datatype="vchar2" columnOrder="13" width="4"
+         defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Société">
+          <xmlSettings xmlTag="Société"/>
+          <dataDescriptor
+           expression="RPAD ( NVL ( a.soccode , &apos; &apos; ) , 4 , &apos; &apos; )"
+           descriptiveExpression="SOCCODE" order="4" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_dec" datatype="vchar2" columnOrder="20"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso jh immo dec N-1"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo dec N-1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( d.consojhimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_DEC" order="5" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_dec" datatype="vchar2" columnOrder="21"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso jh non immo dec N-1"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo dec N-1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( d.nconsojhimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_DEC" order="6" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_dec" datatype="vchar2" columnOrder="14"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso FT dec N-1" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT dec N-1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( d.consoft ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_DEC" order="7" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_dec" datatype="vchar2" columnOrder="15"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso env immo dec N-1"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo dec N-1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( d.consoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_DEC" order="8" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_dec" datatype="vchar2" columnOrder="16"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso env non immo dec N-1"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo dec N-1"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( d.nconsoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_DEC" order="9" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_MOIS" datatype="vchar2" columnOrder="22"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso jh immo du MOIS"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo du mois"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( NVL ( a.consojhimmo_N , 0 ) - NVL ( d.consojhimmo , 0 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_MOIS" order="10" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_MOIS" datatype="vchar2" columnOrder="23"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso jh non immo du MOIS"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo du mois"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( NVL ( a.nconsojhimmo_N , 0 ) - NVL ( d.nconsojhimmo , 0 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_MOIS" order="11" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_MOIS" datatype="vchar2" columnOrder="17"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso FT du MOIS" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT du mois"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( NVL ( a.consoft_N , 0 ) - NVL ( d.consoft , 0 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_MOIS" order="12" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_MOIS" datatype="vchar2" columnOrder="18"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso env immo du MOIS"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo du mois"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( NVL ( a.consoenvimmo_N , 0 ) - NVL ( d.consoenvimmo , 0 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_MOIS" order="13" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_MOIS" datatype="vchar2" columnOrder="19"
+         width="13" defaultWidth="90000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso env non immo du MOIS"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo du mois"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( MAX ( NVL ( a.nconsoenvimmo_N , 0 ) - NVL ( d.nconsoenvimmo , 0.00 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_MOIS" order="14" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consojhimmo_ra" datatype="vchar2" columnOrder="32"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso jh immo Ra" breakOrder="none">
+          <xmlSettings xmlTag="Conso jh immo RA"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( SUM ( NVL ( ra.a_consojhimmo , 0.00 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOJHIMMO_RA" order="15" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsojhimmo_ra" datatype="vchar2" columnOrder="33"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="conso jh non immo Ra"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso jh non immo RA"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( SUM ( NVL ( ra.a_nconsojhimmo , 0.00 ) ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOJHIMMO_RA" order="16" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoft_ra" datatype="vchar2" columnOrder="34"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso FT RA" breakOrder="none">
+          <xmlSettings xmlTag="Conso FT RA"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( SUM ( ra.a_consoft ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOFT_RA" order="17" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="consoenvimmo_ra" datatype="vchar2" columnOrder="35"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso env immo Ra" breakOrder="none">
+          <xmlSettings xmlTag="Conso env immo RA"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( SUM ( ra.a_consoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="CONSOENVIMMO_RA" order="18" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nconsoenvimmo_ra" datatype="vchar2" columnOrder="36"
+         width="13" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="32" defaultLabel="Conso env non immo Ra"
+         breakOrder="none">
+          <xmlSettings xmlTag="Conso env non immo RA"/>
+          <dataDescriptor
+           expression="LPAD ( NVL ( TO_CHAR ( SUM ( ra.a_nconsoenvimmo ) , &apos;FM9999999990D00&apos; , &apos;NLS_NUMERIC_CHARACTERS=&apos;&apos;,.&apos; ) , &apos;0,00&apos; ) , 13 , &apos; &apos; )"
+           descriptiveExpression="NCONSOENVIMMO_RA" order="19" width="13"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_cdeb_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="7.25000" height="0.56250"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_cdeb" source="G_cdeb" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.31250" width="7.25000"
+           height="0.25000"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_cdeb" source="cdeb" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.31250" width="0.18750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsojhimmo_ra" source="nconsojhimmo_ra"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.00000" y="0.43750" width="0.68750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_cafi" source="cafi" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.31250" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_rtype" source="rtype" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.75000" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoft_ra" source="consoft_ra" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="0.81250" y="0.43750" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_soccode" source="soccode" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.18750" y="0.31250" width="0.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoenvimmo_ra" source="consoenvimmo_ra"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.31250" y="0.43750" width="0.62500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consojhimmo_dec" source="consojhimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="1.56250" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsojhimmo_dec" source="nconsojhimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.12500" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsoenvimmo_ra" source="nconsoenvimmo_ra"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.06250" y="0.43750" width="0.75000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoft_dec" source="consoft_dec" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="2.68750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoenvimmo_dec" source="consoenvimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.12500" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsoenvimmo_dec" source="nconsoenvimmo_dec"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="3.68750" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consojhimmo_MOIS" source="consojhimmo_MOIS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.25000" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsojhimmo_MOIS" source="nconsojhimmo_MOIS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="4.81250" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoft_MOIS" source="consoft_MOIS" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.37500" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consoenvimmo_MOIS" source="consoenvimmo_MOIS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="5.81250" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nconsoenvimmo_MOIS" source="nconsoenvimmo_MOIS"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.37500" y="0.31250" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_consojhimmo_ra" source="consojhimmo_ra"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="4"/>
+            <geometryInfo x="6.93750" y="0.31250" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_cdeb_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="7.25000"
+           height="0.31250"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_cdeb" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.18750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Mois]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_cafi" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.31250" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Cafi ress]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_rtype" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.75000" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Type
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[ressource]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_soccode" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.18750" y="0.00000" width="0.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Société]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consojhimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.56250" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo dec N-1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsojhimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.12500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso jh non
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo dec N-1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoft_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.68750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso FT
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[dec N-1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoenvimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.12500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso env
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo dec N-1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsoenvimmo_dec" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.68750" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso env non
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo dec N-1]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consojhimmo_MOIS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.25000" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo du MOIS]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsojhimmo_MOIS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.81250" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso jh non
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo du MOIS]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoft_MOIS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.37500" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso FT
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[du MOIS]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoenvimmo_MOIS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.81250" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso env
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo du MOIS]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsoenvimmo_MOIS" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.37500" y="0.00000" width="0.43750"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso env non
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo du MOIS]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consojhimmo_ra" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.93750" y="0.00000" width="0.31250"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso jh
+]]>
+              </string>
+            </textSegment>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[immo Ra]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsojhimmo_ra" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.18750" width="0.68750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[conso jh non immo Ra]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoft_ra" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.81250" y="0.18750" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso FT RA]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_consoenvimmo_ra" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.18750" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso env immo Ra]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nconsoenvimmo_ra" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.06250" y="0.18750" width="0.75000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="4"/>
+              <string>
+              <![CDATA[Conso env non immo Ra]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.19360" y="0.19397" width="0.64185" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="helvetica" size="8"/>
+      <string>
+      <![CDATA[GLOBAL]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_GLOBAL" source="P_GLOBAL" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.45044" y="0.14539" width="2.00000" height="0.25049"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_suiviactivite" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform" beforeReportTrigger="beforepform">
+  <xmlSettings xmlTag="X_SUIVIACTIVITE" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+</head>
+<body bgcolor="#ffffff">
+
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html dir=&Direction>
+<body bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir=&Direction>
+<head>
+<meta http-equiv="Content-Type"  content="text/html; charset=&Encoding">
+<TITLE>Oracle HTML Navigator</TITLE>
+<SCRIPT type="text/javascript" LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" action="" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM>
+</body></html>]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_WHERE" datatype="character" width="5000"
+     precision="10" label="P Where" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_GLOBAL" datatype="character" width="5000"
+     precision="10"
+     initialValue="X116028;DIR;11050;3261212;01 ;00000000000;102323190;0;36662;;;;;;ges,cli,isac,ginv,act,fin,supach,acdet,fidet,admin,copi;;dir,me,mo,isacm,inv,ach,suiviact,rbip,ref,ore,req;;031010040"
+     label="P Global" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_PERIME" datatype="character" width="512"
+     precision="10" label="P Perime" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_HABILI_DP" datatype="character" width="512"
+     precision="10" label="P Habili Dp" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_HABILI_P" datatype="character" width="512"
+     precision="10" label="P Habili P" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_HABILI_A" datatype="character" width="512"
+     precision="10" label="P Habili A" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_CA_PAYEUR" datatype="character" width="500"
+     precision="10" validationTrigger="p_ca_payeurvalidtrigger"
+     label="P Ca Payeur" defaultWidth="0" defaultHeight="0" display="no"/>
+    <userParameter name="P_MENU" datatype="character" width="52"
+     precision="10" label="P Menu" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_HAB" datatype="character" width="512"
+     precision="10" label="P Hab" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PERIMCLI" datatype="character" width="512"
+     precision="10" label="P Perimcli" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PERIMO" datatype="character" width="1024"
+     precision="10" label="P Perimo" defaultWidth="0" defaultHeight="0"
+     display="no"/>
+    <userParameter name="P_PARAM6" datatype="number" width="7" label="DPG"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_ANNEE" datatype="character" width="4"
+     validationTrigger="p_anneevalidtrigger" label="P Annee" defaultWidth="0"
+     defaultHeight="0" display="no"/>
+    <userParameter name="P_PARAM7" datatype="character" label="Scénario"
+     defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <systemParameter name="DESFORMAT"
+     validationTrigger="desformatvalidtrigger"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select ra.codsg DPG,
+	   st.LIBDSG LIBDPG,
+       ra.CODE_ACTIVITE ACTIVITE,
+	   ra.LIB_ACTIVITE LIB_ACTIVITE,
+                   :P_param7,
+	   RS.LIB_SCENARIO LIB_SCENARIO,
+	   lb.pid L_CODE_BIP, 
+       lb.pnom L_LIB,
+       NVL(c.cusag,0) REALISE,
+       NVL(b.anmont,0) ARBITRE,
+       NVL(b.reestime,0) LREESTIME,
+	   NVL(pack_ree_synthese_locale.RAF_RESSOURCE(ra.CODSG,ra.CODE_ACTIVITE,rs.CODE_SCENARIO,D.MOISMENS),0) RAF_RESSOURCE
+from 
+     REE_ACTIVITES ra,
+	 STRUCT_INFO st,
+	 REE_ACTIVITES_LIGNE_BIP ral,
+	 LIGNE_BIP lb,
+     CONSOMME C,
+     BUDGET b,
+	 DATDEBEX D,
+     REE_REESTIME re,
+	 REE_SCENARIOS RS
+where 
+         ra.codsg=:P_param6
+	 and st.codsg=ra.codsg
+	 and lb.pid=ral.pid(+)
+	 and ral.codsg=ra.codsg(+)
+	 and ral.code_activite=ra.code_activite(+)
+	 and lb.pid=b.pid(+)
+	 and lb.pid=c.pid(+)
+     and b.annee=:P_ANNEE
+	 and c.annee=:P_ANNEE
+     and ra.code_activite=re.code_activite(+)
+	 and ra.codsg=re.codsg(+)
+	 and (to_char(re.cdeb,'YYYY')=:P_ANNEE OR re.cdeb IS NULL)
+	 and RS.CODSG=Ra.CODSG
+	 --and re.code_scenario=rs.code_scenario
+	 and UPPER(RS.CODE_SCENARIO) like UPPER(pack_ree_synthese_locale.code_scenario(:P_param7))
+                   and UPPER(RS.OFFICIEL) like UPPER(pack_ree_synthese_locale.officiel(:P_param7))
+GROUP BY lb.pid,  ra.codsg, st.LIBDSG, ra.CODE_ACTIVITE, ra.LIB_ACTIVITE, lb.pnom, c.cusag,b.anmont,b.reestime,D.MOISMENS,rs.code_scenario, RS.LIB_SCENARIO
+ORDER BY ra.CODE_ACTIVITE]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_1">
+        <displayInfo x="2.07581" y="2.09570" width="1.77832" height="4.01953"
+        />
+        <dataItem name="DPG" oracleDatatype="number" columnOrder="25"
+         width="22" defaultWidth="70000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="DPG">
+          <dataDescriptor expression="ra.codsg" descriptiveExpression="DPG"
+           order="1" oracleDatatype="number" width="22" precision="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIBDPG" datatype="vchar2" columnOrder="26" width="30"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Libellé DPG">
+          <xmlSettings xmlTag="Libellé DPG"/>
+          <dataDescriptor expression="st.LIBDSG"
+           descriptiveExpression="LIBDPG" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ACTIVITE" datatype="vchar2" columnOrder="27"
+         width="12" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Activité">
+          <xmlSettings xmlTag="Activité"/>
+          <dataDescriptor expression="ra.CODE_ACTIVITE"
+           descriptiveExpression="ACTIVITE" order="3" width="12"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_ACTIVITE" datatype="vchar2" columnOrder="28"
+         width="60" defaultWidth="600000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Libellé Activité">
+          <xmlSettings xmlTag="Libellé Activité"/>
+          <dataDescriptor expression="ra.LIB_ACTIVITE"
+           descriptiveExpression="LIB_ACTIVITE" order="4" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="P_param1" datatype="vchar2" columnOrder="36"
+         width="32" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Code Scénario">
+          <xmlSettings xmlTag="Code Scénario"/>
+          <dataDescriptor expression=": P_param7"
+           descriptiveExpression=":P_PARAM7" order="5" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LIB_SCENARIO" datatype="vchar2" columnOrder="29"
+         width="60" defaultWidth="120000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Libellé Scenario">
+          <xmlSettings xmlTag="Libellé Scénario"/>
+          <dataDescriptor expression="RS.LIB_SCENARIO"
+           descriptiveExpression="LIB_SCENARIO" order="6" width="60"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="L_CODE_BIP" datatype="vchar2" columnOrder="30"
+         width="4" defaultWidth="40000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Ligne BIP">
+          <xmlSettings xmlTag="Ligne BIP"/>
+          <dataDescriptor expression="lb.pid"
+           descriptiveExpression="L_CODE_BIP" order="7" width="4"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="L_LIB" datatype="vchar2" columnOrder="31" width="30"
+         defaultWidth="300000" defaultHeight="10000" columnFlags="33"
+         defaultLabel="Libellé ligne BIP">
+          <xmlSettings xmlTag="Libellé ligne BIP"/>
+          <dataDescriptor expression="lb.pnom" descriptiveExpression="L_LIB"
+           order="8" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="REALISE" oracleDatatype="number" columnOrder="32"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Réalisé">
+          <xmlSettings xmlTag="Réalisé"/>
+          <dataDescriptor expression="NVL ( c.cusag , 0 )"
+           descriptiveExpression="REALISE" order="9" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="ARBITRE" oracleDatatype="number" columnOrder="33"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Arbitré">
+          <xmlSettings xmlTag="Arbitré"/>
+          <dataDescriptor expression="NVL ( b.anmont , 0 )"
+           descriptiveExpression="ARBITRE" order="10" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="LREESTIME" oracleDatatype="number" columnOrder="34"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="33" defaultLabel="Réestimé">
+          <xmlSettings xmlTag="Réestimé"/>
+          <dataDescriptor expression="NVL ( b.reestime , 0 )"
+           descriptiveExpression="LREESTIME" order="11"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="RAF_RESSOURCE" oracleDatatype="number"
+         columnOrder="35" width="22" defaultWidth="100000"
+         defaultHeight="10000" columnFlags="33" defaultLabel="RAF_RESSOURCE">
+          <dataDescriptor
+           expression="NVL ( pack_ree_synthese_locale.RAF_RESSOURCE ( ra.CODSG , ra.CODE_ACTIVITE , rs.CODE_SCENARIO , D.MOISMENS ) , 0 )"
+           descriptiveExpression="RAF_RESSOURCE" order="12"
+           oracleDatatype="number" width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_1_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="6.87500" height="0.25000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_1" source="G_1" printDirection="down"
+         minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.12500" width="6.87500"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_DPG" source="DPG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.00000" y="0.12500" width="0.31250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIBDPG" source="LIBDPG" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.31250" y="0.12500" width="0.62500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ACTIVITE" source="ACTIVITE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.93750" y="0.12500" width="0.37500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIB_ACTIVITE" source="LIB_ACTIVITE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.31250" y="0.12500" width="1.25000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_P_param1" source="P_param1" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="2.56250" y="0.12500" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LIB_SCENARIO" source="LIB_SCENARIO" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.12500" y="0.12500" width="0.68750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_L_CODE_BIP" source="L_CODE_BIP" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.81250" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_L_LIB" source="L_LIB" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="4.25000" y="0.12500" width="0.75000"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_REALISE" source="REALISE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.00000" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_ARBITRE" source="ARBITRE" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.43750" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_LREESTIME" source="LREESTIME" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="5.87500" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_RAF_RESSOURCE" source="RAF_RESSOURCE"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="6.31250" y="0.12500" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_1_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="6.87500"
+           height="0.12500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_DPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.31250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[DPG]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIBDPG" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.31250" y="0.00000" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Libellé DPG]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ACTIVITE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.93750" y="0.00000" width="0.37500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Activité]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_ACTIVITE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.31250" y="0.00000" width="1.25000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Libellé Activité]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_P_param1" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.56250" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <advancedLayout formatTrigger="b_p_param1formattrigger"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Code Scénario]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LIB_SCENARIO" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.12500" y="0.00000" width="0.68750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Libellé Scenario]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_L_CODE_BIP" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.81250" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Ligne BIP]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_L_LIB" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="4.25000" y="0.00000" width="0.75000"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Libellé ligne BIP]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_REALISE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.00000" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Réalisé]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_ARBITRE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.43750" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Arbitré]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_LREESTIME" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="5.87500" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Réestimé]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_RAF_RESSOURCE" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="6.31250" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[RAF_RESSOURCE]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.32129" y="0.15979" width="1.38513" height="0.22205"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="12" bold="yes"/>
+      <string>
+      <![CDATA[Paramètres état]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.77441" y="0.49304" width="2.47888" height="0.18042"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="10" bold="yes"/>
+      <string>
+      <![CDATA[Entrer les valeurs des paramètres]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM6" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="0.82629" width="0.31226" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[DPG]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_P_PARAM1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.24316" y="1.15955" width="0.56226" height="0.14929"/>
+    <visualSettings lineWidth="1"/>
+    <textSegment>
+      <font face="MS Sans Serif" size="8" bold="yes"/>
+      <string>
+      <![CDATA[Scénario]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="PF_P_PARAM6" source="P_PARAM6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="0.78430" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="PF_P_PARAM1" source="P_PARAM7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="1.50000" y="1.11755" width="2.00000" height="0.26428"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="p_ca_payeurvalidtrigger">
+      <textSource>
+      <![CDATA[function P_CA_PAYEURValidTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="beforepform">
+      <textSource>
+      <![CDATA[function BeforePForm return boolean is
+begin
+  select to_char(moismens, 'YYYY') into :P_ANNEE from datdebex;
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="p_anneevalidtrigger">
+      <textSource>
+      <![CDATA[function P_ANNEEValidTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="desformatvalidtrigger">
+      <textSource>
+      <![CDATA[function DESFORMATValidTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+    <function name="b_p_param1formattrigger">
+      <textSource>
+      <![CDATA[function B_P_param1FormatTrigger return boolean is
+begin
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 9i Reports Developer"/>
+<title> Your Title </title>
+
+
+
+</head>
+
+
+<body>
+
+<!-- Data Area Generated by Reports Developer -->
+<rw:dataArea id="MG1GRPFR242">
+<table>
+<caption>  </caption>
+ <!-- Header -->
+ <thead>
+  <tr>
+   <th <rw:id id="HBDPG242" asArray="no"/>> DPG </th>
+   <th <rw:id id="HBLIBDPG242" asArray="no"/>> Libellé DPG </th>
+   <th <rw:id id="HBACTIVITE242" asArray="no"/>> Activité </th>
+   <th <rw:id id="HBLIBACTIVITE242" asArray="no"/>> Libellé Activité </th>
+   <th <rw:id id="HBPparam1242" asArray="no"/>> Code Scénario </th>
+   <th <rw:id id="HBLIBSCENARIO242" asArray="no"/>> Libellé Scenario </th>
+   <th <rw:id id="HBLCODEBIP242" asArray="no"/>> Ligne BIP </th>
+   <th <rw:id id="HBLLIB242" asArray="no"/>> Libellé ligne BIP </th>
+   <th <rw:id id="HBREALISE242" asArray="no"/>> Réalisé </th>
+   <th <rw:id id="HBARBITRE242" asArray="no"/>> Arbitré </th>
+   <th <rw:id id="HBLREESTIME242" asArray="no"/>> Réestimé </th>
+   <th <rw:id id="HBRAFRESSOURCE242" asArray="no"/>> RAF_RESSOURCE </th>
+  </tr>
+ </thead>
+ <!-- Body -->
+ <tbody>
+  <rw:foreach id="RG12421" src="G_1">
+   <tr>
+    <td <rw:headers id="HFDPG242" src="HBDPG242"/>><rw:field id="FDPG242" src="DPG" nullValue="&nbsp;"> F_DPG </rw:field></td>
+    <td <rw:headers id="HFLIBDPG242" src="HBLIBDPG242"/>><rw:field id="FLIBDPG242" src="LIBDPG" nullValue="&nbsp;"> F_LIBDPG </rw:field></td>
+    <td <rw:headers id="HFACTIVITE242" src="HBACTIVITE242"/>><rw:field id="FACTIVITE242" src="ACTIVITE" nullValue="&nbsp;"> F_ACTIVITE </rw:field></td>
+    <td <rw:headers id="HFLIBACTIVITE242" src="HBLIBACTIVITE242"/>><rw:field id="FLIBACTIVITE242" src="LIB_ACTIVITE" nullValue="&nbsp;"> F_LIB_ACTIVITE </rw:field></td>
+    <td <rw:headers id="HFPparam1242" src="HBPparam1242"/>><rw:field id="FPparam1242" src="P_param1" nullValue="&nbsp;"> F_P_param1 </rw:field></td>
+    <td <rw:headers id="HFLIBSCENARIO242" src="HBLIBSCENARIO242"/>><rw:field id="FLIBSCENARIO242" src="LIB_SCENARIO" nullValue="&nbsp;"> F_LIB_SCENARIO </rw:field></td>
+    <td <rw:headers id="HFLCODEBIP242" src="HBLCODEBIP242"/>><rw:field id="FLCODEBIP242" src="L_CODE_BIP" nullValue="&nbsp;"> F_L_CODE_BIP </rw:field></td>
+    <td <rw:headers id="HFLLIB242" src="HBLLIB242"/>><rw:field id="FLLIB242" src="L_LIB" nullValue="&nbsp;"> F_L_LIB </rw:field></td>
+    <td <rw:headers id="HFREALISE242" src="HBREALISE242"/>><rw:field id="FREALISE242" src="REALISE" nullValue="&nbsp;"> F_REALISE </rw:field></td>
+    <td <rw:headers id="HFARBITRE242" src="HBARBITRE242"/>><rw:field id="FARBITRE242" src="ARBITRE" nullValue="&nbsp;"> F_ARBITRE </rw:field></td>
+    <td <rw:headers id="HFLREESTIME242" src="HBLREESTIME242"/>><rw:field id="FLREESTIME242" src="LREESTIME" nullValue="&nbsp;"> F_LREESTIME </rw:field></td>
+    <td <rw:headers id="HFRAFRESSOURCE242" src="HBRAFRESSOURCE242"/>><rw:field id="FRAFRESSOURCE242" src="RAF_RESSOURCE" nullValue="&nbsp;"> F_RAF_RESSOURCE </rw:field></td>
+   </tr>
+  </rw:foreach>
+ </tbody>
+</table>
+</rw:dataArea> <!-- id="MG1GRPFR242" -->
+<!-- End of Data Area Generated by Reports Developer -->
+
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <colorPalette>
+    <color index="190" displayName="TextColor" value="#336699"/>
+    <color index="191" displayName="TableHeading" value="#cccc99"/>
+    <color index="192" displayName="TableCell" value="#f7f7e7"/>
+    <color index="193" displayName="Totals" value="#ffffcc"/>
+  </colorPalette>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+  />
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

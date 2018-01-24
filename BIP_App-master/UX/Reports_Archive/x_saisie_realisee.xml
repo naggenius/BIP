@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_saisie_realisee" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T06200284" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select 
+         '"'|| r2.ident ||'"', 
+         '"'|| r2.matricule ||'"', 
+         '"'|| r1.user_rtfe ||'"',
+         '"'|| r2.rnom ||'"', 
+         '"'|| r2.rprenom ||'"', 
+         '"'|| r1.chef_projet ||'"'
+from  rtfe r1, ressource r2
+where r2.ident=r1.ident
+and r1.role='SAISIE_REALISEE'
+order by r2.rnom, r2.rprenom;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_rident">
+        <displayInfo x="1.22046" y="1.68958" width="1.53845" height="3.33594"
+        />
+        <dataItem name="rident" datatype="vchar2" columnOrder="11" width="42"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rident">
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || r2.ident || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||R2.IDENT||&apos;&quot;&apos;"
+           order="1" width="42"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r2_matricule" datatype="character"
+         oracleDatatype="aFixedChar" columnOrder="12" width="9"
+         defaultWidth="90000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="R2 Matricule">
+          <xmlSettings xmlTag="MATRICULE"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || r2.matricule || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||R2.MATRICULE||&apos;&quot;&apos;"
+           order="2" oracleDatatype="aFixedChar" width="9"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r1_user_rtfe" datatype="vchar2" columnOrder="13"
+         width="62" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="R1 User Rtfe">
+          <xmlSettings xmlTag="USER_RTFE"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || r1.user_rtfe || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||R1.USER_RTFE||&apos;&quot;&apos;"
+           order="3" width="62"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r2_rnom" datatype="vchar2" columnOrder="14" width="32"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="R2 Rnom">
+          <xmlSettings xmlTag="NOM"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || r2.rnom || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||R2.RNOM||&apos;&quot;&apos;"
+           order="4" width="32"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r2_rprenom" datatype="vchar2" columnOrder="15"
+         width="17" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="R2 Rprenom">
+          <xmlSettings xmlTag="PRENOM"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || r2.rprenom || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||R2.RPRENOM||&apos;&quot;&apos;"
+           order="5" width="17"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="r1_chef_projet" datatype="vchar2" columnOrder="16"
+         width="502" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="R1 Chef Projet">
+          <xmlSettings xmlTag="CHEF_PROJET"/>
+          <dataDescriptor
+           expression="&apos;&quot;&apos; || r1.chef_projet || &apos;&quot;&apos;"
+           descriptiveExpression="&apos;&quot;&apos;||R1.CHEF_PROJET||&apos;&quot;&apos;"
+           order="6" width="502"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_rident_GRPFR">
+        <geometryInfo x="0.00000" y="0.00000" width="3.68750" height="0.25000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_rident" source="G_rident"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="0.12500" width="3.68750"
+           height="0.12500"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_rident" source="rident" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.00000" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_r2_matricule" source="r2_matricule" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="0.56250" y="0.12500" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_r1_user_rtfe" source="r1_user_rtfe" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.25000" y="0.12500" width="0.56250"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_r2_rnom" source="r2_rnom" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="1.93750" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_r2_rprenom" source="r2_rprenom" minWidowLines="1"
+           spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="2.50000" y="0.12500" width="0.43750"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_r1_chef_projet" source="r1_chef_projet"
+           minWidowLines="1" spacing="0" alignment="start">
+            <font face="Courier New" size="5"/>
+            <geometryInfo x="3.06250" y="0.12500" width="0.62500"
+             height="0.12500"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_rident_HDR">
+          <geometryInfo x="0.00000" y="0.00000" width="3.68750"
+           height="0.12500"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_rident" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.00000" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[Rident]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_r2_matricule" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="0.56250" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[R2 Matricule]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_r1_user_rtfe" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.25000" y="0.00000" width="0.56250"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[R1 User Rtfe]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_r2_rnom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.93750" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[R2 Rnom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_r2_rprenom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="2.50000" y="0.00000" width="0.43750"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[R2 Rprenom]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_r1_chef_projet" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.06250" y="0.00000" width="0.62500"
+             height="0.12500"/>
+            <textSegment>
+              <font face="Courier New" size="5"/>
+              <string>
+              <![CDATA[R1 Chef Projet]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="4.06213" y="0.25000" width="0.37573" height="0.08337"
+        />
+        <textSegment>
+          <font face="Courier New" size="5"/>
+          <string>
+          <![CDATA[x_Resserr]]>
+          </string>
+        </textSegment>
+      </text>
+    </margin>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="x_Resserr"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

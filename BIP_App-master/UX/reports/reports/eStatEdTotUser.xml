@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="eStatEdTotUser" DTDVersion="9.0.2.0.10"
+ afterParameterFormTrigger="afterpform">
+  <xmlSettings xmlTag="ESTATEDTOTUSER" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <userParameter name="P_Param6" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_Param7" datatype="character" width="10"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_WHERE" datatype="character" width="2000"
+     defaultWidth="0" defaultHeight="0"/>
+    <userParameter name="P_MESS" datatype="character" width="4000"
+     precision="10" defaultWidth="0" defaultHeight="0"/>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[select id_user,count(*) , nom , prenom from report_log, tmp_imp_niveau
+where substr( id_user , 2, 6 ) = substr ( matricule, 1, 6) 
+and id_user like 'A%'
+&P_WHERE
+group by id_user , nom , prenom
+union
+select id_user,count(*) , rnom, rprenom from report_log , ressource
+where id_user not like 'A%' 
+and id_user=matricule (+)
+group by id_user,rnom, rprenom
+order by 2 desc
+;]]>
+      </select>
+      <displayInfo x="1.65002" y="1.00000" width="0.69995" height="0.19995"/>
+      <group name="G_id_user">
+        <displayInfo x="1.41394" y="1.94995" width="1.17224" height="0.94336"
+        />
+        <dataItem name="id_user" datatype="vchar2" columnOrder="11" width="20"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="USER ">
+          <dataDescriptor expression="id_user" descriptiveExpression="ID_USER"
+           order="1" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="nom" datatype="vchar2" columnOrder="13" width="30"
+         defaultWidth="250000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="NOM">
+          <dataDescriptor expression="nom" descriptiveExpression="NOM"
+           order="3" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="prenom" datatype="vchar2" columnOrder="14" width="20"
+         defaultWidth="250000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="PRENOM">
+          <dataDescriptor expression="prenom" descriptiveExpression="PRENOM"
+           order="4" width="20"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="count" oracleDatatype="number" columnOrder="12"
+         width="22" defaultWidth="100000" defaultHeight="10000"
+         columnFlags="1" defaultLabel="TOTAL">
+          <dataDescriptor expression="count ( * )"
+           descriptiveExpression="COUNT(*)" order="2" oracleDatatype="number"
+           width="22" precision="38"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <frame name="M_G_id_user_GRPFR">
+        <geometryInfo x="0.00000" y="0.75000" width="7.32800" height="0.50000"
+        />
+        <generalLayout verticalElasticity="variable"/>
+        <repeatingFrame name="R_G_id_user" source="G_id_user"
+         printDirection="down" minWidowRecords="1" columnMode="no">
+          <geometryInfo x="0.00000" y="1.06250" width="7.32800"
+           height="0.18750"/>
+          <generalLayout verticalElasticity="expand"/>
+          <field name="F_id_user" source="id_user" minWidowLines="1"
+           spacing="0" alignment="center">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="0.00000" y="1.06250" width="0.87500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_nom" source="nom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="1.00000" y="1.06250" width="2.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_prenom" source="prenom" minWidowLines="1" spacing="0"
+           alignment="start">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="3.25000" y="1.06250" width="2.12500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+          <field name="F_count" source="count" minWidowLines="1" spacing="0"
+           alignment="center">
+            <font face="Arial" size="10"/>
+            <geometryInfo x="6.45300" y="1.06250" width="0.87500"
+             height="0.18750"/>
+            <generalLayout verticalElasticity="expand"/>
+          </field>
+        </repeatingFrame>
+        <frame name="M_G_id_user_HDR">
+          <geometryInfo x="0.00000" y="0.75000" width="7.32800"
+           height="0.18750"/>
+          <advancedLayout printObjectOnPage="allPage"
+           basePrintingOn="anchoringObject"/>
+          <text name="B_id_user" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="0.00000" y="0.75000" width="0.87500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[USER ]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_nom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="1.00000" y="0.75000" width="2.12500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[NOM]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_prenom" minWidowLines="1">
+            <textSettings spacing="0"/>
+            <geometryInfo x="3.25000" y="0.75000" width="2.12500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[PRENOM]]>
+              </string>
+            </textSegment>
+          </text>
+          <text name="B_count" minWidowLines="1">
+            <textSettings justify="center" spacing="0"/>
+            <geometryInfo x="6.45300" y="0.75000" width="0.87500"
+             height="0.18750"/>
+            <textSegment>
+              <font face="Arial" size="10" bold="yes"/>
+              <string>
+              <![CDATA[TOTAL]]>
+              </string>
+            </textSegment>
+          </text>
+        </frame>
+      </frame>
+    </body>
+    <margin>
+      <text name="B_OR$BODY_SECTION" minWidowLines="1">
+        <textSettings justify="center" spacing="0"/>
+        <geometryInfo x="2.24902" y="1.06250" width="4.00195" height="0.25000"
+        />
+        <textSegment>
+          <font face="Arial" size="12" bold="yes"/>
+          <string>
+          <![CDATA[Total des états lancés par utilisateur]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_MESSAGE" source="P_MESS" minWidowLines="1" spacing="0"
+       alignment="start">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="0.06250" y="0.06250" width="4.12500" height="0.18750"
+        />
+      </field>
+      <text name="B_1" minWidowLines="1">
+        <textSettings spacing="single"/>
+        <geometryInfo x="7.00000" y="0.06250" width="0.37500" height="0.16663"
+        />
+        <textSegment>
+          <font face="Arial" size="9"/>
+          <string>
+          <![CDATA[Date : ]]>
+          </string>
+        </textSegment>
+      </text>
+      <field name="F_Date" source="CurrentDate" minWidowLines="1"
+       formatMask="DD/MM/RRRR" spacing="single" alignment="start">
+        <font face="Arial" size="9"/>
+        <geometryInfo x="7.37500" y="0.06250" width="0.81250" height="0.18750"
+        />
+      </field>
+    </margin>
+  </section>
+  </layout>
+  <parameterForm>
+  <text name="PB_1" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="1.05054" y="0.23962" width="2.02075" height="0.21875"/>
+    <textSegment>
+      <font face="Courier New" size="10" bold="yes" underline="yes"/>
+      <string>
+      <![CDATA[Paramètres de lancement]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_2" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.42712" y="0.81250" width="2.10413" height="0.37500"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de début de suivi :
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(jj/mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <text name="PB_3" pageNumber="1" minWidowLines="1">
+    <textSettings spacing="single"/>
+    <geometryInfo x="0.41675" y="1.39587" width="2.10413" height="0.38538"/>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[Date de fin de suivi :
+]]>
+      </string>
+    </textSegment>
+    <textSegment>
+      <font face="Courier New" size="10"/>
+      <string>
+      <![CDATA[(jj/mm/aaaa)]]>
+      </string>
+    </textSegment>
+  </text>
+  <field name="P_Param6" source="P_Param6" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.55212" y="0.86462" width="1.17700" height="0.25000"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  <field name="P_Param7" source="P_Param7" pageNumber="1" minWidowLines="1"
+   spacing="0">
+    <font size="0"/>
+    <geometryInfo x="2.55261" y="1.43579" width="1.17700" height="0.25000"/>
+    <visualSettings lineWidth="1" linePattern="solid"/>
+  </field>
+  </parameterForm>
+  <programUnits>
+    <function name="afterpform">
+      <textSource>
+      <![CDATA[function AfterPForm return boolean is
+
+where1 varchar2(400);
+where2 varchar2(400);
+l_date varchar2(10);
+
+begin
+  where1 :='';
+  where2 :='';
+  
+  select to_char(sysdate,'dd/mm/yyyy') into l_date from dual;
+
+  IF (:P_PARAM6 is not null or :P_PARAM6<>'') THEN
+  	  where1 := ' AND date_log >= to_date('''||:P_PARAM6||''',''dd/mm/yyyy'') '; 
+  END IF; 
+
+  IF (:P_PARAM7 is not null or :P_PARAM7<>'') THEN 
+  		where2 := ' AND date_log <= to_date('''||:P_PARAM7||''',''dd/mm/yyyy'') '; 
+  END IF;
+	 	
+  :P_WHERE := where1 || where2;
+  
+  :P_MESS := ' Période traitée : jusqu''au '||l_date||'';
+  IF ((:P_PARAM6 is not null or :P_PARAM6<>'')and(:P_PARAM7 is not null or :P_PARAM7<>'')) THEN
+  	  :P_MESS := ' Période traitée : du '||:P_PARAM6||' au '||:P_PARAM7||'';
+  END IF;   
+  IF ((:P_PARAM6 is not null or :P_PARAM6<>'')and(:P_PARAM7 is null or :P_PARAM7='')) THEN
+  	  :P_MESS := ' Période traitée : du '||:P_PARAM6||' au '||l_date||'';
+  END IF;     
+  IF ((:P_PARAM6 is null or :P_PARAM6='')and(:P_PARAM7 is not null or :P_PARAM7<>'')) THEN
+  	  :P_MESS := ' Période traitée : jusqu''au '||:P_PARAM7||'';
+  END IF;     
+  
+  return (TRUE);
+end;]]>
+      </textSource>
+    </function>
+  </programUnits>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate defaultReportType="tabular" versionFlags2="0" templateName=""
+   sectionTitle="Fréquence de lancement des états par utilisateur"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>

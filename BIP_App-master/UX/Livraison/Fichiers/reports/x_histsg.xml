@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="WINDOWS-1252" ?>
+<report name="x_exthistsg" DTDVersion="9.0.2.0.10">
+  <xmlSettings xmlTag="T04301516" xmlPrologType="text">
+  <![CDATA[<?xml version="1.0"?>]]>
+  </xmlSettings>
+  <reportHtmlEscapes>
+    <beforeReportHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+]]>
+    </beforeReportHtmlEscape>
+    <beforePageHtmlEscape>
+    <![CDATA[#NULL#]]>
+    </beforePageHtmlEscape>
+    <afterPageHtmlEscape>
+    <![CDATA[<hr size=5 noshade>
+]]>
+    </afterPageHtmlEscape>
+    <beforeFormHtmlEscape>
+    <![CDATA[<html>
+<body dir=&Direction bgcolor="#ffffff">
+<form method=post action="_action_">
+<input name="hidden_run_parameters" type=hidden value="_hidden_">
+<font color=red><!--error--></font>
+<center>
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><input type=submit></td>
+<td width=15>
+<td><input type=reset></td>
+</tr>
+</table>
+<p><hr><p>
+]]>
+    </beforeFormHtmlEscape>
+    <pageNavigationHtmlEscape>
+    <![CDATA[<HTML>
+<TITLE>Oracle HTML Navigator</TITLE>
+<HEAD>
+<SCRIPT LANGUAGE = "JavaScript">
+
+var jump_index = 1			// Jump to this page
+var num_pages = &TotalPages			// Total number of pages
+var basefilename = "&file_name"		// Base file name
+var fileext = "&file_ext"		//File extension
+
+/* jumps to "new_page" */
+function new_page(form, new_page)
+{
+	form.reqpage.value = new_page;
+	parent.frames[0].location = basefilename + "_" + new_page + "."+fileext;
+}
+
+/* go back one page */
+function back(form)
+{
+	/* if we are not in first page */
+	if (jump_index > 1)
+	{
+		jump_index--;
+		new_page(form, jump_index);
+	}
+}
+
+/* go forward one page */
+function forward(form)
+{
+	/* if we are not in last page */
+	if (jump_index < num_pages)
+	{
+		jump_index++;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to first page */
+function first(form)
+{
+	if(jump_index != 1)
+	{
+		jump_index = 1;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to last page */
+function last(form)
+{
+	if(jump_index != num_pages)
+	{
+		jump_index = num_pages;
+		new_page(form, jump_index);
+	}
+}
+
+/* go to the user specified page number */
+function pagenum(form)
+{
+	/* sanity check */
+	if (form.reqpage.value < 1)
+	{
+		form.reqpage.value = 1;
+	}
+	if (form.reqpage.value > num_pages)
+	{
+		form.reqpage.value = num_pages;
+	}
+	jump_index = form.reqpage.value;
+	new_page(form, jump_index);
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<FORM NAME="ThisForm" onSubmit="pagenum(this); return false;">
+<center><table><tr>
+<td> <INPUT TYPE="button"  VALUE="<< " onClick="first(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" < " onClick="back(this.form)">
+<td> <INPUT TYPE="button"  VALUE="Page:" onClick="pagenum(this.form)">
+<td> <INPUT NAME="reqpage" VALUE="1" SIZE=2>
+<td> <INPUT TYPE="button"  VALUE=" > " onClick="forward(this.form)">
+<td> <INPUT TYPE="button"  VALUE=" >>" onClick="last(this.form)">
+</table></center>
+</FORM></BODY>
+</HTML>
+]]>
+    </pageNavigationHtmlEscape>
+  </reportHtmlEscapes>
+  <data>
+    <systemParameter name="MODE" initialValue="Default"/>
+    <systemParameter name="ORIENTATION" initialValue="Default"/>
+    <dataSource name="Q_1">
+      <select>
+      <![CDATA[SELECT 	to_char(R.ident, 'FM00000')						ident,
+			rpad( nvl(R.rnom, ' '), 30, ' ')					rnom,
+			rpad( nvl(R.rprenom, ' '), 15, ' ')					rprenom,
+			lpad( nvl(R.matricule, ' '), 7, ' ')				matricule,
+			lpad( to_char(SR.codsg, 'FM0000000'), 7, '0')			codsg,
+			rpad( nvl(SI.libdsg, ' '), 30, ' ')					libdsg,
+			rpad( nvl(SR.prestation, ' '), 3, ' ')				qualif,
+			nvl(to_char(SR.datdep, 'DDMMYYYY'), rpad(' ', 8, ' '))	datdep
+FROM	ressource R, situ_ress SR, struct_info SI 	
+WHERE 
+	R.rtype = 'P'
+AND	SR.ident = R.ident
+AND	SR.soccode = 'SG..'
+AND	SR.codsg = SI.codsg
+AND	SR.datsitu = (
+		 SELECT max(datsitu) 
+		 FROM	  situ_ress SR2
+		 WHERE  SR.ident = SR2.ident
+	 	 )	
+ORDER BY 	1 asc,
+		5 asc,
+		7 asc;
+]]>
+      </select>
+      <displayInfo x="0.18750" y="0.15625" width="1.71875" height="0.57288"/>
+      <group name="G_ident">
+        <displayInfo x="0.51758" y="1.54163" width="1.09998" height="1.96875"
+        />
+        <dataItem name="ident" datatype="vchar2" columnOrder="11" width="6"
+         defaultWidth="60000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Ident" breakOrder="none">
+          <dataDescriptor
+           expression="to_char ( R.ident , &apos;FM00000&apos; )"
+           descriptiveExpression="IDENT" order="1" width="6"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rnom" datatype="vchar2" columnOrder="12" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rnom">
+          <dataDescriptor
+           expression="rpad ( nvl ( R.rnom , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="RNOM" order="2" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="rprenom" datatype="vchar2" columnOrder="13" width="15"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Rprenom">
+          <dataDescriptor
+           expression="rpad ( nvl ( R.rprenom , &apos; &apos; ) , 15 , &apos; &apos; )"
+           descriptiveExpression="RPRENOM" order="3" width="15"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="matricule" datatype="vchar2" columnOrder="14"
+         width="7" defaultWidth="70000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Matricule">
+          <dataDescriptor
+           expression="lpad ( nvl ( R.matricule , &apos; &apos; ) , 7 , &apos; &apos; )"
+           descriptiveExpression="MATRICULE" order="4" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="codsg" datatype="vchar2" columnOrder="15" width="7"
+         defaultWidth="70000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Codsg" breakOrder="none">
+          <dataDescriptor
+           expression="lpad ( to_char ( SR.codsg , &apos;FM0000000&apos; ) , 7 , &apos;0&apos; )"
+           descriptiveExpression="CODSG" order="5" width="7"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="libdsg" datatype="vchar2" columnOrder="16" width="30"
+         defaultWidth="100000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Libdsg">
+          <dataDescriptor
+           expression="rpad ( nvl ( SI.libdsg , &apos; &apos; ) , 30 , &apos; &apos; )"
+           descriptiveExpression="LIBDSG" order="6" width="30"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="qualif" datatype="vchar2" columnOrder="17" width="3"
+         defaultWidth="30000" defaultHeight="10000" columnFlags="0"
+         defaultLabel="Qualif" breakOrder="none">
+          <dataDescriptor
+           expression="rpad ( nvl ( SR.prestation , &apos; &apos; ) , 3 , &apos; &apos; )"
+           descriptiveExpression="QUALIF" order="7" width="3"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+        <dataItem name="datdep" datatype="vchar2" columnOrder="18" width="8"
+         defaultWidth="80000" defaultHeight="10000" columnFlags="1"
+         defaultLabel="Datdep">
+          <dataDescriptor
+           expression="nvl ( to_char ( SR.datdep , &apos;DDMMYYYY&apos; ) , rpad ( &apos; &apos; , 8 , &apos; &apos; ) )"
+           descriptiveExpression="DATDEP" order="8" width="8"/>
+          <dataItemPrivate adtName="" schemaName=""/>
+        </dataItem>
+      </group>
+    </dataSource>
+  </data>
+  <layout>
+  <section name="main">
+    <body>
+      <repeatingFrame name="R_1" source="G_ident" printDirection="down"
+       minWidowRecords="1" columnMode="no">
+        <geometryInfo x="0.06250" y="0.06250" width="7.37500" height="0.68750"
+        />
+        <visualSettings fillPattern="transparent" linePattern="solid"/>
+        <field name="F_ident" source="ident" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.12500" y="0.12500" width="0.37500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_rnom" source="rnom" minWidowLines="1" spacing="single"
+         alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="0.56250" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_rprenom" source="rprenom" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.12500" y="0.12500" width="0.62500"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_matricule" source="matricule" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="1.81250" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_codsg" source="codsg" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.37500" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_libdsg" source="libdsg" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="2.93750" y="0.12500" width="0.43750"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_qualif" source="qualif" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="3.43750" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+        <field name="F_datdep" source="datdep" minWidowLines="1"
+         spacing="single" alignment="start">
+          <font face="Courier New" size="10"/>
+          <geometryInfo x="4.00000" y="0.12500" width="0.50000"
+           height="0.18750"/>
+          <visualSettings fillPattern="transparent" linePattern="solid"/>
+        </field>
+      </repeatingFrame>
+    </body>
+  </section>
+  </layout>
+  <webSource>
+  <![CDATA[<%@ taglib uri="/WEB-INF/lib/reports_tld.jar" prefix="rw" %> 
+<%@ page language="java" import="java.io.*" errorPage="/rwerror.jsp" session="false" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" %>
+<!--
+<rw:report id="report"> 
+<rw:objects id="objects">
+</rw:objects>
+-->
+
+<html>
+
+<head>
+<meta name="GENERATOR" content="Oracle 11gR1 Reports Developer"/>
+<title> Your Title </title>
+
+<rw:style id="yourStyle">
+   <!-- Report Wizard inserts style link clause here -->
+</rw:style>
+
+</head>
+
+
+<body>
+
+<rw:dataArea id="yourDataArea">
+   <!-- Report Wizard inserts the default jsp here -->
+</rw:dataArea>
+
+
+
+</body>
+</html>
+
+<!--
+</rw:report> 
+-->
+]]>
+  </webSource>
+  <reportPrivate versionFlags2="0"/>
+  <reportWebSettings>
+  <![CDATA[#NULL#]]>
+  </reportWebSettings>
+</report>
